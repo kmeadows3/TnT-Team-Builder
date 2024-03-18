@@ -1,0 +1,9 @@
+ID,Warband,Title,Rank,Type,Base_Cost,Wounds,Defense,Mettle,Move,Melee,Ranged,Strength,Purchase Notes,Starting Skills,Starting Empty Skills,Available Skillsets
+1,Caravanners,Trade Master,Leader,Human,80,2,6,7,5,6,6,6,Starts with 2 empty skills,[Scavenger],2,[1|2|3|4|5|6|7|8]
+2,Caravanners,Lieutenant,Elite,Human,45,1,6,6,5,5,5,5,Starts with 1 empty skill,[Motivator],1,[2|3|7|8]
+3,Caravanners,Tracker,Elite,Human,50,1,6,6,5,5,5,5,,[Reconnoiter|Trekker],0,[2|3|4]
+4,Caravanners,Defender,Rank and File,Human,23,1,6,5,5,4,4,5,,[Brave],0,[1|2|3]
+5,Raiders,Bandit King,Leader,Human,80,2,6,7,5,6,6,6,Starts with 3 empty skills,,3,[1|2|3|4|5|6|7|8]
+6,Raiders,Brute,Elite,Human,50,1,6,6,6,7,4,6,"Unless Leader is warlord only 1 per team",[Brute|Bully|Dumb],0,[1|6|7]
+7,Raiders,Raider Champion,Elite,Human,50,1,6,6,5,5,5,5,Starts with 2 skills,,2,[1|6|7|8]
+8,Raiders,Raider,Rank and File,Human,20,1,6,5,5,4,4,5,,,0,[1|2|3]

@@ -1,0 +1,8 @@
+Equipment ID,Type,Cost,Special Rules,Item Traits,Rarity
+1,Berserker Brew,3,When consumed before battle gain +1 to move and melee but gain Frenzied,,N/A
+2,Climbing Gear,7,When testing for climbing roll 2d10 and take highest result,,N/A
+3,Net,4,Thrown item with range = STR ignores all combat modifiers but Concentrate. On hit target cannot take actions until it spends 1 AP and successfully passes an attempt to free itself (STR/TN 10) during its activation. Psychic powers may be used while in the net. ,[Single Use],N/A
+4,War Banner,8,Model may not use 2-handed items but gains Bold. One per warband.,[Grants Bold],N/A
+5,Auto-Injector,15,When model is about to go out of action due to wound loss roll a survival test (MET/TN 10). On pass model comes back into play with 1 wound remaining. Starts prone but otherwise acts normally.,[Single Use],Rare
+6,Grappler,10,May ascend or descend vertical surfaces using normal movement rate. Only fail climbing tests on Fumbles.,,Scarce
+7,Pre-Fall Ammo,10,Model must nominate a particular firearm. Firearm gains +1 bonus to Ranged when used. If Firearm fumbles during use lose bonus.,,Sporadic

@@ -1,0 +1,17 @@
+Weapon ID,Type,Cost,Melee Range,Ranged Range,Strength,Reliability,Hands,Type,Special Rules,Item Traits,Relic Rarity
+1,Bayonet,4,0,-99,1,-99,-99,Melee,Doesn't count against carry capacity; add unit Strength to weapon Strength during melee attack,,N/A
+2,Fist,0,0,-99,-1,-99,-99,Melee,Free; add unit Strength to weapon Strength during melee attack,,N/A
+3,Spear,5,1,6,1,-99,2,Melee,Add unit Strength to weapon Strength during melee attack,,N/A
+4,Assault Rifle,15,-99,24,7,2,2,Ranged,N/A,[Burst],N/A
+5,Pistol,12,0,12,6,1,1,Ranged,N/A,[Pistol],N/A
+6,Rifle,10,-99,30,7,1,2,Ranged,N/A,,N/A
+7,Flamethrower,15,-99,-50,6,2,2,Support,Uses Flame Template for Range,[Flammable|Limited Ammo],N/A
+8,Light Machine Gun,25,-99,36,8,2,2,Support,N/A,[Burst|Move or Fire],N/A
+9,Grenade Launcher,20,-99,24,7,2,2,Support,Deviate Small Blast may use any grenade the user purchases seperately,[Limited Ammo|Small Blast],N/A
+10,Flash Bang,8,-99,-50,-99,-99,1,Grenade,Deviate Large Blast; uses STR for range,[Limited Ammo|Large Blast|Stun],N/A
+11,Fragmentation Grenade,7,-99,-50,7,-99,1,Grenade,Deviate Large Blast; uses STR for range,[Limited Ammo|Small Blast],N/A
+12,Sleep Grenade,7,-99,-50,-99,-99,1,Grenade,Deviate Large Blast; uses STR for range,[LImited Ammo|Gas|Knock Out|Small Blast],N/A
+13,Actuated Gauntlet,25,0,-99,3,2,1,Melee,Add unit Strength to weapon Strength during melee attack,[Malfunction Prone],Rare
+14,Plasma Rifle,35,-99,24,9,2,2,Ranged,,[Malfunction Prone|Plasma],Rare
+15,Gatling Laser,55,-99,24,6,3,2,Support,,[Burst|Hail of Lead|Laser|Move or Fire|Malfunction Prone|Thermocycling],Ultra Rare
+16,Plasma Grenade,17,-99,6,8,-99,1,Grenade,Deviate Small Blast,[Limited Ammo|Plasma|Small Blast],Rare

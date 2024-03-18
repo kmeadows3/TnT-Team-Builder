@@ -1,0 +1,16 @@
+Skillset ID,Name,Category
+1,Melee,Skill
+2,Marksmanship,Skill
+3,Survival,Skill
+4,Quickness,Skill
+5,Smarts,Skill
+6,Brawn,Skill
+7,Tenacity,Skill
+8,Leadership,Skill
+9,Hidden Defensive Mutations,Mutation
+10,Hidden Offensive Mutations,Mutation
+11,Physical Mutations,Mutation
+12,Psychic Mutations,Mutation
+13,Hidden Detriments,Detriment
+14,Physical Detriments,Detriment
+15,General Abilities,General

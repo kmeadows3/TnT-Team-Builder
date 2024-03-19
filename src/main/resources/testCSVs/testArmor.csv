@@ -1,7 +1,0 @@
-Armor ID,Type,Melee Armor Bonus,Ranged Armor Bonus,Special Rules,Item Traits,Cost 1 Wound,Cost 2 Wounds,Cost 3 Wounds,isSheild,Rarity
-1,Ballistic Shield,1,1,,[Shield],8,10,12,TRUE,N/A
-2,Combat Armor,1,2,,[Reduces Movement],15,20,25,FALSE,N/A
-3,Biohazard Suit,1,0,Benefits against Gas attacks,[Grants Ungainly],5,7,9,FALSE,N/A
-4,Combat Shield,2,0,,[Shield],6,8,10,TRUE,N/A
-5,Power Armor,4,4,+2 to bearer Strength counts as Biohazard suit.,[Malfunction Prone|Armored Plating],50,75,100,FALSE,Ultra Rare
-6,Shock Shield,2,0,Counts as having a normal Combat Shield. 1/Turn make an attack as an improvised light weapon with strength STR + 2,[Malfunction Prone|Shield|Distracting],10,15,20,TRUE,Scarce

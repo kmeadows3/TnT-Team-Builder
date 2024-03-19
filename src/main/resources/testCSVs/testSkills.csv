@@ -1,9 +1,0 @@
-Skill ID,Skillset ID,Name,Description
-1,5,Scavenger,When taking a weapon with limited ammo roll 2d3 when determining ammo quantity and take the higher of the two. Upkeep does not need to be paid for this unit. May not be taken by Freelancers.
-2,8,Motivator,All friendly models withing 6"" of this model gain +1 to activation tests. Motivator may not stack with itself.
-3,4,Reconnoiter,At the start of the game after all models have deployed but before init is determined make a free move action.
-4,3,Trekker,When moving through Difficult Terrain attempt an Agility test (MET/TN 10) for free. On pass move through terrain without movement penalty.
-5,7,Brave,+2 bonus when making Will tests.
-6,6,Brute,Gaint +1 to Strength Stat when making Melee attacks. Ignore heavy weapons rule.
-7,6,Bully,All enemies defeated by this model in close combat are knocked prone in addition to any other combat result.
-8,15,Dumb,Takes a -2 penalty to intelligence tests

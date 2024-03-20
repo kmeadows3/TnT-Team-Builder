@@ -1,4 +1,4 @@
-package com.techelevator.tenmo.model;
+package my.TNTBuilder.model;
 
 public class UserCredentials {
 

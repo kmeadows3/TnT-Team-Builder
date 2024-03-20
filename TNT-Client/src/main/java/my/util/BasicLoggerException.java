@@ -1,4 +1,4 @@
-package com.techelevator.util;
+package my.util;
 
 public class BasicLoggerException extends RuntimeException {
 

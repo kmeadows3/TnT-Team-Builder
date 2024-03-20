@@ -27,7 +27,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User getUserById(int userId) {
         User user = null;
-        String sql = "SELECT user_id, username, password_hash FROM tenmo_user WHERE user_id = ?";
+        String sql = "SELECT user_id, username, password_hash FROM tnt_user WHERE user_id = ?";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
             if (results.next()) {
@@ -42,7 +42,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public List<User> getUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT user_id, username, password_hash FROM tenmo_user";
+        String sql = "SELECT user_id, username, password_hash FROM tnt_user";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
             while (results.next()) {
@@ -59,7 +59,7 @@ public class JdbcUserDao implements UserDao {
     public User getUserByUsername(String username) {
         if (username == null) throw new IllegalArgumentException("Username cannot be null");
         User user = null;
-        String sql = "SELECT user_id, username, password_hash FROM tenmo_user WHERE username = LOWER(TRIM(?));";
+        String sql = "SELECT user_id, username, password_hash FROM tnt_user WHERE username = LOWER(TRIM(?));";
         try {
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, username);
             if (rowSet.next()) {
@@ -75,16 +75,10 @@ public class JdbcUserDao implements UserDao {
     public User createUser(RegisterUserDto user) {
         User newUser = null;
         // create user
-        String sql = "INSERT INTO tenmo_user (username, password_hash) VALUES (LOWER(TRIM(?)), ?) RETURNING user_id";
+        String sql = "INSERT INTO tnt_user (username, password_hash) VALUES (LOWER(TRIM(?)), ?) RETURNING user_id";
         String password_hash = new BCryptPasswordEncoder().encode(user.getPassword());
         try {
             int newUserId = jdbcTemplate.queryForObject(sql, int.class, user.getUsername(), password_hash);
-            newUser = getUserById(newUserId);
-            if (newUser != null) {
-                // create account
-                sql = "INSERT INTO account (user_id, balance) VALUES (?, ?)";
-                jdbcTemplate.update(sql, newUserId, STARTING_BALANCE);
-            }
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {

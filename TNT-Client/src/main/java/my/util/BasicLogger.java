@@ -1,4 +1,4 @@
-package com.techelevator.util;
+package my.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,8 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class BasicLogger {
 
 	private static PrintWriter pw = null;
-	private static final String DIRECTORY_NAME = "tenmo-client";
-	
+	private static final String DIRECTORY_NAME = "TNT-Client";
 	public static void log(String message) {
 		try {
 			if (pw == null) {

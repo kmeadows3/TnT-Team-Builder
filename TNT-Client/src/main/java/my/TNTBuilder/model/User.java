@@ -1,4 +1,4 @@
-package com.techelevator.tenmo.model;
+package my.TNTBuilder.model;
 
 import java.util.Objects;
 

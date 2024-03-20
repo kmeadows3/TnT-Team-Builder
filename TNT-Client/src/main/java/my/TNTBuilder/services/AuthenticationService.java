@@ -1,6 +1,6 @@
-package com.techelevator.tenmo.services;
+package my.TNTBuilder.services;
 
-import com.techelevator.util.BasicLogger;
+import my.util.BasicLogger;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -10,8 +10,8 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
-import com.techelevator.tenmo.model.AuthenticatedUser;
-import com.techelevator.tenmo.model.UserCredentials;
+import my.TNTBuilder.model.AuthenticatedUser;
+import my.TNTBuilder.model.UserCredentials;
 
 public class AuthenticationService {
 

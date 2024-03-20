@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS team, unit_reference, faction, tnt_user, skill_reference, skillset_reference;
+DROP TABLE IF EXISTS team, unit_reference, faction, tnt_user, skill_reference, skillset_reference, item_trait_reference;
 DROP SEQUENCE IF EXISTS seq_user_id;
 
 CREATE SEQUENCE seq_user_id;
@@ -63,7 +63,11 @@ CREATE TABLE skill_reference(
 	CONSTRAINT fk_skill_skillset FOREIGN KEY(skillset_id) REFERENCES skillset_reference(skillset_id)
 );
 
-
+CREATE TABLE item_trait_reference(
+	item_trait_id serial PRIMARY KEY NOT NULL,
+	name varchar(50) NOT NULL,
+	effect text NOT NULL
+);
 
 
 
@@ -130,4 +134,11 @@ INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(6, 'Bully', 'All enemies defeated by this model in close combat are knocked prone in addition to any other combat result.'),
 	(15, 'Dumb', 'Takes a -2 penalty to intelligence tests');
 	
+INSERT INTO item_trait_reference (name, effect)
+
+
+
+
+
+
 COMMIT;

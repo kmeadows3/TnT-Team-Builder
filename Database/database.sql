@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS team, unit_reference, faction, tnt_user, skill_reference, skillset_reference, item_item_trait, item_trait_reference, item_reference;
+DROP TABLE IF EXISTS team_item, unit_item, unit_skillset, unit_skill, unit, team, unit_reference, faction, tnt_user, skill_reference, skillset_reference, item_item_trait, item_trait_reference, item_reference;
 DROP SEQUENCE IF EXISTS seq_user_id;
 
 CREATE SEQUENCE seq_user_id;
@@ -45,7 +45,7 @@ CREATE TABLE unit_reference (
 	skillsets varchar(50) NOT NULL,
 	starting_skills varchar(50),
 	starting_free_skills int NOT NULL,
-	new_purchase_note text NOT NULL,
+	special_rules text NOT NULL,
 	CONSTRAINT FK_unit_faction FOREIGN KEY(faction_id) REFERENCES faction(faction_id)
 );
 
@@ -97,6 +97,55 @@ CREATE TABLE item_item_trait(
 );
 
 
+CREATE TABLE team_item(
+	team_id int NOT NULL,
+	item_id int NOT NULL,
+	CONSTRAINT FK_team_item_join_item_id FOREIGN KEY(item_id) REFERENCES item_reference(item_id),
+	CONSTRAINT FK_team_item_join_team_id FOREIGN KEY(team_id) REFERENCES team(team_id)
+);
+
+CREATE TABLE unit(
+	unit_id serial PRIMARY KEY NOT NULL,
+	name varchar(100) NOT NULL,
+	class varchar(20) NOT NULL,
+	rank varchar(20) NOT NULL,
+	species varchar(20) NOT NULL,
+	base_cost int NOT NULL,
+	wounds int NOT NULL,
+	defense int NOT NULL,
+	mettle int NOT NULL,
+	move int NOT NULL,
+	ranged int NOT NULL,
+	melee int NOT NULL,
+	strength int NOT NULL,
+	empty_skills int NOT NULL,
+	special_rules text NOT NULL,
+	spent_exp int NOT NULL,
+	unspent_exp int DEFAULT 0,
+	total_advances int DEFAULT 0,
+	ten_point_advances int DEFAULT 0
+);
+
+CREATE TABLE unit_item(
+	unit_id int NOT NULL,
+	item_id int NOT NULL,
+	CONSTRAINT FK_unit_item_join_item_id FOREIGN KEY(item_id) REFERENCES item_reference(item_id),
+	CONSTRAINT FK_unit_item_join_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id)
+);
+
+CREATE TABLE unit_skillset(
+	unit_id int NOT NULL,
+	skillset_id int NOT NULL,
+	CONSTRAINT FK_unit_skillset_join_skillset_id FOREIGN KEY(skillset_id) REFERENCES skillset_reference(skillset_id),
+	CONSTRAINT FK_unit_skillset_join_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id)
+);
+
+CREATE TABLE unit_skill(
+	unit_id int NOT NULL,
+	skill_id int NOT NULL,
+	CONSTRAINT FK_unit_skill_join_skill_id FOREIGN KEY(skill_id) REFERENCES skill_reference(skill_id),
+	CONSTRAINT FK_unit_skill_join_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id)
+);
 
 
 
@@ -122,14 +171,14 @@ INSERT INTO faction (faction_name) VALUES
 	('Freelancers');
 	
 INSERT INTO unit_reference (faction_id, class, rank, species, base_cost, wounds, defense, mettle, move, ranged, melee, 
-							strength, skillsets, starting_skills, starting_free_skills, new_purchase_note) VALUES
-	(1, 'Trade Master', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '[1]', 2, 'Starts with 2 empty skills'),
-	(1, 'Lieutenant', 'Elite', 'Human', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|7|8]', '[2]', 1, 'Starts with 1 empty skill'),
+							strength, skillsets, starting_skills, starting_free_skills, special_rules) VALUES
+	(1, 'Trade Master', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '[1]', 2, 'N/A'),
+	(1, 'Lieutenant', 'Elite', 'Human', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|7|8]', '[2]', 1, 'N/A'),
 	(1, 'Tracker', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[2|3|4]', '[3|4]', 0, 'N/A'),
 	(1, 'Defender', 'Rank and File', 'Human', 23, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '[5]', 0, 'N/A'),
-	(3, 'Bandit King', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '', 3, 'Starts with 3 empty skills'),
-	(3, 'Brute', 'Elite', 'Human', 50, 1, 6, 6, 6, 4, 7, 6, '[1|6|7]', '[6|7|8]', 0, 'Unless Leader is warlord only 1 per team'),
-	(3, 'Raider Champion', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[1|6|7|8]', '', 2, 'Starts with 2 skills'),
+	(3, 'Bandit King', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '', 3, 'N/A'),
+	(3, 'Brute', 'Elite', 'Human', 50, 1, 6, 6, 6, 4, 7, 6, '[1|6|7]', '[6|7|8]', 0, 'Unless Leader is warlord, only 1 per team'),
+	(3, 'Raider Champion', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[1|6|7|8]', '', 2, 'N/A'),
 	(3, 'Raider', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, 'N/A');
 
 INSERT INTO skillset_reference (skillset_name, category) VALUES 

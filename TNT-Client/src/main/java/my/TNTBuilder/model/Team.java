@@ -9,6 +9,7 @@ import java.util.Objects;
 public class Team {
     private int id;
     private int userId;
+    private String faction;
     private int factionId;
     private String name = "";
     private int money;
@@ -18,11 +19,12 @@ public class Team {
     //Constructors
     public Team (){
     }
-    public Team (int id, int userId, String name, int factionId, int money,
+    public Team (int id, int userId, String name, String faction, int factionId, int money,
                  List<Unit> unitList, List<Item> inventory){
         this.id = id;
         this.userId = userId;
         this.name = name;
+        this.faction = faction;
         this.factionId = factionId;
         this.money = money;
         this.unitList = unitList;
@@ -62,6 +64,15 @@ Derived instance variables
     /*
     getters and setters
      */
+
+    public String getFaction() {
+        return faction;
+    }
+
+    public void setFaction(String faction) {
+        this.faction = faction;
+    }
+
     public int getUserId() {
         return userId;
     }

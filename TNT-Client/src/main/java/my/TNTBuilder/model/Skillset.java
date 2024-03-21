@@ -1,4 +1,4 @@
-package my.TNTBuilder.model.userModels;
+package my.TNTBuilder.model;
 
 import java.util.Objects;
 

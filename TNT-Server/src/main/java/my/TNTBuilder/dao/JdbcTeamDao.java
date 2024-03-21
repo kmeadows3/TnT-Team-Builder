@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 public class JdbcTeamDao implements TeamDao{
 
     private final JdbcTemplate jdbcTemplate;
-    private final String SELECT_ALL_FROM_TEAM = "SELECT team_id, user_id, faction_id, team_name, money FROM team ";
+    private final String SELECT_ALL_FROM_TEAM = "SELECT team_id, user_id, f.faction_id, team_name, money, faction_name " +
+            "FROM team JOIN faction f ON f.faction_id = team.faction_id ";
 
     public JdbcTeamDao(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
@@ -56,6 +57,7 @@ public class JdbcTeamDao implements TeamDao{
         Team team = new Team();
         team.setId(row.getInt("team_id"));
         team.setFactionId(row.getInt("faction_id"));
+        team.setFaction(row.getString("faction_name"));
         team.setUserId(row.getInt("user_id"));
         team.setName(row.getString("team_name"));
         team.setMoney(row.getInt("money"));

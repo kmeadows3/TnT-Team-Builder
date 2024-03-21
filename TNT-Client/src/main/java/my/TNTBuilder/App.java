@@ -1,9 +1,12 @@
 package my.TNTBuilder;
 
 import my.TNTBuilder.model.AuthenticatedUser;
+import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.UserCredentials;
+import my.TNTBuilder.model.dto.TeamInputDTO;
 import my.TNTBuilder.services.AuthenticationService;
 import my.TNTBuilder.services.ConsoleService;
+import my.TNTBuilder.services.TeamService;
 
 public class App {
 
@@ -18,8 +21,8 @@ public class App {
     private static final String API_BASE_URL = "http://localhost:8080/";
 
     private final ConsoleService consoleService = new ConsoleService();
+    private final TeamService teamService = new TeamService(API_BASE_URL);
     private final AuthenticationService authenticationService = new AuthenticationService(API_BASE_URL);
-//    private final TNTService tntService = new TNTService(API_BASE_URL);
     private AuthenticatedUser currentUser;
     private TNTException generalError = new TNTException("Unknown Error, check log for details.");
 
@@ -35,11 +38,12 @@ public class App {
         consoleService.printGreeting();
         loginMenu();
         if (currentUser != null) {
-//            tntService.setCurrentUser(currentUser);
+            teamService.setCurrentUser(currentUser);
             mainMenu();
         }
         System.out.println("This line in the run method stops the debugger before program exits");
     }
+
     private void loginMenu() {
         int menuSelection = -1;
         while (menuSelection != MENU_EXIT && currentUser == null) {
@@ -78,8 +82,7 @@ public class App {
         while (selection != MENU_EXIT) {
             selection = consoleService.printMainMenu();
             if (selection == MAIN_MENU_NEW_WARBAND) {
-                //createTeam();
-                consoleService.printMessage("whoo");
+                createTeam();
             } else if (selection == MAIN_MENU_LOAD_WARBAD) {
                 consoleService.printErrorMessage("This functionality is not implemented");
             } else if (selection == MAIN_MENU_LOOKUP_RULE) {
@@ -122,15 +125,19 @@ public class App {
 //
 //
 //
-//    private void createTeam() throws TNTException{
-//        try {
-//            TeamInputHelper teamData = consoleService.initializeNewTeam(tntService.getReference().getTeamOptions());
+    private void createTeam() {
+        try {
+            //TODO make this actually work by getting list of factions
+            TeamInputDTO testTeam = new TeamInputDTO("Test Name", 1, 100);
+            Team newTeam = teamService.createTeam(testTeam);
+            consoleService.displayTeam(newTeam);
+//            TeamInputDTO teamData = consoleService.initializeNewTeam(tntService.getReference().getTeamOptions());
 //            tntService.newTeam(teamData.getName(), teamData.getFaction(), teamData.getMoney());
 //            editTeamMenu();
-//        } catch (TNTException e) {
-//            consoleService.printErrorMessage(e);
-//        }
-//    }
+        } catch (TNTException e) {
+            consoleService.printErrorMessage(e);
+        }
+    }
 //
 //    private void createUnit(){
 //        try {

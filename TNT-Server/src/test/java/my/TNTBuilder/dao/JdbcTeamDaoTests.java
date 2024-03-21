@@ -12,9 +12,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.ArrayList;
 
 public class JdbcTeamDaoTests extends BaseDaoTests{
-    protected final Team team1 = new Team(1, 1, "Team 1", 1, 500, new ArrayList<Unit>(), new ArrayList<Item>());
-    protected final Team team2 = new Team(1, 1, "Team 2", 3, 1500, new ArrayList<Unit>(), new ArrayList<Item>());
-    protected final Team team3 = new Team(1, 2, "Team 3", 2, 1000, new ArrayList<Unit>(), new ArrayList<Item>());
+    protected final Team team1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500, new ArrayList<Unit>(), new ArrayList<Item>());
+    protected final Team team2 = new Team(1, 1, "Team 2", "Raiders", 3, 1500, new ArrayList<Unit>(), new ArrayList<Item>());
+    protected final Team team3 = new Team(1, 2, "Team 3", "Mutants", 2, 1000, new ArrayList<Unit>(), new ArrayList<Item>());
 
     private JdbcTeamDao sut;
 
@@ -42,6 +42,7 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         Team newTeam = new Team();
         newTeam.setUserId(1);
         newTeam.setFactionId(1);
+        newTeam.setFaction("Caravanners");
         newTeam.setName("New Team");
         newTeam.setMoney(500);
         Team returnedTeam = sut.createTeam(newTeam);
@@ -53,12 +54,12 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
 
     @Test(expected = DaoException.class)
     public void create_team_invalid_faction_throws_exception(){
-        sut.createTeam(new Team(4, 1, "Name", 99, 500, new ArrayList<Unit>(), new ArrayList<Item>()));
+        sut.createTeam(new Team(4, 1, "Name", "Mutants", 99, 500, new ArrayList<Unit>(), new ArrayList<Item>()));
     }
 
     @Test(expected = DaoException.class)
     public void create_team_invalid_user_throws_exception(){
-        sut.createTeam(new Team(4, 99, "Name", 1, 500, new ArrayList<Unit>(), new ArrayList<Item>()));
+        sut.createTeam(new Team(4, 99, "Name", "Caravanners", 1, 500, new ArrayList<Unit>(), new ArrayList<Item>()));
     }
 
 }

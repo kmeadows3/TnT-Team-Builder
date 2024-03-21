@@ -1,6 +1,7 @@
 package my.TNTBuilder.services;
 
 
+import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.User;
 import my.TNTBuilder.model.UserCredentials;
 import java.util.List;
@@ -98,5 +99,32 @@ public class ConsoleService {
         scanner.nextLine();
     }
 
+    public void displayTeam(Team team){
 
+        int[] padding = calculatePaddingForCenteredText(team.getName(), BOX_WIDTH);
+
+
+        System.out.println();
+        System.out.println("---------------------------------------------------------------------------");
+        System.out.printf("| %" + padding[0] + "s%S%"+ (padding[1]) + "s |%n", "", team.getName(), "");
+        System.out.println("--------------------------------------------------------------------------");
+        System.out.printf("| %-12s           |  %7s  |  %21s  |  %6s  |%n",
+                "FACTION", "BS COST", "UNSPENT BARTER SCRIP", "UPKEEP");
+        System.out.printf("| %-22s |   %4d    |          %5d          |    %2d    |%n",
+                team.getFaction(), team.getBSCost(), team.getMoney(), team.getUpkeep());
+        System.out.println("---------------------------------------------------------------------------");
+        //printTeamBox(team);
+        System.out.println("---------------------------------------------------------------------------");
+        System.out.printf("| %-71s |%n", "INVENTORY");
+        System.out.printf("| %-71s |%n", "- Admittedly, inventory isn't implemented, so I can't print it.");
+        System.out.println("---------------------------------------------------------------------------");
+
+    }
+
+    private int[] calculatePaddingForCenteredText(String string, int boxWidth){
+        int[] padding = new int[2];
+        padding[0] = (boxWidth - string.length()) / 2;
+        padding[1] = boxWidth - padding[0] - string.length();
+        return padding;
+    }
 }

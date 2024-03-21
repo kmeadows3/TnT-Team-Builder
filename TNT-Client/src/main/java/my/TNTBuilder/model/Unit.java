@@ -1,7 +1,6 @@
 package my.TNTBuilder.model;
 
 import my.TNTBuilder.model.inventory.Item;
-import my.TNTBuilder.model.userModels.Skillset;
 
 import java.util.ArrayList;
 import java.util.HashSet;

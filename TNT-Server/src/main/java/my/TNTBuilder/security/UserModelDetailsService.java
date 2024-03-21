@@ -1,8 +1,8 @@
 package my.TNTBuilder.security;
 
 import my.TNTBuilder.dao.UserDao;
-import my.TNTBuilder.model.Authority;
-import my.TNTBuilder.model.User;
+import my.TNTBuilder.model.userModels.Authority;
+import my.TNTBuilder.model.userModels.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;

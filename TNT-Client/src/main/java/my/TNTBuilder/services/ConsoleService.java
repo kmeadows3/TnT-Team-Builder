@@ -1,11 +1,8 @@
 package my.TNTBuilder.services;
 
 
-import my.TNTBuilder.model.Transfer;
 import my.TNTBuilder.model.User;
 import my.TNTBuilder.model.UserCredentials;
-
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
 

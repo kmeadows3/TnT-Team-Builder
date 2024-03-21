@@ -1,7 +1,7 @@
 package my.TNTBuilder.dao;
 
-import my.TNTBuilder.model.RegisterUserDto;
-import my.TNTBuilder.model.User;
+import my.TNTBuilder.model.userModels.RegisterUserDto;
+import my.TNTBuilder.model.userModels.User;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ public interface UserDao {
 
     User getUserByUsername(String username);
 
+    int getUserIdByUsername(String username);
     User createUser(RegisterUserDto user);
 
 

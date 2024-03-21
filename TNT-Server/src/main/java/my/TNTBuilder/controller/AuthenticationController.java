@@ -3,10 +3,10 @@ package my.TNTBuilder.controller;
 import javax.validation.Valid;
 
 import my.TNTBuilder.exception.DaoException;
-import my.TNTBuilder.model.LoginResponseDto;
+import my.TNTBuilder.model.userModels.LoginResponseDto;
 import my.TNTBuilder.dao.UserDao;
-import my.TNTBuilder.model.LoginDto;
-import my.TNTBuilder.model.User;
+import my.TNTBuilder.model.userModels.LoginDto;
+import my.TNTBuilder.model.userModels.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import my.TNTBuilder.model.RegisterUserDto;
+import my.TNTBuilder.model.userModels.RegisterUserDto;
 import my.TNTBuilder.security.jwt.TokenProvider;
 import org.springframework.web.server.ResponseStatusException;
 

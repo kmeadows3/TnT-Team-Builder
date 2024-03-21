@@ -1,9 +1,10 @@
 package my.TNTBuilder.dao;
 
 import my.TNTBuilder.exception.DaoException;
-import my.TNTBuilder.model.RegisterUserDto;
-import my.TNTBuilder.model.User;
+import my.TNTBuilder.model.userModels.RegisterUserDto;
+import my.TNTBuilder.model.userModels.User;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -17,7 +18,6 @@ import java.util.List;
 @Component
 public class JdbcUserDao implements UserDao {
 
-    private static final BigDecimal STARTING_BALANCE = new BigDecimal("1000.00");
     private final JdbcTemplate jdbcTemplate;
 
     public JdbcUserDao(JdbcTemplate jdbcTemplate) {
@@ -72,6 +72,21 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
+    public int getUserIdByUsername(String username) {
+        if (username == null) throw new IllegalArgumentException("Username cannot be null");
+        int userid = -1;
+        String sql = "SELECT user_id FROM tnt_user WHERE username = LOWER(TRIM(?));";
+        try {
+            userid = jdbcTemplate.queryForObject(sql, Integer.class, username);
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (EmptyResultDataAccessException e) {
+            throw new DaoException("Unable to find user of that username");
+        }
+        return userid;
+    }
+
+    @Override
     public User createUser(RegisterUserDto user) {
         User newUser = null;
         // create user
@@ -79,6 +94,7 @@ public class JdbcUserDao implements UserDao {
         String password_hash = new BCryptPasswordEncoder().encode(user.getPassword());
         try {
             int newUserId = jdbcTemplate.queryForObject(sql, int.class, user.getUsername(), password_hash);
+            newUser = getUserById(newUserId);
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {

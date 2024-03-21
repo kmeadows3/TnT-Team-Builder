@@ -1,8 +1,8 @@
 package my.TNTBuilder.dao;
 
 import my.TNTBuilder.exception.DaoException;
-import my.TNTBuilder.model.RegisterUserDto;
-import my.TNTBuilder.model.User;
+import my.TNTBuilder.model.userModels.RegisterUserDto;
+import my.TNTBuilder.model.userModels.User;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,9 +11,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 
 public class JdbcUserDaoTests extends BaseDaoTests {
-    protected static final User USER_1 = new User(1001, "user1", "user1", "USER");
-    protected static final User USER_2 = new User(1002, "user2", "user2", "USER");
-    private static final User USER_3 = new User(1003, "user3", "user3", "USER");
+    protected static final User USER_1 = new User(1, "user1", "user1", "USER");
+    protected static final User USER_2 = new User(2, "user2", "user2", "USER");
+    private static final User USER_3 = new User(3, "user3", "user3", "USER");
 
     private JdbcUserDao sut;
 
@@ -38,6 +38,17 @@ public class JdbcUserDaoTests extends BaseDaoTests {
         User actualUser = sut.getUserByUsername(USER_1.getUsername());
 
         Assert.assertEquals(USER_1, actualUser);
+    }
+
+    @Test
+    public void getUserIdByUsername_given_valid_user_returns_id() {
+        int returnedId = sut.getUserIdByUsername(USER_1.getUsername());
+        Assert.assertEquals(USER_1.getId(), returnedId);
+    }
+
+    @Test (expected = DaoException.class)
+    public void getUserIdByUsername_given_invalid_user_throws_exception() {
+        int returnedId = sut.getUserIdByUsername("Invalid Username");
     }
 
     @Test

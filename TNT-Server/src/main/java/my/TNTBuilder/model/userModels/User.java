@@ -1,4 +1,4 @@
-package my.TNTBuilder.model;
+package my.TNTBuilder.model.userModels;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

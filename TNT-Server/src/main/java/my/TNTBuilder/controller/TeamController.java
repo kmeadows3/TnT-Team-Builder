@@ -35,12 +35,14 @@ public class TeamController {
         return returnTeam;
     }
 
-    //TODO MAKE THIS SECURE, just coded it now so I didn't have to make JSON in postman
     @RequestMapping(path = "/team/{id}", method = RequestMethod.GET)
-    public Team createTeam(@PathVariable int id){
+    public Team createTeam(@PathVariable int id, Principal principal){
         Team returnTeam = null;
         try{
-            returnTeam = teamDao.getTeamById(id);
+            returnTeam = teamDao.getTeamById(id, userDao.getUserIdByUsername(principal.getName()));
+            if(returnTeam == null){
+                throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to find selected team belonging to logged in user");
+            }
         } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

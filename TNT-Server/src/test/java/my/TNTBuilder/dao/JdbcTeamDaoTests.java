@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class JdbcTeamDaoTests extends BaseDaoTests{
     protected final Team team1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500, new ArrayList<Unit>(), new ArrayList<Item>());
-    protected final Team team2 = new Team(1, 1, "Team 2", "Raiders", 3, 1500, new ArrayList<Unit>(), new ArrayList<Item>());
-    protected final Team team3 = new Team(1, 2, "Team 3", "Mutants", 2, 1000, new ArrayList<Unit>(), new ArrayList<Item>());
+    protected final Team team2 = new Team(2, 1, "Team 2", "Raiders", 3, 1500, new ArrayList<Unit>(), new ArrayList<Item>());
+    protected final Team team3 = new Team(3, 2, "Team 3", "Mutants", 2, 1000, new ArrayList<Unit>(), new ArrayList<Item>());
 
     private JdbcTeamDao sut;
 
@@ -26,14 +26,14 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
 
     @Test
     public void get_team_by_id_returns_correct_team(){
-        Team testTeam = sut.getTeamById(1);
+        Team testTeam = sut.getTeamById(1, 1);
         Assert.assertNotNull(testTeam);
         Assert.assertEquals(team1, testTeam);
     }
 
     @Test
     public void get_team_by_id_returns_null_with_invalid_id(){
-        Team testTeam = sut.getTeamById(99);
+        Team testTeam = sut.getTeamById(99, 1);
         Assert.assertNull(testTeam);
     }
 
@@ -46,7 +46,7 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         newTeam.setName("New Team");
         newTeam.setMoney(500);
         Team returnedTeam = sut.createTeam(newTeam);
-        Team teamFromDatabase = sut.getTeamById(4);
+        Team teamFromDatabase = sut.getTeamById(returnedTeam.getId(), 1);
         Assert.assertEquals(0, teamFromDatabase.getInventory().size());
         Assert.assertEquals(0, teamFromDatabase.getUnitList().size());
         Assert.assertEquals(returnedTeam, teamFromDatabase);

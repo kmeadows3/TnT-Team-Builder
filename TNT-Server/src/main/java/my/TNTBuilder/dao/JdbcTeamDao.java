@@ -20,11 +20,11 @@ public class JdbcTeamDao implements TeamDao{
     }
 
     @Override
-    public Team getTeamById(int teamId) {
-        String sql = SELECT_ALL_FROM_TEAM + "WHERE team_id = ?";
+    public Team getTeamById(int teamId, int userId) {
+        String sql = SELECT_ALL_FROM_TEAM + "WHERE team_id = ? AND user_id = ?";
         Team team = null;
         try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, teamId);
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, teamId, userId);
             while (results.next()){
                 team = mapRowToTeam(results);
             }
@@ -42,7 +42,7 @@ public class JdbcTeamDao implements TeamDao{
         try {
             int team_id = jdbcTemplate.queryForObject(sql, Integer.class, newTeam.getUserId(), newTeam.getFactionId(),
                     newTeam.getName(), newTeam.getMoney());
-            team = getTeamById(team_id);
+            team = getTeamById(team_id, newTeam.getUserId());
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {

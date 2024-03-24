@@ -106,6 +106,7 @@ CREATE TABLE team_item(
 
 CREATE TABLE unit(
 	unit_id serial PRIMARY KEY NOT NULL,
+	team_id int NOT NULL,
 	name varchar(100) NOT NULL,
 	class varchar(20) NOT NULL,
 	rank varchar(20) NOT NULL,
@@ -123,7 +124,8 @@ CREATE TABLE unit(
 	spent_exp int NOT NULL,
 	unspent_exp int DEFAULT 0,
 	total_advances int DEFAULT 0,
-	ten_point_advances int DEFAULT 0
+	ten_point_advances int DEFAULT 0,
+	CONSTRAINT FK_unit_team FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
 
 CREATE TABLE unit_item(

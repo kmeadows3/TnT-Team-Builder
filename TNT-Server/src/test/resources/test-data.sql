@@ -106,6 +106,7 @@ CREATE TABLE team_item(
 
 CREATE TABLE unit(
 	unit_id serial PRIMARY KEY NOT NULL,
+	team_id int NOT NULL,
 	name varchar(100) NOT NULL,
 	class varchar(20) NOT NULL,
 	rank varchar(20) NOT NULL,
@@ -123,8 +124,10 @@ CREATE TABLE unit(
 	spent_exp int NOT NULL,
 	unspent_exp int DEFAULT 0,
 	total_advances int DEFAULT 0,
-	ten_point_advances int DEFAULT 0
+	ten_point_advances int DEFAULT 0,
+	CONSTRAINT FK_unit_team FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
+
 
 CREATE TABLE unit_item(
 	unit_id int NOT NULL,
@@ -316,6 +319,11 @@ INSERT INTO tnt_user (username,password_hash,role) VALUES ('user3','user3','ROLE
 INSERT INTO team(user_id, faction_id, team_name, money) VALUES (1, 1, 'Team 1', 500);
 INSERT INTO team(user_id, faction_id, team_name, money) VALUES (1, 3, 'Team 2', 1500);
 INSERT INTO team(user_id, faction_id, team_name, money) VALUES (2, 2, 'Team 3', 1000);
+
+INSERT INTO unit (team_id, name, class, rank, species, base_cost, wounds, defense, mettle, move, ranged, melee,
+    strength, empty_skills, special_rules, spent_exp)
+VALUES (1, 'UnitName1', 'Trade Master', 'Leader', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100);
+VALUES (3, 'UnitName2', 'Soldier', 'Elite', 'Mutant', 51, 11, 6, 8, 7, 9, 7, 6, 1, 'Special rules description', 50);
 
 
 COMMIT;

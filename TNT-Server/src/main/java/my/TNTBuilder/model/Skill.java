@@ -2,19 +2,39 @@ package my.TNTBuilder.model;
 
 import java.util.Objects;
 
-public class UnitTrait {
+public class Skill {
     //Instance variables
     private String name;
     private String description;
     private int id;
+    private int skillsetId;
+    private String skillsetName;
 
-    public UnitTrait(int id, String name, String description){
+    public Skill(int id, String name, String description, int skillsetId, String skillsetName){
         this.id = id;
         this.name = name;
         this.description = description;
+        this.skillsetId = skillsetId;
+        this.skillsetName = skillsetName;
     }
 
-    public UnitTrait() {
+    public Skill() {
+    }
+
+    public int getSkillsetId() {
+        return skillsetId;
+    }
+
+    public void setSkillsetId(int skillsetId) {
+        this.skillsetId = skillsetId;
+    }
+
+    public String getSkillsetName() {
+        return skillsetName;
+    }
+
+    public void setSkillsetName(String skillsetName) {
+        this.skillsetName = skillsetName;
     }
 
     public int getId() {
@@ -40,8 +60,8 @@ public class UnitTrait {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UnitTrait unitTrait = (UnitTrait) o;
-        return id == unitTrait.id && name.equals(unitTrait.name) && description.equals(unitTrait.description);
+        Skill skill = (Skill) o;
+        return id == skill.id && name.equals(skill.name) && description.equals(skill.description);
     }
 
     public int hashCode() {

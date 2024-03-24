@@ -134,26 +134,25 @@ public class ConsoleService {
 
         System.out.println();
         printFullTopLine();
-        paddedDisplay(team.getName(), BOX_WIDTH, true);
+        paddedDisplay(team.getName(), BOX_WIDTH, true, true);
         printFullMiddleLine();
 
-        paddedDisplay("FACTION", 24, false);
-        paddedDisplay("BS COST", 11, false);
-        paddedDisplay("UNSPENT BARTER SCRIP", 25, false);
-        paddedDisplay("UPKEEP", 10, true);
+        paddedDisplay("FACTION", 24, true, false);
+        paddedDisplay("BS COST", 11, false,false);
+        paddedDisplay("UNSPENT BARTER SCRIP", 25, false, false);
+        paddedDisplay("UPKEEP", 10, false, true);
 
-        paddedDisplay(team.getFaction(), 24, false);
-        paddedDisplay(Integer.toString(team.getBSCost()), 11, false);
-        paddedDisplay(Integer.toString(team.getMoney()), 25, false);
-        paddedDisplay(Integer.toString(team.getUpkeep()), 10, true);
+        paddedDisplay(team.getFaction(), 24, true, false);
+        paddedDisplay(Integer.toString(team.getBSCost()), 11, false, false);
+        paddedDisplay(Integer.toString(team.getMoney()), 25, false, false);
+        paddedDisplay(Integer.toString(team.getUpkeep()), 10, false, true);
 
         printFullMiddleLine();
         printTeamBox(team);
         printFullMiddleLine();
 
-
-        System.out.printf("│ %-71s │%n", "INVENTORY");
-        System.out.printf("│ %-71s │%n", "- Admittedly, inventory isn't implemented, so I can't print it.");
+        System.out.printf("║ %-71s ║%n", "INVENTORY");
+        System.out.printf("║ %-71s ║%n", "- Admittedly, inventory isn't implemented, so I can't print it.");
         printFullBottomLine();
 
     }
@@ -182,41 +181,50 @@ public class ConsoleService {
      */
 
     private void printTeamBox(Team team) {
-        System.out.printf("│ %-71s │%n", "MEMBERS");
+        System.out.printf("║ %-71s ║%n", "MEMBERS");
         if (team.getUnitList().isEmpty()){
-            System.out.printf("│ %-71s │%n", "- How sad, this warband has no members :(");
+            System.out.printf("║ %-71s ║%n", "- How sad, this warband has no members :(");
         } else {
             for (int i = 0; i < team.getUnitList().size(); i++){
                 Unit unit = team.getUnitList().get(i);
                 String unitInfo = "(" + (i + 1) + ") " + unit.getUnitNickname() + " - " + unit.getName() + " - " +
                         unit.getBSCost() + " BS";
                 int paddingAmount = BOX_WIDTH - unitInfo.length();
-                System.out.printf("│ %s%" + paddingAmount + "s │%n", unitInfo, "");
+                System.out.printf("║ %s%" + paddingAmount + "s ║%n", unitInfo, "");
             }
 
         }
     }
 
-    private void paddedDisplay(String string, int boxWidth, boolean isEnd){
+    private void paddedDisplay(String string, int boxWidth, boolean isStart, boolean isEnd){
         int startPadding = (boxWidth - string.length()) / 2;
         int endPadding = boxWidth - startPadding - string.length();
-        String formatString = "│%" + startPadding + "s%s%" + endPadding + "s";
+        String formatString = "";
+
+        if (isStart){
+            formatString += "║";
+        } else {
+            formatString += "│";
+        }
+
+        formatString += "%" + startPadding + "s%s%" + endPadding + "s";
+
         if (isEnd){
-            formatString += "│%n";
+            formatString += "║%n";
         }
         System.out.printf(formatString, "", string, "");
     }
 
     private void printFullTopLine() {
-        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("╔═════════════════════════════════════════════════════════════════════════╗");
     }
 
     private void printFullBottomLine() {
-        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
+        System.out.println("╚═════════════════════════════════════════════════════════════════════════╝");
     }
 
     private void printFullMiddleLine() {
-        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("╟─────────────────────────────────────────────────────────────────────────╢");
     }
 
 

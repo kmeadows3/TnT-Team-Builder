@@ -4,16 +4,14 @@ import my.TNTBuilder.model.inventory.Item;
 
 import java.util.*;
 
-public class Unit implements Cloneable {
+public class Unit {
     private int id;
-    private String unitNickname; //not called name so it's not confusing with getName
+    private int teamId;
+    private String name;
     private String title;
-    private String faction;
     private String rank;
-    private String type;
+    private String species;
     private int baseCost;
-    private String newPurchaseNote;
-    private int additionalStartingSkills;
     private int wounds;
     private int defense;
     private int mettle;
@@ -21,27 +19,32 @@ public class Unit implements Cloneable {
     private int ranged;
     private int melee;
     private int strength;
+    private int emptySkills;
+    private String specialRules;
     private int spentExperience;
-    private int unspentExperience;
-    private int advances = 0;
+    private int unspentExperience = 0;
+    private int totalAdvances = 0;
     private int tenPointAdvances = 0;
     private List<Skillset> availableSkillsets;
-    private List<UnitTrait> unitTraits;
-    private List<Item> inventory;
+    private List<Skill> skills = new ArrayList<>();
+    private List<Item> inventory = new ArrayList<>();
 
 
-    //constructor
+    //constructors
 
-    public Unit(int id, String faction, String title, String rank, String type, int baseCost, String newPurchaseNote,
-                int wounds, int defense, int mettle, int move, int ranged, int melee, int strength,
-                List<Skillset> availableSkillsets, List<UnitTrait> unitTraits, int additionalStartingSkills, int spentExperience) {
+    public Unit(){};
+
+    public Unit(int id, int teamId, String name, String title, String rank, String species, int baseCost, int wounds, int defense,
+                int mettle, int move, int ranged, int melee, int strength, int emptySkills, String specialRules,
+                int spentExperience, int unspentExperience, int totalAdvances, int tenPointAdvances,
+                List<Skillset> availableSkillsets, List<Skill> skills, List<Item> inventory) {
         this.id = id;
-        this.faction = faction;
+        this.teamId = teamId;
+        this.name = name;
         this.title = title;
         this.rank = rank;
-        this.type = type;
+        this.species = species;
         this.baseCost = baseCost;
-        this.newPurchaseNote = newPurchaseNote;
         this.wounds = wounds;
         this.defense = defense;
         this.mettle = mettle;
@@ -49,27 +52,17 @@ public class Unit implements Cloneable {
         this.ranged = ranged;
         this.melee = melee;
         this.strength = strength;
-        this.availableSkillsets = availableSkillsets;
-        this.unitTraits = unitTraits;
-        this.additionalStartingSkills = additionalStartingSkills;
+        this.emptySkills = emptySkills;
+        this.specialRules = specialRules;
         this.spentExperience = spentExperience;
-        this.inventory = new ArrayList<Item>();
+        this.unspentExperience = unspentExperience;
+        this.totalAdvances = totalAdvances;
+        this.tenPointAdvances = tenPointAdvances;
+        this.availableSkillsets = availableSkillsets;
+        this.skills = skills;
+        this.inventory = inventory;
     }
-
-    public Unit() {
-    }
-
     //Methods
-
-
-    @Override
-    public Unit clone() throws CloneNotSupportedException {
-        Unit clonedUnit = (Unit) super.clone();
-        clonedUnit.inventory = new ArrayList<Item>();
-        clonedUnit.unitTraits = new ArrayList<>(unitTraits);
-        return clonedUnit;
-
-    }
 
     public int getBSCost() {
         int bsCost = baseCost;
@@ -81,8 +74,8 @@ public class Unit implements Cloneable {
         int upkeep = 0;
 
         List<String> skillNames = new ArrayList<>();
-        for (UnitTrait unitTrait : unitTraits) {
-            skillNames.add(unitTrait.getName());
+        for (Skill skill : skills) {
+            skillNames.add(skill.getName());
         }
         boolean isScavenger = skillNames.contains("Scavenger");
 
@@ -114,13 +107,156 @@ public class Unit implements Cloneable {
 
     //Getters and Setters
 
-
-    public int getAdvances() {
-        return advances;
+    public int getId() {
+        return id;
     }
 
-    public void setAdvances(int advances) {
-        this.advances = advances;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+    public String getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+
+    public int getBaseCost() {
+        return baseCost;
+    }
+
+    public void setBaseCost(int baseCost) {
+        this.baseCost = baseCost;
+    }
+
+    public int getWounds() {
+        return wounds;
+    }
+
+    public void setWounds(int wounds) {
+        this.wounds = wounds;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    public int getMettle() {
+        return mettle;
+    }
+
+    public void setMettle(int mettle) {
+        this.mettle = mettle;
+    }
+
+    public int getMove() {
+        return move;
+    }
+
+    public void setMove(int move) {
+        this.move = move;
+    }
+
+    public int getRanged() {
+        return ranged;
+    }
+
+    public void setRanged(int ranged) {
+        this.ranged = ranged;
+    }
+
+    public int getMelee() {
+        return melee;
+    }
+
+    public void setMelee(int melee) {
+        this.melee = melee;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public int getEmptySkills() {
+        return emptySkills;
+    }
+
+    public void setEmptySkills(int emptySkills) {
+        this.emptySkills = emptySkills;
+    }
+
+    public String getSpecialRules() {
+        return specialRules;
+    }
+
+    public void setSpecialRules(String specialRules) {
+        this.specialRules = specialRules;
+    }
+
+    public int getSpentExperience() {
+        return spentExperience;
+    }
+
+    public void setSpentExperience(int spentExperience) {
+        this.spentExperience = spentExperience;
+    }
+
+    public int getUnspentExperience() {
+        return unspentExperience;
+    }
+
+    public void setUnspentExperience(int unspentExperience) {
+        this.unspentExperience = unspentExperience;
+    }
+
+    public int getTotalAdvances() {
+        return totalAdvances;
+    }
+
+    public void setTotalAdvances(int totalAdvances) {
+        this.totalAdvances = totalAdvances;
     }
 
     public int getTenPointAdvances() {
@@ -131,192 +267,52 @@ public class Unit implements Cloneable {
         this.tenPointAdvances = tenPointAdvances;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return title;
-    }
-
-    public void setUnitNickname(String unitNickname) {
-        this.unitNickname = unitNickname;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setFaction(String faction) {
-        this.faction = faction;
-    }
-
-    public void setRank(String rank) {
-        this.rank = rank;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setBaseCost(int baseCost) {
-        this.baseCost = baseCost;
-    }
-
-    public void setNewPurchaseNote(String newPurchaseNote) {
-        this.newPurchaseNote = newPurchaseNote;
-    }
-
-    public void setAdditionalStartingSkills(int additionalStartingSkills) {
-        this.additionalStartingSkills = additionalStartingSkills;
-    }
-
-    public void setWounds(int wounds) {
-        this.wounds = wounds;
-    }
-
-    public void setDefense(int defense) {
-        this.defense = defense;
-    }
-
-    public void setMettle(int mettle) {
-        this.mettle = mettle;
-    }
-
-    public void setMove(int move) {
-        this.move = move;
-    }
-
-    public void setRanged(int ranged) {
-        this.ranged = ranged;
-    }
-
-    public void setMelee(int melee) {
-        this.melee = melee;
-    }
-
-    public void setStrength(int strength) {
-        this.strength = strength;
-    }
-
-    public void setSpentExperience(int spentExperience) {
-        this.spentExperience = spentExperience;
-    }
-
-    public void setUnspentExperience(int unspentExperience) {
-        this.unspentExperience = unspentExperience;
+    public List<Skillset> getAvailableSkillsets() {
+        return availableSkillsets;
     }
 
     public void setAvailableSkillsets(List<Skillset> availableSkillsets) {
         this.availableSkillsets = availableSkillsets;
     }
 
-    public void setUnitTraits(List<UnitTrait> unitTraits) {
-        this.unitTraits = unitTraits;
+    public List<Skill> getSkills() {
+        return skills;
     }
 
-    public void setInventory(List<Item> inventory) {
-        this.inventory = inventory;
-    }
-
-    public String getUnitNickname() {
-        return unitNickname;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getFaction() {
-        return faction;
-    }
-
-    public String getRank() {
-        return rank;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public int getBaseCost() {
-        return baseCost;
-    }
-
-    public String getNewPurchaseNote() {
-        return newPurchaseNote;
-    }
-
-    public int getWounds() {
-        return wounds;
-    }
-
-    public int getDefense() {
-        return defense;
-    }
-
-    public int getMettle() {
-        return mettle;
-    }
-
-    public int getMove() {
-        return move;
-    }
-
-    public int getRanged() {
-        return ranged;
-    }
-
-    public int getMelee() {
-        return melee;
-    }
-
-    public int getStrength() {
-        return strength;
-    }
-
-    public int getSpentExperience() {
-        return spentExperience;
-    }
-
-    public int getUnspentExperience() {
-        return unspentExperience;
-    }
-
-    public List<Skillset> getAvailableSkillsets() {
-        return availableSkillsets;
-    }
-
-    public List<UnitTrait> getUnitTraits() {
-        return unitTraits;
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
     }
 
     public List<Item> getInventory() {
         return inventory;
     }
 
-    public int getAdditionalStartingSkills() {
-        return additionalStartingSkills;
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
     }
+
+
+    //Override Equals
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Unit unit = (Unit) o;
-        return id == unit.id && baseCost == unit.baseCost && additionalStartingSkills == unit.additionalStartingSkills
-                && wounds == unit.wounds && defense == unit.defense && mettle == unit.mettle && move == unit.move
-                && ranged == unit.ranged && melee == unit.melee && strength == unit.strength
+        return id == unit.id && baseCost == unit.baseCost && wounds == unit.wounds && defense == unit.defense
+                && mettle == unit.mettle && move == unit.move && ranged == unit.ranged && melee == unit.melee
+                && strength == unit.strength && emptySkills == unit.emptySkills
                 && spentExperience == unit.spentExperience && unspentExperience == unit.unspentExperience
-                && Objects.equals(title, unit.title) && Objects.equals(faction, unit.faction)
-                && Objects.equals(rank, unit.rank)
-                && Objects.equals(type, unit.type) && Objects.equals(newPurchaseNote, unit.newPurchaseNote)
-                && new HashSet<>(unit.getAvailableSkillsets()).containsAll(availableSkillsets);
+                && totalAdvances == unit.totalAdvances && tenPointAdvances == unit.tenPointAdvances
+                && Objects.equals(name, unit.name) && Objects.equals(title, unit.title)
+                && Objects.equals(rank, unit.rank) && Objects.equals(species, unit.species)
+                && Objects.equals(specialRules, unit.specialRules);
     }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, title, rank, species, baseCost, wounds, defense, mettle, move, ranged, melee,
+                strength, emptySkills, specialRules, spentExperience, unspentExperience, totalAdvances, tenPointAdvances);
+    }
 }

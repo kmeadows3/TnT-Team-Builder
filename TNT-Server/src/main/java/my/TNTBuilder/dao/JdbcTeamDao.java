@@ -70,7 +70,7 @@ public class JdbcTeamDao implements TeamDao{
                 throw new DaoException("User has no saved teams");
             }
         } catch (CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to server or database", e);
+            throw new DaoException("Unable to connect to database", e);
         }
         return allTeams;
     }

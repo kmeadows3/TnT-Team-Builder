@@ -12,6 +12,8 @@ public class TeamInputDTO {
         this.money = money;
     }
 
+    public TeamInputDTO(){};
+
     public String getName() {
         return name;
     }

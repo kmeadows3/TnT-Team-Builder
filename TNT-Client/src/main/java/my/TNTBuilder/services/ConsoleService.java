@@ -1,16 +1,20 @@
 package my.TNTBuilder.services;
 
 
+import my.TNTBuilder.TNTException;
+import my.TNTBuilder.model.Faction;
 import my.TNTBuilder.model.Team;
-import my.TNTBuilder.model.User;
-import my.TNTBuilder.model.UserCredentials;
+import my.TNTBuilder.model.Unit;
+import my.TNTBuilder.model.dto.TeamInputDTO;
+import my.TNTBuilder.model.userModels.UserCredentials;
+
 import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleService {
 
     private final Scanner scanner = new Scanner(System.in);
-    private final int BOX_WIDTH = 71;
+    private final int BOX_WIDTH = 73;
 
     public int promptForMenuSelection(String prompt) {
         int menuSelection;
@@ -51,9 +55,20 @@ public class ConsoleService {
         System.out.println("(3) Lookup Rule");
         System.out.println("(0) Exit Program");
         System.out.println();
-        return promptForMenuSelection("Please choose an option:");
+        return promptForMenuSelection("Please choose an option: ");
     }
 
+    public void editTeamMenu(){
+        System.out.println();
+        System.out.println("(1) Change Team Name");
+        System.out.println("(2) Edit Unit");
+        System.out.println("(3) Add New Unit");
+        System.out.println("(4) Manage Money");
+        System.out.println("(5) Manage Inventory");
+        System.out.println("(6) Save and Exit Menu");
+        System.out.println("(0) Exit Menu");
+        System.out.println();
+    }
     public UserCredentials promptForCredentials() {
         String username = promptForString("Username: ");
         String password = promptForString("Password: ");
@@ -99,32 +114,112 @@ public class ConsoleService {
         scanner.nextLine();
     }
 
+    public TeamInputDTO setTeamNameAndStartingMoney(TeamInputDTO newTeamInfo) {
+        newTeamInfo.setMoney(promptForInt("Starting Money: "));
+        newTeamInfo.setName(promptForString("Team Name: "));
+        return newTeamInfo;
+    }
+
+    public void displayTeamOptions(List<Team> teams){
+
+        for (int i = 0; i < teams.size(); i++){
+            Team team = teams.get(i);
+            System.out.printf("(%d) %s (%s) - %d%n", i + 1, team.getName(), team.getFaction(), team.getMoney());
+        }
+        System.out.println();
+
+    }
+
     public void displayTeam(Team team){
 
-        int[] padding = calculatePaddingForCenteredText(team.getName(), BOX_WIDTH);
-
-
         System.out.println();
-        System.out.println("---------------------------------------------------------------------------");
-        System.out.printf("| %" + padding[0] + "s%S%"+ (padding[1]) + "s |%n", "", team.getName(), "");
-        System.out.println("--------------------------------------------------------------------------");
-        System.out.printf("| %-12s           |  %7s  |  %21s  |  %6s  |%n",
-                "FACTION", "BS COST", "UNSPENT BARTER SCRIP", "UPKEEP");
-        System.out.printf("| %-22s |   %4d    |          %5d          |    %2d    |%n",
-                team.getFaction(), team.getBSCost(), team.getMoney(), team.getUpkeep());
-        System.out.println("---------------------------------------------------------------------------");
-        //printTeamBox(team);
-        System.out.println("---------------------------------------------------------------------------");
-        System.out.printf("| %-71s |%n", "INVENTORY");
-        System.out.printf("| %-71s |%n", "- Admittedly, inventory isn't implemented, so I can't print it.");
-        System.out.println("---------------------------------------------------------------------------");
+        printFullTopLine();
+        paddedDisplay(team.getName(), BOX_WIDTH, true);
+        printFullMiddleLine();
+
+        paddedDisplay("FACTION", 24, false);
+        paddedDisplay("BS COST", 11, false);
+        paddedDisplay("UNSPENT BARTER SCRIP", 25, false);
+        paddedDisplay("UPKEEP", 10, true);
+
+        paddedDisplay(team.getFaction(), 24, false);
+        paddedDisplay(Integer.toString(team.getBSCost()), 11, false);
+        paddedDisplay(Integer.toString(team.getMoney()), 25, false);
+        paddedDisplay(Integer.toString(team.getUpkeep()), 10, true);
+
+        printFullMiddleLine();
+        printTeamBox(team);
+        printFullMiddleLine();
+
+
+        System.out.printf("│ %-71s │%n", "INVENTORY");
+        System.out.printf("│ %-71s │%n", "- Admittedly, inventory isn't implemented, so I can't print it.");
+        printFullBottomLine();
 
     }
 
-    private int[] calculatePaddingForCenteredText(String string, int boxWidth){
-        int[] padding = new int[2];
-        padding[0] = (boxWidth - string.length()) / 2;
-        padding[1] = boxWidth - padding[0] - string.length();
-        return padding;
+    public int getFactionSelection(List<Faction> factionList) {
+        System.out.println();
+        for (int i = 0; i < factionList.size(); i++){
+            System.out.printf("(%d) %s%n", i + 1, factionList.get(i).getFactionName());
+        }
+        System.out.println();
+        int selection = promptForMenuSelection("Select your faction (0 to exit): ");
+        return selection;
     }
+
+    public int validateSelectionFromList(int selection, int listSize){
+        if (selection > 0 && selection <= listSize) {
+            return selection;
+        } else {
+            printErrorMessage("Invalid Selection. Please pick a selection from the list above.");
+            return -1;
+        }
+    }
+
+    /*
+    PRIVATE METHODS
+     */
+
+    private void printTeamBox(Team team) {
+        System.out.printf("│ %-71s │%n", "MEMBERS");
+        if (team.getUnitList().isEmpty()){
+            System.out.printf("│ %-71s │%n", "- How sad, this warband has no members :(");
+        } else {
+            for (int i = 0; i < team.getUnitList().size(); i++){
+                Unit unit = team.getUnitList().get(i);
+                String unitInfo = "(" + (i + 1) + ") " + unit.getUnitNickname() + " - " + unit.getName() + " - " +
+                        unit.getBSCost() + " BS";
+                int paddingAmount = BOX_WIDTH - unitInfo.length();
+                System.out.printf("│ %s%" + paddingAmount + "s │%n", unitInfo, "");
+            }
+
+        }
+    }
+
+    private void paddedDisplay(String string, int boxWidth, boolean isEnd){
+        int startPadding = (boxWidth - string.length()) / 2;
+        int endPadding = boxWidth - startPadding - string.length();
+        String formatString = "│%" + startPadding + "s%s%" + endPadding + "s";
+        if (isEnd){
+            formatString += "│%n";
+        }
+        System.out.printf(formatString, "", string, "");
+    }
+
+    private void printFullTopLine() {
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+    }
+
+    private void printFullBottomLine() {
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
+    }
+
+    private void printFullMiddleLine() {
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+    }
+
+
+
+
 }

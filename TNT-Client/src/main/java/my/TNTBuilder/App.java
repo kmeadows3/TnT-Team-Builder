@@ -1,12 +1,15 @@
 package my.TNTBuilder;
 
-import my.TNTBuilder.model.AuthenticatedUser;
+import my.TNTBuilder.model.Faction;
+import my.TNTBuilder.model.userModels.AuthenticatedUser;
 import my.TNTBuilder.model.Team;
-import my.TNTBuilder.model.UserCredentials;
+import my.TNTBuilder.model.userModels.UserCredentials;
 import my.TNTBuilder.model.dto.TeamInputDTO;
 import my.TNTBuilder.services.AuthenticationService;
 import my.TNTBuilder.services.ConsoleService;
 import my.TNTBuilder.services.TeamService;
+
+import java.util.List;
 
 public class App {
 
@@ -16,10 +19,17 @@ public class App {
     public static final int MAIN_MENU_NEW_WARBAND = 1;
     public static final int MAIN_MENU_LOAD_WARBAD = 2;
     public static final int MAIN_MENU_LOOKUP_RULE = 3;
-    
+    public static final int EDIT_TEAM_MENU_CHANGE_NAME = 1;
+    public static final int EDIT_TEAM_MENU_EDIT_UNIT = 2;
+    public static final int EDIT_TEAM_MENU_ADD_NEW_UNIT = 3;
+    public static final int EDIT_TEAM_MENU_MANAGE_MONEY = 4;
+    public static final int EDIT_TEAM_MENU_MANAGE_INVENTORY = 5;
+    public static final int EDIT_TEAM_MENU_SAVE_AND_EXIT = 6;
+
+
+
 
     private static final String API_BASE_URL = "http://localhost:8080/";
-
     private final ConsoleService consoleService = new ConsoleService();
     private final TeamService teamService = new TeamService(API_BASE_URL);
     private final AuthenticationService authenticationService = new AuthenticationService(API_BASE_URL);
@@ -84,7 +94,7 @@ public class App {
             if (selection == MAIN_MENU_NEW_WARBAND) {
                 createTeam();
             } else if (selection == MAIN_MENU_LOAD_WARBAD) {
-                consoleService.printErrorMessage("This functionality is not implemented");
+                loadTeam();
             } else if (selection == MAIN_MENU_LOOKUP_RULE) {
                 consoleService.printErrorMessage("This functionality is not implemented");
             } else if (selection != MENU_EXIT){
@@ -94,50 +104,97 @@ public class App {
         consoleService.goodbyeMessage();
     }
 
-
-//    private void editTeamMenu(){
-//        while (true) {
-//            consoleService.displayTeam(tntService.getCurrentTeam());
-//            try {
-//                String userSelection = consoleService.editTeamMenu();
-//                if (userSelection.equals("1")){
-//                    renameTeam();
-//                } else if (userSelection.equals("2")){
-//                    editUnit();
-//                } else if (userSelection.equals("3")){
-//                    createUnit();
-//                } else if (userSelection.equals("4")){
-//                    manageMoneyMenu();
-//                } else if (userSelection.equals("5")){
-//                    throw new TNTException("This functionality is not implemented");
-//                } else if (userSelection.equals("6")){
-//                    // TODO implement save functionality
-//                    return;
-//                } else {
-//                    throw new TNTException("Please enter a valid selection");
-//                }
-//            } catch (TNTException e) {
-//                consoleService.printErrorMessage(e);
-//            }
-//        }
-//    }
-//
-//
-//
-//
-    private void createTeam() {
+    private void loadTeam() {
+        List<Team> savedTeams = null;
         try {
-            //TODO make this actually work by getting list of factions
-            TeamInputDTO testTeam = new TeamInputDTO("Test Name", 1, 100);
-            Team newTeam = teamService.createTeam(testTeam);
-            consoleService.displayTeam(newTeam);
-//            TeamInputDTO teamData = consoleService.initializeNewTeam(tntService.getReference().getTeamOptions());
-//            tntService.newTeam(teamData.getName(), teamData.getFaction(), teamData.getMoney());
-//            editTeamMenu();
+            savedTeams = teamService.getTeamsForUser();
+            if (savedTeams == null){
+                throw new TNTException("No teams returned");
+            }
+        } catch (TNTException e) {
+            consoleService.printErrorMessage(e);
+            return;
+        }
+        int selection = -1;
+        while (selection == -1) {
+            consoleService.displayTeamOptions(savedTeams);
+            selection = consoleService.promptForMenuSelection("Select team from list (0 to return): ");
+            if (selection == 0) {
+                return;
+            }
+            selection = consoleService.validateSelectionFromList(selection, savedTeams.size());
+        }
+        editTeamMenu(savedTeams.get(selection -1));
+    }
+
+
+    private void editTeamMenu(Team currentTeam){
+        while (true) {
+            consoleService.displayTeam(currentTeam);
+            consoleService.editTeamMenu();
+
+            int userSelection = consoleService.promptForMenuSelection("Select option from menu: ");
+            if (userSelection == MENU_EXIT){
+                return;
+            } else if (userSelection == EDIT_TEAM_MENU_CHANGE_NAME){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else if (userSelection == EDIT_TEAM_MENU_EDIT_UNIT){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else if (userSelection == EDIT_TEAM_MENU_ADD_NEW_UNIT){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else if (userSelection == EDIT_TEAM_MENU_MANAGE_MONEY){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else if (userSelection == EDIT_TEAM_MENU_MANAGE_INVENTORY){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else if (userSelection == EDIT_TEAM_MENU_SAVE_AND_EXIT) {
+                // TODO implement save functionality
+                return;
+            } else {
+                consoleService.printErrorMessage("Not a valid selection");
+            }
+        }
+    }
+
+
+
+
+    private void createTeam() {
+        List<Faction> factionList = null;
+        try {
+            factionList = teamService.getFactions();
+        } catch (TNTException e) {
+            consoleService.printErrorMessage(e);
+            return;
+        }
+        try {
+            TeamInputDTO newTeamInfo = gatherNewTeamInfoFromUser(factionList);
+            if (newTeamInfo.getFactionId() == 0){
+                return;
+            } else {
+                Team newTeam = teamService.createTeam(newTeamInfo);
+                editTeamMenu(newTeam);
+            }
         } catch (TNTException e) {
             consoleService.printErrorMessage(e);
         }
     }
+
+    private TeamInputDTO gatherNewTeamInfoFromUser(List<Faction> factionList){
+        TeamInputDTO newTeamInfo = new TeamInputDTO();
+        int factionId = -1;
+        while (factionId == -1){
+            factionId = consoleService.getFactionSelection(factionList);
+            if (factionId == MENU_EXIT){
+                newTeamInfo.setFactionId(MENU_EXIT);
+                return newTeamInfo;
+            }
+            factionId = consoleService.validateSelectionFromList(factionId, factionList.size());
+        }
+        newTeamInfo.setFactionId(factionId);
+        return consoleService.setTeamNameAndStartingMoney(newTeamInfo);
+    }
+
+
 //
 //    private void createUnit(){
 //        try {

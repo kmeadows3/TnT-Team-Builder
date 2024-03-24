@@ -1,12 +1,16 @@
 package my.TNTBuilder.dao;
 
 import my.TNTBuilder.exception.DaoException;
+import my.TNTBuilder.model.FactionDTO;
 import my.TNTBuilder.model.Team;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class JdbcTeamDao implements TeamDao{
@@ -17,21 +21,6 @@ public class JdbcTeamDao implements TeamDao{
 
     public JdbcTeamDao(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
-    }
-
-    @Override
-    public Team getTeamById(int teamId, int userId) {
-        String sql = SELECT_ALL_FROM_TEAM + "WHERE team_id = ? AND user_id = ?";
-        Team team = null;
-        try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, teamId, userId);
-            while (results.next()){
-                team = mapRowToTeam(results);
-            }
-        } catch (CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to server or database", e);
-        }
-        return team;
     }
 
     @Override
@@ -52,7 +41,62 @@ public class JdbcTeamDao implements TeamDao{
         return team;
     }
 
+    @Override
+    public Team getTeamById(int teamId, int userId) {
+        String sql = SELECT_ALL_FROM_TEAM + "WHERE team_id = ? AND user_id = ?";
+        Team team = null;
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, teamId, userId);
+            while (results.next()){
+                team = mapRowToTeam(results);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return team;
+    }
 
+    @Override
+    public List<Team> getAllTeamsForUser(int userId) {
+        List<Team> allTeams = new ArrayList<>();
+        String sql = SELECT_ALL_FROM_TEAM + "WHERE user_id = ?";
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+            while (results.next()){
+                Team team = mapRowToTeam(results);
+                allTeams.add(team);
+            }
+            if (allTeams.isEmpty()){
+                throw new DaoException("User has no saved teams");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return allTeams;
+    }
+
+    @Override
+    public List<FactionDTO> getAllFactions() {
+        List<FactionDTO> allFactions = new ArrayList<>();
+        String sql = "SELECT faction_id, faction_name FROM faction WHERE faction_name != 'Freelancers' ORDER BY faction_id";
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+            while (results.next()) {
+                FactionDTO currentFaction = new FactionDTO();
+                currentFaction.setFactionId(results.getInt("faction_id"));
+                currentFaction.setFactionName(results.getString("faction_name"));
+                allFactions.add(currentFaction);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        return allFactions;
+    }
+
+
+    /*
+    PRIVATE METHODS
+     */
     private Team mapRowToTeam(SqlRowSet row){
         Team team = new Team();
         team.setId(row.getInt("team_id"));

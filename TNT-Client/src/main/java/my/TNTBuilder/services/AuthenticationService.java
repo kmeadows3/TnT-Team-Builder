@@ -10,8 +10,8 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
-import my.TNTBuilder.model.AuthenticatedUser;
-import my.TNTBuilder.model.UserCredentials;
+import my.TNTBuilder.model.userModels.AuthenticatedUser;
+import my.TNTBuilder.model.userModels.UserCredentials;
 
 public class AuthenticationService {
 

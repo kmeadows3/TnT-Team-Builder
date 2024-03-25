@@ -51,10 +51,11 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         newTeam.setName("New Team");
         newTeam.setMoney(500);
         Team returnedTeam = sut.createTeam(newTeam);
-        Team teamFromDatabase = sut.getTeamById(returnedTeam.getId(), 1);
+        newTeam.setId(returnedTeam.getId());
+        Team teamFromDatabase = sut.getTeamById(newTeam.getId(), 1);
         Assert.assertEquals(0, teamFromDatabase.getInventory().size());
         Assert.assertEquals(0, teamFromDatabase.getUnitList().size());
-        Assert.assertEquals(returnedTeam, teamFromDatabase);
+        Assert.assertEquals(newTeam, teamFromDatabase);
     }
 
     @Test(expected = DaoException.class)

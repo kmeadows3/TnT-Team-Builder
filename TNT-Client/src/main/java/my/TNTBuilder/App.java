@@ -4,7 +4,6 @@ import my.TNTBuilder.model.Faction;
 import my.TNTBuilder.model.userModels.AuthenticatedUser;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.userModels.UserCredentials;
-import my.TNTBuilder.model.dto.TeamInputDTO;
 import my.TNTBuilder.services.AuthenticationService;
 import my.TNTBuilder.services.ConsoleService;
 import my.TNTBuilder.services.TeamService;
@@ -167,7 +166,7 @@ public class App {
             return;
         }
         try {
-            TeamInputDTO newTeamInfo = gatherNewTeamInfoFromUser(factionList);
+            Team newTeamInfo = gatherNewTeamInfoFromUser(factionList);
             if (newTeamInfo.getFactionId() == 0){
                 return;
             } else {
@@ -179,8 +178,8 @@ public class App {
         }
     }
 
-    private TeamInputDTO gatherNewTeamInfoFromUser(List<Faction> factionList){
-        TeamInputDTO newTeamInfo = new TeamInputDTO();
+    private Team gatherNewTeamInfoFromUser(List<Faction> factionList){
+        Team newTeamInfo = new Team();
         int factionId = -1;
         while (factionId == -1){
             factionId = consoleService.getFactionSelection(factionList);

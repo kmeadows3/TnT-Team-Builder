@@ -128,7 +128,6 @@ CREATE TABLE unit(
 	CONSTRAINT FK_unit_team FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
 
-
 CREATE TABLE unit_item(
 	unit_id int NOT NULL,
 	item_id int NOT NULL,

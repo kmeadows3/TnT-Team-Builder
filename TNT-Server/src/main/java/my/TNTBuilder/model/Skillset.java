@@ -8,6 +8,20 @@ public class Skillset {
     private String name;
     private String category;
 
+    /*
+    CONSTRUCTORS
+     */
+    public Skillset(){};
+
+    public Skillset(int id, String name, String category) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+    }
+    /*
+    GETTERS AND SETTERS
+     */
+
     public int getId() {
         return id;
     }

@@ -2,12 +2,15 @@ package my.TNTBuilder.model;
 
 import my.TNTBuilder.model.inventory.Item;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 public class Unit {
+    @NotNull(message = "Unit must have an id")
     private int id;
+    @NotNull(message = "Unit must belong to a team")
     private int teamId;
-    private String name;
+    private String name = "";
     private String title;
     private String rank;
     private String species;

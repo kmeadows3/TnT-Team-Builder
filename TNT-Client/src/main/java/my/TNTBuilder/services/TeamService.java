@@ -4,7 +4,6 @@ import my.TNTBuilder.TNTException;
 import my.TNTBuilder.model.Faction;
 import my.TNTBuilder.model.userModels.AuthenticatedUser;
 import my.TNTBuilder.model.Team;
-import my.TNTBuilder.model.dto.TeamInputDTO;
 import my.util.BasicLogger;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,10 +27,10 @@ public class TeamService {
         this.BASE_API_URL = baseUrl;
     }
 
-    public Team createTeam(TeamInputDTO teamInput) throws TNTException{
+    public Team createTeam(Team teamInput) throws TNTException{
         String url = BASE_API_URL+"/team";
         Team newTeam = null;
-        HttpEntity<TeamInputDTO> entity = getTeamInputDTOHttpEntity(teamInput);
+        HttpEntity<Team> entity = getTeamHttpEntity(teamInput);
         try {
             newTeam = restTemplate.postForObject(url, entity, Team.class);
         } catch (RestClientResponseException | ResourceAccessException e) {
@@ -90,7 +89,7 @@ public class TeamService {
     Private methods
      */
 
-    private HttpEntity<TeamInputDTO> getTeamInputDTOHttpEntity(TeamInputDTO teamInput) {
+    private HttpEntity<Team> getTeamHttpEntity(Team teamInput) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(currentUser.getToken());
         return new HttpEntity<>(teamInput, httpHeaders);

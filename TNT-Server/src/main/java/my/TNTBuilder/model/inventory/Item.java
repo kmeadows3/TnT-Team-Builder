@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class Item {
-
     private int id;
     private String name;
     private int cost;

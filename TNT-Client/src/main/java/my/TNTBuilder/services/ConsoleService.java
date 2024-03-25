@@ -1,11 +1,9 @@
 package my.TNTBuilder.services;
 
 
-import my.TNTBuilder.TNTException;
 import my.TNTBuilder.model.Faction;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
-import my.TNTBuilder.model.dto.TeamInputDTO;
 import my.TNTBuilder.model.userModels.UserCredentials;
 
 import java.util.List;
@@ -114,10 +112,10 @@ public class ConsoleService {
         scanner.nextLine();
     }
 
-    public TeamInputDTO setTeamNameAndStartingMoney(TeamInputDTO newTeamInfo) {
-        newTeamInfo.setMoney(promptForInt("Starting Money: "));
-        newTeamInfo.setName(promptForString("Team Name: "));
-        return newTeamInfo;
+    public Team setTeamNameAndStartingMoney(Team newTeam) {
+        newTeam.setMoney(promptForInt("Starting Money: "));
+        newTeam.setName(promptForString("Team Name: "));
+        return newTeam;
     }
 
     public void displayTeamOptions(List<Team> teams){

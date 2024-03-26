@@ -51,7 +51,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
 
     @Test
     public void addUnitToDatabase_adds_unit(){
-        Unit expectedUnit = new Unit(1, 2, "Name", "Defender", "Rank and File",
+        Unit expectedUnit = new Unit(4, 2, "Name", "Defender", "Rank and File",
                 "Human", 23,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
                 new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
@@ -61,8 +61,9 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         expectedUnit.getSkills().add(new Skill(5, "Brave", "+2 bonus when making Will tests.",
                 7, "Tenacity"));
 
-        Unit testUnit = sut.addUnitToDatabase(expectedUnit);
-        expectedUnit.setId(testUnit.getId());
+        Unit newUnit = sut.createUnit(expectedUnit);
+        expectedUnit.setId(newUnit.getId());
+        Unit testUnit = sut.getUnitById(newUnit.getId(), 1);
         Assert.assertNotNull(testUnit);
         Assert.assertEquals(expectedUnit, testUnit);
 

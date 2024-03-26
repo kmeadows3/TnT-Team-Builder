@@ -18,7 +18,7 @@ public class JdbcUnitDao implements UnitDao{
     private final String SELECT_ALL_FROM_UNIT_REFERENCE = "SELECT unit_ref_id, faction_id, class, rank, species, base_cost, " +
             "wounds, defense, mettle, move, ranged, melee, strength, skillsets, starting_skills, starting_free_skills, " +
             "special_rules FROM unit_reference ";
-    private final String SELECT_ALL_FROM_UNIT = "SELECT unit_id, name, class, rank, species, base_cost, wounds, " +
+    private final String SELECT_ALL_FROM_UNIT = "SELECT u.team_id, unit_id, name, class, rank, species, base_cost, wounds, " +
             "defense, mettle, move, ranged, melee, strength, empty_skills, special_rules, spent_exp, unspent_exp, " +
             "total_advances, ten_point_advances, u.team_id FROM unit u " +
             "JOIN team t on t.team_id = u.team_id ";
@@ -50,41 +50,15 @@ public class JdbcUnitDao implements UnitDao{
         return unit;
     }
 
-//    @Override
-//    public Unit createUnit(Unit clientUnit) {
-//        Unit newUnit = initializeNewUnit(clientUnit);
-//        String sql = "INSERT INTO unit (team_id, name, class, rank, species, base_cost, wounds, defense, mettle, " +
-//                "move, ranged, melee, strength, empty_skills, special_rules, spent_exp) " +
-//                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING unit_id";
-//        try {
-//            int unitId = jdbcTemplate.queryForObject(sql, Integer.class, newUnit.getTeamId(), newUnit.getName(),
-//                    newUnit.getClass(), newUnit.getRank(),  newUnit.getSpecies(), newUnit.getBaseCost(),
-//                    newUnit.getWounds(), newUnit.getDefense(), newUnit.getMettle(), newUnit.getMove(),
-//                    newUnit.getRanged(), newUnit.getMelee(), newUnit.getStrength(), newUnit.getEmptySkills(),
-//                    newUnit.getSpecialRules(), newUnit.getSpentExperience()
-//                    );
-//            newUnit.setId(unitId);
-//        } catch (CannotGetJdbcConnectionException e) {
-//            throw new DaoException("Unable to connect to database", e);
-//        } catch (DataIntegrityViolationException e) {
-//            throw new DaoException("Invalid data provided, cannot create unit", e);
-//        }
-//        return newUnit;
-//    }
-
     @Override
     public Unit createUnit(Unit clientUnit) {
         Unit newUnit = initializeNewUnit(clientUnit);
-        return addUnitToDatabase(newUnit);
-    }
-
-    public Unit addUnitToDatabase(Unit newUnit) {
         String sql = "INSERT INTO unit (team_id, name, class, rank, species, base_cost, wounds, defense, mettle, " +
-            "move, ranged, melee, strength, empty_skills, special_rules, spent_exp) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING unit_id";
+                "move, ranged, melee, strength, empty_skills, special_rules, spent_exp) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING unit_id";
         try {
             int unitId = jdbcTemplate.queryForObject(sql, Integer.class, newUnit.getTeamId(), newUnit.getName(),
-                    newUnit.getClass(), newUnit.getRank(),  newUnit.getSpecies(), newUnit.getBaseCost(),
+                    newUnit.getUnitClass(), newUnit.getRank(),  newUnit.getSpecies(), newUnit.getBaseCost(),
                     newUnit.getWounds(), newUnit.getDefense(), newUnit.getMettle(), newUnit.getMove(),
                     newUnit.getRanged(), newUnit.getMelee(), newUnit.getStrength(), newUnit.getEmptySkills(),
                     newUnit.getSpecialRules(), newUnit.getSpentExperience()
@@ -132,9 +106,9 @@ public class JdbcUnitDao implements UnitDao{
     private Unit mapRowToUnit(SqlRowSet row){
         Unit newUnit = new Unit();
         newUnit.setId(row.getInt("unit_id"));
-        newUnit.setId(row.getInt("team_id"));
+        newUnit.setTeamId(row.getInt("team_id"));
         newUnit.setName(row.getString("name"));
-        newUnit.setTitle(row.getString("class"));
+        newUnit.setUnitClass(row.getString("class"));
         newUnit.setRank(row.getString("rank"));
         newUnit.setSpecies(row.getString("species"));
         newUnit.setBaseCost(row.getInt("base_cost"));
@@ -157,7 +131,7 @@ public class JdbcUnitDao implements UnitDao{
 
     private Unit mapRowToUnitFromUnitReference(SqlRowSet row){
         Unit newUnit = new Unit();
-        newUnit.setTitle(row.getString("class"));
+        newUnit.setUnitClass(row.getString("class"));
         newUnit.setRank(row.getString("rank"));
         newUnit.setSpecies(row.getString("species"));
         newUnit.setBaseCost(row.getInt("base_cost"));

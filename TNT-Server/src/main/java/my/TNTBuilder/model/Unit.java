@@ -11,7 +11,7 @@ public class Unit {
     @NotNull(message = "Unit must belong to a team")
     private int teamId;
     private String name = "";
-    private String title;
+    private String unitClass;
     private String rank;
     private String species;
     private int baseCost;
@@ -37,14 +37,14 @@ public class Unit {
 
     public Unit(){};
 
-    public Unit(int id, int teamId, String name, String title, String rank, String species, int baseCost, int wounds, int defense,
+    public Unit(int id, int teamId, String name, String unitClass, String rank, String species, int baseCost, int wounds, int defense,
                 int mettle, int move, int ranged, int melee, int strength, int emptySkills, String specialRules,
                 int spentExperience, int unspentExperience, int totalAdvances, int tenPointAdvances,
                 List<Skillset> availableSkillsets, List<Skill> skills, List<Item> inventory) {
         this.id = id;
         this.teamId = teamId;
         this.name = name;
-        this.title = title;
+        this.unitClass = unitClass;
         this.rank = rank;
         this.species = species;
         this.baseCost = baseCost;
@@ -134,12 +134,12 @@ public class Unit {
         this.name = name;
     }
 
-    public String getTitle() {
-        return title;
+    public String getUnitClass() {
+        return unitClass;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setUnitClass(String unitClass) {
+        this.unitClass = unitClass;
     }
 
     public String getRank() {
@@ -297,25 +297,27 @@ public class Unit {
 
     //Override Equals
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Unit unit = (Unit) o;
-        return id == unit.id && baseCost == unit.baseCost && wounds == unit.wounds && defense == unit.defense
-                && mettle == unit.mettle && move == unit.move && ranged == unit.ranged && melee == unit.melee
-                && strength == unit.strength && emptySkills == unit.emptySkills
-                && spentExperience == unit.spentExperience && unspentExperience == unit.unspentExperience
-                && totalAdvances == unit.totalAdvances && tenPointAdvances == unit.tenPointAdvances
-                && Objects.equals(name, unit.name) && Objects.equals(title, unit.title)
-                && Objects.equals(rank, unit.rank) && Objects.equals(species, unit.species)
-                && Objects.equals(specialRules, unit.specialRules);
+        return id == unit.id && teamId == unit.teamId && baseCost == unit.baseCost && wounds == unit.wounds &&
+                defense == unit.defense && mettle == unit.mettle && move == unit.move && ranged == unit.ranged &&
+                melee == unit.melee && strength == unit.strength && emptySkills == unit.emptySkills &&
+                spentExperience == unit.spentExperience && unspentExperience == unit.unspentExperience &&
+                totalAdvances == unit.totalAdvances && tenPointAdvances == unit.tenPointAdvances &&
+                Objects.equals(name, unit.name) && Objects.equals(unitClass, unit.unitClass) &&
+                Objects.equals(rank, unit.rank) && Objects.equals(species, unit.species) &&
+                Objects.equals(specialRules, unit.specialRules) &&
+                Objects.equals(availableSkillsets, unit.availableSkillsets) && Objects.equals(skills, unit.skills) &&
+                Objects.equals(inventory, unit.inventory);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, title, rank, species, baseCost, wounds, defense, mettle, move, ranged, melee,
-                strength, emptySkills, specialRules, spentExperience, unspentExperience, totalAdvances, tenPointAdvances);
+        return Objects.hash(id, teamId, name, unitClass, rank, species, baseCost, wounds, defense, mettle, move, ranged,
+                melee, strength, emptySkills, specialRules, spentExperience, unspentExperience, totalAdvances,
+                tenPointAdvances, availableSkillsets, skills, inventory);
     }
 }

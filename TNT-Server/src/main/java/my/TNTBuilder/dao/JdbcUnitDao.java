@@ -22,9 +22,9 @@ public class JdbcUnitDao implements UnitDao{
             "defense, mettle, move, ranged, melee, strength, empty_skills, special_rules, spent_exp, unspent_exp, " +
             "total_advances, ten_point_advances, u.team_id FROM unit u " +
             "JOIN team t on t.team_id = u.team_id ";
-    private final String SELECT_ALL_FROM_SKILLSET_REFERENCE = "SELECT skillset_id, skillset_name, category " +
-            "FROM skillset_reference ";
-    private final String SELECT_ALL_FROM_SKILL_REFERENCE = "SELECT skill_id, sr.skillset_id, name, description, " +
+    private final String SELECT_ALL_FROM_SKILLSET_REFERENCE = "SELECT ssr.skillset_id, skillset_name, category " +
+            "FROM skillset_reference ssr ";
+    private final String SELECT_ALL_FROM_SKILL_REFERENCE = "SELECT sr.skill_id AS skill_id, sr.skillset_id, name, description, " +
             "skillset_name FROM skill_reference sr " +
             "JOIN skillset_reference ssr ON ssr.skillset_id = sr.skillset_id ";
 
@@ -43,6 +43,8 @@ public class JdbcUnitDao implements UnitDao{
             if (unit == null){
                 throw new DaoException("Unit cannot be retrieved from database");
             }
+            unit.setSkills(getUnitSkills(id));
+            unit.setAvailableSkillsets(getAvailableSkillsets(id));
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to database", e);
         }
@@ -64,6 +66,8 @@ public class JdbcUnitDao implements UnitDao{
                     newUnit.getSpecialRules(), newUnit.getSpentExperience()
                     );
             newUnit.setId(unitId);
+            addSkillsToUnitSkillJoinTable(unitId, newUnit.getSkills());
+            addSkillsetsToUnitSkillsetJoinTable(unitId, newUnit.getAvailableSkillsets());
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to database", e);
         } catch (DataIntegrityViolationException e) {
@@ -78,8 +82,50 @@ public class JdbcUnitDao implements UnitDao{
     PRIVATE METHODS
      */
 
+    private List<Skill> getUnitSkills(int unitId){
+        List<Skill> skills = new ArrayList<>();
+        String sql = SELECT_ALL_FROM_SKILL_REFERENCE + "JOIN unit_skill us ON us.skill_id = sr.skill_id " +
+                "WHERE unit_id = ? " +
+                "ORDER BY sr.skill_id";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, unitId);
+        while (results.next()){
+            skills.add(mapRowToSkill(results));
+        }
+        return skills;
+    }
+
+    private List<Skillset> getAvailableSkillsets(int unitId){
+        List<Skillset> skillsets = new ArrayList<>();
+        String sql = SELECT_ALL_FROM_SKILLSET_REFERENCE + "JOIN unit_skillset uss ON uss.skillset_id = ssr.skillset_id "
+                + " WHERE unit_id = ? ORDER BY ssr.skillset_id";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, unitId);
+        while (results.next()){
+            skillsets.add(mapRowToSkillset(results));
+        }
+        return skillsets;
+    }
+    private void addSkillsToUnitSkillJoinTable(int unitId, List<Skill> skills){
+        String sql = "INSERT INTO unit_skill (unit_id, skill_id) VALUES (?, ?)";
+        List<Object[]> batch = new ArrayList<>();
+        for (Skill skill : skills) {
+            Object[] values = new Object[] { unitId, skill.getId() };
+            batch.add(values);
+        }
+        jdbcTemplate.batchUpdate(sql, batch);
+    }
+
+    private void addSkillsetsToUnitSkillsetJoinTable(int unitId, List<Skillset> skillsets){
+        String sql = "INSERT INTO unit_skillset (unit_id, skillset_id) VALUES (?, ?)";
+        List<Object[]> batch = new ArrayList<>();
+        for (Skillset skillset : skillsets){
+            Object[] values = new Object[] { unitId, skillset.getId() };
+            batch.add(values);
+        }
+        jdbcTemplate.batchUpdate(sql, batch);
+    }
+
     private Unit initializeNewUnit(Unit clientUnit) {
-        Unit newUnit = selectReferenceUnitByUnitId(clientUnit.getId());
+        Unit newUnit = convertReferenceUnitToUnit(clientUnit.getId());
         if (newUnit == null){
             throw new DaoException("Invalid unit provided, cannot create unit.");
         }
@@ -88,12 +134,11 @@ public class JdbcUnitDao implements UnitDao{
         return newUnit;
     }
 
-
-    private Unit selectReferenceUnitByUnitId(int unitId){
+    private Unit convertReferenceUnitToUnit(int referenceUnitId){
         Unit referenceUnit = null;
         String sql = SELECT_ALL_FROM_UNIT_REFERENCE + "WHERE unit_ref_id = ?";
         try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, unitId);
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, referenceUnitId);
             while (results.next()){
                 referenceUnit = mapRowToUnitFromUnitReference(results);
             }
@@ -101,6 +146,100 @@ public class JdbcUnitDao implements UnitDao{
             throw new DaoException("Unable to connect to database", e);
         }
         return referenceUnit;
+    }
+
+    private Unit mapRowToUnitFromUnitReference(SqlRowSet row){
+        Unit newUnit = new Unit();
+        newUnit.setUnitClass(row.getString("class"));
+        newUnit.setRank(row.getString("rank"));
+        newUnit.setSpecies(row.getString("species"));
+        newUnit.setBaseCost(row.getInt("base_cost"));
+        newUnit.setWounds(row.getInt("wounds"));
+        newUnit.setDefense(row.getInt("defense"));
+        newUnit.setMettle(row.getInt("mettle"));
+        newUnit.setMove(row.getInt("move"));
+        newUnit.setRanged(row.getInt("ranged"));
+        newUnit.setMelee(row.getInt("melee"));
+        newUnit.setStrength(row.getInt("strength"));
+        newUnit.setEmptySkills(row.getInt("starting_free_skills"));
+        newUnit.setSpecialRules(row.getString("special_rules"));
+        newUnit.setUnspentExperience(convertStartingExp(newUnit.getRank()));
+        newUnit.setAvailableSkillsets(convertAvailableSkillsets(row.getString("skillsets")));
+        newUnit.setSkills(convertStartingSkills(row.getString("starting_skills")));
+        return newUnit;
+    }
+    private int convertStartingExp(String rank){
+        if (rank.equalsIgnoreCase("Rank and File")){
+            return 0;
+        } else if (rank.equalsIgnoreCase("Specialist")) {
+            return 21;
+        } else if (rank.equalsIgnoreCase("Elite")) {
+            return 46;
+        } else {
+            return 75;
+        }
+    }
+
+    private List<Skillset> convertAvailableSkillsets(String skillsetsAsString){
+        int[] skillsetsAsArray = referenceArraySplitter(skillsetsAsString);
+        List<Skillset> availableSkillsets = new ArrayList<>();
+        Map<Integer, Skillset> skillsetMap = generateSkillSetMap();
+        for (int skillset : skillsetsAsArray){
+            availableSkillsets.add(skillsetMap.get(skillset));
+        }
+        return availableSkillsets;
+    }
+
+    private List<Skill> convertStartingSkills(String skillsAsString){
+        List<Skill> startingSkills = new ArrayList<>();
+        int[] skillArray = referenceArraySplitter(skillsAsString);
+        Map<Integer, Skill> skillMap = generateSkillMap();
+        for (int skill : skillArray){
+            startingSkills.add(skillMap.get(skill));
+        }
+        return  startingSkills;
+    }
+
+    private int[] referenceArraySplitter (String arrayAsString){
+        if ( arrayAsString == null || arrayAsString.isEmpty()){
+            return new int[0];
+        } else {
+            arrayAsString = arrayAsString.substring(1,arrayAsString.length()-1);
+            String[] skillsetArray = arrayAsString.split("\\|");
+            int[] convertedArray = new int[skillsetArray.length];
+            for (int i = 0; i < convertedArray.length; i++){
+                convertedArray[i] = Integer.parseInt(skillsetArray[i]);
+            }
+            return convertedArray;
+        }
+    }
+
+    private Map<Integer, Skillset> generateSkillSetMap(){
+        Map<Integer, Skillset> skillsetMap = new HashMap<>();
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(SELECT_ALL_FROM_SKILLSET_REFERENCE);
+            while (results.next()){
+                Skillset skillset = mapRowToSkillset(results);
+                skillsetMap.put(skillset.getId(), skillset);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        }
+        return skillsetMap;
+    }
+
+    private Map<Integer, Skill> generateSkillMap() {
+        Map<Integer, Skill> skillMap = new HashMap<>();
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(SELECT_ALL_FROM_SKILL_REFERENCE);
+            while (results.next()) {
+                Skill skill = mapRowToSkill(results);
+                skillMap.put(skill.getId(), skill);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        }
+        return skillMap;
     }
 
     private Unit mapRowToUnit(SqlRowSet row){
@@ -129,28 +268,6 @@ public class JdbcUnitDao implements UnitDao{
         return newUnit;
     }
 
-    private Unit mapRowToUnitFromUnitReference(SqlRowSet row){
-        Unit newUnit = new Unit();
-        newUnit.setUnitClass(row.getString("class"));
-        newUnit.setRank(row.getString("rank"));
-        newUnit.setSpecies(row.getString("species"));
-        newUnit.setBaseCost(row.getInt("base_cost"));
-        newUnit.setWounds(row.getInt("wounds"));
-        newUnit.setDefense(row.getInt("defense"));
-        newUnit.setMettle(row.getInt("mettle"));
-        newUnit.setMove(row.getInt("move"));
-        newUnit.setRanged(row.getInt("ranged"));
-        newUnit.setMelee(row.getInt("melee"));
-        newUnit.setStrength(row.getInt("strength"));
-        newUnit.setEmptySkills(row.getInt("starting_free_skills"));
-        newUnit.setSpecialRules(row.getString("special_rules"));
-        newUnit.setUnspentExperience(convertStartingExp(newUnit.getRank()));
-        newUnit.setAvailableSkillsets(generateAvailableSkillsets(row.getString("skillsets")));
-        newUnit.setSkills(generateStartingSkills(row.getString("starting_skills")));
-        return newUnit;
-    }
-
-
     private Skillset mapRowToSkillset(SqlRowSet row) {
         Skillset newSkillset = new Skillset();
         newSkillset.setId(row.getInt("skillset_id"));
@@ -169,78 +286,6 @@ public class JdbcUnitDao implements UnitDao{
         return newSkill;
     }
 
-    private List<Skillset> generateAvailableSkillsets(String skillsetsAsString){
-        int[] skillsetsAsArray = referenceArraySplitter(skillsetsAsString);
-        List<Skillset> availableSkillsets = new ArrayList<>();
-        Map<Integer, Skillset> skillsetMap = getSkillSetMap();
-        for (int skillset : skillsetsAsArray){
-            availableSkillsets.add(skillsetMap.get(skillset));
-        }
-        return availableSkillsets;
-    }
-
-    private List<Skill> generateStartingSkills(String skillsAsString){
-        List<Skill> startingSkills = new ArrayList<>();
-        int[] skillArray = referenceArraySplitter(skillsAsString);
-        Map<Integer, Skill> skillMap = getSkillMap();
-        for (int skill : skillArray){
-            startingSkills.add(skillMap.get(skill));
-        }
-        return  startingSkills;
-    }
-
-    private Map<Integer, Skillset> getSkillSetMap(){
-        Map<Integer, Skillset> skillsetMap = new HashMap<>();
-        try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(SELECT_ALL_FROM_SKILLSET_REFERENCE);
-            while (results.next()){
-                Skillset skillset = mapRowToSkillset(results);
-                skillsetMap.put(skillset.getId(), skillset);
-            }
-        } catch (CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to database", e);
-        }
-        return skillsetMap;
-    }
-
-    private Map<Integer, Skill> getSkillMap(){
-        Map<Integer, Skill> skillMap = new HashMap<>();
-        try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(SELECT_ALL_FROM_SKILL_REFERENCE);
-            while (results.next()){
-                Skill skill = mapRowToSkill(results);
-                skillMap.put(skill.getId(), skill);
-            }
-        } catch (CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to database", e);
-        }
-        return skillMap;
-    }
 
 
-    private int convertStartingExp(String rank){
-        if (rank.equalsIgnoreCase("Rank and File")){
-            return 0;
-        } else if (rank.equalsIgnoreCase("Specialist")) {
-            return 21;
-        } else if (rank.equalsIgnoreCase("Elite")) {
-            return 46;
-        } else {
-            return 75;
-        }
-    }
-
-    private int[] referenceArraySplitter (String arrayAsString){
-        if ( arrayAsString == null || arrayAsString.isEmpty()){
-            return new int[0];
-        } else {
-            arrayAsString = arrayAsString.substring(1,arrayAsString.length()-1);
-            String[] skillsetArray = arrayAsString.split("\\|");
-            int[] convertedArray = new int[skillsetArray.length];
-            for (int i = 0; i < convertedArray.length; i++){
-                convertedArray[i] = Integer.parseInt(skillsetArray[i]);
-            }
-            return convertedArray;
-        }
-    }
 }

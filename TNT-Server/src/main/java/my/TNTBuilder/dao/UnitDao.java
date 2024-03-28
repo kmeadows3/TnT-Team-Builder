@@ -9,4 +9,6 @@ public interface UnitDao {
     Unit getUnitById(int id, int userId);
 
     Unit createUnit(Unit newUnit);
+
+    int getFactionIdByUnitId(int unitId);
 }

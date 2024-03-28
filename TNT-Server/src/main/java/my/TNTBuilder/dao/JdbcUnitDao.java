@@ -76,6 +76,23 @@ public class JdbcUnitDao implements UnitDao{
         return newUnit;
     }
 
+    public int getFactionIdByUnitId(int unitId){
+        String sql = "SELECT faction_id FROM unit_reference WHERE unit_ref_id = ?";
+        int id = 0;
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, unitId);
+            while(results.next()){
+                id = results.getInt("faction_id");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        }
+
+        if (id == 0){
+            throw new DaoException("Unable to locate faction");
+        }
+        return id;
+    }
 
 
     /*
@@ -124,13 +141,13 @@ public class JdbcUnitDao implements UnitDao{
         jdbcTemplate.batchUpdate(sql, batch);
     }
 
-    private Unit initializeNewUnit(Unit clientUnit) {
-        Unit newUnit = convertReferenceUnitToUnit(clientUnit.getId());
+    private Unit initializeNewUnit(Unit providedUnit) {
+        Unit newUnit = convertReferenceUnitToUnit(providedUnit.getId());
         if (newUnit == null){
             throw new DaoException("Invalid unit provided, cannot create unit.");
         }
-        newUnit.setTeamId(clientUnit.getTeamId());
-        newUnit.setName(clientUnit.getName());
+        newUnit.setTeamId(providedUnit.getTeamId());
+        newUnit.setName(providedUnit.getName());
         return newUnit;
     }
 

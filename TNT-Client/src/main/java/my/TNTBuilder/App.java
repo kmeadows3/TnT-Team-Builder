@@ -1,12 +1,15 @@
 package my.TNTBuilder;
 
 import my.TNTBuilder.model.Faction;
+import my.TNTBuilder.model.Unit;
+import my.TNTBuilder.model.UnitStarterDTO;
 import my.TNTBuilder.model.userModels.AuthenticatedUser;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.userModels.UserCredentials;
 import my.TNTBuilder.services.AuthenticationService;
 import my.TNTBuilder.services.ConsoleService;
 import my.TNTBuilder.services.TeamService;
+import my.TNTBuilder.services.UnitService;
 
 import java.util.List;
 
@@ -24,16 +27,14 @@ public class App {
     public static final int EDIT_TEAM_MENU_MANAGE_MONEY = 4;
     public static final int EDIT_TEAM_MENU_MANAGE_INVENTORY = 5;
     public static final int EDIT_TEAM_MENU_SAVE_AND_EXIT = 6;
-
-
-
-
     private static final String API_BASE_URL = "http://localhost:8080/";
     private final ConsoleService consoleService = new ConsoleService();
     private final TeamService teamService = new TeamService(API_BASE_URL);
+    private final UnitService unitService = new UnitService(API_BASE_URL);
     private final AuthenticationService authenticationService = new AuthenticationService(API_BASE_URL);
     private AuthenticatedUser currentUser;
     private TNTException generalError = new TNTException("Unknown Error, check log for details.");
+    private Team currentTeam;
 
     public static void main(String[] args) {
         App app = new App();
@@ -48,11 +49,15 @@ public class App {
         loginMenu();
         if (currentUser != null) {
             teamService.setCurrentUser(currentUser);
+            unitService.setCurrentUser(currentUser);
             mainMenu();
         }
         System.out.println("This line in the run method stops the debugger before program exits");
     }
 
+    /*
+    MENUS
+     */
     private void loginMenu() {
         int menuSelection = -1;
         while (menuSelection != MENU_EXIT && currentUser == null) {
@@ -68,24 +73,6 @@ public class App {
             }
         }
     }
-    private void handleRegister() {
-        consoleService.printMessage("Please register a new user account");
-        UserCredentials credentials = consoleService.promptForCredentials();
-        if (authenticationService.register(credentials)) {
-            consoleService.printMessage("Registration successful. You can now login.");
-        } else {
-            consoleService.printErrorMessage(generalError);
-        }
-    }
-    private void handleLogin() {
-        UserCredentials credentials = consoleService.promptForCredentials();
-        currentUser = authenticationService.login(credentials);
-        if (currentUser == null) {
-            consoleService.printErrorMessage(generalError);
-        }
-    }
-
-
     private void mainMenu(){
         int selection = -1;
         while (selection != MENU_EXIT) {
@@ -102,7 +89,37 @@ public class App {
         }
         consoleService.goodbyeMessage();
     }
+    private void editTeamMenu(Team team){
+        currentTeam = team;
+        while (true) {
+            consoleService.displayTeam(currentTeam);
+            consoleService.editTeamMenu();
 
+            int userSelection = consoleService.promptForMenuSelection("Select option from menu: ");
+            if (userSelection == MENU_EXIT){
+                return;
+            } else if (userSelection == EDIT_TEAM_MENU_CHANGE_NAME){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else if (userSelection == EDIT_TEAM_MENU_EDIT_UNIT){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else if (userSelection == EDIT_TEAM_MENU_ADD_NEW_UNIT){
+                addNewUnit();
+            } else if (userSelection == EDIT_TEAM_MENU_MANAGE_MONEY){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else if (userSelection == EDIT_TEAM_MENU_MANAGE_INVENTORY){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else if (userSelection == EDIT_TEAM_MENU_SAVE_AND_EXIT) {
+                // TODO implement save functionality
+                return;
+            } else {
+                consoleService.printErrorMessage("Not a valid selection");
+            }
+        }
+    }
+
+    /*
+    MAIN MENU OPTIONS
+     */
     private void loadTeam() {
         List<Team> savedTeams = null;
         try {
@@ -118,45 +135,13 @@ public class App {
         while (selection == -1) {
             consoleService.displayTeamOptions(savedTeams);
             selection = consoleService.promptForMenuSelection("Select team from list (0 to return): ");
-            if (selection == 0) {
+            if (selection == MENU_EXIT) {
                 return;
             }
             selection = consoleService.validateSelectionFromList(selection, savedTeams.size());
         }
         editTeamMenu(savedTeams.get(selection -1));
     }
-
-
-    private void editTeamMenu(Team currentTeam){
-        while (true) {
-            consoleService.displayTeam(currentTeam);
-            consoleService.editTeamMenu();
-
-            int userSelection = consoleService.promptForMenuSelection("Select option from menu: ");
-            if (userSelection == MENU_EXIT){
-                return;
-            } else if (userSelection == EDIT_TEAM_MENU_CHANGE_NAME){
-                consoleService.printErrorMessage("Not yet implemented");
-            } else if (userSelection == EDIT_TEAM_MENU_EDIT_UNIT){
-                consoleService.printErrorMessage("Not yet implemented");
-            } else if (userSelection == EDIT_TEAM_MENU_ADD_NEW_UNIT){
-                consoleService.printErrorMessage("Not yet implemented");
-            } else if (userSelection == EDIT_TEAM_MENU_MANAGE_MONEY){
-                consoleService.printErrorMessage("Not yet implemented");
-            } else if (userSelection == EDIT_TEAM_MENU_MANAGE_INVENTORY){
-                consoleService.printErrorMessage("Not yet implemented");
-            } else if (userSelection == EDIT_TEAM_MENU_SAVE_AND_EXIT) {
-                // TODO implement save functionality
-                return;
-            } else {
-                consoleService.printErrorMessage("Not a valid selection");
-            }
-        }
-    }
-
-
-
-
     private void createTeam() {
         List<Faction> factionList = null;
         try {
@@ -167,7 +152,7 @@ public class App {
         }
         try {
             Team newTeamInfo = gatherNewTeamInfoFromUser(factionList);
-            if (newTeamInfo.getFactionId() == 0){
+            if (newTeamInfo.getFactionId() == MENU_EXIT){
                 return;
             } else {
                 Team newTeam = teamService.createTeam(newTeamInfo);
@@ -177,6 +162,53 @@ public class App {
             consoleService.printErrorMessage(e);
         }
     }
+
+    /*
+    EDIT TEAM OPTIONS
+     */
+    private void addNewUnit(){
+
+
+        Unit returnedUnit = null;
+        List<Unit> potentialUnits = null;
+        try {
+            potentialUnits = teamService.getUnitsForPurchase(currentTeam.getFactionId());
+        }catch (TNTException e){
+            consoleService.printErrorMessage(e);
+        }
+
+        UnitStarterDTO newUnit = getNewUnitInformation(potentialUnits);
+        if (newUnit == null) return;
+
+        try {
+            returnedUnit = unitService.addNewUnitToDatabase(newUnit);
+        } catch (TNTException e){
+            consoleService.printErrorMessage(e);
+        }
+        System.out.println("STOP");
+    }
+
+    private UnitStarterDTO getNewUnitInformation(List<Unit> potentialUnits) {
+        UnitStarterDTO newUnit = new UnitStarterDTO();
+        newUnit.setTeamId(currentTeam.getId());
+        int selection = -1;
+        while(selection == -1) {
+            selection = consoleService.getUnitSelectionForNewUnit(potentialUnits);
+            if (selection == MENU_EXIT){
+                return null;
+            }
+            selection = consoleService.validateSelectionFromList(selection, potentialUnits.size());
+        }
+        newUnit.setId(selection);
+        newUnit.setName(consoleService.promptForString("Name the new unit: "));
+        return newUnit;
+    }
+
+
+
+    /*
+    HELPER METHODS
+     */
 
     private Team gatherNewTeamInfoFromUser(List<Faction> factionList){
         Team newTeamInfo = new Team();
@@ -193,6 +225,30 @@ public class App {
         return consoleService.setTeamNameAndStartingMoney(newTeamInfo);
     }
 
+
+
+
+    /*
+    LOGIN METHODS
+     */
+
+    private void handleLogin() {
+        UserCredentials credentials = consoleService.promptForCredentials();
+        currentUser = authenticationService.login(credentials);
+        if (currentUser == null) {
+            consoleService.printErrorMessage(generalError);
+        }
+    }
+
+    private void handleRegister() {
+        consoleService.printMessage("Please register a new user account");
+        UserCredentials credentials = consoleService.promptForCredentials();
+        if (authenticationService.register(credentials)) {
+            consoleService.printMessage("Registration successful. You can now login.");
+        } else {
+            consoleService.printErrorMessage(generalError);
+        }
+    }
 
 //
 //    private void createUnit(){

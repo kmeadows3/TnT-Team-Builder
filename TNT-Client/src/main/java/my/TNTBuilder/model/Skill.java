@@ -2,19 +2,19 @@ package my.TNTBuilder.model;
 
 import java.util.Objects;
 
-public class UnitTrait {
+public class Skill {
     //Instance variables
     private String name;
     private String description;
     private int id;
 
-    public UnitTrait(int id, String name, String description){
+    public Skill(int id, String name, String description){
         this.id = id;
         this.name = name;
         this.description = description;
     }
 
-    public UnitTrait() {
+    public Skill() {
     }
 
     public int getId() {
@@ -40,7 +40,7 @@ public class UnitTrait {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UnitTrait unitTrait = (UnitTrait) o;
+        Skill unitTrait = (Skill) o;
         return id == unitTrait.id && name.equals(unitTrait.name) && description.equals(unitTrait.description);
     }
 

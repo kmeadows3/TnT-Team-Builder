@@ -8,6 +8,9 @@ import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class UnitService {
     private final int FREELANCER_FACTION_ID = 7;
@@ -31,6 +34,19 @@ public class UnitService {
         return newUnit;
     }
 
+    public List<Unit> getUnitsForFaction(int factionId){
+        List<Unit> units = null;
+        try {
+            units = unitDao.getListOfUnitsByFactionId(factionId);
+        } catch (DaoException e){
+            throw new ServiceException(e.getMessage());
+        }
+        return units;
+    }
+
+    /*
+        PRIVATE METHODS
+     */
     private void validateClientUnit(Unit unit, int userId) {
         Team team = teamDao.getTeamById(unit.getTeamId(), userId);
         if (team == null) {

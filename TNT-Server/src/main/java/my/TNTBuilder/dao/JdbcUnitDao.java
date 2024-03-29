@@ -76,6 +76,7 @@ public class JdbcUnitDao implements UnitDao{
         return newUnit;
     }
 
+    @Override
     public int getFactionIdByUnitId(int unitId){
         String sql = "SELECT faction_id FROM unit_reference WHERE unit_ref_id = ?";
         int id = 0;
@@ -93,6 +94,28 @@ public class JdbcUnitDao implements UnitDao{
         }
         return id;
     }
+
+    @Override
+    public List<Unit> getListOfUnitsByFactionId(int factionId) {
+        String sql = "SELECT unit_ref_id FROM unit_reference WHERE faction_id = ? OR faction_id = 7";
+        List<Unit> unitList = new ArrayList<>();
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, factionId);
+            List<Integer> validUnitIds = new ArrayList<>();
+            while (results.next()){
+                validUnitIds.add(results.getInt("unit_ref_id"));
+            }
+            for (int unitRefId : validUnitIds){
+                Unit unit = convertReferenceUnitToUnit(unitRefId);
+                unit.setId(unitRefId);
+                unitList.add(unit);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        }
+        return unitList;
+    }
+
 
 
     /*

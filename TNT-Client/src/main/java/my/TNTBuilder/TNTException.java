@@ -7,4 +7,8 @@ public class TNTException extends Exception {
     public TNTException(String message) {
         super(message);
     }
+
+    public TNTException(String message, Exception cause) {
+        super(message, cause);
+    }
 }

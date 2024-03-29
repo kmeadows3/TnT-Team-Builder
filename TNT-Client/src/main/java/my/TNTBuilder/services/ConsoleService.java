@@ -165,6 +165,14 @@ public class ConsoleService {
         return selection;
     }
 
+    public int getUnitSelectionForNewUnit(List<Unit> unitsForPurchase){
+        for (int i = 0; i < unitsForPurchase.size(); i++){
+            System.out.printf("(%d) %s - %s%n", i + 1, unitsForPurchase.get(i).getUnitClass(), unitsForPurchase.get(i).getRank());
+        }
+        int selection = promptForMenuSelection("Select your unit (0 to exit): ");
+        return selection;
+    }
+
     public int validateSelectionFromList(int selection, int listSize){
         if (selection > 0 && selection <= listSize) {
             return selection;
@@ -185,7 +193,7 @@ public class ConsoleService {
         } else {
             for (int i = 0; i < team.getUnitList().size(); i++){
                 Unit unit = team.getUnitList().get(i);
-                String unitInfo = "(" + (i + 1) + ") " + unit.getUnitNickname() + " - " + unit.getName() + " - " +
+                String unitInfo = "(" + (i + 1) + ") " + unit.getName() + " - " + unit.getName() + " - " +
                         unit.getBSCost() + " BS";
                 int paddingAmount = BOX_WIDTH - unitInfo.length();
                 System.out.printf("║ %s%" + paddingAmount + "s ║%n", unitInfo, "");

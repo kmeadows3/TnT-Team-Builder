@@ -2,6 +2,7 @@ package my.TNTBuilder.services;
 
 import my.TNTBuilder.TNTException;
 import my.TNTBuilder.model.Faction;
+import my.TNTBuilder.model.Unit;
 import my.TNTBuilder.model.userModels.AuthenticatedUser;
 import my.TNTBuilder.model.Team;
 import my.util.BasicLogger;
@@ -77,6 +78,24 @@ public class TeamService {
         }
 
         return factionlist;
+    }
+
+    public List<Unit> getUnitsForPurchase(int factionId) throws TNTException{
+        List<Unit> unitsForPurchase = null;
+        String url = BASE_API_URL + "faction/" + factionId;
+        try {
+            ResponseEntity<Unit[]> response = restTemplate.exchange(url, HttpMethod.GET, getVoidHttpEntity(), Unit[].class);
+            Unit[] units = response.getBody();
+            if (units == null){
+                throw new TNTException("No valid units for this team");
+            }
+            unitsForPurchase = Arrays.asList(units);
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+            throw new TNTException("Unable to access server");
+        }
+
+        return unitsForPurchase;
     }
 
 

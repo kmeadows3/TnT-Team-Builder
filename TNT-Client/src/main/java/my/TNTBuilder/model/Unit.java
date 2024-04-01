@@ -105,7 +105,6 @@ public class Unit {
         return 8;
     }
 
-
     //Getters and Setters
 
     public int getId() {

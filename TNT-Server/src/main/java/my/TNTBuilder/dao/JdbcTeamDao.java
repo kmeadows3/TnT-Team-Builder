@@ -105,6 +105,8 @@ public class JdbcTeamDao implements TeamDao{
         team.setUserId(row.getInt("user_id"));
         team.setName(row.getString("team_name"));
         team.setMoney(row.getInt("money"));
+        JdbcUnitDao jdbcUnitDao = new JdbcUnitDao(jdbcTemplate);
+        team.setUnitList(jdbcUnitDao.getAllUnitsForTeam(team.getId()));
         //TODO deal with inventory later (new method solely focused on inventory?)
         return team;
     }

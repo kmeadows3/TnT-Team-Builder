@@ -2,7 +2,6 @@ package my.TNTBuilder.services;
 
 import my.TNTBuilder.TNTException;
 import my.TNTBuilder.model.Unit;
-import my.TNTBuilder.model.UnitStarterDTO;
 import my.TNTBuilder.model.userModels.AuthenticatedUser;
 import my.util.BasicLogger;
 import org.springframework.http.HttpEntity;
@@ -22,14 +21,11 @@ public class UnitService {
         this.BASE_API_URL = baseUrl;
     }
 
-    public Unit addNewUnitToDatabase(UnitStarterDTO newUnit) throws TNTException{
+    public Unit addNewUnitToDatabase(Unit newUnit) throws TNTException{
         String url = BASE_API_URL +"/unit";
         Unit returnedUnit = null;
-        HttpHeaders header = new HttpHeaders();
-        header.setBearerAuth(currentUser.getToken());
-        HttpEntity<UnitStarterDTO> entity = new HttpEntity<>(newUnit, header);
         try {
-            ResponseEntity<Unit> response = restTemplate.exchange(url, HttpMethod.POST, entity, Unit.class);
+            ResponseEntity<Unit> response = restTemplate.exchange(url, HttpMethod.POST, generateUnitHttpEntity(newUnit), Unit.class);
             returnedUnit = response.getBody();
             if (returnedUnit == null){
                 throw new TNTException("No unit returned");

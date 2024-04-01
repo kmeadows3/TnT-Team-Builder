@@ -14,4 +14,6 @@ public interface UnitDao {
     int getFactionIdByUnitId(int unitId);
 
     List<Unit> getListOfUnitsByFactionId(int factionId);
+
+    List<Unit> getAllUnitsForTeam(int teamId);
 }

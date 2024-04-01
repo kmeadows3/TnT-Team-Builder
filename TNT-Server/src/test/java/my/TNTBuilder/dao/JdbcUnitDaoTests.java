@@ -103,4 +103,11 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Assert.assertEquals(10, testList.get(4).getId());
     }
 
+    @Test
+    public void getAllUnitsForTeam_returns_correct_list(){
+        List<Unit> testList = sut.getAllUnitsForTeam(1);
+        Assert.assertEquals(2, testList.size());
+        Assert.assertEquals(UNIT1, testList.get(0));
+        Assert.assertFalse(testList.contains(UNIT2));
+    }
 }

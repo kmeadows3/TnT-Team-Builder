@@ -2,7 +2,6 @@ package my.TNTBuilder;
 
 import my.TNTBuilder.model.Faction;
 import my.TNTBuilder.model.Unit;
-import my.TNTBuilder.model.UnitStarterDTO;
 import my.TNTBuilder.model.userModels.AuthenticatedUser;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.userModels.UserCredentials;
@@ -26,7 +25,13 @@ public class App {
     public static final int EDIT_TEAM_MENU_ADD_NEW_UNIT = 3;
     public static final int EDIT_TEAM_MENU_MANAGE_MONEY = 4;
     public static final int EDIT_TEAM_MENU_MANAGE_INVENTORY = 5;
-    public static final int EDIT_TEAM_MENU_SAVE_AND_EXIT = 6;
+    public static final int EDIT_UNIT_MENU_CHANGE_NAME = 1;
+    public static final int EDIT_UNIT_MENU_MANAGE_EXP = 2;
+    public static final int EDIT_UNIT_MENU_MANAGE_INVENTORY = 3;
+    public static final int EDIT_UNIT_MENU_MANAGE_INJURIES = 4;
+
+
+
     private static final String API_BASE_URL = "http://localhost:8080/";
     private final ConsoleService consoleService = new ConsoleService();
     private final TeamService teamService = new TeamService(API_BASE_URL);
@@ -35,6 +40,7 @@ public class App {
     private AuthenticatedUser currentUser;
     private TNTException generalError = new TNTException("Unknown Error, check log for details.");
     private Team currentTeam;
+    private Unit currentUnit;
 
     public static void main(String[] args) {
         App app = new App();
@@ -101,21 +107,42 @@ public class App {
             } else if (userSelection == EDIT_TEAM_MENU_CHANGE_NAME){
                 consoleService.printErrorMessage("Not yet implemented");
             } else if (userSelection == EDIT_TEAM_MENU_EDIT_UNIT){
-                consoleService.printErrorMessage("Not yet implemented");
+                editUnit();
             } else if (userSelection == EDIT_TEAM_MENU_ADD_NEW_UNIT){
                 addNewUnit();
             } else if (userSelection == EDIT_TEAM_MENU_MANAGE_MONEY){
                 consoleService.printErrorMessage("Not yet implemented");
             } else if (userSelection == EDIT_TEAM_MENU_MANAGE_INVENTORY){
                 consoleService.printErrorMessage("Not yet implemented");
-            } else if (userSelection == EDIT_TEAM_MENU_SAVE_AND_EXIT) {
-                // TODO implement save functionality
-                return;
             } else {
                 consoleService.printErrorMessage("Not a valid selection");
             }
         }
     }
+
+    private void editUnitMenu(Unit unit){
+        currentUnit = unit;
+        while (true) {
+            consoleService.displayUnit(currentUnit);
+            consoleService.editUnitMenu();
+
+            int userSelection = consoleService.promptForMenuSelection("Select option from menu: ");
+            if (userSelection == MENU_EXIT){
+                return;
+            } else if (userSelection == EDIT_UNIT_MENU_CHANGE_NAME){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else if (userSelection == EDIT_UNIT_MENU_MANAGE_EXP){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else if (userSelection == EDIT_UNIT_MENU_MANAGE_INVENTORY){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else if (userSelection == EDIT_UNIT_MENU_MANAGE_INJURIES){
+                consoleService.printErrorMessage("Not yet implemented");
+            } else {
+                consoleService.printErrorMessage("Not a valid selection");
+            }
+        }
+    }
+
 
     /*
     MAIN MENU OPTIONS
@@ -166,9 +193,19 @@ public class App {
     /*
     EDIT TEAM OPTIONS
      */
+
+    private void editUnit(){
+        int selection = -1;
+        while (selection == -1) {
+            selection = consoleService.promptForMenuSelection("Select unit from list (0 to return): ");
+            if (selection == MENU_EXIT) {
+                return;
+            }
+            selection = consoleService.validateSelectionFromList(selection, currentTeam.getUnitList().size());
+        }
+        editUnitMenu(currentTeam.getUnitList().get(selection - 1));
+    }
     private void addNewUnit(){
-
-
         Unit returnedUnit = null;
         List<Unit> potentialUnits = null;
         try {
@@ -177,7 +214,7 @@ public class App {
             consoleService.printErrorMessage(e);
         }
 
-        UnitStarterDTO newUnit = getNewUnitInformation(potentialUnits);
+        Unit newUnit = getNewUnitInformation(potentialUnits);
         if (newUnit == null) return;
 
         try {
@@ -185,31 +222,15 @@ public class App {
         } catch (TNTException e){
             consoleService.printErrorMessage(e);
         }
-        System.out.println("STOP");
+        editUnitMenu(returnedUnit);
     }
 
-    private UnitStarterDTO getNewUnitInformation(List<Unit> potentialUnits) {
-        UnitStarterDTO newUnit = new UnitStarterDTO();
-        newUnit.setTeamId(currentTeam.getId());
-        int selection = -1;
-        while(selection == -1) {
-            selection = consoleService.getUnitSelectionForNewUnit(potentialUnits);
-            if (selection == MENU_EXIT){
-                return null;
-            }
-            selection = consoleService.validateSelectionFromList(selection, potentialUnits.size());
-        }
-        newUnit.setId(selection);
-        newUnit.setName(consoleService.promptForString("Name the new unit: "));
-        return newUnit;
-    }
 
 
 
     /*
     HELPER METHODS
      */
-
     private Team gatherNewTeamInfoFromUser(List<Faction> factionList){
         Team newTeamInfo = new Team();
         int factionId = -1;
@@ -223,6 +244,22 @@ public class App {
         }
         newTeamInfo.setFactionId(factionId);
         return consoleService.setTeamNameAndStartingMoney(newTeamInfo);
+    }
+
+    private Unit getNewUnitInformation(List<Unit> potentialUnits) {
+        Unit newUnit = new Unit();
+        newUnit.setTeamId(currentTeam.getId());
+        int selection = -1;
+        while(selection == -1) {
+            selection = consoleService.getUnitSelectionForNewUnit(potentialUnits);
+            if (selection == MENU_EXIT){
+                return null;
+            }
+            selection = consoleService.validateSelectionFromList(selection, potentialUnits.size());
+        }
+        newUnit.setId(selection);
+        newUnit.setName(consoleService.promptForString("Name the new unit: "));
+        return newUnit;
     }
 
 

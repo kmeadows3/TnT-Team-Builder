@@ -1,11 +1,10 @@
 package my.TNTBuilder.services;
 
 
-import my.TNTBuilder.model.Faction;
-import my.TNTBuilder.model.Team;
-import my.TNTBuilder.model.Unit;
+import my.TNTBuilder.model.*;
 import my.TNTBuilder.model.userModels.UserCredentials;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -63,10 +62,20 @@ public class ConsoleService {
         System.out.println("(3) Add New Unit");
         System.out.println("(4) Manage Money");
         System.out.println("(5) Manage Inventory");
-        System.out.println("(6) Save and Exit Menu");
-        System.out.println("(0) Exit Menu");
+        System.out.println("(0) Finish Editing Team");
         System.out.println();
     }
+
+    public void editUnitMenu(){
+        System.out.println();
+        System.out.println("(1) Change Unit Name");
+        System.out.println("(2) Manage Experience and Leveling");
+        System.out.println("(3) Manage Inventory");
+        System.out.println("(4) Manage Injuries");
+        System.out.println("(0) Finish Editing Unit");
+        System.out.println();
+    }
+
     public UserCredentials promptForCredentials() {
         String username = promptForString("Username: ");
         String password = promptForString("Password: ");
@@ -155,6 +164,112 @@ public class ConsoleService {
 
     }
 
+    public void displayUnit(Unit unit){
+        System.out.println();
+        printFullTopLine();
+        paddedDisplay(unit.getName(), BOX_WIDTH, true, true);
+        printBasicInformation(unit);
+        printStatBlock(unit);
+        printInventory();
+        printSkillList(unit);
+        printExperinceAndUpkeep(unit);
+        printAvailableSkillsets(unit);
+        printFullBottomLine();
+    }
+
+    private void printAvailableSkillsets(Unit unit) {
+        paddedDisplay("AVAILABLE SKILLSETS", BOX_WIDTH, true,true);
+        StringBuilder appendString = new StringBuilder(new StringBuilder());
+        for (Skillset skillset : unit.getAvailableSkillsets()){
+            appendString.append(skillset.getName()).append(" ");
+        }
+        String skillsetString = appendString.toString();
+        paddedDisplay(skillsetString, BOX_WIDTH, true, true);
+    }
+
+    private void printExperinceAndUpkeep(Unit unit) {
+        paddedDisplay("SPENT EXP", 17, true, false);
+        paddedDisplay("UNSPENT EXP", 18, false, false);
+        paddedDisplay("COST TO ADVANCE", 18, false, false);
+        paddedDisplay("UPKEEP", 17, false, true);
+        paddedDisplay(Integer.toString(unit.getSpentExperience()), 17, true, false);
+        paddedDisplay(Integer.toString(unit.getUnspentExperience()), 18, false, false);
+        paddedDisplay(Integer.toString(unit.costToAdvance()), 18, false, false);
+        paddedDisplay(Integer.toString(unit.getUnitUpkeep()), 17, false, true);
+        printFullMiddleLine();
+    }
+
+    private void printInventory() {
+        paddedDisplay("INVENTORY", BOX_WIDTH, true, true);
+        System.out.printf("║ %-71s ║%n", "Not Implemented");
+        printFullMiddleLine();
+    }
+
+    private void printSkillList(Unit unit) {
+        paddedDisplay("SPECIAL ABILITIES", BOX_WIDTH, true, true);
+        for (int i = 0; i < unit.getSkills().size(); i++){
+            Skill skill = unit.getSkills().get(i);
+            printSkill(skill);
+            if(i < unit.getSkills().size()-1) {
+                System.out.printf("║ %-71s ║%n", "");
+            }
+        }
+        printFullMiddleLine();
+    }
+
+    private void printBasicInformation(Unit unit) {
+        printFullMiddleLine();
+        paddedDisplay("TITLE", 23, true, false);
+        paddedDisplay("RANK", 24, false, false);
+        paddedDisplay("TYPE", 24, false, true);
+        paddedDisplay(unit.getUnitClass(), 23, true, false);
+        paddedDisplay(unit.getRank(), 24, false, false);
+        paddedDisplay(unit.getSpecies(), 24, false, true);
+        printFullMiddleLine();
+        paddedDisplay("METTLE", 23, true, false);
+        paddedDisplay("WOUNDS", 24, false, false);
+        paddedDisplay("BS COST", 24, false, true);
+        paddedDisplay(Integer.toString(unit.getMettle()), 23, true, false);
+        paddedDisplay(Integer.toString(unit.getWounds()), 24, false, false);
+        paddedDisplay(Integer.toString(unit.getBSCost()), 24, false, true);
+        printFullMiddleLine();
+
+    }
+
+    private void printStatBlock(Unit unit) {
+        paddedDisplay("MOVE", 14, true, false);
+        paddedDisplay("MELEE", 14, false, false);
+        paddedDisplay("RANGED", 14, false, false);
+        paddedDisplay("STRENGTH", 14, false, false);
+        paddedDisplay("DEFENSE", 13, false, true);
+        paddedDisplay(Integer.toString(unit.getMove()), 14, true, false);
+        paddedDisplay(Integer.toString(unit.getMelee()), 14, false, false);
+        paddedDisplay(Integer.toString(unit.getRanged()), 14, false, false);
+        paddedDisplay(Integer.toString(unit.getStrength()), 14, false, false);
+        paddedDisplay(Integer.toString(unit.getDefense()), 13, false, true);
+        printFullMiddleLine();
+    }
+
+    private void printSkill(Skill skill) {
+        if (skill.getDescription().length() <= 54){
+            System.out.printf("║ %-15s | %-53s ║%n", skill.getName(), skill.getDescription());
+        } else {
+            List<String> brokenDesc = new ArrayList<>();
+            for (int i = 0; i < skill.getDescription().length() - 53; i += 53){
+                String substring = skill.getDescription().substring(i, i + 53);
+                brokenDesc.add(substring);
+            }
+            int brokenLength = brokenDesc.size() * 53;
+            brokenDesc.add(skill.getDescription().substring(brokenLength));
+            for (int i = 0; i < brokenDesc.size(); i++){
+                if (i == 0){
+                    System.out.printf("║ %-15s | %-53s ║%n", skill.getName(), brokenDesc.get(i));
+                } else {
+                    System.out.printf("║ %-15s | %-53s ║%n", "", brokenDesc.get(i));
+                }
+            }
+        }
+    }
     public int getFactionSelection(List<Faction> factionList) {
         System.out.println();
         for (int i = 0; i < factionList.size(); i++){
@@ -193,10 +308,10 @@ public class ConsoleService {
         } else {
             for (int i = 0; i < team.getUnitList().size(); i++){
                 Unit unit = team.getUnitList().get(i);
-                String unitInfo = "(" + (i + 1) + ") " + unit.getName() + " - " + unit.getName() + " - " +
+                String unitInfo = "(" + (i + 1) + ") " + unit.getName() + " - " + unit.getUnitClass() + " - " +
                         unit.getBSCost() + " BS";
-                int paddingAmount = BOX_WIDTH - unitInfo.length();
-                System.out.printf("║ %s%" + paddingAmount + "s ║%n", unitInfo, "");
+                int paddingAmount = BOX_WIDTH - unitInfo.length() - 1;
+                System.out.printf("║ %s%" + paddingAmount + "s║%n", unitInfo, "");
             }
 
         }

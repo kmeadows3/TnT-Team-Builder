@@ -10,7 +10,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 @Component
 public class JdbcUnitDao implements UnitDao{
@@ -50,6 +54,24 @@ public class JdbcUnitDao implements UnitDao{
         }
 
         return unit;
+    }
+
+    @Override
+    public List<Unit> getAllUnitsForTeam(int teamId){
+        String sql = SELECT_ALL_FROM_UNIT + "WHERE t.team_id = ? ORDER BY base_cost desc, unit_id";
+        List<Unit> unitList = new ArrayList<>();
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, teamId);
+            while (results.next()){
+                Unit unit = mapRowToUnit(results);
+                unit.setSkills(getUnitSkills(unit.getId()));
+                unit.setAvailableSkillsets(getAvailableSkillsets(unit.getId()));
+                unitList.add(unit);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        }
+        return unitList;
     }
 
     @Override

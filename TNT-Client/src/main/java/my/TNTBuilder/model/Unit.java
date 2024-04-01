@@ -5,15 +5,14 @@ import my.TNTBuilder.model.inventory.Item;
 
 import java.util.*;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Unit {
     private int id;
     private int teamId;
     private String name = "";
     private String unitClass;
-    private String rank;
+    private String rank = "Rank and File";
     private String species;
-    private int baseCost;
+    private int baseCost = 0;
     private int wounds;
     private int defense;
     private int mettle;
@@ -23,7 +22,7 @@ public class Unit {
     private int strength;
     private int emptySkills;
     private String specialRules;
-    private int spentExperience;
+    private int spentExperience = 0;
     private int unspentExperience = 0;
     private int totalAdvances = 0;
     private int tenPointAdvances = 0;

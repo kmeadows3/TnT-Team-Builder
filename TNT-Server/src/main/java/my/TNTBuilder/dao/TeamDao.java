@@ -12,4 +12,5 @@ public interface TeamDao {
     Team createTeam(Team newTeam);
     List<FactionDTO> getAllFactions();
     List<Team> getAllTeamsForUser(int userId);
+    void updateTeam(Team team);
 }

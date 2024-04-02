@@ -14,11 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcTeamDaoTests extends BaseDaoTests{
-    protected final Team TEAM_1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500, new ArrayList<Unit>(), new ArrayList<Item>());
-    protected final Team TEAM_2 = new Team(2, 1, "Team 2", "Raiders", 3, 1500, new ArrayList<Unit>(), new ArrayList<Item>());
-    protected final Team TEAM_3 = new Team(3, 2, "Team 3", "Mutants", 2, 1000, new ArrayList<Unit>(), new ArrayList<Item>());
-    protected final FactionDTO faction1 = new FactionDTO(1, "Caravanners");
-    protected final FactionDTO faction2 = new FactionDTO(2, "Mutants");
 
     private JdbcTeamDao sut;
 
@@ -101,6 +96,15 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         Assert.assertNotNull(testList);
         Assert.assertEquals(6, testList.size());
         Assert.assertEquals(faction1, testList.get(0));
+    }
+
+    @Test
+    public void updateTeam_updates_team(){
+        TEAM_1.setName("New Name");
+        TEAM_1.setMoney(1000);
+        sut.updateTeam(TEAM_1);
+        Team testTeam = sut.getTeamById(TEAM_1.getId(), 1);
+        Assert.assertEquals(TEAM_1, testTeam);
     }
 
 }

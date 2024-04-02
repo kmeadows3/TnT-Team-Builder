@@ -1,5 +1,6 @@
 package my.TNTBuilder.dao;
 
+import my.TNTBuilder.TeamValidator;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.model.FactionDTO;
 import my.TNTBuilder.model.Team;
@@ -54,6 +55,22 @@ public class JdbcTeamDao implements TeamDao{
             throw new DaoException("Unable to connect to server or database", e);
         }
         return team;
+    }
+
+    @Override
+    public void updateTeam(Team team){
+        String sql = "UPDATE team SET team_name = ?, money = ? WHERE team_id = ?";
+        Team updatedTeam = null;
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, team.getName(), team.getMoney(), team.getId());
+            if (rowsAffected != 1){
+                throw new DaoException("Incorrect number of rows affected");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Invalid data provided, cannot update unit", e);
+        }
     }
 
     @Override

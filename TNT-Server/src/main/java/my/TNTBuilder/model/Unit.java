@@ -2,11 +2,15 @@ package my.TNTBuilder.model;
 
 import my.TNTBuilder.model.inventory.Item;
 
+import javax.validation.constraints.Min;
 import java.util.*;
 
 
 public class Unit {
+    @Min(value = 1, message = "Unit ID must be provided")
     private int id;
+    @Min(value = 0, message = "Team ID must be provided")
+
     private int teamId;
     private String name = "";
     private String unitClass;

@@ -1,5 +1,6 @@
 package my.TNTBuilder.service;
 
+import my.TNTBuilder.UnitValidator;
 import my.TNTBuilder.dao.*;
 import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.Skill;
@@ -24,7 +25,7 @@ public class UnitServiceTests extends BaseDaoTests {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         unitDao = new JdbcUnitDao(jdbcTemplate);
         teamDao = new JdbcTeamDao(jdbcTemplate);
-        sut = new UnitService(unitDao, teamDao);
+        sut = new UnitService(unitDao, teamDao, new UnitValidator());
 
     }
 

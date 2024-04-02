@@ -138,33 +138,19 @@ public class Team {
     Override Equals
      */
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Team team = (Team) o;
-        boolean unitsEqual= true;
-        for(Unit unit : unitList){
-            if (!team.getUnitList().contains(unit)){
-                unitsEqual = false;
-                break;
-            }
-        }
-        boolean inventoryEqual= true;
-        for(Item item : inventory){
-            if (!team.getInventory().contains(item)){
-                inventoryEqual = false;
-                break;
-            }
-        }
-
-        return id == team.id && userId == team.userId && factionId == team.factionId && money == team.money &&
-                Objects.equals(name, team.name) && unitsEqual &&
-                inventoryEqual;
+        return id == team.id && userId == team.userId && factionId == team.factionId && money == team.money
+                && Objects.equals(faction, team.faction) && Objects.equals(name, team.name)
+                && Objects.equals(unitList, team.unitList) && Objects.equals(inventory, team.inventory);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, factionId, name, money, unitList, inventory);
+        return Objects.hash(id, userId, faction, factionId, name, money, unitList, inventory);
     }
 }

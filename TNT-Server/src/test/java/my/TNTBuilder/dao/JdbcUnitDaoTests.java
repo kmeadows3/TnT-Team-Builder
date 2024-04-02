@@ -15,13 +15,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcUnitDaoTests extends BaseDaoTests{
-    protected final Unit UNIT1 = new Unit(1, 1, "UnitName1", "Trade Master", "Leader",
+    protected static final Unit UNIT1 = new Unit(1, 1, "UnitName1", "Trade Master", "Leader",
             "Human", 50,10,5,7,6,8,6,5,0,
             "Special rules description",100,0,0,0,
             new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
-    protected final Unit UNIT2 = new Unit(2, 3, "UnitName2", "Soldier", "Elite",
+    protected static final Unit UNIT2 = new Unit(2, 3, "UnitName2", "Soldier", "Elite",
             "Mutant", 51,11,6,8,7,9,7,6,1,
             "Special rules description",50,0,0,0,
+            new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
+
+    protected static final Unit UNIT3 = new Unit(3, 1, "UnitName3", "Class Name", "Specialist",
+            "Human", 40,10,5,7,6,8,6,5,0,
+            "Special rules description",100,0,0,0,
             new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
 
     private JdbcUnitDao sut;

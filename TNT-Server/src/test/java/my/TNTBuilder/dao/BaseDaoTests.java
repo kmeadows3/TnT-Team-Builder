@@ -13,6 +13,10 @@ import java.sql.SQLException;
 @ContextConfiguration(classes = TestingDatabaseConfig.class)
 public abstract class BaseDaoTests {
 
+
+
+
+
     @Autowired
     protected DataSource dataSource;
 

@@ -14,10 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcTeamDaoTests extends BaseDaoTests{
-    protected final Team team1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500, new ArrayList<Unit>(), new ArrayList<Item>());
-    protected final Team team2 = new Team(2, 1, "Team 2", "Raiders", 3, 1500, new ArrayList<Unit>(), new ArrayList<Item>());
-    protected final Team team3 = new Team(3, 2, "Team 3", "Mutants", 2, 1000, new ArrayList<Unit>(), new ArrayList<Item>());
-
+    protected final Team TEAM_1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500, new ArrayList<Unit>(), new ArrayList<Item>());
+    protected final Team TEAM_2 = new Team(2, 1, "Team 2", "Raiders", 3, 1500, new ArrayList<Unit>(), new ArrayList<Item>());
+    protected final Team TEAM_3 = new Team(3, 2, "Team 3", "Mutants", 2, 1000, new ArrayList<Unit>(), new ArrayList<Item>());
     protected final FactionDTO faction1 = new FactionDTO(1, "Caravanners");
     protected final FactionDTO faction2 = new FactionDTO(2, "Mutants");
 
@@ -27,13 +26,16 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
     public void setSut(){
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         sut = new JdbcTeamDao(jdbcTemplate);
+        TEAM_1.getUnitList().add(JdbcUnitDaoTests.UNIT1);
+        TEAM_1.getUnitList().add(JdbcUnitDaoTests.UNIT3);
+        TEAM_3.getUnitList().add(JdbcUnitDaoTests.UNIT2);
     }
 
     @Test
     public void get_team_by_id_returns_correct_team(){
         Team testTeam = sut.getTeamById(1, 1);
         Assert.assertNotNull(testTeam);
-        Assert.assertEquals(team1, testTeam);
+        Assert.assertEquals(TEAM_1, testTeam);
     }
 
     @Test
@@ -75,7 +77,7 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         List<Team> testList = sut.getAllTeamsForUser(2);
         Assert.assertNotNull(testList);
         Assert.assertEquals(1, testList.size());
-        Assert.assertEquals(team3, testList.get(0));
+        Assert.assertEquals(TEAM_3, testList.get(0));
     }
 
     @Test
@@ -83,8 +85,8 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         List<Team> testList = sut.getAllTeamsForUser(1);
         Assert.assertNotNull(testList);
         Assert.assertEquals(2, testList.size());
-        Assert.assertEquals(team1, testList.get(0));
-        Assert.assertEquals(team2, testList.get(1));
+        Assert.assertEquals(TEAM_1, testList.get(0));
+        Assert.assertEquals(TEAM_2, testList.get(1));
     }
 
     @Test(expected = DaoException.class)

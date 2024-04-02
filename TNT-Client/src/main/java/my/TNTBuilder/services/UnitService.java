@@ -22,7 +22,7 @@ public class UnitService {
     }
 
     public Unit addNewUnitToDatabase(Unit newUnit) throws TNTException{
-        String url = BASE_API_URL +"/unit";
+        String url = BASE_API_URL + "/units";
         Unit returnedUnit = null;
         try {
             ResponseEntity<Unit> response = restTemplate.exchange(url, HttpMethod.POST, generateUnitHttpEntity(newUnit), Unit.class);

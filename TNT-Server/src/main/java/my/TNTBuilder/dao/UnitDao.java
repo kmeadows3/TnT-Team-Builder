@@ -16,4 +16,6 @@ public interface UnitDao {
     List<Unit> getListOfUnitsByFactionId(int factionId);
 
     List<Unit> getAllUnitsForTeam(int teamId);
+
+    void updateUnit(Unit updatedUnit);
 }

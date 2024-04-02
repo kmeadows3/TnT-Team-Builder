@@ -110,4 +110,16 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Assert.assertEquals(UNIT1, testList.get(0));
         Assert.assertFalse(testList.contains(UNIT2));
     }
+
+    @Test
+    public void updateUnit_updates_unit(){
+        Unit updatedUnit = new Unit(1, 1, "Updated Name", "Trade Master", "Updated Rank",
+                "Human", 50,50,50,50,50,50,50,50,50,
+                "Special rules description",50,50,50,50,
+                new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
+        sut.updateUnit(updatedUnit);
+        Unit testUnit = sut.getUnitById(updatedUnit.getId(), 1);
+        Assert.assertEquals(updatedUnit, testUnit);
+
+    }
 }

@@ -194,7 +194,7 @@ public class ConsoleService {
         paddedDisplay("UPKEEP", 17, false, true);
         paddedDisplay(Integer.toString(unit.getSpentExperience()), 17, true, false);
         paddedDisplay(Integer.toString(unit.getUnspentExperience()), 18, false, false);
-        paddedDisplay(Integer.toString(unit.costToAdvance()), 18, false, false);
+        paddedDisplay(Integer.toString(unit.getCostToAdvance()), 18, false, false);
         paddedDisplay(Integer.toString(unit.getUnitUpkeep()), 17, false, true);
         printFullMiddleLine();
     }

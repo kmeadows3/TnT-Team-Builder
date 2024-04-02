@@ -30,7 +30,7 @@ public class TeamController {
         this.unitService = unitService;
     }
 
-    @RequestMapping(path = "/team", method = RequestMethod.POST)
+    @RequestMapping(path = "/teams", method = RequestMethod.POST)
     public Team createTeam(@Valid @RequestBody Team team, Principal principal){
         team.setUserId(userDao.getUserIdByUsername(principal.getName()));
         Team returnTeam = null;
@@ -42,7 +42,7 @@ public class TeamController {
         return returnTeam;
     }
 
-    @RequestMapping(path = "/team", method = RequestMethod.GET)
+    @RequestMapping(path = "/teams", method = RequestMethod.GET)
     public List<Team> getUsersTeams(Principal principal){
         List<Team> teamList = null;
         try{
@@ -54,7 +54,7 @@ public class TeamController {
         return teamList;
     }
 
-    @RequestMapping(path = "/team/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/teams/{id}", method = RequestMethod.GET)
     public Team createTeam(@PathVariable int id, Principal principal){
         Team returnTeam = null;
         try{
@@ -69,7 +69,7 @@ public class TeamController {
         return returnTeam;
     }
 
-    @RequestMapping(path = "/faction", method = RequestMethod.GET)
+    @RequestMapping(path = "/factions", method = RequestMethod.GET)
     public List<FactionDTO> lookupAllFactions(){
         try {
             return teamDao.getAllFactions();
@@ -78,7 +78,7 @@ public class TeamController {
         }
     }
 
-    @RequestMapping(path = "/faction/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/factions/{id}", method = RequestMethod.GET)
     public List<Unit> getUnitsForFaction(@PathVariable int id){
         try {
             return unitService.getUnitsForFaction(id);

@@ -138,6 +138,26 @@ public class JdbcUnitDao implements UnitDao{
         return unitList;
     }
 
+    @Override
+    public void updateUnit(Unit updatedUnit){
+        String sql = "UPDATE unit SET name = ?, rank = ?, wounds = ?, defense = ?, mettle = ?, move = ?, " +
+                "ranged = ?, melee = ?, strength = ?, empty_skills = ?, spent_exp = ?, unspent_exp = ?, " +
+                "total_advances = ?, ten_point_advances = ? WHERE unit_id = ?";
+        try{
+            int rowsAffected = jdbcTemplate.update(sql, updatedUnit.getName(), updatedUnit.getRank(), updatedUnit.getWounds(),
+                    updatedUnit.getDefense(), updatedUnit.getMettle(), updatedUnit.getMove(), updatedUnit.getRanged(),
+                    updatedUnit.getMelee(), updatedUnit.getStrength(), updatedUnit.getEmptySkills(),
+                    updatedUnit.getSpentExperience(), updatedUnit.getUnspentExperience(), updatedUnit.getTotalAdvances(),
+                    updatedUnit.getTenPointAdvances(), updatedUnit.getId());
+            if (rowsAffected != 1){
+                throw new DaoException("Incorrect number of rows affected");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Invalid data provided, cannot update unit", e);
+        }
+    }
 
 
     /*

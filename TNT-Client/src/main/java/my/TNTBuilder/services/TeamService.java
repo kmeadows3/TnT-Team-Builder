@@ -29,7 +29,7 @@ public class TeamService {
     }
 
     public Team createTeam(Team teamInput) throws TNTException{
-        String url = BASE_API_URL+"/team";
+        String url = BASE_API_URL + "/teams";
         Team newTeam = null;
         HttpEntity<Team> entity = getTeamHttpEntity(teamInput);
         try {
@@ -44,7 +44,7 @@ public class TeamService {
 
     public List<Team> getTeamsForUser() throws TNTException{
         List<Team> teamsForUser = null;
-        String url = BASE_API_URL + "/team";
+        String url = BASE_API_URL + "/teams";
 
         try {
             ResponseEntity<Team[]> response = restTemplate.exchange(url, HttpMethod.GET, getVoidHttpEntity(), Team[].class);
@@ -61,7 +61,7 @@ public class TeamService {
     }
     public List<Faction> getFactions() throws TNTException{
         List<Faction> factionlist = null;
-        String url = BASE_API_URL + "/faction";
+        String url = BASE_API_URL + "/factions";
         HttpEntity<Void> entity = getVoidHttpEntity();
 
         try {
@@ -82,7 +82,7 @@ public class TeamService {
 
     public List<Unit> getUnitsForPurchase(int factionId) throws TNTException{
         List<Unit> unitsForPurchase = null;
-        String url = BASE_API_URL + "faction/" + factionId;
+        String url = BASE_API_URL + "factions/" + factionId;
         try {
             ResponseEntity<Unit[]> response = restTemplate.exchange(url, HttpMethod.GET, getVoidHttpEntity(), Unit[].class);
             Unit[] units = response.getBody();

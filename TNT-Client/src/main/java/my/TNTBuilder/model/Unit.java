@@ -1,6 +1,5 @@
 package my.TNTBuilder.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import my.TNTBuilder.model.inventory.Item;
 
 import java.util.*;
@@ -93,7 +92,7 @@ public class Unit {
         return upkeep;
     }
 
-    public int costToAdvance() {
+    public int getCostToAdvance() {
         int totalExp = spentExperience + unspentExperience;
         if (totalExp <= 20) {
             return 5;

@@ -93,7 +93,7 @@ public class Unit {
         return upkeep;
     }
 
-    public int costToAdvance() {
+    public int getCostToAdvance() {
         int totalExp = spentExperience + unspentExperience;
         if (totalExp <= 20) {
             return 5;

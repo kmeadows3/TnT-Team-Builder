@@ -95,9 +95,18 @@ public class App {
         }
         consoleService.goodbyeMessage();
     }
-    private void editTeamMenu(Team team){
-        currentTeam = team;
+    private void editTeamMenu(int teamId){
+
+
+
         while (true) {
+            try {
+                currentTeam = teamService.getTeamByTeamId(teamId);
+            } catch (TNTException e) {
+                consoleService.printErrorMessage(e);
+                return;
+            }
+
             consoleService.displayTeam(currentTeam);
             consoleService.editTeamMenu();
 
@@ -167,7 +176,8 @@ public class App {
             }
             selection = consoleService.validateSelectionFromList(selection, savedTeams.size());
         }
-        editTeamMenu(savedTeams.get(selection -1));
+
+        editTeamMenu(savedTeams.get(selection -1).getId());
     }
     private void createTeam() {
         List<Faction> factionList = null;
@@ -183,7 +193,7 @@ public class App {
                 return;
             } else {
                 Team newTeam = teamService.createTeam(newTeamInfo);
-                editTeamMenu(newTeam);
+                editTeamMenu(newTeam.getId());
             }
         } catch (TNTException e) {
             consoleService.printErrorMessage(e);
@@ -215,12 +225,16 @@ public class App {
         }
 
         Unit newUnit = getNewUnitInformation(potentialUnits);
-        if (newUnit == null) return;
+        if (newUnit == null){
+            return;
+        }
 
         try {
+            teamService.validatePurchase(newUnit.getBaseCost(), currentTeam);
             returnedUnit = unitService.addNewUnitToDatabase(newUnit);
         } catch (TNTException e){
             consoleService.printErrorMessage(e);
+            return;
         }
         editUnitMenu(returnedUnit);
     }
@@ -259,6 +273,7 @@ public class App {
         }
         newUnit.setId(selection);
         newUnit.setName(consoleService.promptForString("Name the new unit: "));
+        newUnit.setBaseCost(potentialUnits.get(selection-1).getBaseCost());
         return newUnit;
     }
 

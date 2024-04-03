@@ -1,6 +1,6 @@
 package my.TNTBuilder.service;
 
-import my.TNTBuilder.UnitValidator;
+import my.TNTBuilder.validator.UnitValidator;
 import my.TNTBuilder.dao.TeamDao;
 import my.TNTBuilder.dao.UnitDao;
 import my.TNTBuilder.exception.DaoException;
@@ -17,18 +17,22 @@ public class UnitService {
     private UnitDao unitDao;
     private TeamDao teamDao;
     private UnitValidator unitValidator;
+    private TeamService teamService;
 
-    public UnitService(UnitDao unitDao, TeamDao teamDao, UnitValidator unitValidator) {
+    public UnitService(UnitDao unitDao, TeamDao teamDao, UnitValidator unitValidator, TeamService teamService) {
         this.unitDao = unitDao;
         this.teamDao = teamDao;
         this.unitValidator = unitValidator;
+        this.teamService = teamService;
     }
 
-    public Unit createNewUnit(Unit clientUnit, int UserId){
+    public Unit createNewUnit(Unit clientUnit, int userId){
         Unit newUnit = null;
         try {
-            validateNewClientUnit(clientUnit, UserId);
+            validateNewClientUnit(clientUnit, userId);
             newUnit = unitDao.createUnit(clientUnit);
+            teamService.spendMoney(newUnit.getBaseCost(), newUnit.getTeamId(), userId);
+
         } catch (DaoException e){
             throw new ServiceException(e.getMessage());
         }
@@ -69,6 +73,10 @@ public class UnitService {
         int unitFaction = unitDao.getFactionIdByUnitId(unit.getId());
         if (unitFaction != team.getFactionId() && unitFaction != FREELANCER_FACTION_ID) {
             throw new ServiceException("Invalid unit. Unit does not belong to same faction as team.");
+        }
+        int cost = unitDao.convertReferenceUnitToUnit(unit.getId()).getBaseCost();
+        if (team.getMoney() - cost < 0){
+            throw new ServiceException("Team cannot afford this unit");
         }
     }
 

@@ -1,6 +1,5 @@
 package my.TNTBuilder.dao;
 
-import my.TNTBuilder.TeamValidator;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.model.FactionDTO;
 import my.TNTBuilder.model.Team;

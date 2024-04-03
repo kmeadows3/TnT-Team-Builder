@@ -25,7 +25,7 @@ public class UnitController {
     }
 
     @RequestMapping(path="/units", method = RequestMethod.POST)
-    public Unit newUnit(@Valid @RequestBody Unit unit, @PathVariable int teamId, Principal principal){
+    public Unit newUnit(@Valid @RequestBody Unit unit, Principal principal){
         Unit newUnit = null;
         try{
             newUnit = unitService.createNewUnit(unit, userDao.getUserIdByUsername(principal.getName()));

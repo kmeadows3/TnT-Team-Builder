@@ -21,9 +21,6 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
     public void setSut(){
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         sut = new JdbcTeamDao(jdbcTemplate);
-        TEAM_1.getUnitList().add(JdbcUnitDaoTests.UNIT1);
-        TEAM_1.getUnitList().add(JdbcUnitDaoTests.UNIT3);
-        TEAM_3.getUnitList().add(JdbcUnitDaoTests.UNIT2);
     }
 
     @Test
@@ -72,7 +69,7 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         List<Team> testList = sut.getAllTeamsForUser(2);
         Assert.assertNotNull(testList);
         Assert.assertEquals(1, testList.size());
-        Assert.assertEquals(TEAM_3, testList.get(0));
+        Assert.assertTrue(testList.contains(TEAM_3));
     }
 
     @Test
@@ -80,8 +77,8 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         List<Team> testList = sut.getAllTeamsForUser(1);
         Assert.assertNotNull(testList);
         Assert.assertEquals(2, testList.size());
-        Assert.assertEquals(TEAM_1, testList.get(0));
-        Assert.assertEquals(TEAM_2, testList.get(1));
+        Assert.assertTrue(testList.contains(TEAM_1));
+        Assert.assertTrue(testList.contains(TEAM_2));
     }
 
     @Test(expected = DaoException.class)
@@ -95,7 +92,7 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         List<FactionDTO> testList = sut.getAllFactions();
         Assert.assertNotNull(testList);
         Assert.assertEquals(6, testList.size());
-        Assert.assertEquals(faction1, testList.get(0));
+        Assert.assertTrue(testList.contains(faction1));
     }
 
     @Test

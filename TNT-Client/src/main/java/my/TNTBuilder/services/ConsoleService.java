@@ -282,7 +282,7 @@ public class ConsoleService {
 
     public int getUnitSelectionForNewUnit(List<Unit> unitsForPurchase){
         for (int i = 0; i < unitsForPurchase.size(); i++){
-            System.out.printf("(%d) %s - %s%n", i + 1, unitsForPurchase.get(i).getUnitClass(), unitsForPurchase.get(i).getRank());
+            System.out.printf("(%d) %s - %s - %d BS%n", i + 1, unitsForPurchase.get(i).getUnitClass(), unitsForPurchase.get(i).getRank(), unitsForPurchase.get(i).getBaseCost());
         }
         int selection = promptForMenuSelection("Select your unit (0 to exit): ");
         return selection;

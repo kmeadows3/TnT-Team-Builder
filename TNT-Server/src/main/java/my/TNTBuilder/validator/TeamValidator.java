@@ -1,4 +1,4 @@
-package my.TNTBuilder;
+package my.TNTBuilder.validator;
 
 import my.TNTBuilder.model.Team;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class TeamValidator {
     }
 
     public boolean validMoneyChange (Team team, Team updatedTeam){
-        if (updatedTeam.getMoney() > team.getMoney() || updatedTeam.getMoney() < team.getMoney() && updatedTeam.getMoney() >= 0 ){
+        if (updatedTeam.getMoney() != team.getMoney() && updatedTeam.getMoney() >= 0 ){
             return updatedTeam.getId() == team.getId() && updatedTeam.getUserId() == team.getUserId()
                     && updatedTeam.getFactionId() == team.getFactionId()
                     && Objects.equals(updatedTeam.getFaction(), team.getFaction())

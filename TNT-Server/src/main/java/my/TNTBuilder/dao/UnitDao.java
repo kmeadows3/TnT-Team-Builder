@@ -18,4 +18,6 @@ public interface UnitDao {
     List<Unit> getAllUnitsForTeam(int teamId);
 
     void updateUnit(Unit updatedUnit);
+
+    Unit convertReferenceUnitToUnit(int referenceUnitId);
 }

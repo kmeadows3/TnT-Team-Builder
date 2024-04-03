@@ -1,6 +1,6 @@
 package my.TNTBuilder.service;
 
-import my.TNTBuilder.TeamValidator;
+import my.TNTBuilder.validator.TeamValidator;
 import my.TNTBuilder.dao.TeamDao;
 import my.TNTBuilder.dao.UserDao;
 import my.TNTBuilder.exception.DaoException;
@@ -36,5 +36,18 @@ public class TeamService {
             throw new ServiceException("Invalid update to Team");
         }
         return teamDao.getTeamById(teamId, userId);
+    }
+
+    public void spendMoney(int amountToSpend, int teamId, int userId){
+        try{
+            Team team = teamDao.getTeamById(teamId, userId);
+            if (team.getMoney() - amountToSpend < 0){
+                throw new ServiceException("Team does not have enough money for this action.");
+            }
+            team.setMoney(team.getMoney() - amountToSpend);
+            teamDao.updateTeam(team);
+        } catch (DaoException e){
+            throw new ServiceException(e.getMessage(), e);
+        }
     }
 }

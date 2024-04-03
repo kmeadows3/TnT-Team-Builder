@@ -8,8 +8,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 
 
 public class UnitService {
@@ -30,15 +31,13 @@ public class UnitService {
             if (returnedUnit == null){
                 throw new TNTException("No unit returned");
             }
-        } catch (ResponseStatusException e) {
+        } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
-            throw new TNTException(e.getMessage(), e);
+            throw new TNTException("Unit could not be created, see log for details", e);
         }
 
         return returnedUnit;
     }
-
-
 
 
 

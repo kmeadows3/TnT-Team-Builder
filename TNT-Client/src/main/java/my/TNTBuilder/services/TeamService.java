@@ -42,6 +42,23 @@ public class TeamService {
         return newTeam;
     }
 
+    public Team getTeamByTeamId(int teamId) throws TNTException{
+        Team team = null;
+        String url = BASE_API_URL + "/teams/" + teamId;
+
+        try{
+            ResponseEntity<Team> response = restTemplate.exchange(url, HttpMethod.GET, getVoidHttpEntity(), Team.class);
+            team = response.getBody();
+            if(team == null){
+                throw new TNTException("Unable to retrieve team");
+            }
+        } catch (RestClientResponseException | ResourceAccessException e){
+            BasicLogger.log(e.getMessage());
+            throw new TNTException("Unable to access resource: " + e.getMessage(), e);
+        }
+        return team;
+    }
+
     public List<Team> getTeamsForUser() throws TNTException{
         List<Team> teamsForUser = null;
         String url = BASE_API_URL + "/teams";
@@ -101,7 +118,11 @@ public class TeamService {
 
 
 
-
+    public void validatePurchase(int cost, Team team) throws TNTException{
+        if (team.getMoney() - cost < 0){
+            throw new TNTException("Team does not have money for this purchase.");
+        }
+    }
 
 
     /*

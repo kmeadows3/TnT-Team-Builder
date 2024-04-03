@@ -159,6 +159,20 @@ public class JdbcUnitDao implements UnitDao{
         }
     }
 
+    @Override
+    public Unit convertReferenceUnitToUnit(int referenceUnitId){
+        Unit referenceUnit = null;
+        String sql = SELECT_ALL_FROM_UNIT_REFERENCE + "WHERE unit_ref_id = ?";
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, referenceUnitId);
+            while (results.next()){
+                referenceUnit = mapRowToUnitFromUnitReference(results);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        }
+        return referenceUnit;
+    }
 
     /*
     PRIVATE METHODS
@@ -175,7 +189,6 @@ public class JdbcUnitDao implements UnitDao{
         }
         return skills;
     }
-
     private List<Skillset> getAvailableSkillsets(int unitId){
         List<Skillset> skillsets = new ArrayList<>();
         String sql = SELECT_ALL_FROM_SKILLSET_REFERENCE + "JOIN unit_skillset uss ON uss.skillset_id = ssr.skillset_id "
@@ -186,6 +199,7 @@ public class JdbcUnitDao implements UnitDao{
         }
         return skillsets;
     }
+
     private void addSkillsToUnitSkillJoinTable(int unitId, List<Skill> skills){
         String sql = "INSERT INTO unit_skill (unit_id, skill_id) VALUES (?, ?)";
         List<Object[]> batch = new ArrayList<>();
@@ -214,20 +228,6 @@ public class JdbcUnitDao implements UnitDao{
         newUnit.setTeamId(providedUnit.getTeamId());
         newUnit.setName(providedUnit.getName());
         return newUnit;
-    }
-
-    private Unit convertReferenceUnitToUnit(int referenceUnitId){
-        Unit referenceUnit = null;
-        String sql = SELECT_ALL_FROM_UNIT_REFERENCE + "WHERE unit_ref_id = ?";
-        try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, referenceUnitId);
-            while (results.next()){
-                referenceUnit = mapRowToUnitFromUnitReference(results);
-            }
-        } catch (CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to database", e);
-        }
-        return referenceUnit;
     }
 
     private Unit mapRowToUnitFromUnitReference(SqlRowSet row){

@@ -1,4 +1,4 @@
-package my.TNTBuilder;
+package my.TNTBuilder.validator;
 
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Skillset;

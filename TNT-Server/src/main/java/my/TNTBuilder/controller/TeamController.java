@@ -7,6 +7,7 @@ import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.FactionDTO;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
+import my.TNTBuilder.service.TeamService;
 import my.TNTBuilder.service.UnitService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,11 +24,13 @@ public class TeamController {
     private final TeamDao teamDao;
     private final UserDao userDao;
     private final UnitService unitService;
+    private final TeamService teamService;
 
-    public TeamController(TeamDao teamDao, UserDao userDao, UnitService unitService){
+    public TeamController(TeamDao teamDao, UserDao userDao, UnitService unitService, TeamService teamService){
         this.teamDao = teamDao;
         this.userDao = userDao;
         this.unitService = unitService;
+        this.teamService = teamService;
     }
 
     @RequestMapping(path = "/teams", method = RequestMethod.POST)
@@ -52,6 +55,18 @@ public class TeamController {
         }
 
         return teamList;
+    }
+
+    @RequestMapping(path = "/teams/{id}", method = RequestMethod.PUT)
+    public Team updateTeam(@Valid @RequestBody Team updatedTeam, Principal principal){
+        Team teamAfterUpdate = null;
+        try{
+            teamAfterUpdate = teamService.updateTeam(updatedTeam, principal.getName());
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+
+        return teamAfterUpdate;
     }
 
     @RequestMapping(path = "/teams/{id}", method = RequestMethod.GET)

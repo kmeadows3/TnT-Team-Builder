@@ -1,6 +1,6 @@
 package my.TNTBuilder.service;
 
-import my.TNTBuilder.UnitValidator;
+import my.TNTBuilder.validator.UnitValidator;
 import my.TNTBuilder.dao.*;
 import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.Skill;

@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = TestingDatabaseConfig.class)
@@ -33,9 +34,12 @@ public abstract class BaseDaoTests {
             "Human", 40,10,5,7,6,8,6,5,0,
             "Special rules description",100,0,0,0,
             new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
-    protected final Team TEAM_1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500, new ArrayList<Unit>(), new ArrayList<Item>());
-    protected final Team TEAM_2 = new Team(2, 1, "Team 2", "Raiders", 3, 1500, new ArrayList<Unit>(), new ArrayList<Item>());
-    protected final Team TEAM_3 = new Team(3, 2, "Team 3", "Mutants", 2, 1000, new ArrayList<Unit>(), new ArrayList<Item>());
+    protected final Team TEAM_1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500,
+            Arrays.asList(new Unit[]{UNIT1, UNIT3}), new ArrayList<Item>());
+    protected final Team TEAM_2 = new Team(2, 1, "Team 2", "Raiders", 3, 1500,
+            new ArrayList<Unit>(), new ArrayList<Item>());
+    protected final Team TEAM_3 = new Team(3, 2, "Team 3", "Mutants", 2, 1000,
+            Arrays.asList(new Unit[]{UNIT2}), new ArrayList<Item>());
     protected final FactionDTO faction1 = new FactionDTO(1, "Caravanners");
     protected final FactionDTO faction2 = new FactionDTO(2, "Mutants");
 

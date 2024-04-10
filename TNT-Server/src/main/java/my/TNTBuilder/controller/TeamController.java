@@ -17,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-
+@CrossOrigin
 @RestController
 @PreAuthorize("isAuthenticated()")
 public class TeamController {

@@ -1,11 +1,17 @@
 <template>
   <div id="capstone-app">
-    <div id="nav">
-      <router-link v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'dashboard' }" v-if="$store.state.token != ''">Team List</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
-    
-    </div>
+    <MainNavigation />
     <router-view />
   </div>
 </template>
+
+
+<script>
+import MainNavigation from "./components/MainNavigation.vue";
+
+export default{
+  components: {
+    MainNavigation
+  }
+}
+</script>

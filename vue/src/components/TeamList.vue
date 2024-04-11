@@ -21,6 +21,7 @@ export default {
         TeamsService.retrieveTeamList()
             .then( response => {
                 this.teams = response.data;
+                this.$store.commit('SET_TEAM_LIST', response.data);
             })
             .catch( err => {
                 console.error(err)

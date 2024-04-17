@@ -1,5 +1,6 @@
 import { createStore as _createStore } from 'vuex';
 import axios from 'axios';
+import TeamsService from '../services/TeamsService';
 
 export function createStore(currentToken, currentUser) {
   let store = _createStore({
@@ -9,6 +10,8 @@ export function createStore(currentToken, currentUser) {
       showTeamList: true,
       showTeamDetail: false,
       showUnitDetail: false,
+      showNewUnitForm: false,
+      showNewTeamForm: false,
       teamList: [],
       currentTeam: {},
       currentUnit: {}
@@ -55,8 +58,25 @@ export function createStore(currentToken, currentUser) {
         state.currentUnit = {};
         state.showUnitDetail = false;
         state.showTeamDetail = true;
+      },
+      TOGGLE_NEW_UNIT_FORM(state){
+        state.showNewUnitForm = !state.showNewUnitForm;
+      },
+      TOGGLE_NEW_TEAM_FORM(state){
+        state.showNewTeamForm = !state.showNewTeamForm;
       }
     },
+    actions: {
+      loadTeams() {
+        TeamsService.retrieveTeamList()
+          .then(response => {
+            store.commit('SET_TEAM_LIST', response.data);
+          })
+          .catch(err => {
+            console.error(err)
+          });
+      }
+    }
   });
   return store;
 }

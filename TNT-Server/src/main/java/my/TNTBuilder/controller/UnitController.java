@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.security.Principal;
-
+@CrossOrigin
 @RestController
 @PreAuthorize("isAuthenticated()")
 public class UnitController {

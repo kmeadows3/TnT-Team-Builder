@@ -1,6 +1,12 @@
 <template>
     <section class="main-display">
         <h1 class ="page-title">Choose Your Team</h1>
+        <div class="controls">
+            <button @click="$store.commit('TOGGLE_NEW_TEAM_FORM')">New Team</button>
+            <button>Remove Team</button>
+            <NewTeamForm v-show="$store.state.showNewTeamForm"/>
+        </div>
+        
         <div class="team-list">
             <TeamCard v-for ='team in teams' v-bind:key="team.id" v-bind:team='team'/>
         </div>
@@ -9,7 +15,8 @@
 
 <script>
 import TeamCard from './TeamCard.vue';
-import TeamsService from '../services/TeamsService.js';
+import NewTeamForm from './NewTeamForm.vue';
+import TeamsService from '../services/TeamsService';
 
 export default {
     data() {
@@ -19,16 +26,16 @@ export default {
     },
     created(){
         TeamsService.retrieveTeamList()
-            .then( response => {
-                this.teams = response.data;
-                this.$store.commit('SET_TEAM_LIST', response.data);
-            })
-            .catch( err => {
-                console.error(err)
-            });
+          .then(response => {
+            this.teams = response.data;
+          })
+          .catch(err => {
+            console.error(err)
+          });
     },
     components: {
-        TeamCard
+        TeamCard,
+        NewTeamForm
     }
 }
 </script>

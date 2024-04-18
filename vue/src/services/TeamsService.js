@@ -16,6 +16,9 @@ export default {
   },
   getFactionList(){
     return axios.get('factions');
+  },
+  updateTeam(team){
+    return axios.put(`/teams/${team.id}`, team);
   }
 
 }

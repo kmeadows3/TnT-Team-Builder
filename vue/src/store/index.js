@@ -64,6 +64,19 @@ export function createStore(currentToken, currentUser) {
       },
       TOGGLE_NEW_TEAM_FORM(state){
         state.showNewTeamForm = !state.showNewTeamForm;
+      },
+      CHANGE_TEAM_NAME(state, newName){
+        state.currentTeam.name = newName;
+      },
+      GAIN_MONEY(state, addedMoney){
+        state.currentTeam.money += addedMoney;
+      },
+      LOSE_MONEY(state, lostMoney){
+        if(state.currentTeam.money - lostMoney >= 0){
+            state.currentTeam.money -= lostMoney;
+        } else {
+          throw "Not enough money for this action";
+        }
       }
     },
     actions: {

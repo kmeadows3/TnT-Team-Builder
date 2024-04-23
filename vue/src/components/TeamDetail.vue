@@ -89,42 +89,11 @@ h1.page-title span{
     padding-right: 20px;
 }
 
-span.action-buttons{
-    display: flex;
-    flex-direction: column;
-}
-
-span.action-buttons i {
-    font-size: 1.1rem;
-    cursor: pointer;
-    padding: 1px 3px;
-    margin: 2px;
-    border: solid 1px black;
-    border-radius: 5px;
-}
-
-i.bi-pencil-square {
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 3px 4px;
-    border: solid 1px black;
-    border-radius: 5px;
-}
-
-
-
 .main-display form {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-input#changeName {
-    margin: 3px;
-    padding: 2px 20px;
-    font-size: .9em;
-    font-style: italic;
-    font-weight: 100;
-}
 
 </style>

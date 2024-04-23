@@ -28,6 +28,9 @@ export default {
   },
   getUnit(id){
     return axios.get(`/units/${id}`);
+  },
+  updateUnit(unit){
+    return axios.put(`/units/${unit.id}`, unit);
   }
 
 }

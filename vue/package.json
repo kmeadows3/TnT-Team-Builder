@@ -13,7 +13,6 @@
     "axios": "^0.21.4",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
-    "bootstrap-vue": "^2.23.1",
     "vue": "^3.4.23",
     "vue-router": "^4.2.1",
     "vuex": "^4.1.0"

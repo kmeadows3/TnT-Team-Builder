@@ -1,7 +1,20 @@
 <template>
     <div id="basic-information">
         <div id="name">
-            <h1>{{$store.state.currentUnit.name}}</h1>
+            <h1 class="page-title" v-show="!showChangeNameForm">
+            <span>{{$store.state.currentUnit.name}}</span>
+            <i class="bi bi-pencil-square" @click="toggleEditName()"></i>
+        </h1>
+        <h1 class="page-title" v-show="showChangeNameForm">
+            <form>
+                <input type="text" id="changeName" v-model="unitName">
+            </form>
+            <span class="action-buttons">
+            <i class="bi bi-check-circle" @click="changeName()"></i>
+            <i class="bi bi-x-square" @click="resetName()"></i>
+        </span>
+        </h1>
+            <h1></h1>
         </div>
         <div id="title">
             <p>TITLE</p>
@@ -29,6 +42,40 @@
         </div>
     </div>
 </template>
+
+<script>
+import TeamsService from '../services/TeamsService.js';
+
+export default {
+    data() {
+        return {
+            showChangeNameForm:false,
+            untName: '',
+        }
+    },
+    methods: {
+        toggleEditName(){
+            this.showChangeNameForm = !this.showChangeNameForm;
+        },
+        resetName(){
+            this.unitName = this.$store.state.currentUnit.name;
+            this.toggleEditName();
+        },
+        changeName(){
+            this.$store.commit('CHANGE_UNIT_NAME', this.unitName);
+            TeamsService.updateUnit(this.$store.state.currentUnit)
+                .then( response => {
+                    this.$store.commit('SET_CURRENT_UNIT', response.data);
+                }).catch(error => console.error(error));
+            this.toggleEditName();
+        }
+    },
+    beforeMount() {
+        this.unitName = this.$store.state.currentUnit.name;
+    }
+}
+</script>
+
 
 <style scoped>
 div#basic-information{
@@ -66,4 +113,17 @@ div#wounds{
 div#bs-cost{
     grid-area: bs-cost;
 }
+
+h1.page-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1.page-title span{
+    padding-right: 20px;
+}
+
+
+
 </style>

@@ -15,10 +15,10 @@ import java.util.List;
 @Component
 public class UnitService {
     private final int FREELANCER_FACTION_ID = 7;
-    private UnitDao unitDao;
-    private TeamDao teamDao;
-    private UnitValidator unitValidator;
-    private TeamService teamService;
+    private final UnitDao unitDao;
+    private final TeamDao teamDao;
+    private final UnitValidator unitValidator;
+    private final TeamService teamService;
 
     public UnitService(UnitDao unitDao, TeamDao teamDao, UnitValidator unitValidator, TeamService teamService) {
         this.unitDao = unitDao;
@@ -89,7 +89,6 @@ public class UnitService {
         }
     }
 
-    //TODO test me
     public Unit getUnitById(int unitId, int userId){
         Unit unit = null;
         try {
@@ -134,23 +133,23 @@ public class UnitService {
             return;
         } else if (unitValidator.validFivePointLevel(currentUnit, updatedUnit)
                 && unitValidator.unitCanAffordAdvance(currentUnit)){
-            spentExpForAdvance(updatedUnit);
+            spendExpForAdvance(updatedUnit);
         } else if (unitValidator.validTenPointLevel(currentUnit, updatedUnit)
                 && unitValidator.unitCanAffordAdvance(currentUnit)){
-            spentExpForAdvance(updatedUnit);
+            spendExpForAdvance(updatedUnit);
             updatedUnit.setTenPointAdvances(updatedUnit.getTenPointAdvances() + 1);
         } else {
             throw new ServiceException("Unit update is not valid");
         }
     }
 
-    private void spentExpForAdvance(Unit updatedUnit) {
+    private void spendExpForAdvance(Unit updatedUnit) {
         updatedUnit.setUnspentExperience(updatedUnit.getUnspentExperience() - updatedUnit.getCostToAdvance());
+        updatedUnit.setSpentExperience(updatedUnit.getSpentExperience() + updatedUnit.getCostToAdvance());
         updatedUnit.setTotalAdvances(updatedUnit.getTotalAdvances() + 1);
     }
 
     private boolean unitCanAddSkill(int unitId, int skillId, int userId){
-        boolean valid = false;
 
         Unit unit = unitDao.getUnitById(unitId, userId);
         if (unit == null){

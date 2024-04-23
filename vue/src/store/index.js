@@ -77,7 +77,18 @@ export function createStore(currentToken, currentUser) {
         } else {
           throw "Not enough money for this action";
         }
+      },
+      CHANGE_UNIT_NAME(state, newName){
+        state.currentUnit.name = newName;
+      },
+      GAIN_UNSPENT_EXP(state, expToGain){
+        if(expToGain > 0){
+          state.currentUnit.unspentExperience += expToGain;
+        } else {
+          throw "Experience gained must be positive."
+        }
       }
+
     },
     actions: {
       loadTeams() {

@@ -80,12 +80,25 @@ div.abilities>div {
     display: flex;
     text-align: left;
     gap: 20px;
-    padding: 0px 20px;
+    padding: 0px;
+    border-bottom: solid 1px black;
+}
+
+div.abilities>div:last-child{
+    border-bottom: 0px;
 }
 
 div.abilities>div>h3 {
     min-width: 100px;
+    margin: 5px;
+    margin-left: 20px;
     text-align: center;
+}
+
+div.abilities>div>p {
+    min-width: 100px;
+    margin: 5px;
+    text-align: left;
 }
 
 div.skillsets {

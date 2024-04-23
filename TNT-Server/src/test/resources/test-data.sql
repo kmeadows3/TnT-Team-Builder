@@ -210,7 +210,7 @@ INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(4, 'Reconnoiter', 'At the start of the game after all models have deployed but before init is determined make a free move action.'),
 	(3, 'Trekker', 'When moving through Difficult Terrain attempt an Agility test (MET/TN 10) for free. On pass move through terrain without movement penalty.'),
 	(7, 'Brave', '+2 bonus when making Will tests.'),
-	(6, 'Brute', 'Gaint +1 to Strength Stat when making Melee attacks. Ignore heavy weapons rule.'),
+	(6, 'Brute', 'Gain +1 to Strength Stat when making Melee attacks. Ignore heavy weapons rule.'),
 	(6, 'Bully', 'All enemies defeated by this model in close combat are knocked prone in addition to any other combat result.'),
 	(15, 'Dumb', 'Takes a -2 penalty to intelligence tests');
 
@@ -329,5 +329,13 @@ VALUES (1, 'UnitName1', 'Trade Master', 'Leader', 'Human', 50, 10, 5, 7, 6, 8, 6
     (3, 'UnitName2', 'Soldier', 'Elite', 'Mutant', 51, 11, 6, 8, 7, 9, 7, 6, 1, 'Special rules description', 50),
     (1, 'UnitName3', 'Class Name', 'Specialist', 'Human', 40, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100);
 
+INSERT INTO unit_skillset (unit_id, skillset_id)
+VALUES (1, 3),
+    (1, 4),
+    (2, 6),
+    (3, 6);
+
+INSERT INTO unit_skill (unit_id, skill_id)
+VALUES (3, 7);
 
 COMMIT;

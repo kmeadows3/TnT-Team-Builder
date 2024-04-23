@@ -98,6 +98,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     @Test
     public void getAllUnitsForTeam_returns_correct_list(){
         List<Unit> testList = sut.getAllUnitsForTeam(1);
+
         Assert.assertEquals(2, testList.size());
         Assert.assertEquals(UNIT1, testList.get(0));
         Assert.assertFalse(testList.contains(UNIT2));
@@ -109,9 +110,71 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
                 "Human", 50,50,50,50,50,50,50,50,50,
                 "Special rules description",50,50,50,50,
                 new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
+        Skillset skillset1 = new Skillset(3, "Survival", "Skill");
+        Skillset skillset2 = new Skillset(4, "Quickness", "Skill");
+        updatedUnit.getAvailableSkillsets().add(skillset1);
+        updatedUnit.getAvailableSkillsets().add(skillset2);
+
         sut.updateUnit(updatedUnit);
         Unit testUnit = sut.getUnitById(updatedUnit.getId(), 1);
         Assert.assertEquals(updatedUnit, testUnit);
 
     }
+
+    @Test
+    public void getPotentialSkills_returns_correct_list_one_skillset(){
+        Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
+                "Ignore heavy weapons rule.", 6, "Brawn");
+        Skill skill2 = new Skill(7, "Bully", "All enemies defeated by this model in close combat are knocked prone " +
+                "in addition to any other combat result.", 6, "Brawn");
+
+        List<Skill> skillList = sut.getPotentialSkills(2);
+
+        Assert.assertEquals(2, skillList.size());
+        Assert.assertTrue(skillList.contains(skill1));
+        Assert.assertTrue(skillList.contains(skill2));
+
+    }
+
+    @Test
+    public void getPotentialSkills_returns_correct_list_multiple_skillsets(){
+        Skill skill1 = new Skill(3, "Reconnoiter", "At the start of the game after all models have " +
+                "deployed but before init is determined make a free move action.", 4, "Quickness");
+        Skill skill2 = new Skill(4, "Trekker", "When moving through Difficult Terrain attempt an " +
+                "Agility test (MET/TN 10) for free. On pass move through terrain without movement penalty.",
+                3, "Survival");
+
+        List<Skill> skillList = sut.getPotentialSkills(1);
+
+        Assert.assertEquals(2, skillList.size());
+        Assert.assertTrue(skillList.contains(skill1));
+        Assert.assertTrue(skillList.contains(skill2));
+
+    }
+
+    @Test
+    public void getPotentialSkills_does_not_return_existing_skills(){
+        Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
+                "Ignore heavy weapons rule.", 6, "Brawn");
+        Skill skill2 = new Skill(7, "Bully", "All enemies defeated by this model in close combat are knocked prone " +
+                "in addition to any other combat result.", 6, "Brawn");
+
+        List<Skill> skillList = sut.getPotentialSkills(3);
+
+        Assert.assertEquals(1, skillList.size());
+        Assert.assertTrue(skillList.contains(skill1));
+        Assert.assertFalse(skillList.contains(skill2));
+    }
+
+    @Test
+    public void addSkillToUnit_adds_skill_to_unit(){
+        Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
+                "Ignore heavy weapons rule.", 6, "Brawn");
+
+        sut.addSkillToUnit(6, 2);
+        Unit testUnit = sut.getUnitById(2, 2);
+        Assert.assertEquals(1, testUnit.getSkills().size());
+        Assert.assertTrue(testUnit.getSkills().contains(skill1));
+    }
+
 }

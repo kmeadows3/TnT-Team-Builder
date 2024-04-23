@@ -1,5 +1,6 @@
 package my.TNTBuilder.service;
 
+import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.validator.UnitValidator;
 import my.TNTBuilder.dao.TeamDao;
 import my.TNTBuilder.dao.UnitDao;
@@ -61,6 +62,47 @@ public class UnitService {
         return unitDao.getUnitById(clientUnit.getId(), userId);
     }
 
+    public List<Skill> getPotentialSkills(int unitId){
+        List<Skill> skillList = null;
+        try {
+            skillList = unitDao.getPotentialSkills(unitId);
+            if (skillList == null){
+                throw new ServiceException("No valid skills");
+            }
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+
+        return skillList;
+    }
+
+    public void addSkillToUnit(int skillId, int unitId, int userId){
+        try {
+            if (unitCanAddSkill(unitId, skillId, userId)){
+                unitDao.addSkillToUnit(skillId, unitId);
+                Unit unit = unitDao.getUnitById(unitId, userId);
+                unit.setEmptySkills(unit.getEmptySkills() - 1);
+                unitDao.updateUnit(unit);
+            }
+        } catch (DaoException e){
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    //TODO test me
+    public Unit getUnitById(int unitId, int userId){
+        Unit unit = null;
+        try {
+            unit = unitDao.getUnitById(unitId, userId);
+            if (unit == null){
+                throw new ServiceException("Unable to retrieve unit");
+            }
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage());
+        }
+        return unit;
+    }
+
     /*
         PRIVATE METHODS
      */
@@ -106,6 +148,29 @@ public class UnitService {
         updatedUnit.setUnspentExperience(updatedUnit.getUnspentExperience() - updatedUnit.getCostToAdvance());
         updatedUnit.setTotalAdvances(updatedUnit.getTotalAdvances() + 1);
     }
+
+    private boolean unitCanAddSkill(int unitId, int skillId, int userId){
+        boolean valid = false;
+
+        Unit unit = unitDao.getUnitById(unitId, userId);
+        if (unit == null){
+            throw new ServiceException("Error, invalid unit.");
+        }
+
+        if (unit.getEmptySkills() < 1){
+            throw new ServiceException("Error, no open skills.");
+        }
+
+        List<Skill> potentialSkills = unitDao.getPotentialSkills(unit.getId());
+        for (Skill skill: potentialSkills){
+            if(skill.getId() == skillId){
+                return true;
+            }
+        }
+
+        throw new ServiceException("Error, unit cannot have this skill.");
+    }
+
 
 
 }

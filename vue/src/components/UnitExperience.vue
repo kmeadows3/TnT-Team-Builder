@@ -1,24 +1,20 @@
 <template>
     <div class="stat-container">
         <div class="stat-box">
-            <p>MOVE</p>
-            <p>{{ $store.state.currentUnit.move }}</p>
+            <p>SPENT EXPERIENCE</p>
+            <p>{{ $store.state.currentUnit.spentExperience }}</p>
         </div>
         <div class="stat-box">
-            <p>MELEE</p>
-            <p>{{ $store.state.currentUnit.melee }}</p>
+            <p>UNSPENT EXPERIENCE</p>
+            <p>{{ $store.state.currentUnit.unspentExperience }}</p>
         </div>
         <div class="stat-box">
-            <p>RANGED</p>
-            <p>{{ $store.state.currentUnit.ranged }}</p>
+            <p>COST TO ADVANCE</p>
+            <p>{{ $store.state.currentUnit.costToAdvance }}</p>
         </div>
         <div class="stat-box">
-            <p>STRENGTH</p>
-            <p>{{ $store.state.currentUnit.strength }}</p>
-        </div>
-        <div class="stat-box">
-            <p>DEFENSE</p>
-            <p>{{ $store.state.currentUnit.defense }}</p>
+            <p>UPKEEP</p>
+            <p>{{ $store.state.currentUnit.unitUpkeep }}</p>
         </div>
     </div>
 </template>

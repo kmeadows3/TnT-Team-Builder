@@ -2,8 +2,7 @@
     <section class="main-display">
         <h1 class ="page-title">Choose Your Team</h1>
         <div class="controls">
-            <button @click="$store.commit('TOGGLE_NEW_TEAM_FORM')">New Team</button>
-            <button>Remove Team</button>
+            <button @click="$store.commit('TOGGLE_NEW_TEAM_FORM')" v-show="!this.$store.state.showNewTeamForm">New Team</button>
             <NewTeamForm v-show="$store.state.showNewTeamForm"/>
         </div>
         

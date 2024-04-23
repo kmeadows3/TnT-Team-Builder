@@ -1,5 +1,6 @@
 package my.TNTBuilder.service;
 
+import my.TNTBuilder.validator.TeamValidator;
 import my.TNTBuilder.validator.UnitValidator;
 import my.TNTBuilder.dao.*;
 import my.TNTBuilder.exception.ServiceException;
@@ -19,13 +20,16 @@ public class UnitServiceTests extends BaseDaoTests {
     private UnitService sut;
     private UnitDao unitDao;
     private TeamDao teamDao;
+    private UserDao userDao;
 
     @Before
     public void setup(){
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+
         unitDao = new JdbcUnitDao(jdbcTemplate);
         teamDao = new JdbcTeamDao(jdbcTemplate);
-        sut = new UnitService(unitDao, teamDao, new UnitValidator());
+        userDao = new JdbcUserDao(jdbcTemplate);
+        sut = new UnitService(unitDao, teamDao, new UnitValidator(), new TeamService(teamDao, userDao, new TeamValidator()));
 
     }
 
@@ -95,9 +99,92 @@ public class UnitServiceTests extends BaseDaoTests {
         } catch (ServiceException e){
             Assert.fail();
         }
+    }
 
+
+    @Test
+    public void getPotentialSkills_returns_correct_list_one_skillset(){
+        Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
+                "Ignore heavy weapons rule.", 6, "Brawn");
+        Skill skill2 = new Skill(7, "Bully", "All enemies defeated by this model in close combat are knocked prone " +
+                "in addition to any other combat result.", 6, "Brawn");
+
+        List<Skill> skillList = sut.getPotentialSkills(2);
+
+        Assert.assertEquals(2, skillList.size());
+        Assert.assertTrue(skillList.contains(skill1));
+        Assert.assertTrue(skillList.contains(skill2));
 
     }
 
+    @Test
+    public void getPotentialSkills_returns_correct_list_multiple_skillsets(){
+        Skill skill1 = new Skill(3, "Reconnoiter", "At the start of the game after all models have " +
+                "deployed but before init is determined make a free move action.", 4, "Quickness");
+        Skill skill2 = new Skill(4, "Trekker", "When moving through Difficult Terrain attempt an " +
+                "Agility test (MET/TN 10) for free. On pass move through terrain without movement penalty.",
+                3, "Survival");
+
+        List<Skill> skillList = sut.getPotentialSkills(1);
+
+        Assert.assertEquals(2, skillList.size());
+        Assert.assertTrue(skillList.contains(skill1));
+        Assert.assertTrue(skillList.contains(skill2));
+
+    }
+
+    @Test
+    public void getPotentialSkills_does_not_return_existing_skills(){
+        Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
+                "Ignore heavy weapons rule.", 6, "Brawn");
+        Skill skill2 = new Skill(7, "Bully", "All enemies defeated by this model in close combat are knocked prone " +
+                "in addition to any other combat result.", 6, "Brawn");
+
+        List<Skill> skillList = sut.getPotentialSkills(3);
+
+        Assert.assertEquals(1, skillList.size());
+        Assert.assertTrue(skillList.contains(skill1));
+        Assert.assertFalse(skillList.contains(skill2));
+
+    }
+
+    @Test
+    public void addSkillToUnit_adds_skill_to_unit(){
+        Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
+                "Ignore heavy weapons rule.", 6, "Brawn");
+        sut.addSkillToUnit(6, 2, 2);
+        Unit testUnit = unitDao.getUnitById(2, 2);
+        Assert.assertEquals(1, testUnit.getSkills().size());
+        Assert.assertTrue(testUnit.getSkills().contains(skill1));
+    }
+
+    @Test (expected = ServiceException.class)
+    public void addSkillToUnit_throws_exception_if_user_does_not_own_unit(){
+        Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
+                "Ignore heavy weapons rule.", 6, "Brawn");
+        sut.addSkillToUnit(6, 2, 1);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void addSkillToUnit_throws_exception_if_unit_cannot_have_skill(){
+        Skill skill1 = new Skill(3, "Reconnoiter", "At the start of the game after all models have " +
+                "deployed but before init is determined make a free move action.", 4, "Quickness");
+        sut.addSkillToUnit(3, 2, 2);
+        Assert.fail();
+    }
+
+    @Test
+    public void getUnitById_returns_correct_unit(){
+        Unit testUnit = sut.getUnitById(1,1);
+        Assert.assertNotNull(testUnit);
+        Assert.assertEquals(UNIT1, testUnit);
+    }
+
+    @Test (expected = ServiceException.class)
+    public void getUnitById_throws_exception_incorrect_user(){
+        Unit testUnit = sut.getUnitById(1,2);
+        Assert.fail();
+    }
 
 }

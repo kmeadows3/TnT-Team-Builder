@@ -1,10 +1,9 @@
 <template>
+    <h1 class="section-title">Unit List</h1>
     <div class="controls">
-        <button @click="$store.commit('TOGGLE_NEW_UNIT_FORM')">Add Unit</button>
-        <button>Remove Unit</button>
+        <button @click="$store.commit('TOGGLE_NEW_UNIT_FORM')" v-show="!this.$store.state.showNewUnitForm">Add Unit</button>
         <NewUnitForm v-show="this.$store.state.showNewUnitForm"/>
     </div>
-    <h1 class="section-title">Unit List</h1>
     <div id="unit-list">  
         <UnitCard v-for="unit in this.$store.state.currentTeam.unitList" v-bind:key="unit.id" v-bind:unit="unit"/>
     </div>

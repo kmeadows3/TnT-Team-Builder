@@ -19,6 +19,15 @@ export default {
   },
   updateTeam(team){
     return axios.put(`/teams/${team.id}`, team);
+  },
+  getPotentialSkills(id){
+    return axios.get(`/units/${id}/skills`);
+  },
+  addSkill(id, skill){
+    return axios.post(`/units/${id}/skills`, skill);
+  },
+  getUnit(id){
+    return axios.get(`/units/${id}`);
   }
 
 }

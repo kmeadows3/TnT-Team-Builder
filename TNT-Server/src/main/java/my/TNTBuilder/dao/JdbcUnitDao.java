@@ -85,8 +85,7 @@ public class JdbcUnitDao implements UnitDao{
                     newUnit.getUnitClass(), newUnit.getRank(),  newUnit.getSpecies(), newUnit.getBaseCost(),
                     newUnit.getWounds(), newUnit.getDefense(), newUnit.getMettle(), newUnit.getMove(),
                     newUnit.getRanged(), newUnit.getMelee(), newUnit.getStrength(), newUnit.getEmptySkills(),
-                    newUnit.getSpecialRules(), newUnit.getSpentExperience()
-                    );
+                    newUnit.getSpecialRules(), newUnit.getSpentExperience());
             newUnit.setId(unitId);
             addSkillsToUnitSkillJoinTable(unitId, newUnit.getSkills());
             addSkillsetsToUnitSkillsetJoinTable(unitId, newUnit.getAvailableSkillsets());
@@ -174,6 +173,51 @@ public class JdbcUnitDao implements UnitDao{
         return referenceUnit;
     }
 
+    @Override
+    public List<Skill> getPotentialSkills(int unitId) {
+        List<Integer> skillsetIds = new ArrayList<>();
+        List<Skill> potentialSkills = new ArrayList<>();
+        String getSkillsets = "SELECT skillset_id FROM unit_skillset WHERE unit_id = ?";
+        String sql = SELECT_ALL_FROM_SKILL_REFERENCE + " WHERE sr.skillset_id = ?";
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(getSkillsets, unitId);
+            while(results.next()){
+                skillsetIds.add(results.getInt("skillset_id"));
+            }
+
+            for (int id : skillsetIds){
+                results = jdbcTemplate.queryForRowSet(sql, id);
+                while (results.next()){
+                    Skill skill = mapRowToSkill(results);
+                    potentialSkills.add(skill);
+                }
+            }
+
+            List<Skill> currentSkills = getUnitSkills(unitId);
+            for (Skill skill : currentSkills){
+                potentialSkills.remove(skill);
+            }
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        }
+
+        return potentialSkills;
+    }
+
+    @Override
+    public void addSkillToUnit(int skillId, int unitId) {
+        String sql = "INSERT INTO unit_skill (unit_id, skill_id) VALUES (?, ?)";
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, unitId, skillId);
+            if (rowsAffected != 1){
+                throw new DaoException("Error, " + rowsAffected + " rows affected.");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        }
+    }
+
     /*
     PRIVATE METHODS
      */
@@ -245,7 +289,7 @@ public class JdbcUnitDao implements UnitDao{
         newUnit.setStrength(row.getInt("strength"));
         newUnit.setEmptySkills(row.getInt("starting_free_skills"));
         newUnit.setSpecialRules(row.getString("special_rules"));
-        newUnit.setUnspentExperience(convertStartingExp(newUnit.getRank()));
+        newUnit.setSpentExperience(convertStartingExp(newUnit.getRank()));
         newUnit.setAvailableSkillsets(convertAvailableSkillsets(row.getString("skillsets")));
         newUnit.setSkills(convertStartingSkills(row.getString("starting_skills")));
         return newUnit;

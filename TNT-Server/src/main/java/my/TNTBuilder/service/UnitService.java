@@ -155,10 +155,14 @@ public class UnitService {
         Unit unit = unitDao.getUnitById(unitId, userId);
         if (unit == null){
             throw new ServiceException("Error, invalid unit.");
+        } else if (unit.getEmptySkills() < 1){
+            throw new ServiceException("Error, no open skills.");
         }
 
-        if (unit.getEmptySkills() < 1){
-            throw new ServiceException("Error, no open skills.");
+        for (Skill skill : unit.getSkills()){
+            if (skill.getId() == skillId){
+                throw new ServiceException("Error, unit already has this skill");
+            }
         }
 
         List<Skill> potentialSkills = unitDao.getPotentialSkills(unit.getId());

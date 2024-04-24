@@ -31,6 +31,9 @@ export default {
   },
   updateUnit(unit){
     return axios.put(`/units/${unit.id}`, unit);
+  },
+  getBaseUnit(unitClass){
+    return axios.get(`/units?class=${unitClass}`);
   }
 
 }

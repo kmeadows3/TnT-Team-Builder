@@ -174,6 +174,21 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
+    public Unit convertReferenceUnitToUnit(String unitClass) {
+        Unit referenceUnit = null;
+        String sql = SELECT_ALL_FROM_UNIT_REFERENCE + "WHERE class = ?";
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, unitClass);
+            while (results.next()){
+                referenceUnit = mapRowToUnitFromUnitReference(results);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        }
+        return referenceUnit;
+    }
+
+    @Override
     public List<Skill> getPotentialSkills(int unitId) {
         List<Integer> skillsetIds = new ArrayList<>();
         List<Skill> potentialSkills = new ArrayList<>();

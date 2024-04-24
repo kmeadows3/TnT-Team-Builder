@@ -22,6 +22,8 @@ public interface UnitDao {
 
     Unit convertReferenceUnitToUnit(int referenceUnitId);
 
+    Unit convertReferenceUnitToUnit(String unitClass);
+
     List<Skill> getPotentialSkills(int unitId);
 
     void addSkillToUnit(int skillId, int unitId);

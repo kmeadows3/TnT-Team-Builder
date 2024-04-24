@@ -102,6 +102,19 @@ public class UnitService {
         return unit;
     }
 
+    public Unit getReferenceUnitByClass(String unitClass){
+        Unit unit = null;
+        try {
+            unit = unitDao.convertReferenceUnitToUnit(unitClass);
+            if (unit == null){
+                throw new ServiceException("Unable to retrieve unit");
+            }
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage());
+        }
+        return unit;
+    }
+
     /*
         PRIVATE METHODS
      */

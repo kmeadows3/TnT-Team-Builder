@@ -48,6 +48,22 @@ public class UnitController {
         return newUnit;
     }
 
+    @RequestMapping(path = "/units", method = RequestMethod.GET)
+    public Unit getReferenceUnitByClass(@RequestParam(value="class") String unitClass) {
+        Unit refUnit = null;
+        try{
+            refUnit = unitService.getReferenceUnitByClass(unitClass);
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+
+        if (refUnit == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find reference unit");
+        }
+
+        return refUnit;
+    }
+
 
     @RequestMapping(path="/units/{unitId}", method = RequestMethod.PUT)
     public Unit updateUnit(@RequestBody Unit unit, Principal principal){
@@ -103,5 +119,6 @@ public class UnitController {
         }
         return unit;
     }
+
 
 }

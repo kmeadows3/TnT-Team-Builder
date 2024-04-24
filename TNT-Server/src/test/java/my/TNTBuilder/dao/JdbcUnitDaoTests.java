@@ -9,6 +9,7 @@ import my.TNTBuilder.model.inventory.Item;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
@@ -176,5 +177,6 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Assert.assertEquals(1, testUnit.getSkills().size());
         Assert.assertTrue(testUnit.getSkills().contains(skill1));
     }
+
 
 }

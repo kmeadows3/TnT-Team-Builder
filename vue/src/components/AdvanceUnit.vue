@@ -16,18 +16,31 @@
     </div>
     <div v-show="showRandom">
         <p>You rolled: {{ randomNum }}</p>
+        
     </div>
     </div>
 </template>
 
 <script>
+import TeamsService from '../services/TeamsService';
+
 export default {
     data() {
         return{
             showRandom: false,
             showPick: false,
-            randomNum: ''
+            randomNum: '',
+            baseUnit: {}
         }
+    },
+    computed:{
+        isMoveLegal() {
+            if (this.$store.state.currentUnit.move == 8){
+                return false;
+            }
+            return true;
+        }
+
     },
     methods: {
         toggleShowRandom() {
@@ -43,8 +56,15 @@ export default {
         rollRandom() {
             this.randomNum = Math.floor(Math.random() * 10 + 1);
             this.toggleShowRandom();
+        },
+        getBaseUnit() {
+            TeamsService.getBaseUnit(this.$store.state.currentUnit.unitClass)
+                .then( response => this.baseUnit = response.data)
+                .catch( error => console.log(error));
         }
-
+    },
+    created() {
+        this.getBaseUnit();
     }
 }
 </script>

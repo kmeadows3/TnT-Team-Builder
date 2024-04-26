@@ -99,6 +99,11 @@ export function createStore(currentToken, currentUser) {
           .catch(err => {
             console.error(err)
           });
+      },
+      reloadCurrentUnit(context) {
+        TeamsService.getUnit(context.state.currentUnit.id)
+          .then(response => store.commit('SET_CURRENT_UNIT', response.data))
+          .catch(err => console.error(err));
       }
     }
   });

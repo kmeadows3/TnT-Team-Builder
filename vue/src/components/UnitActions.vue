@@ -1,7 +1,7 @@
 <template>
         <div v-show="!showExp && !showAdvance">
             <button @click="toggleShowExp()">Gain Experience</button>
-            <button @click="toggleShowAdvance()">Gain Advance</button>
+            <button @click="toggleShowAdvance()" v-show="$store.state.currentUnit.unspentExperience >= $store.state.currentUnit.costToAdvance">Gain Advance</button>
             <button>Add Injury</button>
         </div>
         <div class="gain-exp" v-show="showExp">
@@ -12,7 +12,10 @@
                 <button @click.prevent="clearForm()">Cancel</button>
             </form>
         </div>
-        <AdvanceUnit v-show="showAdvance" />
+        <div>
+            <AdvanceUnit v-show="showAdvance" @exit-advance="toggleShowAdvance()"/>
+        </div>
+        
 </template>
 
 <script>

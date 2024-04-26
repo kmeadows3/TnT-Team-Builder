@@ -11,9 +11,11 @@ import my.TNTBuilder.model.Unit;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UnitService {
+    public static final double MAX_SPECIALIST_RATIO = .34;
     private final int FREELANCER_FACTION_ID = 7;
     private final UnitDao unitDao;
     private final TeamDao teamDao;
@@ -40,13 +42,25 @@ public class UnitService {
         return newUnit;
     }
 
-    public List<Unit> getUnitsForFaction(int factionId){
+    public List<Unit> getUnitsForFaction(int factionId, Team team){
         List<Unit> units = null;
         try {
             units = unitDao.getListOfUnitsByFactionId(factionId);
         } catch (DaoException e){
             throw new ServiceException(e.getMessage());
         }
+
+        if (team.getUnitList().stream().anyMatch( unit -> "Leader".equalsIgnoreCase(unit.getRank())) ){
+            units = units.stream()
+                    .filter( unit -> !"Leader".equalsIgnoreCase(unit.getRank() ) )
+                    .collect(Collectors.toList());
+        } else {
+            units = units.stream()
+                    .filter( unit -> "Leader".equalsIgnoreCase(unit.getRank()))
+                    .collect(Collectors.toList());
+            return units;
+        }
+
         return units;
     }
 
@@ -119,19 +133,45 @@ public class UnitService {
         PRIVATE METHODS
      */
     private void validateNewClientUnit(Unit unit, int userId) {
+
         Team team = teamDao.getTeamById(unit.getTeamId(), userId);
         if (team == null) {
             throw new ServiceException("Invalid Unit. Logged in user does not own team.");
+        }
+
+        int cost = unitDao.convertReferenceUnitToUnit(unit.getId()).getBaseCost();
+        if (team.getMoney() - cost < 0){
+            throw new ServiceException("Team cannot afford this unit");
         }
 
         int unitFaction = unitDao.getFactionIdByUnitId(unit.getId());
         if (unitFaction != team.getFactionId() && unitFaction != FREELANCER_FACTION_ID) {
             throw new ServiceException("Invalid unit. Unit does not belong to same faction as team.");
         }
-        int cost = unitDao.convertReferenceUnitToUnit(unit.getId()).getBaseCost();
-        if (team.getMoney() - cost < 0){
-            throw new ServiceException("Team cannot afford this unit");
+
+        if (    unit.getRank().equalsIgnoreCase("Leader")
+                && team.getUnitList().stream().anyMatch( teamUnit -> "Leader".equalsIgnoreCase(teamUnit.getRank()))){
+            throw new ServiceException("Team cannot have two leaders.");
         }
+
+        if (    unit.getRank().equalsIgnoreCase("Elite")
+            && team.getUnitList().stream().filter( teamUnit -> "Elite".equalsIgnoreCase( teamUnit.getRank())).count() >= 3){
+            throw new ServiceException("Team cannot take more than 3 elites.");
+        }
+
+        if (unit.getRank().equalsIgnoreCase("Specialist") && !teamCanHaveSpecialist(team)){
+            throw new ServiceException("Specialists may not exceed more than 1/3rd of the team");
+        }
+
+    }
+
+    private boolean teamCanHaveSpecialist(Team team){
+        int unitCount = team.getUnitList().size();
+        int specialistCount = (int) team.getUnitList().stream()
+                .filter( teamUnit -> "Specialist".equalsIgnoreCase( teamUnit.getRank()))
+                .count();
+
+        return  ( (double)(specialistCount + 1) / unitCount ) <= MAX_SPECIALIST_RATIO;
     }
 
 

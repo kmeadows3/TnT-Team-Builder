@@ -188,21 +188,22 @@ INSERT INTO unit_reference (faction_id, class, rank, species, base_cost, wounds,
 
 
 INSERT INTO skillset_reference (skillset_name, category) VALUES
-	('Melee', 'Skill'),
-	('Marksmanship', 'Skill'),
-	('Survival', 'Skill'),
-	('Quickness', 'Skill'),
-	('Smarts', 'Skill'),
-	('Brawn', 'Skill'),
-	('Tenacity', 'Skill'),
-	('Leadership', 'Skill'),
-	('Hidden Defensive Mutations', 'Mutation'),
-	('Hidden Offensive Mutations', 'Mutation'),
-	('Physical Mutations', 'Mutation'),
-	('Psychic Mutations', 'Mutation'),
-	('Hidden Detriments', 'Detriment'),
-	('Physical Detriments', 'Detriment'),
-	('General Abilities', 'General');
+	('Melee', 'Skill'), -- ID 1
+	('Marksmanship', 'Skill'), -- ID 2
+	('Survival', 'Skill'), -- ID 3
+	('Quickness', 'Skill'), -- ID 4
+	('Smarts', 'Skill'), -- ID 5
+	('Brawn', 'Skill'), -- ID 6
+	('Tenacity', 'Skill'), -- ID 7
+	('Leadership', 'Skill'), -- ID 8
+	('Hidden Defensive Mutations', 'Mutation'), -- ID 9
+	('Hidden Offensive Mutations', 'Mutation'), -- ID 10
+	('Physical Mutations', 'Mutation'), -- ID 11
+	('Psychic Mutations', 'Mutation'), -- ID 12
+	('Hidden Detriments', 'Detriment'), -- ID 13
+	('Physical Detriments', 'Detriment'), -- ID 14
+	('General Abilities', 'General'), -- ID 15
+	('Injuries', 'Injury'); -- ID 16
 
 INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(5, 'Scavenger', 'When taking a weapon with limited ammo roll 2d3 when determining ammo quantity and take the higher of the two. Upkeep does not need to be paid for this unit. May not be taken by Freelancers.'),
@@ -210,9 +211,11 @@ INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(4, 'Reconnoiter', 'At the start of the game after all models have deployed but before init is determined make a free move action.'),
 	(3, 'Trekker', 'When moving through Difficult Terrain attempt an Agility test (MET/TN 10) for free. On pass move through terrain without movement penalty.'),
 	(7, 'Brave', '+2 bonus when making Will tests.'),
-	(6, 'Brute', 'Gain +1 to Strength Stat when making Melee attacks. Ignore heavy weapons rule.'),
+	(6, 'Brute', 'Gaint +1 to Strength Stat when making Melee attacks. Ignore heavy weapons rule.'),
 	(6, 'Bully', 'All enemies defeated by this model in close combat are knocked prone in addition to any other combat result.'),
-	(15, 'Dumb', 'Takes a -2 penalty to intelligence tests');
+	(15, 'Dumb', 'Takes a -2 penalty to intelligence tests'),
+	(16, 'Gashed Leg', '-1 penalty to Move'),
+	(16, 'Banged Head', '-1 penalty to Mettle');
 
 INSERT INTO item_trait_reference (name, effect) VALUES
 	('Burst', 'Allow the shooter to fire twice in an activation. If all AP is used to shoot, gain 1 extra AP that must be used to fire a final time.'),

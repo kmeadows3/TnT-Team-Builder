@@ -5,8 +5,8 @@ export default {
   retrieveTeamList() {
     return axios.get('/teams')
   },
-  getUnitsForTeam(id) {
-    return axios.get(`factions/${id}`);
+  getUnitsForTeam(team) {
+    return axios.post(`factions/${team.factionId}`, team);
   },
   buyUnit(newUnit){
     return axios.post('/units', newUnit);
@@ -14,7 +14,7 @@ export default {
   createNewTeam(newTeam){
     return axios.post('/teams', newTeam);
   },
-  getFactionList(){
+  getFactionList(team){
     return axios.get('factions');
   },
   updateTeam(team){

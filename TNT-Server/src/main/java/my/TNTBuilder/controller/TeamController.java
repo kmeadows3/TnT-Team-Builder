@@ -93,10 +93,10 @@ public class TeamController {
         }
     }
 
-    @RequestMapping(path = "/factions/{id}", method = RequestMethod.GET)
-    public List<Unit> getUnitsForFaction(@PathVariable int id){
+    @RequestMapping(path = "/factions/{id}", method = RequestMethod.POST)
+    public List<Unit> getUnitsForFaction(@PathVariable int id, @RequestBody Team team) {
         try {
-            return unitService.getUnitsForFaction(id);
+            return unitService.getUnitsForFaction(id, team);
         }catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

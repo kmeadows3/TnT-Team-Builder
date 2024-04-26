@@ -27,7 +27,7 @@ export default {
     },
     methods: {
         loadPossibleUnits() {
-            TeamsService.getUnitsForTeam(this.$store.state.currentTeam.factionId)
+            TeamsService.getUnitsForTeam(this.$store.state.currentTeam)
                 .then(response => {
                     this.possibleUnits = response.data;
                 }).catch ( error => console.error(error));

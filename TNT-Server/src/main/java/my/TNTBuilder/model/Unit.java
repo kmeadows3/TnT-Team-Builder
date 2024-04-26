@@ -71,6 +71,7 @@ public class Unit {
 
     public int getBSCost() {
         int bsCost = baseCost;
+        bsCost += (totalAdvances + tenPointAdvances) * 5;
         //TODO calculate this after inventory is implemented
         return bsCost;
     }

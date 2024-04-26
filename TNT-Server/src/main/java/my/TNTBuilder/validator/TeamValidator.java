@@ -35,7 +35,7 @@ public class TeamValidator {
     }
 
     public boolean validFirstLeaderChange (Team team, Team updatedTeam){
-        if (updatedTeam.getMoney() != team.getMoney() && updatedTeam.getMoney() >= 0 ){
+        if (updatedTeam.isBoughtFirstLeader() != team.isBoughtFirstLeader() ){
             return updatedTeam.getId() == team.getId() && updatedTeam.getUserId() == team.getUserId()
                     && updatedTeam.getFactionId() == team.getFactionId()
                     && updatedTeam.getMoney() == team.getMoney()

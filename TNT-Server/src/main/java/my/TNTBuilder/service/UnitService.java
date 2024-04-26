@@ -51,7 +51,7 @@ public class UnitService {
             throw new ServiceException(e.getMessage());
         }
 
-        units = filterOutInvalidUnits(team, units);
+        units = adjustUnitListForTeamStatus(team, units);
 
         return units;
     }
@@ -68,6 +68,7 @@ public class UnitService {
         }
         return unitDao.getUnitById(clientUnit.getId(), userId);
     }
+
     public List<Skill> getPotentialSkills(int unitId){
         List<Skill> skillList = null;
         try {
@@ -94,6 +95,7 @@ public class UnitService {
             throw new ServiceException(e.getMessage(), e);
         }
     }
+
     public Unit getUnitById(int unitId, int userId){
         Unit unit = null;
         try {
@@ -107,6 +109,7 @@ public class UnitService {
         return unit;
     }
 
+    //TODO TEST ME
     public Unit getReferenceUnitByClass(String unitClass){
         Unit unit = null;
         try {
@@ -175,11 +178,14 @@ public class UnitService {
         return !(((double) (specialistCount + 1) / unitCount) <= MAX_SPECIALIST_RATIO);
     }
 
-    private List<Unit> filterOutInvalidUnits(Team team, List<Unit> units) {
+    private List<Unit> adjustUnitListForTeamStatus(Team team, List<Unit> units) {
         if ( teamMustBuyLeader(team) ) {
             units = units.stream()
                     .filter(unit -> "Leader".equalsIgnoreCase(unit.getRank()))
                     .collect(Collectors.toList());
+            if (team.isBoughtFirstLeader()){
+                units.forEach(unit -> unit.setBaseCost(unit.getBaseCost()/2));
+            }
         } else {
             units = filterOutRank(units, "Leader");
 

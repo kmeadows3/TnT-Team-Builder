@@ -59,10 +59,11 @@ public class JdbcTeamDao implements TeamDao{
 
     @Override
     public void updateTeam(Team team){
-        String sql = "UPDATE team SET team_name = ?, money = ? WHERE team_id = ?";
+        String sql = "UPDATE team SET team_name = ?, money = ?, bought_first_leader = ? WHERE team_id = ?";
         Team updatedTeam = null;
         try {
-            int rowsAffected = jdbcTemplate.update(sql, team.getName(), team.getMoney(), team.getId());
+            int rowsAffected = jdbcTemplate.update(sql, team.getName(), team.getMoney(), team.isBoughtFirstLeader(),
+                    team.getId());
             if (rowsAffected != 1){
                 throw new DaoException("Incorrect number of rows affected");
             }

@@ -30,7 +30,7 @@ public class TeamService {
 
         if (teamValidator.validMoneyChange(currentTeam, updatedTeam)
                 || teamValidator.validNameChange(currentTeam, updatedTeam)
-                ||  teamValidator.validFirstLeaderChange(currentTeam, updatedTeam)){
+                || teamValidator.validFirstLeaderChange(currentTeam, updatedTeam)){
             try {
                 teamDao.updateTeam(updatedTeam);
             } catch (DaoException e){
@@ -62,13 +62,13 @@ public class TeamService {
         Team team = getTeamById(newUnit.getTeamId(), userId);
 
         int cost = getUnitBaseCostWithDiscounts(team, newUnit);
-        spendMoney(cost, newUnit.getTeamId(), userId);
+        team = spendMoney(cost, newUnit.getTeamId(), userId);
 
         if (newUnit.getRank().equalsIgnoreCase("Leader")){
-            if (! team.isBoughtFirstLeader()){
+            if (!team.isBoughtFirstLeader()){
                 team.setBoughtFirstLeader(true);
+                updateTeam(team, userId);
             }
-            updateTeam(team, userId);
         }
     }
 
@@ -77,7 +77,7 @@ public class TeamService {
     PRIVATE METHODS
      */
 
-    private void spendMoney(int amountToSpend, int teamId, int userId){
+    private Team spendMoney(int amountToSpend, int teamId, int userId){
         Team team = getTeamById(teamId, userId);
 
         if (team.getMoney() - amountToSpend < 0){
@@ -91,6 +91,8 @@ public class TeamService {
         } catch (DaoException e){
             throw new ServiceException(e.getMessage(), e);
         }
+
+        return team;
     }
 
     private int getUnitBaseCostWithDiscounts(Team team, Unit newUnit) {

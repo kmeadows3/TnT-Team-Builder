@@ -42,7 +42,7 @@ export default {
                 .then(response => {
                     this.$store.dispatch('loadTeams');
                     this.$store.commit('SET_CURRENT_UNIT', response.data);
-                }).catch (error => console.error(error));
+                }).catch (error => console.error(error.response.data.message));
             this.clearForm();
         }
     },

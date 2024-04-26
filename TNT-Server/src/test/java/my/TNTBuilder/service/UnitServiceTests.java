@@ -1,5 +1,6 @@
 package my.TNTBuilder.service;
 
+import my.TNTBuilder.model.Team;
 import my.TNTBuilder.validator.TeamValidator;
 import my.TNTBuilder.validator.UnitValidator;
 import my.TNTBuilder.dao.*;
@@ -29,7 +30,7 @@ public class UnitServiceTests extends BaseDaoTests {
         unitDao = new JdbcUnitDao(jdbcTemplate);
         teamDao = new JdbcTeamDao(jdbcTemplate);
         userDao = new JdbcUserDao(jdbcTemplate);
-        sut = new UnitService(unitDao, teamDao, new UnitValidator(), new TeamService(teamDao, userDao, new TeamValidator()));
+        sut = new UnitService(unitDao, new UnitValidator(), new TeamService(teamDao, userDao, new TeamValidator()));
 
     }
 
@@ -51,6 +52,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Assert.assertEquals(expectedUnit, testUnit);
     }
 
+    //TODO fix me, created before extra validation added
     @Test
     public void getUnitsForFaction_returns_list_correctly(){
         Unit expectedUnit = new Unit(4, 0, "", "Defender", "Rank and File",
@@ -64,7 +66,7 @@ public class UnitServiceTests extends BaseDaoTests {
                 7, "Tenacity"));
 
 
-        List<Unit> testList = sut.getUnitsForFaction(1);
+        List<Unit> testList = sut.getUnitsForFaction(1, new Team());
         Assert.assertNotNull(testList);
         Assert.assertEquals(5, testList.size());
         Assert.assertEquals(expectedUnit, testList.get(3));

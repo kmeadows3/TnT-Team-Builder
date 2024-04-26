@@ -1,5 +1,6 @@
 package my.TNTBuilder.service;
 
+import my.TNTBuilder.model.Unit;
 import my.TNTBuilder.validator.TeamValidator;
 import my.TNTBuilder.dao.TeamDao;
 import my.TNTBuilder.dao.UserDao;
@@ -19,14 +20,17 @@ public class TeamService {
         this.teamValidator = teamValidator;
     }
 
-    public Team updateTeam(Team updatedTeam, String username){
-        int userId = userDao.getUserIdByUsername(username);
+    public Team updateTeam(Team updatedTeam, int userId){
         int teamId = updatedTeam.getId();
+
         Team currentTeam = teamDao.getTeamById(teamId, userId);
         if (currentTeam == null){
             throw new ServiceException("Unable to update team. Either team does not exist, or does not belong to user.");
         }
-        if (teamValidator.validMoneyChange(currentTeam, updatedTeam) || teamValidator.validNameChange(currentTeam, updatedTeam)){
+
+        if (teamValidator.validMoneyChange(currentTeam, updatedTeam)
+                || teamValidator.validNameChange(currentTeam, updatedTeam)
+                ||  teamValidator.validFirstLeaderChange(currentTeam, updatedTeam)){
             try {
                 teamDao.updateTeam(updatedTeam);
             } catch (DaoException e){
@@ -35,19 +39,67 @@ public class TeamService {
         } else {
             throw new ServiceException("Invalid update to Team");
         }
+
         return teamDao.getTeamById(teamId, userId);
     }
 
-    public void spendMoney(int amountToSpend, int teamId, int userId){
+    //TODO test me
+    public Team getTeamById(int teamId, int userId){
+        Team team = null;
         try{
-            Team team = teamDao.getTeamById(teamId, userId);
-            if (team.getMoney() - amountToSpend < 0){
-                throw new ServiceException("Team does not have enough money for this action.");
+            team = teamDao.getTeamById(teamId, userId);
+            if (team == null){
+                throw new ServiceException("No team returned");
             }
-            team.setMoney(team.getMoney() - amountToSpend);
+        } catch (DaoException e){
+            throw new ServiceException(e.getMessage(), e);
+        }
+        return team;
+    }
+
+    //TODO more tests
+    public void updateTeamAfterNewUnitPurchase(int userId, Unit newUnit) {
+        Team team = getTeamById(newUnit.getTeamId(), userId);
+
+        int cost = getUnitBaseCostWithDiscounts(team, newUnit);
+        spendMoney(cost, newUnit.getTeamId(), userId);
+
+        if (newUnit.getRank().equalsIgnoreCase("Leader")){
+            if (! team.isBoughtFirstLeader()){
+                team.setBoughtFirstLeader(true);
+            }
+            updateTeam(team, userId);
+        }
+    }
+
+
+    /*
+    PRIVATE METHODS
+     */
+
+    private void spendMoney(int amountToSpend, int teamId, int userId){
+        Team team = getTeamById(teamId, userId);
+
+        if (team.getMoney() - amountToSpend < 0){
+            throw new ServiceException("Team does not have enough money for this action.");
+        }
+
+        team.setMoney(team.getMoney() - amountToSpend);
+
+        try{
             teamDao.updateTeam(team);
         } catch (DaoException e){
             throw new ServiceException(e.getMessage(), e);
         }
+    }
+
+    private int getUnitBaseCostWithDiscounts(Team team, Unit newUnit) {
+        int cost = newUnit.getBaseCost();
+
+        if (team.isBoughtFirstLeader() && newUnit.getRank().equalsIgnoreCase("Leader")){
+            cost /= 2;
+        }
+
+        return cost;
     }
 }

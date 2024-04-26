@@ -61,7 +61,7 @@ public class TeamController {
     public Team updateTeam(@Valid @RequestBody Team updatedTeam, Principal principal){
         Team teamAfterUpdate = null;
         try{
-            teamAfterUpdate = teamService.updateTeam(updatedTeam, principal.getName());
+            teamAfterUpdate = teamService.updateTeam(updatedTeam, userDao.getUserIdByUsername(principal.getName()));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

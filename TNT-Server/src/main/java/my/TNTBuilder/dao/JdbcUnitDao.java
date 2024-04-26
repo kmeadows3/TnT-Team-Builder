@@ -24,7 +24,7 @@ public class JdbcUnitDao implements UnitDao{
             "special_rules FROM unit_reference ";
     private final String SELECT_ALL_FROM_UNIT = "SELECT u.team_id, unit_id, name, class, rank, species, base_cost, wounds, " +
             "defense, mettle, move, ranged, melee, strength, empty_skills, special_rules, spent_exp, unspent_exp, " +
-            "total_advances, ten_point_advances, u.team_id FROM unit u " +
+            "total_advances, ten_point_advances, u.team_id, is_banged_up, is_long_recovery FROM unit u " +
             "JOIN team t on t.team_id = u.team_id ";
     private final String SELECT_ALL_FROM_SKILLSET_REFERENCE = "SELECT ssr.skillset_id, skillset_name, category " +
             "FROM skillset_reference ssr ";
@@ -141,13 +141,15 @@ public class JdbcUnitDao implements UnitDao{
     public void updateUnit(Unit updatedUnit){
         String sql = "UPDATE unit SET name = ?, rank = ?, wounds = ?, defense = ?, mettle = ?, move = ?, " +
                 "ranged = ?, melee = ?, strength = ?, empty_skills = ?, spent_exp = ?, unspent_exp = ?, " +
-                "total_advances = ?, ten_point_advances = ? WHERE unit_id = ?";
+                "total_advances = ?, ten_point_advances = ?, is_banged_up = ?, is_long_recovery = ? " +
+                "WHERE unit_id = ?";
         try{
             int rowsAffected = jdbcTemplate.update(sql, updatedUnit.getName(), updatedUnit.getRank(), updatedUnit.getWounds(),
                     updatedUnit.getDefense(), updatedUnit.getMettle(), updatedUnit.getMove(), updatedUnit.getRanged(),
                     updatedUnit.getMelee(), updatedUnit.getStrength(), updatedUnit.getEmptySkills(),
                     updatedUnit.getSpentExperience(), updatedUnit.getUnspentExperience(), updatedUnit.getTotalAdvances(),
-                    updatedUnit.getTenPointAdvances(), updatedUnit.getId());
+                    updatedUnit.getTenPointAdvances(), updatedUnit.isBangedUp(), updatedUnit.isLongRecovery(),
+                    updatedUnit.getId());
             if (rowsAffected != 1){
                 throw new DaoException("Incorrect number of rows affected");
             }

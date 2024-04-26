@@ -24,6 +24,7 @@ CREATE TABLE team (
 	faction_id int NOT NULL,
 	team_name varchar(100) NOT NULL,
 	money int NOT NULL,
+	bought_first_leader boolean DEFAULT false,
 	CONSTRAINT FK_team_user FOREIGN KEY(user_id) REFERENCES tnt_user(user_id),
 	CONSTRAINT fk_team_faction FOREIGN KEY(faction_id) REFERENCES faction(faction_id)
 );
@@ -125,6 +126,8 @@ CREATE TABLE unit(
 	unspent_exp int DEFAULT 0,
 	total_advances int DEFAULT 0,
 	ten_point_advances int DEFAULT 0,
+    is_banged_up boolean DEFAULT false,
+    is_long_recovery boolean DEFAULT false,
 	CONSTRAINT FK_unit_team FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
 
@@ -211,7 +214,7 @@ INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(4, 'Reconnoiter', 'At the start of the game after all models have deployed but before init is determined make a free move action.'),
 	(3, 'Trekker', 'When moving through Difficult Terrain attempt an Agility test (MET/TN 10) for free. On pass move through terrain without movement penalty.'),
 	(7, 'Brave', '+2 bonus when making Will tests.'),
-	(6, 'Brute', 'Gaint +1 to Strength Stat when making Melee attacks. Ignore heavy weapons rule.'),
+	(6, 'Brute', 'Gain +1 to Strength Stat when making Melee attacks. Ignore heavy weapons rule.'),
 	(6, 'Bully', 'All enemies defeated by this model in close combat are knocked prone in addition to any other combat result.'),
 	(15, 'Dumb', 'Takes a -2 penalty to intelligence tests'),
 	(16, 'Gashed Leg', '-1 penalty to Move'),

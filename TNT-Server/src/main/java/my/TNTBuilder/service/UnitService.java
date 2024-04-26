@@ -2,7 +2,6 @@ package my.TNTBuilder.service;
 
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.validator.UnitValidator;
-import my.TNTBuilder.dao.TeamDao;
 import my.TNTBuilder.dao.UnitDao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
@@ -18,31 +17,32 @@ public class UnitService {
     public static final double MAX_SPECIALIST_RATIO = .34;
     private final int FREELANCER_FACTION_ID = 7;
     private final UnitDao unitDao;
-    private final TeamDao teamDao;
     private final UnitValidator unitValidator;
     private final TeamService teamService;
 
-    public UnitService(UnitDao unitDao, TeamDao teamDao, UnitValidator unitValidator, TeamService teamService) {
+    public UnitService(UnitDao unitDao, UnitValidator unitValidator, TeamService teamService) {
         this.unitDao = unitDao;
-        this.teamDao = teamDao;
         this.unitValidator = unitValidator;
         this.teamService = teamService;
     }
 
     public Unit createNewUnit(Unit clientUnit, int userId){
         Unit newUnit = null;
+
         try {
             validateNewClientUnit(clientUnit, userId);
             newUnit = unitDao.createUnit(clientUnit);
-            teamService.spendMoney(newUnit.getBaseCost(), newUnit.getTeamId(), userId);
+            teamService.updateTeamAfterNewUnitPurchase(userId, newUnit);
 
         } catch (DaoException e){
             throw new ServiceException(e.getMessage());
         }
+
         return newUnit;
     }
 
     //TODO: TEST ME MORE TOO
+
     public List<Unit> getUnitsForFaction(int factionId, Team team){
         List<Unit> units = null;
         try {
@@ -57,8 +57,8 @@ public class UnitService {
     }
 
 
-
     //TODO this method needs testing!
+
     public Unit updateUnit(Unit clientUnit, int userId){
         try {
             validateUpdatedUnit(clientUnit, userId);
@@ -68,7 +68,6 @@ public class UnitService {
         }
         return unitDao.getUnitById(clientUnit.getId(), userId);
     }
-
     public List<Skill> getPotentialSkills(int unitId){
         List<Skill> skillList = null;
         try {
@@ -82,6 +81,7 @@ public class UnitService {
 
         return skillList;
     }
+
     public void addSkillToUnit(int skillId, int unitId, int userId){
         try {
             if (unitCanAddSkill(unitId, skillId, userId)){
@@ -94,7 +94,6 @@ public class UnitService {
             throw new ServiceException(e.getMessage(), e);
         }
     }
-
     public Unit getUnitById(int unitId, int userId){
         Unit unit = null;
         try {
@@ -125,9 +124,10 @@ public class UnitService {
     /*
         PRIVATE METHODS
      */
+
     private void validateNewClientUnit(Unit unit, int userId) {
 
-        Team team = teamDao.getTeamById(unit.getTeamId(), userId);
+        Team team = teamService.getTeamById(unit.getTeamId(), userId);
         if (team == null) {
             throw new ServiceException("Invalid Unit. Logged in user does not own team.");
         }
@@ -145,7 +145,6 @@ public class UnitService {
         confirmNewUnitRankIsValidOption(potentialUnit, team);
 
     }
-
     private void confirmNewUnitRankIsValidOption(Unit potentialUnit, Team team) {
         if ( potentialUnit.getRank().equalsIgnoreCase("Leader") && !teamMustBuyLeader (team)){
             throw new ServiceException("Team cannot have two leaders.");
@@ -157,10 +156,10 @@ public class UnitService {
             throw new ServiceException("Team cannot purchase units until it has a leader");
         }
     }
+
     private boolean teamMustBuyLeader(Team team){
         return team.getUnitList().stream().noneMatch(teamUnit -> "Leader".equalsIgnoreCase(teamUnit.getRank()));
     }
-
     private boolean teamCanNotBuyElite(Team team){
         return team.getUnitList().stream()
                 .filter(teamUnit -> "Elite".equalsIgnoreCase(teamUnit.getRank()))
@@ -200,6 +199,7 @@ public class UnitService {
                 .collect(Collectors.toList());
         return units;
     }
+
 
 
     private void validateUpdatedUnit(Unit updatedUnit, int userId){

@@ -18,12 +18,14 @@ public class Team {
     @NotNull(message = "Barter Scrip may not be null.")
     @Min(value = 0, message = "Barter Script may not fall below zero.")
     private int money;
+    private boolean boughtFirstLeader = false;
     private List<Unit> unitList = new ArrayList<>();
     private List<Item> inventory = new ArrayList<>();
 
     //Constructors
     public Team (){
     }
+
     public Team (int id, int userId, String name, String faction, int factionId, int money,
                  List<Unit> unitList, List<Item> inventory){
         this.id = id;
@@ -69,6 +71,14 @@ public class Team {
     /*
     getters and setters
      */
+
+    public boolean isBoughtFirstLeader() {
+        return boughtFirstLeader;
+    }
+
+    public void setBoughtFirstLeader(boolean boughtFirstLeader) {
+        this.boughtFirstLeader = boughtFirstLeader;
+    }
 
     public String getFaction() {
         return faction;

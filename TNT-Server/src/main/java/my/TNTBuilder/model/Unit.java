@@ -33,6 +33,8 @@ public class Unit {
     private List<Skillset> availableSkillsets;
     private List<Skill> skills = new ArrayList<>();
     private List<Item> inventory = new ArrayList<>();
+    private boolean isBangedUp = false;
+    private boolean isLongRecovery = false;
 
 
     //constructors
@@ -282,7 +284,6 @@ public class Unit {
     public void setAvailableSkillsets(List<Skillset> availableSkillsets) {
         this.availableSkillsets = availableSkillsets;
     }
-
     public List<Skill> getSkills() {
         return skills;
     }
@@ -299,6 +300,21 @@ public class Unit {
         this.inventory = inventory;
     }
 
+    public boolean isBangedUp() {
+        return isBangedUp;
+    }
+
+    public void setBangedUp(boolean bangedUp) {
+        isBangedUp = bangedUp;
+    }
+
+    public boolean isLongRecovery() {
+        return isLongRecovery;
+    }
+
+    public void setLongRecovery(boolean longRecovery) {
+        isLongRecovery = longRecovery;
+    }
 
     //Override Equals
 

@@ -13,6 +13,7 @@ public class TeamValidator {
         if (!(team.getName().equals(updatedTeam.getName()))){
             return updatedTeam.getId() == team.getId() && updatedTeam.getUserId() == team.getUserId()
                     && updatedTeam.getFactionId() == team.getFactionId() && updatedTeam.getMoney() == team.getMoney()
+                    && updatedTeam.isBoughtFirstLeader() == team.isBoughtFirstLeader()
                     && Objects.equals(updatedTeam.getFaction(), team.getFaction())
                     && Objects.equals(updatedTeam.getUnitList(), team.getUnitList())
                     && Objects.equals(updatedTeam.getInventory(), team.getInventory());
@@ -24,6 +25,20 @@ public class TeamValidator {
         if (updatedTeam.getMoney() != team.getMoney() && updatedTeam.getMoney() >= 0 ){
             return updatedTeam.getId() == team.getId() && updatedTeam.getUserId() == team.getUserId()
                     && updatedTeam.getFactionId() == team.getFactionId()
+                    && updatedTeam.isBoughtFirstLeader() == team.isBoughtFirstLeader()
+                    && Objects.equals(updatedTeam.getFaction(), team.getFaction())
+                    && Objects.equals(updatedTeam.getName(), team.getName())
+                    && Objects.equals(updatedTeam.getUnitList(), team.getUnitList())
+                    && Objects.equals(updatedTeam.getInventory(), team.getInventory());
+        }
+        return false;
+    }
+
+    public boolean validFirstLeaderChange (Team team, Team updatedTeam){
+        if (updatedTeam.getMoney() != team.getMoney() && updatedTeam.getMoney() >= 0 ){
+            return updatedTeam.getId() == team.getId() && updatedTeam.getUserId() == team.getUserId()
+                    && updatedTeam.getFactionId() == team.getFactionId()
+                    && updatedTeam.getMoney() == team.getMoney()
                     && Objects.equals(updatedTeam.getFaction(), team.getFaction())
                     && Objects.equals(updatedTeam.getName(), team.getName())
                     && Objects.equals(updatedTeam.getUnitList(), team.getUnitList())
@@ -35,7 +50,9 @@ public class TeamValidator {
 
     /* Everything is the same
             return updatedTeam.getId() == team.getId() && updatedTeam.getUserId() == team.getUserId()
-                    && updatedTeam.getFactionId() == team.getFactionId() && updatedTeam.getMoney() == team.getMoney()
+                    && updatedTeam.getFactionId() == team.getFactionId()
+                    && updatedTeam.getMoney() == team.getMoney()
+                    && updatedTeam.isBoughtFirstLeader() == team.isBoughtFirstLeader()
                     && Objects.equals(updatedTeam.getFaction(), team.getFaction())
                     && Objects.equals(updatedTeam.getName(), team.getName())
                     && Objects.equals(updatedTeam.getUnitList(), team.getUnitList())

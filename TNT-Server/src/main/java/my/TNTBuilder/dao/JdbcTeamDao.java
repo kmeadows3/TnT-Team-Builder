@@ -16,7 +16,8 @@ import java.util.List;
 public class JdbcTeamDao implements TeamDao{
 
     private final JdbcTemplate jdbcTemplate;
-    private final String SELECT_ALL_FROM_TEAM = "SELECT team_id, user_id, f.faction_id, team_name, money, faction_name " +
+    private final String SELECT_ALL_FROM_TEAM = "SELECT team_id, user_id, f.faction_id, team_name, money, " +
+            "faction_name, bought_first_leader " +
             "FROM team JOIN faction f ON f.faction_id = team.faction_id ";
 
     public JdbcTeamDao(JdbcTemplate jdbcTemplate){
@@ -121,6 +122,7 @@ public class JdbcTeamDao implements TeamDao{
         team.setUserId(row.getInt("user_id"));
         team.setName(row.getString("team_name"));
         team.setMoney(row.getInt("money"));
+        team.setBoughtFirstLeader(row.getBoolean("bought_first_leader"));
         JdbcUnitDao jdbcUnitDao = new JdbcUnitDao(jdbcTemplate);
         team.setUnitList(jdbcUnitDao.getAllUnitsForTeam(team.getId()));
         //TODO deal with inventory later (new method solely focused on inventory?)

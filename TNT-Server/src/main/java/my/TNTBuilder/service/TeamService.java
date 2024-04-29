@@ -3,7 +3,6 @@ package my.TNTBuilder.service;
 import my.TNTBuilder.model.Unit;
 import my.TNTBuilder.validator.TeamValidator;
 import my.TNTBuilder.dao.TeamDao;
-import my.TNTBuilder.dao.UserDao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.Team;
@@ -11,12 +10,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TeamService {
-    private TeamDao teamDao;
-    private UserDao userDao;
-    private TeamValidator teamValidator;
-    public TeamService (TeamDao teamDao, UserDao userDao, TeamValidator teamValidator){
+    private final TeamDao teamDao;
+    private final TeamValidator teamValidator;
+    public TeamService (TeamDao teamDao, TeamValidator teamValidator){
         this.teamDao = teamDao;
-        this.userDao = userDao;
         this.teamValidator = teamValidator;
     }
 
@@ -43,7 +40,6 @@ public class TeamService {
         return teamDao.getTeamById(teamId, userId);
     }
 
-    //TODO test me
     public Team getTeamById(int teamId, int userId){
         Team team = null;
         try{
@@ -57,7 +53,6 @@ public class TeamService {
         return team;
     }
 
-    //TODO more tests
     public void updateTeamAfterNewUnitPurchase(int userId, Unit newUnit) {
         Team team = getTeamById(newUnit.getTeamId(), userId);
 

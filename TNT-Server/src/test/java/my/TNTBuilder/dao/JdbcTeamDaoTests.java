@@ -95,6 +95,7 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         Assert.assertTrue(testList.contains(faction1));
     }
 
+    //TODO more tests about this
     @Test
     public void updateTeam_updates_team(){
         TEAM_1.setName("New Name");

@@ -30,7 +30,7 @@ public class UnitServiceTests extends BaseDaoTests {
         unitDao = new JdbcUnitDao(jdbcTemplate);
         teamDao = new JdbcTeamDao(jdbcTemplate);
         userDao = new JdbcUserDao(jdbcTemplate);
-        sut = new UnitService(unitDao, new UnitValidator(), new TeamService(teamDao, userDao, new TeamValidator()));
+        sut = new UnitService(unitDao, new UnitValidator(), new TeamService(teamDao, new TeamValidator()));
 
     }
 

@@ -42,7 +42,6 @@ public class UnitService {
     }
 
     //TODO: TEST ME MORE TOO
-
     public List<Unit> getUnitsForFaction(int factionId, Team team){
         List<Unit> units = null;
         try {
@@ -58,7 +57,6 @@ public class UnitService {
 
 
     //TODO this method needs testing!
-
     public Unit updateUnit(Unit clientUnit, int userId){
         try {
             validateUpdatedUnit(clientUnit, userId);

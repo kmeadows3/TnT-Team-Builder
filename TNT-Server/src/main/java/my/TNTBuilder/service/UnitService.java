@@ -26,6 +26,7 @@ public class UnitService {
         this.teamService = teamService;
     }
 
+
     public Unit createNewUnit(Unit clientUnit, int userId){
         Unit newUnit = null;
 
@@ -41,7 +42,6 @@ public class UnitService {
         return newUnit;
     }
 
-    //TODO: TEST ME MORE TOO
     public List<Unit> getUnitsForFaction(int factionId, Team team){
         List<Unit> units = null;
         try {
@@ -107,7 +107,6 @@ public class UnitService {
         return unit;
     }
 
-    //TODO TEST ME
     public Unit getReferenceUnitByClass(String unitClass){
         Unit unit = null;
         try {
@@ -147,13 +146,16 @@ public class UnitService {
 
     }
     private void confirmNewUnitRankIsValidOption(Unit potentialUnit, Team team) {
-        if ( potentialUnit.getRank().equalsIgnoreCase("Leader") && !teamMustBuyLeader (team)){
+
+        if (potentialUnit.getRank().equalsIgnoreCase("Leader") && !teamMustBuyLeader(team)) {
             throw new ServiceException("Team cannot have two leaders.");
         } else if (potentialUnit.getRank().equalsIgnoreCase("Elite") && teamCanNotBuyElite(team)) {
             throw new ServiceException("Team cannot take more than 3 elites.");
         } else if (potentialUnit.getRank().equalsIgnoreCase("Specialist") && teamCanNotBuySpecialist(team)) {
             throw new ServiceException("Specialists may not exceed more than 1/3rd of the team");
-        } else if (teamMustBuyLeader(team) && !potentialUnit.getRank().equalsIgnoreCase("Leader")){
+        } else if (potentialUnit.getRank().equalsIgnoreCase("Freelancer") && teamCanNotBuyFreelancer(team)) {
+            throw new ServiceException("Team can only have one freelancer per 200 BS cost");
+        }else if (teamMustBuyLeader(team) && !potentialUnit.getRank().equalsIgnoreCase("Leader")){
             throw new ServiceException("Team cannot purchase units until it has a leader");
         }
     }
@@ -162,18 +164,24 @@ public class UnitService {
         return team.getUnitList().stream().noneMatch(teamUnit -> "Leader".equalsIgnoreCase(teamUnit.getRank()));
     }
     private boolean teamCanNotBuyElite(Team team){
-        return team.getUnitList().stream()
-                .filter(teamUnit -> "Elite".equalsIgnoreCase(teamUnit.getRank()))
-                .count() >= 3;
+        return countRankOccurance("Elite", team) >= 3;
     }
-
     private boolean teamCanNotBuySpecialist(Team team){
         int unitCount = team.getUnitList().size();
-        int specialistCount = (int) team.getUnitList().stream()
-                .filter( teamUnit -> "Specialist".equalsIgnoreCase( teamUnit.getRank()))
-                .count();
+        int specialistCount = countRankOccurance("Specialist", team);
 
         return !(((double) (specialistCount + 1) / unitCount) <= MAX_SPECIALIST_RATIO);
+    }
+    private boolean teamCanNotBuyFreelancer(Team team){
+        int freelancerCount = countRankOccurance("Freelancer", team);
+
+        return !(team.getBSCost()/200 >= freelancerCount + 1);
+    }
+
+    private int countRankOccurance(String rank, Team team) {
+        return (int) team.getUnitList().stream()
+                .filter( teamUnit -> rank.equalsIgnoreCase( teamUnit.getRank()))
+                .count();
     }
 
     private List<Unit> adjustUnitListForTeamStatus(Team team, List<Unit> units) {
@@ -192,6 +200,9 @@ public class UnitService {
             }
             if (teamCanNotBuySpecialist(team)){
                 units = filterOutRank(units, "Specialist");
+            }
+            if (teamCanNotBuyFreelancer(team)){
+                units = filterOutRank(units, "Freelancer");
             }
         }
         return units;

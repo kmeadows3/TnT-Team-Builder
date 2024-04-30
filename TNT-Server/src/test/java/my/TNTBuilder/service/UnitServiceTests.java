@@ -1,5 +1,6 @@
 package my.TNTBuilder.service;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.validator.TeamValidator;
 import my.TNTBuilder.validator.UnitValidator;
@@ -15,71 +16,33 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class UnitServiceTests extends BaseDaoTests {
     private UnitService sut;
-    private UnitDao unitDao;
-    private TeamDao teamDao;
-    private UserDao userDao;
 
     @Before
     public void setup(){
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-
-        unitDao = new JdbcUnitDao(jdbcTemplate);
-        teamDao = new JdbcTeamDao(jdbcTemplate);
-        userDao = new JdbcUserDao(jdbcTemplate);
-        sut = new UnitService(unitDao, new UnitValidator(), new TeamService(teamDao, new TeamValidator()));
+        TeamDao teamDao = new JdbcTeamDao(jdbcTemplate);
+        sut = new UnitService(new JdbcUnitDao(jdbcTemplate), new UnitValidator(), new TeamService(teamDao, new TeamValidator()));
 
     }
 
     @Test
     public void createNewUnit_creates_new_unit(){
-        Unit expectedUnit = new Unit(4, 1, "Name", "Defender", "Rank and File",
-                "Human", 23,1,6,5,5,4,4,5,0,
-                "N/A",0,0,0,0,
-                new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
-        expectedUnit.getAvailableSkillsets().add(new Skillset(1, "Melee", "Skill"));
-        expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
-        expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));
-        expectedUnit.getSkills().add(new Skill(5, "Brave", "+2 bonus when making Will tests.",
-                7, "Tenacity"));
+
+        Unit expectedUnit = generateExpectedRankAndFileCaravanner();
+        expectedUnit.setTeamId(1);
+
         Unit newUnit = sut.createNewUnit(expectedUnit, 1);
         expectedUnit.setId(newUnit.getId());
-        Unit testUnit = unitDao.getUnitById(expectedUnit.getId(), 1);
+
+        Unit testUnit = sut.getUnitById(expectedUnit.getId(), 1);
+
         Assert.assertNotNull(testUnit);
         Assert.assertEquals(expectedUnit, testUnit);
-    }
-
-    //TODO fix me, created before extra validation added
-    @Test
-    public void getUnitsForFaction_returns_list_correctly(){
-        Unit expectedUnit = new Unit(4, 0, "", "Defender", "Rank and File",
-                "Human", 23,1,6,5,5,4,4,5,0,
-                "N/A",0,0,0,0,
-                new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
-        expectedUnit.getAvailableSkillsets().add(new Skillset(1, "Melee", "Skill"));
-        expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
-        expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));
-        expectedUnit.getSkills().add(new Skill(5, "Brave", "+2 bonus when making Will tests.",
-                7, "Tenacity"));
-
-
-        List<Unit> testList = sut.getUnitsForFaction(1, new Team());
-        Assert.assertNotNull(testList);
-        Assert.assertEquals(5, testList.size());
-        Assert.assertEquals(expectedUnit, testList.get(3));
-        Assert.assertEquals(10, testList.get(4).getId());
-    }
-
-    @Test (expected = ServiceException.class)
-    public void createNewUnit_throws_exception_with_invalid_unit(){
-        Unit invalidUnit = new Unit();
-        invalidUnit.setId(1);
-        invalidUnit.setTeamId(2);
-        sut.createNewUnit(invalidUnit, 1);
-        Assert.fail();
     }
 
     @Test (expected = ServiceException.class)
@@ -91,18 +54,157 @@ public class UnitServiceTests extends BaseDaoTests {
         Assert.fail();
     }
 
+    @Test (expected = ServiceException.class)
+    public void createNewUnit_throws_exception_if_team_can_not_afford_unit(){
+
+        Unit invalidUnit = new Unit();
+        invalidUnit.setId(1);
+        invalidUnit.setTeamId(5);
+        sut.createNewUnit(invalidUnit, 4);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void createNewUnit_throws_exception_if_unit_can_not_belong_to_faction(){
+        Unit invalidUnit = new Unit();
+        invalidUnit.setId(1);
+        invalidUnit.setTeamId(2);
+        sut.createNewUnit(invalidUnit, 1);
+        Assert.fail();
+    }
+
     @Test
-    public void createNewUnit_does_not_throw_exception_with_freelancer_units(){
+    public void createNewUnit_does_not_throw_exception_if_team_can_purchase_freelancer_units(){
+        Unit validUnit = new Unit();
+        validUnit.setId(10);
+        validUnit.setTeamId(4);
+
         try {
-            Unit invalidUnit = new Unit();
-            invalidUnit.setId(10);
-            invalidUnit.setTeamId(1);
-            sut.createNewUnit(invalidUnit, 1);
+            sut.createNewUnit(validUnit, 4);
         } catch (ServiceException e){
             Assert.fail();
         }
     }
 
+    @Test (expected = ServiceException.class)
+    public void createNewUnit_throws_exception_if_team_tries_to_buy_leader_while_having_leader(){
+        Unit invalidUnit = new Unit();
+        invalidUnit.setId(1);
+        invalidUnit.setTeamId(1);
+        sut.createNewUnit(invalidUnit, 1);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void createNewUnit_throws_exception_if_team_has_no_leader_and_does_not_buy_leader(){
+        Unit invalidUnit = new Unit();
+        invalidUnit.setId(4);
+        invalidUnit.setTeamId(6);
+        sut.createNewUnit(invalidUnit, 1);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void createNewUnit_throws_exception_if_team_cannot_buy_elites(){
+        Unit invalidUnit = new Unit();
+        invalidUnit.setId(2);
+        invalidUnit.setTeamId(7);
+        sut.createNewUnit(invalidUnit, 1);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void createNewUnit_throws_exception_if_team_cannot_buy_specialists(){
+        Unit invalidUnit = new Unit();
+        invalidUnit.setId(11);
+        invalidUnit.setTeamId(1);
+        sut.createNewUnit(invalidUnit, 1);
+        Assert.fail();
+    }
+
+    @Test
+    public void getUnitsForFaction_returns_only_leader_if_team_has_no_leader(){
+
+        List<Unit> testList = sut.getUnitsForFaction(1, new Team());
+
+        Assert.assertNotNull(testList);
+        Assert.assertEquals(1, testList.size());
+        Assert.assertEquals("Leader", testList.get(0).getRank());
+    }
+
+    @Test
+    public void getUnitsForFaction_returns_list_of_all_non_leaders_if_team_has_leader_and_no_restrictions(){
+        Team team = instantiateTeamWithLeader();
+        Unit expectedUnit = generateExpectedRankAndFileCaravanner();
+
+        //Add enough units to allow both specialists and freelancers without disallowing elites
+        team.getUnitList().add(UNIT2);
+        team.getUnitList().add(UNIT2);
+        team.getUnitList().add(expectedUnit);
+        team.getUnitList().add(expectedUnit);
+        team.getUnitList().add(expectedUnit);
+
+        List<Unit> testList = sut.getUnitsForFaction(1, team);
+
+        Assert.assertNotNull(testList);
+        Assert.assertEquals(5, testList.size()); //returns all valid units
+        Assert.assertEquals(expectedUnit, testList.get(2)); //unit returned is expected one
+        Assert.assertEquals(10, testList.get(3).getId()); //can return freelancers
+        for (Unit unit : testList){
+            Assert.assertFalse("Leader".equalsIgnoreCase(unit.getRank())); //No leaders
+        }
+    }
+
+    @Test
+    public void getUnitsForFaction_does_not_include_freelancers_when_they_are_invalid(){
+        Team team = instantiateTeamWithLeader();
+        Unit expectedUnit = generateExpectedRankAndFileCaravanner();
+        team.getUnitList().add(expectedUnit);
+        team.getUnitList().add(expectedUnit);
+        int bsCost = team.getBSCost();
+
+        List<Unit> testList = sut.getUnitsForFaction(1, team);
+
+        Assert.assertNotNull(testList);
+        Assert.assertEquals(4, testList.size()); //returns all valid units except for freelancers
+        for (Unit unit : testList){
+            Assert.assertFalse("Freelancer".equalsIgnoreCase(unit.getRank()));
+        }
+    }
+
+    @Test
+    public void getUnitsForFaction_returns_list_without_elites_if_team_has_3_elites(){
+        Team team = instantiateTeamWithLeader();
+        team.getUnitList().add(UNIT2);
+        team.getUnitList().add(UNIT2);
+        team.getUnitList().add(UNIT2);
+
+        Unit expectedUnit = generateExpectedRankAndFileCaravanner();
+        List<Unit> testList = sut.getUnitsForFaction(1, team);
+
+        Assert.assertNotNull(testList);
+        Assert.assertEquals(3, testList.size());
+        for (Unit unit : testList){
+            Assert.assertFalse("Elite".equalsIgnoreCase(unit.getRank()));
+        }
+    }
+
+    @Test
+    public void getUnitsForFaction_returns_list_without_specialists_if_team_has_too_many_specialists(){
+        Team team = instantiateTeamWithLeader();
+        team.getUnitList().add(UNIT2);
+        team.getUnitList().add(UNIT2);
+        team.getUnitList().add(UNIT3);
+
+        Unit expectedUnit = generateExpectedRankAndFileCaravanner();
+        List<Unit> testList = sut.getUnitsForFaction(1, team);
+
+        Assert.assertNotNull(testList);
+        Assert.assertEquals(3, testList.size());
+        for (Unit unit : testList){
+            Assert.assertFalse("Specialist".equalsIgnoreCase(unit.getRank()));
+        }
+    }
 
     @Test
     public void getPotentialSkills_returns_correct_list_one_skillset(){
@@ -155,7 +257,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
                 "Ignore heavy weapons rule.", 6, "Brawn");
         sut.addSkillToUnit(6, 2, 2);
-        Unit testUnit = unitDao.getUnitById(2, 2);
+        Unit testUnit = sut.getUnitById(2, 2);
         Assert.assertEquals(1, testUnit.getSkills().size());
         Assert.assertTrue(testUnit.getSkills().contains(skill1));
     }
@@ -189,4 +291,49 @@ public class UnitServiceTests extends BaseDaoTests {
         Assert.fail();
     }
 
+    @Test
+    public void getReferenceUnitByClass_returns_expected_unit(){
+        Unit expectedUnit = new Unit (0, 0, "", "Raider", "Rank and File",
+                "Human", 20, 1, 6, 5, 5, 4, 4, 5,
+                0, "N/A", 0, 0, 0, 0,
+                Arrays.asList(new Skillset[]{
+                        new Skillset(1, "Melee", "Skill"),
+                        new Skillset(2, "Marksmanship", "Skill"),
+                        new Skillset(3, "Survival", "Skill"),
+                }),
+                new ArrayList<Skill>(), new ArrayList<Item>());
+        Unit testUnit = sut.getReferenceUnitByClass("Raider");
+        Assert.assertEquals(expectedUnit, testUnit);
+    }
+
+    @Test(expected = ServiceException.class)
+    public void getReferenceUnitByClass_throws_error_for_invalid_classes(){
+        Unit unit = sut.getReferenceUnitByClass("Not A Real Class");
+        Assert.fail();
+    }
+
+
+    /*
+    Private Helper Methods
+     */
+    private Unit generateExpectedRankAndFileCaravanner() {
+        Unit expectedUnit = new Unit(4, 0, "", "Defender", "Rank and File",
+                "Human", 23,1,6,5,5,4,4,5,0,
+                "N/A",0,0,0,0,
+                new ArrayList<Skillset>(),
+                new ArrayList<Skill>(), new ArrayList<Item>());
+        expectedUnit.getAvailableSkillsets().add(new Skillset(1, "Melee", "Skill"));
+        expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
+        expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));
+        expectedUnit.getSkills().add(new Skill(5, "Brave", "+2 bonus when making Will tests.",
+                7, "Tenacity"));
+
+        return expectedUnit;
+    }
+
+    private Team instantiateTeamWithLeader(){
+
+        return new Team(1, 1, "", "Caravanners", 1, 500,
+                new ArrayList<>(Arrays.asList(new Unit[]{UNIT1})), new ArrayList<Item>());
+    }
 }

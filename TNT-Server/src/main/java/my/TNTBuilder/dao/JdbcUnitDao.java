@@ -316,7 +316,7 @@ public class JdbcUnitDao implements UnitDao{
             return 0;
         } else if (rank.equalsIgnoreCase("Specialist")) {
             return 21;
-        } else if (rank.equalsIgnoreCase("Elite")) {
+        } else if (rank.equalsIgnoreCase("Elite") || rank.equalsIgnoreCase("Freelancer")) {
             return 46;
         } else {
             return 75;

@@ -91,7 +91,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
 
         List<Unit> testList = sut.getListOfUnitsByFactionId(1);
         Assert.assertNotNull(testList);
-        Assert.assertEquals(5, testList.size());
+        Assert.assertEquals(6, testList.size());
         Assert.assertEquals(expectedUnit, testList.get(3));
         Assert.assertEquals(10, testList.get(4).getId());
     }

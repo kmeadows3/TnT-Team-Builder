@@ -181,12 +181,13 @@ INSERT INTO unit_reference (faction_id, class, rank, species, base_cost, wounds,
 	(1, 'Lieutenant', 'Elite', 'Human', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|7|8]', '[2]', 1, 'N/A'),
 	(1, 'Tracker', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[2|3|4]', '[3|4]', 0, 'N/A'),
 	(1, 'Defender', 'Rank and File', 'Human', 23, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '[5]', 0, 'N/A'),
-	(3, 'Bandit King', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '', 3, 'N/A'),
+	(3, 'Bandit King', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '', 3, 'N/A'),  -- ID 5
 	(3, 'Brute', 'Elite', 'Human', 50, 1, 6, 6, 6, 4, 7, 6, '[1|6|7]', '[6|7|8]', 0, 'Unless Leader is warlord, only 1 per team'),
 	(3, 'Raider Champion', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[1|6|7|8]', '', 2, 'N/A'),
 	(3, 'Raider', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, 'N/A'),
-    (2, 'Raider', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, 'N/A'),
-    (7, 'Raider', 'Freelancer', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, 'N/A');
+    (2, 'Raider2', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, 'N/A'),
+    (7, 'Freelancer', 'Freelancer', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, 'N/A'), -- ID 10
+    (1, 'Specialist', 'Specialist', 'Human', 23, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '[5]', 0, 'N/A');
 
 
 
@@ -324,16 +325,27 @@ INSERT INTO item_item_trait (item_id, item_trait_id) VALUES
 INSERT INTO tnt_user (username,password_hash,role) VALUES ('user1','user1','ROLE_USER');
 INSERT INTO tnt_user (username,password_hash,role) VALUES ('user2','user2','ROLE_USER');
 INSERT INTO tnt_user (username,password_hash,role) VALUES ('user3','user3','ROLE_USER');
+INSERT INTO tnt_user (username,password_hash,role) VALUES ('user4','user4','ROLE_USER');
 
-INSERT INTO team(user_id, faction_id, team_name, money) VALUES (1, 1, 'Team 1', 500);
-INSERT INTO team(user_id, faction_id, team_name, money) VALUES (1, 3, 'Team 2', 1500);
-INSERT INTO team(user_id, faction_id, team_name, money) VALUES (2, 2, 'Team 3', 1000);
+INSERT INTO team(user_id, faction_id, team_name, money) VALUES (1, 1, 'Team 1', 500); -- ID 1
+INSERT INTO team(user_id, faction_id, team_name, money) VALUES (1, 3, 'Team 2', 1500); -- ID 2
+INSERT INTO team(user_id, faction_id, team_name, money) VALUES (2, 2, 'Team 3', 1000); -- ID 3
+INSERT INTO team(user_id, faction_id, team_name, money) VALUES (4, 1, 'High BS Team', 1000); -- ID 4
+INSERT INTO team(user_id, faction_id, team_name, money) VALUES (4, 1, 'Poor Team', 1); -- ID 5
+INSERT INTO team(user_id, faction_id, team_name, money) VALUES (4, 1, 'Team Without Leader', 1000); -- ID 6
+INSERT INTO team(user_id, faction_id, team_name, money) VALUES (4, 1, 'Team With 3 Elites', 1000); -- ID 7
+
+
 
 INSERT INTO unit (team_id, name, class, rank, species, base_cost, wounds, defense, mettle, move, ranged, melee,
     strength, empty_skills, special_rules, spent_exp)
 VALUES (1, 'UnitName1', 'Trade Master', 'Leader', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
     (3, 'UnitName2', 'Soldier', 'Elite', 'Mutant', 51, 11, 6, 8, 7, 9, 7, 6, 1, 'Special rules description', 50),
-    (1, 'UnitName3', 'Class Name', 'Specialist', 'Human', 40, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100);
+    (1, 'UnitName3', 'Class Name', 'Specialist', 'Human', 40, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
+    (4, 'UnitName4', 'High BS Unit', 'Leader', 'Human', 200, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
+    (7, 'UnitName5', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
+    (7, 'UnitName6', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
+    (7, 'UnitName7', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100);
 
 INSERT INTO unit_skillset (unit_id, skillset_id)
 VALUES (1, 3),

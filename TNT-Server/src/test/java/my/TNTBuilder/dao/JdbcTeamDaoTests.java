@@ -3,8 +3,6 @@ package my.TNTBuilder.dao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.model.FactionDTO;
 import my.TNTBuilder.model.Team;
-import my.TNTBuilder.model.Unit;
-import my.TNTBuilder.model.inventory.Item;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,13 +52,13 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
 
     @Test(expected = DaoException.class)
     public void create_team_invalid_faction_throws_exception(){
-        sut.createTeam(new Team(4, 1, "Name", "Mutants", 99, 500, new ArrayList<Unit>(), new ArrayList<Item>()));
+        sut.createTeam(new Team(4, 1, "Name", "Mutants", 99, 500, new ArrayList<>(), new ArrayList<>()));
         Assert.fail();
     }
 
     @Test(expected = DaoException.class)
     public void create_team_invalid_user_throws_exception(){
-        sut.createTeam(new Team(4, 99, "Name", "Caravanners", 1, 500, new ArrayList<Unit>(), new ArrayList<Item>()));
+        sut.createTeam(new Team(4, 99, "Name", "Caravanners", 1, 500, new ArrayList<>(), new ArrayList<>()));
         Assert.fail();
     }
 
@@ -95,7 +93,6 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         Assert.assertTrue(testList.contains(faction1));
     }
 
-    //TODO more tests about this
     @Test
     public void updateTeam_updates_team(){
         TEAM_1.setName("New Name");

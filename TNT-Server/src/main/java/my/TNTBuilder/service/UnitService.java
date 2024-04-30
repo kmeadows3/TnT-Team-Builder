@@ -55,8 +55,6 @@ public class UnitService {
         return units;
     }
 
-
-    //TODO this method needs testing!
     public Unit updateUnit(Unit clientUnit, int userId){
         try {
             validateUpdatedUnit(clientUnit, userId);

@@ -1,6 +1,5 @@
 package my.TNTBuilder.service;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.validator.TeamValidator;
 import my.TNTBuilder.validator.UnitValidator;
@@ -9,7 +8,6 @@ import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Skillset;
 import my.TNTBuilder.model.Unit;
-import my.TNTBuilder.model.inventory.Item;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -161,7 +159,6 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit expectedUnit = generateExpectedRankAndFileCaravanner();
         team.getUnitList().add(expectedUnit);
         team.getUnitList().add(expectedUnit);
-        int bsCost = team.getBSCost();
 
         List<Unit> testList = sut.getUnitsForFaction(1, team);
 
@@ -179,7 +176,6 @@ public class UnitServiceTests extends BaseDaoTests {
         team.getUnitList().add(UNIT2);
         team.getUnitList().add(UNIT2);
 
-        Unit expectedUnit = generateExpectedRankAndFileCaravanner();
         List<Unit> testList = sut.getUnitsForFaction(1, team);
 
         Assert.assertNotNull(testList);
@@ -196,7 +192,6 @@ public class UnitServiceTests extends BaseDaoTests {
         team.getUnitList().add(UNIT2);
         team.getUnitList().add(UNIT3);
 
-        Unit expectedUnit = generateExpectedRankAndFileCaravanner();
         List<Unit> testList = sut.getUnitsForFaction(1, team);
 
         Assert.assertNotNull(testList);
@@ -264,16 +259,12 @@ public class UnitServiceTests extends BaseDaoTests {
 
     @Test (expected = ServiceException.class)
     public void addSkillToUnit_throws_exception_if_user_does_not_own_unit(){
-        Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
-                "Ignore heavy weapons rule.", 6, "Brawn");
         sut.addSkillToUnit(6, 2, 1);
         Assert.fail();
     }
 
     @Test (expected = ServiceException.class)
     public void addSkillToUnit_throws_exception_if_unit_cannot_have_skill(){
-        Skill skill1 = new Skill(3, "Reconnoiter", "At the start of the game after all models have " +
-                "deployed but before init is determined make a free move action.", 4, "Quickness");
         sut.addSkillToUnit(3, 2, 2);
         Assert.fail();
     }
@@ -287,7 +278,7 @@ public class UnitServiceTests extends BaseDaoTests {
 
     @Test (expected = ServiceException.class)
     public void getUnitById_throws_exception_incorrect_user(){
-        Unit testUnit = sut.getUnitById(1,2);
+        sut.getUnitById(1,2);
         Assert.fail();
     }
 
@@ -296,19 +287,38 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit expectedUnit = new Unit (0, 0, "", "Raider", "Rank and File",
                 "Human", 20, 1, 6, 5, 5, 4, 4, 5,
                 0, "N/A", 0, 0, 0, 0,
-                Arrays.asList(new Skillset[]{
+                Arrays.asList(
                         new Skillset(1, "Melee", "Skill"),
                         new Skillset(2, "Marksmanship", "Skill"),
-                        new Skillset(3, "Survival", "Skill"),
-                }),
-                new ArrayList<Skill>(), new ArrayList<Item>());
+                        new Skillset(3, "Survival", "Skill")),
+                new ArrayList<>(), new ArrayList<>());
         Unit testUnit = sut.getReferenceUnitByClass("Raider");
         Assert.assertEquals(expectedUnit, testUnit);
     }
 
     @Test(expected = ServiceException.class)
     public void getReferenceUnitByClass_throws_error_for_invalid_classes(){
-        Unit unit = sut.getReferenceUnitByClass("Not A Real Class");
+        sut.getReferenceUnitByClass("Not A Real Class");
+        Assert.fail();
+    }
+
+
+
+    @Test
+    public void updateUnit_updates_unit_with_valid_change(){
+        Unit unitToUpdate = sut.getUnitById(1,1);
+        unitToUpdate.setName("New Name");
+
+        sut.updateUnit(unitToUpdate, 1);
+        Unit testUnit = sut.getUnitById(1, 1);
+        Assert.assertEquals(unitToUpdate, testUnit);
+    }
+
+    @Test (expected = ServiceException.class)
+    public void updateUnit_throws_exception_with_invalid_change(){
+        Unit unitToUpdate = sut.getUnitById(1,1);
+        unitToUpdate.setUnitClass("New Class Name");
+        sut.updateUnit(unitToUpdate, 1);
         Assert.fail();
     }
 
@@ -320,8 +330,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit expectedUnit = new Unit(4, 0, "", "Defender", "Rank and File",
                 "Human", 23,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<Skillset>(),
-                new ArrayList<Skill>(), new ArrayList<Item>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         expectedUnit.getAvailableSkillsets().add(new Skillset(1, "Melee", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));
@@ -334,6 +343,6 @@ public class UnitServiceTests extends BaseDaoTests {
     private Team instantiateTeamWithLeader(){
 
         return new Team(1, 1, "", "Caravanners", 1, 500,
-                new ArrayList<>(Arrays.asList(new Unit[]{UNIT1})), new ArrayList<Item>());
+                new ArrayList<>(List.of(UNIT1)), new ArrayList<>());
     }
 }

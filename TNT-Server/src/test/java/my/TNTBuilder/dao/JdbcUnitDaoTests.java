@@ -1,15 +1,12 @@
 package my.TNTBuilder.dao;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Skillset;
 import my.TNTBuilder.model.Unit;
-import my.TNTBuilder.model.inventory.Item;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
@@ -49,7 +46,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Unit expectedUnit = new Unit(4, 2, "Name", "Defender", "Rank and File",
                 "Human", 23,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         expectedUnit.getAvailableSkillsets().add(new Skillset(1, "Melee", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));
@@ -81,7 +78,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Unit expectedUnit = new Unit(4, 0, "", "Defender", "Rank and File",
                 "Human", 23,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         expectedUnit.getAvailableSkillsets().add(new Skillset(1, "Melee", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));
@@ -110,7 +107,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Unit updatedUnit = new Unit(1, 1, "Updated Name", "Trade Master", "Updated Rank",
                 "Human", 50,50,50,50,50,50,50,50,50,
                 "Special rules description",50,50,50,50,
-                new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         Skillset skillset1 = new Skillset(3, "Survival", "Skill");
         Skillset skillset2 = new Skillset(4, "Quickness", "Skill");
         updatedUnit.getAvailableSkillsets().add(skillset1);

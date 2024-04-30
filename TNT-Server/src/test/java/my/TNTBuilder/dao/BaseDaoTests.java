@@ -1,7 +1,6 @@
 package my.TNTBuilder.dao;
 
 import my.TNTBuilder.model.*;
-import my.TNTBuilder.model.inventory.Item;
 import my.TNTBuilder.model.userModels.User;
 import org.junit.After;
 import org.junit.runner.RunWith;
@@ -13,6 +12,8 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = TestingDatabaseConfig.class)
@@ -26,27 +27,26 @@ public abstract class BaseDaoTests {
             "Special rules description",100,0,0,0,
             Arrays.asList(new Skillset(3, "Survival", "Skill"),
                     new Skillset(4, "Quickness", "Skill")),
-            new ArrayList<Skill>(), new ArrayList<Item>());
+            new ArrayList<>(), new ArrayList<>());
     protected static final Unit UNIT2 = new Unit(2, 3, "UnitName2", "Soldier", "Elite",
             "Mutant", 51,11,6,8,7,9,7,6,1,
             "Special rules description",50,0,0,0,
-            Arrays.asList(new Skillset[]{new Skillset(6, "Brawn", "Skill")}), new ArrayList<Skill>(), new ArrayList<Item>());
+            List.of(new Skillset(6, "Brawn", "Skill")), new ArrayList<>(), new ArrayList<>());
 
     protected static final Unit UNIT3 = new Unit(3, 1, "UnitName3", "Class Name", "Specialist",
             "Human", 40,10,5,7,6,8,6,5,0,
             "Special rules description",100,0,0,0,
-            Arrays.asList(new Skillset[]{new Skillset(6, "Brawn", "Skill")}),
-            Arrays.asList(new Skill[]{new Skill(7, "Bully", "All enemies defeated by this model in" +
-                    " close combat are knocked prone in addition to any other combat result.", 6, "Brawn")}),
-            new ArrayList<Item>());
+            List.of(new Skillset(6, "Brawn", "Skill")),
+            List.of(new Skill(7, "Bully", "All enemies defeated by this model in" +
+                    " close combat are knocked prone in addition to any other combat result.", 6, "Brawn")),
+            new ArrayList<>());
     protected final Team TEAM_1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500,
-            Arrays.asList(new Unit[]{UNIT1, UNIT3}), new ArrayList<Item>());
+            Arrays.asList(UNIT1, UNIT3), new ArrayList<>());
     protected final Team TEAM_2 = new Team(2, 1, "Team 2", "Raiders", 3, 1500,
-            new ArrayList<Unit>(), new ArrayList<Item>());
+            new ArrayList<>(), new ArrayList<>());
     protected final Team TEAM_3 = new Team(3, 2, "Team 3", "Mutants", 2, 1000,
-            Arrays.asList(new Unit[]{UNIT2}), new ArrayList<Item>());
+            Collections.singletonList(UNIT2), new ArrayList<>());
     protected final FactionDTO faction1 = new FactionDTO(1, "Caravanners");
-    protected final FactionDTO faction2 = new FactionDTO(2, "Mutants");
 
 
 

@@ -1,11 +1,8 @@
 package my.TNTBuilder.service;
 
 import my.TNTBuilder.exception.ServiceException;
-import my.TNTBuilder.model.Skill;
-import my.TNTBuilder.model.Skillset;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
-import my.TNTBuilder.model.inventory.Item;
 import my.TNTBuilder.validator.TeamValidator;
 import my.TNTBuilder.dao.*;
 import org.junit.Assert;
@@ -57,13 +54,13 @@ public class TeamServiceTests extends BaseDaoTests {
 
     @Test (expected = ServiceException.class)
     public void getTeamById_throws_exception_for_incorrect_user(){
-        Team testTeam = sut.getTeamById(1,2);
+        sut.getTeamById(1,2);
         Assert.fail();
     }
 
     @Test (expected = ServiceException.class)
-    public void getTeamById_throws_exception_for_nonexistant_team(){
-        Team testTeam = sut.getTeamById(41,1);
+    public void getTeamById_throws_exception_if_team_does_not_exist(){
+        sut.getTeamById(41,1);
         Assert.fail();
     }
 
@@ -72,7 +69,7 @@ public class TeamServiceTests extends BaseDaoTests {
         Unit boughtUnit = new Unit(5, 1, "Name", "Defender", "Rank and File",
                 "Human", 50,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         sut.updateTeamAfterNewUnitPurchase(1, boughtUnit);
         Team testTeam = sut.getTeamById(1, 1);
@@ -85,7 +82,7 @@ public class TeamServiceTests extends BaseDaoTests {
         Unit boughtUnit = new Unit(5, 1, "Name", "Defender", "Leader",
                 "Human", 50,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         sut.updateTeamAfterNewUnitPurchase(1, boughtUnit);
         Team testTeam = sut.getTeamById(1, 1);
@@ -102,7 +99,7 @@ public class TeamServiceTests extends BaseDaoTests {
         Unit boughtUnit = new Unit(5, 1, "Name", "Defender", "Leader",
                 "Human", 50,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<Skillset>(), new ArrayList<Skill>(), new ArrayList<Item>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
 
         sut.updateTeamAfterNewUnitPurchase(1, boughtUnit);

@@ -24,7 +24,8 @@ public class UnitServiceTests extends BaseDaoTests {
     public void setup(){
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         TeamDao teamDao = new JdbcTeamDao(jdbcTemplate);
-        sut = new UnitService(new JdbcUnitDao(jdbcTemplate), new UnitValidator(), new TeamService(teamDao, new TeamValidator()));
+        UnitDao unitDao = new JdbcUnitDao(jdbcTemplate);
+        sut = new UnitService(unitDao, new UnitValidator(unitDao), new TeamService(teamDao, new TeamValidator()));
 
     }
 

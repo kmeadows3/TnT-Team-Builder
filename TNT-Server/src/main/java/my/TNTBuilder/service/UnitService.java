@@ -9,13 +9,13 @@ import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
 import org.springframework.stereotype.Component;
 
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class UnitService {
-    public static final double MAX_SPECIALIST_RATIO = .34;
-    private final int FREELANCER_FACTION_ID = 7;
+
     private final UnitDao unitDao;
     private final UnitValidator unitValidator;
     private final TeamService teamService;
@@ -30,8 +30,9 @@ public class UnitService {
     public Unit createNewUnit(Unit clientUnit, int userId){
         Unit newUnit = null;
 
+        unitValidator.validateNewClientUnit(clientUnit, teamService.getTeamById(clientUnit.getTeamId(), userId) );
+
         try {
-            validateNewClientUnit(clientUnit, userId);
             newUnit = unitDao.createUnit(clientUnit);
             teamService.updateTeamAfterNewUnitPurchase(userId, newUnit);
 
@@ -57,7 +58,17 @@ public class UnitService {
 
     public Unit updateUnit(Unit clientUnit, int userId){
         try {
-            validateUpdatedUnit(clientUnit, userId);
+            Unit currentUnit = unitDao.getUnitById(clientUnit.getId(), userId);
+
+            unitValidator.validateUpdatedUnit(clientUnit, currentUnit);
+
+            if (unitValidator.validFivePointLevel(currentUnit, clientUnit)){
+                spendExpForAdvance(clientUnit);
+            } else if (unitValidator.validTenPointLevel(currentUnit, clientUnit)) {
+                spendExpForAdvance(clientUnit);
+                clientUnit.setTenPointAdvances(clientUnit.getTenPointAdvances() + 1);
+            }
+
             unitDao.updateUnit(clientUnit);
         } catch (DaoException e){
             throw new ServiceException(e.getMessage(), e);
@@ -123,67 +134,8 @@ public class UnitService {
         PRIVATE METHODS
      */
 
-    private void validateNewClientUnit(Unit unit, int userId) {
-
-        Team team = teamService.getTeamById(unit.getTeamId(), userId);
-        if (team == null) {
-            throw new ServiceException("Invalid Unit. Logged in user does not own team.");
-        }
-
-        Unit potentialUnit = unitDao.convertReferenceUnitToUnit(unit.getId());
-        if (team.getMoney() - potentialUnit.getBaseCost() < 0){
-            throw new ServiceException("Team cannot afford this unit");
-        }
-
-        int unitFaction = unitDao.getFactionIdByUnitId(unit.getId());
-        if (unitFaction != team.getFactionId() && unitFaction != FREELANCER_FACTION_ID) {
-            throw new ServiceException("Invalid unit. Unit does not belong to same faction as team.");
-        }
-
-        confirmNewUnitRankIsValidOption(potentialUnit, team);
-
-    }
-    private void confirmNewUnitRankIsValidOption(Unit potentialUnit, Team team) {
-
-        if (potentialUnit.getRank().equalsIgnoreCase("Leader") && !teamMustBuyLeader(team)) {
-            throw new ServiceException("Team cannot have two leaders.");
-        } else if (potentialUnit.getRank().equalsIgnoreCase("Elite") && teamCanNotBuyElite(team)) {
-            throw new ServiceException("Team cannot take more than 3 elites.");
-        } else if (potentialUnit.getRank().equalsIgnoreCase("Specialist") && teamCanNotBuySpecialist(team)) {
-            throw new ServiceException("Specialists may not exceed more than 1/3rd of the team");
-        } else if (potentialUnit.getRank().equalsIgnoreCase("Freelancer") && teamCanNotBuyFreelancer(team)) {
-            throw new ServiceException("Team can only have one freelancer per 200 BS cost");
-        }else if (teamMustBuyLeader(team) && !potentialUnit.getRank().equalsIgnoreCase("Leader")){
-            throw new ServiceException("Team cannot purchase units until it has a leader");
-        }
-    }
-
-    private boolean teamMustBuyLeader(Team team){
-        return team.getUnitList().stream().noneMatch(teamUnit -> "Leader".equalsIgnoreCase(teamUnit.getRank()));
-    }
-    private boolean teamCanNotBuyElite(Team team){
-        return countRankOccurance("Elite", team) >= 3;
-    }
-    private boolean teamCanNotBuySpecialist(Team team){
-        int unitCount = team.getUnitList().size();
-        int specialistCount = countRankOccurance("Specialist", team);
-
-        return !(((double) (specialistCount + 1) / unitCount) <= MAX_SPECIALIST_RATIO);
-    }
-    private boolean teamCanNotBuyFreelancer(Team team){
-        int freelancerCount = countRankOccurance("Freelancer", team);
-
-        return !(team.getBSCost()/200 >= freelancerCount + 1);
-    }
-
-    private int countRankOccurance(String rank, Team team) {
-        return (int) team.getUnitList().stream()
-                .filter( teamUnit -> rank.equalsIgnoreCase( teamUnit.getRank()))
-                .count();
-    }
-
-    private List<Unit> adjustUnitListForTeamStatus(Team team, List<Unit> units) {
-        if ( teamMustBuyLeader(team) ) {
+    public List<Unit> adjustUnitListForTeamStatus(Team team, List<Unit> units) {
+        if ( unitValidator.teamMustBuyLeader(team) ) {
             units = units.stream()
                     .filter(unit -> "Leader".equalsIgnoreCase(unit.getRank()))
                     .collect(Collectors.toList());
@@ -193,13 +145,13 @@ public class UnitService {
         } else {
             units = filterOutRank(units, "Leader");
 
-            if (teamCanNotBuyElite(team)){
+            if (unitValidator.teamCanNotBuyElite(team)){
                 units = filterOutRank(units, "Elite");
             }
-            if (teamCanNotBuySpecialist(team)){
+            if (unitValidator.teamCanNotBuySpecialist(team)){
                 units = filterOutRank(units, "Specialist");
             }
-            if (teamCanNotBuyFreelancer(team)){
+            if (unitValidator.teamCanNotBuyFreelancer(team)){
                 units = filterOutRank(units, "Freelancer");
             }
         }
@@ -211,29 +163,6 @@ public class UnitService {
                 .filter( unit -> !filteredOutRank.equalsIgnoreCase(unit.getRank() ) )
                 .collect(Collectors.toList());
         return units;
-    }
-
-
-
-    private void validateUpdatedUnit(Unit updatedUnit, int userId){
-        Unit currentUnit = unitDao.getUnitById(updatedUnit.getId(), userId);
-        if (currentUnit == null){
-            throw new ServiceException("Update failed. User does not own unit.");
-        }
-        if ( unitValidator.onlyNameChanged(currentUnit, updatedUnit)){
-            return;
-        } else if (unitValidator.onlyUnspentExpGained(currentUnit, updatedUnit)) {
-            return;
-        } else if (unitValidator.validFivePointLevel(currentUnit, updatedUnit)
-                && unitValidator.unitCanAffordAdvance(currentUnit)){
-            spendExpForAdvance(updatedUnit);
-        } else if (unitValidator.validTenPointLevel(currentUnit, updatedUnit)
-                && unitValidator.unitCanAffordAdvance(currentUnit)){
-            spendExpForAdvance(updatedUnit);
-            updatedUnit.setTenPointAdvances(updatedUnit.getTenPointAdvances() + 1);
-        } else {
-            throw new ServiceException("Unit update is not valid");
-        }
     }
 
     private void spendExpForAdvance(Unit updatedUnit) {

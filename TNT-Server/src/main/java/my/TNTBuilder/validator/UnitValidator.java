@@ -61,7 +61,7 @@ public class UnitValidator {
             throw new ValidatorException("Team cannot afford this unit");
         }
 
-        int unitFaction = unitDao.getFactionIdByUnitId(unit.getId());
+        int unitFaction = unitDao.getFactionIdByUnitReferenceId(unit.getId());
         if (unitFaction != team.getFactionId() && unitFaction != FREELANCER_FACTION_ID) {
             throw new ValidatorException("Invalid unit. Unit does not belong to same faction as team.");
         }

@@ -29,6 +29,12 @@ public class UnitController {
         this.userDao = userDao;
     }
 
+    /**
+     * Validates and initializes a potential unit, then creates a copy in the database
+     * @param unit the unit to be added, with the minimum details needed to initialize the unit
+     * @param principal the logged-in user
+     * @return the fully initialized unit
+     */
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path="/units", method = RequestMethod.POST)
     public Unit newUnit(@Valid @RequestBody Unit unit, Principal principal){
@@ -48,6 +54,11 @@ public class UnitController {
         return newUnit;
     }
 
+    /**
+     * Returns the base template of a class
+     * @param unitClass the class of the unit
+     * @return a unit that matches the base template of the class before any advances
+     */
     @RequestMapping(path = "/units", method = RequestMethod.GET)
     public Unit getReferenceUnitByClass(@RequestParam(value="class") String unitClass) {
         Unit refUnit = null;
@@ -65,6 +76,12 @@ public class UnitController {
     }
 
 
+    /**
+     * Updates a unit
+     * @param unit the unit from the client to be validated then updated in the database
+     * @param principal the logged-in user
+     * @return the updated unit
+     */
     @RequestMapping(path="/units/{unitId}", method = RequestMethod.PUT)
     public Unit updateUnit(@RequestBody Unit unit, Principal principal){
         Unit updatedUnit = null;
@@ -83,6 +100,11 @@ public class UnitController {
          return updatedUnit;
     }
 
+    /**
+     * Returns a list of valid skills for a unit
+     * @param unitId the id of the unit
+     * @return the list of skills available to the unit
+     */
     @RequestMapping(path="/units/{unitId}/skills", method = RequestMethod.GET)
     public List<Skill> getSkillsForPurchase(@PathVariable int unitId){
         List<Skill> skills = null;
@@ -95,6 +117,12 @@ public class UnitController {
         return skills;
     }
 
+    /**
+     * Adds a new skill to the unit
+     * @param skill the skill to be added
+     * @param unitId the id of the unit
+     * @param principal the logged-in user
+     */
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path="/units/{unitId}/skills", method = RequestMethod.POST)
     public void addSkillToUnit(@RequestBody Skill skill, @PathVariable int unitId, Principal principal){
@@ -107,6 +135,12 @@ public class UnitController {
         }
     }
 
+    /**
+     * Returns a specific unit based on the id
+     * @param unitId the unit id
+     * @param principal the logged-in user
+     * @return the unit matching the id
+     */
     @RequestMapping(path="/units/{unitId}", method = RequestMethod.GET)
     public Unit getUnit(@PathVariable int unitId, Principal principal){
         Unit unit = null;

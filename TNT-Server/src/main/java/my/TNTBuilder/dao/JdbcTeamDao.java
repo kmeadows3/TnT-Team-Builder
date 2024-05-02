@@ -20,9 +20,16 @@ public class JdbcTeamDao implements TeamDao{
             "faction_name, bought_first_leader " +
             "FROM team JOIN faction f ON f.faction_id = team.faction_id ";
 
+    /*
+    CONSTRUCTOR
+     */
     public JdbcTeamDao(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
+
+    /*
+    PUBLIC METHODS
+     */
 
     @Override
     public Team createTeam(Team newTeam) {
@@ -114,6 +121,12 @@ public class JdbcTeamDao implements TeamDao{
 
     /*
     PRIVATE METHODS
+     */
+
+    /**
+     * Converts a SqlRowSet into a Team
+     * @param row the SqlRowSet from the database
+     * @return The team extracted from the SqlRowSet
      */
     private Team mapRowToTeam(SqlRowSet row){
         Team team = new Team();

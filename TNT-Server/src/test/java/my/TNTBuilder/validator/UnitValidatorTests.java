@@ -27,7 +27,7 @@ public class UnitValidatorTests extends BaseDaoTests {
         sut = new UnitValidator(new JdbcUnitDao(new JdbcTemplate(dataSource)));
     }
 
-    
+
 
 
 }

@@ -33,6 +33,12 @@ public class TeamController {
         this.teamService = teamService;
     }
 
+    /**
+     * Creates a new team in the database
+     * @param team the team sent by the client, only with basic data to instantiate the team
+     * @param principal the logged-in user
+     * @return the fully created team from the database
+     */
     @RequestMapping(path = "/teams", method = RequestMethod.POST)
     public Team createTeam(@Valid @RequestBody Team team, Principal principal){
         team.setUserId(userDao.getUserIdByUsername(principal.getName()));
@@ -45,6 +51,11 @@ public class TeamController {
         return returnTeam;
     }
 
+    /**
+     * Returns a list of teams belonging to the user
+     * @param principal the logged-in user
+     * @return A list of teams belonging to the user
+     */
     @RequestMapping(path = "/teams", method = RequestMethod.GET)
     public List<Team> getUsersTeams(Principal principal){
         List<Team> teamList = null;
@@ -57,6 +68,12 @@ public class TeamController {
         return teamList;
     }
 
+    /**
+     * Validates and updates a specific team
+     * @param updatedTeam the team from the client
+     * @param principal the logged-in user
+     * @return the team after the update is made
+     */
     @RequestMapping(path = "/teams/{id}", method = RequestMethod.PUT)
     public Team updateTeam(@Valid @RequestBody Team updatedTeam, Principal principal){
         Team teamAfterUpdate = null;
@@ -69,8 +86,14 @@ public class TeamController {
         return teamAfterUpdate;
     }
 
+    /**
+     * Gets a specific team belonging to the user based on the ID
+     * @param id the id of the team
+     * @param principal the logged-in user
+     * @return the team belonging to the user
+     */
     @RequestMapping(path = "/teams/{id}", method = RequestMethod.GET)
-    public Team createTeam(@PathVariable int id, Principal principal){
+    public Team getTeam(@PathVariable int id, Principal principal){
         Team returnTeam = null;
         try{
             returnTeam = teamDao.getTeamById(id, userDao.getUserIdByUsername(principal.getName()));
@@ -84,6 +107,10 @@ public class TeamController {
         return returnTeam;
     }
 
+    /**
+     * Returns a list of all possible factions in the database
+     * @return the list of factions
+     */
     @RequestMapping(path = "/factions", method = RequestMethod.GET)
     public List<FactionDTO> lookupAllFactions(){
         try {
@@ -93,6 +120,12 @@ public class TeamController {
         }
     }
 
+    /**
+     * returns a list of valid units for a faction that a specific team can buy
+     * @param id the id of the faction
+     * @param team the team the new units would belong to
+     * @return the list of valid units for that team
+     */
     @RequestMapping(path = "/factions/{id}", method = RequestMethod.POST)
     public List<Unit> getUnitsForFaction(@PathVariable int id, @RequestBody Team team) {
         try {

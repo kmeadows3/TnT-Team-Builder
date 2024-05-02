@@ -63,13 +63,13 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
 
     @Test
     public void getFactionIdByUnitId_returns_faction_id(){
-        int testFactionId = sut.getFactionIdByUnitId(UNIT1.getId());
+        int testFactionId = sut.getFactionIdByUnitReferenceId(UNIT1.getId());
         Assert.assertEquals(1, testFactionId);
     }
 
     @Test(expected = DaoException.class)
     public void getFactionIdByUnitId_throws_exception_on_invalid_unit(){
-        sut.getFactionIdByUnitId(50);
+        sut.getFactionIdByUnitReferenceId(50);
         Assert.fail();
     }
 

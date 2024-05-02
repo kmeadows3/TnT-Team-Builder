@@ -18,6 +18,8 @@ import java.util.Map;
 
 @Component
 public class JdbcUnitDao implements UnitDao{
+    private final int FREELANCER_FACTION_ID = 7;
+
     private final JdbcTemplate jdbcTemplate;
     private final String SELECT_ALL_FROM_UNIT_REFERENCE = "SELECT unit_ref_id, faction_id, class, rank, species, base_cost, " +
             "wounds, defense, mettle, move, ranged, melee, strength, skillsets, starting_skills, starting_free_skills, " +
@@ -32,9 +34,16 @@ public class JdbcUnitDao implements UnitDao{
             "skillset_name FROM skill_reference sr " +
             "JOIN skillset_reference ssr ON ssr.skillset_id = sr.skillset_id ";
 
+    /*
+    Constructor
+     */
     public JdbcUnitDao (JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
+
+    /*
+    PUBLIC METHODS
+     */
     @Override
     public Unit getUnitById(int id, int userId) {
         String sql = SELECT_ALL_FROM_UNIT + "WHERE unit_id = ? AND user_id = ?";
@@ -98,11 +107,11 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
-    public int getFactionIdByUnitId(int unitId){
+    public int getFactionIdByUnitReferenceId(int referenceUnitId){
         String sql = "SELECT faction_id FROM unit_reference WHERE unit_ref_id = ?";
         int id = 0;
         try {
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, unitId);
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, referenceUnitId);
             while(results.next()){
                 id = results.getInt("faction_id");
             }
@@ -118,7 +127,7 @@ public class JdbcUnitDao implements UnitDao{
 
     @Override
     public List<Unit> getListOfUnitsByFactionId(int factionId) {
-        String sql = "SELECT unit_ref_id FROM unit_reference WHERE faction_id = ? OR faction_id = 7";
+        String sql = "SELECT unit_ref_id FROM unit_reference WHERE faction_id = ? OR faction_id = " + FREELANCER_FACTION_ID;
         List<Unit> unitList = new ArrayList<>();
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, factionId);

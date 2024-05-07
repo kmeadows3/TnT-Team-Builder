@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import TeamsService from '../services/TeamsService';
+import TeamsService from '../../services/TeamsService';
 import AdvanceUnit from './AdvanceUnit.vue';
 
 export default {

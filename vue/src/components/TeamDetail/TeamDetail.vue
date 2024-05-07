@@ -25,7 +25,7 @@
 import UnitList from './UnitList.vue';
 import TeamSummary from './TeamSummary.vue';
 import MoneyManagment from './MoneyManagement.vue';
-import TeamsService from '../services/TeamsService';
+import TeamsService from '../../services/TeamsService';
 
 export default {
     data() {

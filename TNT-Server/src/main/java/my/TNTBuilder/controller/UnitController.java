@@ -1,13 +1,11 @@
 package my.TNTBuilder.controller;
 
-import my.TNTBuilder.dao.UnitDao;
 import my.TNTBuilder.dao.UserDao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Unit;
 import my.TNTBuilder.service.UnitService;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -136,13 +134,13 @@ public class UnitController {
     }
 
     /**
-     * Returns a specific unit based on the id
+     * Returns a specific unit based on the unit's id
      * @param unitId the unit id
      * @param principal the logged-in user
      * @return the unit matching the id
      */
     @RequestMapping(path="/units/{unitId}", method = RequestMethod.GET)
-    public Unit getUnit(@PathVariable int unitId, Principal principal){
+    public Unit getUnitById(@PathVariable int unitId, Principal principal){
         Unit unit = null;
         try {
             unit = unitService.getUnitById(unitId, userDao.getUserIdByUsername(principal.getName()));

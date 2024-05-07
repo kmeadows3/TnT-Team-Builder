@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import TeamsService from '../services/TeamsService.js';
+import TeamsService from '../../services/TeamsService.js';
 
 export default {
     data() {

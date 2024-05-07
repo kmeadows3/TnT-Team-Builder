@@ -15,7 +15,7 @@
 <script>
 import TeamCard from './TeamCard.vue';
 import NewTeamForm from './NewTeamForm.vue';
-import TeamsService from '../services/TeamsService';
+import TeamsService from '../../services/TeamsService';
 
 export default {
     data() {

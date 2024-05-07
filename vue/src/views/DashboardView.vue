@@ -6,9 +6,9 @@
 
 
 <script>
-import TeamList from '../components/TeamList.vue';
-import TeamDetail from '../components/TeamDetail.vue';
-import UnitDetail from '../components/UnitDetail.vue';
+import TeamList from '../components/TeamList/TeamList.vue';
+import TeamDetail from '../components/TeamDetail/TeamDetail.vue';
+import UnitDetail from '../components/UnitDetail/UnitDetail.vue';
 
 export default {
     data() {

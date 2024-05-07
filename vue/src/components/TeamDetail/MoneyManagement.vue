@@ -22,7 +22,7 @@
 
 <script>
 
-    import TeamsService from '../services/TeamsService';
+    import TeamsService from '../../services/TeamsService';
 
     export default {
         data() {

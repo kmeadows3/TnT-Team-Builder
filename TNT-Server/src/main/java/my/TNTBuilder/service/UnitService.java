@@ -10,6 +10,7 @@ import my.TNTBuilder.model.Unit;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ValidationException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,6 @@ public class UnitService {
         this.unitValidator = unitValidator;
         this.teamService = teamService;
     }
-
 
     public Unit createNewUnit(Unit clientUnit, int userId){
         Unit newUnit = null;

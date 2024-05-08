@@ -41,10 +41,4 @@ public interface TeamDao {
      * @param team the updated version of the team
      */
     void updateTeam(Team team);
-
-    /**
-     * Adds an item to the team-item join table
-     * @param itemId the id of the item to add
-     */
-    void purchaseItem(int itemId, int teamId);
 }

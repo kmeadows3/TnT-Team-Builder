@@ -8,21 +8,19 @@ public class Weapon extends Item{
     private int rangedRange;
     private int strength;
     private int reliability;
-    private int handsRequired;
-    private String Category;
+    private String category;
 
     //Constructor
 
 
-    public Weapon(int id, String type, int cost, String specialRules, List<ItemTrait> itemTraits, String rarity, boolean isRelic,
+    public Weapon(int id, int referenceId, String type, int cost, String specialRules, List<ItemTrait> itemTraits, String rarity, boolean isRelic,
                   int meleeRange, int rangedRange, int strength, int reliability, int handsRequired, String category) {
-        super(id, type, cost, specialRules, itemTraits, rarity, isRelic);
+        super(id, referenceId, type, cost, specialRules, itemTraits, rarity, isRelic, handsRequired);
         this.meleeRange = meleeRange;
         this.rangedRange = rangedRange;
         this.strength = strength;
         this.reliability = reliability;
-        this.handsRequired = handsRequired;
-        Category = category;
+        this.category = category;
     }
 
     public Weapon() {
@@ -46,12 +44,8 @@ public class Weapon extends Item{
         this.reliability = reliability;
     }
 
-    public void setHandsRequired(int handsRequired) {
-        this.handsRequired = handsRequired;
-    }
-
     public void setCategory(String category) {
-        Category = category;
+        category = category;
     }
 
     public int getMeleeRange() {
@@ -70,12 +64,8 @@ public class Weapon extends Item{
         return reliability;
     }
 
-    public int getHandsRequired() {
-        return handsRequired;
-    }
-
     public String getCategory() {
-        return Category;
+        return category;
     }
 
     @Override
@@ -85,11 +75,11 @@ public class Weapon extends Item{
         if (!super.equals(o)) return false;
         Weapon weapon = (Weapon) o;
         return meleeRange == weapon.meleeRange && rangedRange == weapon.rangedRange && strength == weapon.strength &&
-                reliability == weapon.reliability && handsRequired == weapon.handsRequired && Category.equals(weapon.Category);
+                reliability == weapon.reliability && category.equals(weapon.category);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), meleeRange, rangedRange, strength, reliability, handsRequired, Category);
+        return Objects.hash(super.hashCode(), meleeRange, rangedRange, strength, reliability, category);
     }
 }

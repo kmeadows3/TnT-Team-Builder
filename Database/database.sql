@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS team_item, unit_item, unit_skillset, unit_skill, unit, team, unit_reference, faction, tnt_user, skill_reference, skillset_reference, item_item_trait, item_trait_reference, item_reference;
+DROP TABLE IF EXISTS item, unit_skillset, unit_skill, unit, team, unit_reference, faction, tnt_user, skill_reference, skillset_reference, item_ref_item_trait, item_trait_reference, item_reference;
 DROP SEQUENCE IF EXISTS seq_user_id;
 
 CREATE SEQUENCE seq_user_id;
@@ -77,17 +77,18 @@ CREATE TABLE item_reference(
 	special_rules text NOT NULL,
 	rarity varchar(12) NOT NULL,
 	is_relic boolean NOT NULL,
+	item_category varchar(50) NOT NULL,
+	hands_required int DEFAULT 0, 
 	melee_defense_bonus int,
 	ranged_defense_bonus int,
 	is_shield boolean,
 	cost_2_wounds int,
 	cost_3_wounds int,
 	melee_range int,
-	ranged_ranged int,
+	ranged_range int,
 	weapon_strength int,
 	reliablity int,
-	hands_required int,
-	item_category varchar(50)
+	CONSTRAINT CHK_item_ref_valid_category CHECK( item_category IN ('Armor', 'Equipment', 'Melee Weapon', 'Ranged Weapon', 'Support Weapon', 'Grenade'))
 	);
 
 CREATE TABLE item_ref_item_trait(
@@ -130,7 +131,7 @@ CREATE TABLE item(
 	unit_id int,
 	team_id int,
 	CONSTRAINT CHK_item_unit_id_or_team_id_null CHECK ( unit_id IS NULL OR team_id IS NULL),
-	CONSTRAINT CHK_item_not_both_null CHECK (unit_id IS NULL AND team_id IS NULL),
+	CONSTRAINT CHK_item_not_both_null CHECK (NOT(unit_id IS NULL AND team_id IS NULL)),
 	CONSTRAINT FK_item_item_ref_id FOREIGN KEY(item_ref_id) REFERENCES item_reference(item_ref_id),
 	CONSTRAINT FK_item_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id),
 	CONSTRAINT FK_item_team_id FOREIGN KEY(team_id) REFERENCES team(team_id)
@@ -242,23 +243,23 @@ INSERT INTO item_trait_reference (name, effect) VALUES
 	('Laser', 'Roll 2d10 and pick highest result when making a Ranged attack. Malfunctions on 1s or any double result.');
 
 INSERT INTO item_reference (name, cost, special_rules, rarity, is_relic, melee_defense_bonus, ranged_defense_bonus, is_shield,
-							cost_2_wounds, cost_3_wounds, melee_range, ranged_ranged, weapon_strength, reliablity, 
+							cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliablity, 
 							hands_required, item_category) VALUES
 	('Ballistic Shield', 8, 'N/A', 'N/A', FALSE, 1, 1, TRUE, 10, 12, null, null, null, null, 1, 'Armor'),
-	('Combat Armor', 15, 'N/A', 'N/A', FALSE, 1, 2, FALSE, 20, 25, null, null, null, null, null, 'Armor'),
-	('Biohazard Suit', 5, 'Benefits against Gas attacks', 'N/A', FALSE, 1, 0, FALSE, 7, 9, null, null, null, null, null, 'Armor'),
+	('Combat Armor', 15, 'N/A', 'N/A', FALSE, 1, 2, FALSE, 20, 25, null, null, null, null, 0, 'Armor'),
+	('Biohazard Suit', 5, 'Benefits against Gas attacks', 'N/A', FALSE, 1, 0, FALSE, 7, 9, null, null, null, null, 0, 'Armor'),
 	('Combat Shield', 6, 'N/A', 'N/A', FALSE, 2, 0, TRUE, 8, 10, null, null, null, null, 1, 'Armor'),
-	('Power Armor', 50, '+2 to bearer Strength, counts as Biohazard suit.', 'Ultra Rare', TRUE, 4, 4, FALSE, 75, 100, null, null, null, null, null, 'Armor'),
+	('Power Armor', 50, '+2 to bearer Strength, counts as Biohazard suit.', 'Ultra Rare', TRUE, 4, 4, FALSE, 75, 100, null, null, null, null, 0, 'Armor'),
 	('Shock Shield', 10, 'Counts as having a normal Combat Shield. 1/Turn, make an attack as an improvised light weapon with strength STR + 2', 'Scarce', TRUE, 2, 0, TRUE, 15, 20, null, null, null, null, 1, 'Armor'),
-	('Berserker Brew', 3, 'When consumed before battle, gain +1 to move and melee but gain Frenzied', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment'),
-	('Climbing Gear', 7, 'When testing for climbing, roll 2d10 and take highest result', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment'),
-	('Net', 4, 'Thrown item with range = STR, ignores all combat modifiers but Concentrate. On hit, target cannot take actions until it spends 1 AP and successfully passes an attempt to free itself (STR/TN 10) during its activation. Psychic powers may be used while in the net. ', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment'),
+	('Berserker Brew', 3, 'When consumed before battle, gain +1 to move and melee but gain Frenzied', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 0, 'Equipment'),
+	('Climbing Gear', 7, 'When testing for climbing, roll 2d10 and take highest result', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 0, 'Equipment'),
+	('Net', 4, 'Thrown item with range = STR, ignores all combat modifiers but Concentrate. On hit, target cannot take actions until it spends 1 AP and successfully passes an attempt to free itself (STR/TN 10) during its activation. Psychic powers may be used while in the net. ', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 0, 'Equipment'),
 	('War Banner', 8, 'Model may not use 2-handed items, but gains Bold. One per warband.', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Equipment'),
-	('Auto-Injector', 15, 'When model is about to go out of action due to wound loss, roll a survival test (MET/TN 10). On pass, model comes back into play with 1 wound remaining. Starts prone but otherwise acts normally.', 'Rare', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment'),
-	('Grappler', 10, 'May ascend or descend vertical surfaces using normal movement rate. Only fail climbing tests on Fumbles.', 'Scarce', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment'),
-	('Pre-Fall Ammo', 10, 'Model must nominate a particular firearm. Firearm gains +1 bonus to Ranged when used. If Firearm fumbles during use, lose bonus.', 'Sporadic', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment'),
-	('Bayonet', 4, 'Doesn''t count against carry capacity; add unit Strength to weapon Strength during melee attack', 'N/A', FALSE, null, null, null, null, null, 0, null, 1, null, null, 'Melee Weapon'),
-	('Fist', 0, 'Free; add unit Strength to weapon Strength during melee attack', 'N/A', FALSE, null, null, null, null, null, 0, null, -1, null, null, 'Melee Weapon'),
+	('Auto-Injector', 15, 'When model is about to go out of action due to wound loss, roll a survival test (MET/TN 10). On pass, model comes back into play with 1 wound remaining. Starts prone but otherwise acts normally.', 'Rare', TRUE, null, null, null, null, null, null, null, null, null, 0, 'Equipment'),
+	('Grappler', 10, 'May ascend or descend vertical surfaces using normal movement rate. Only fail climbing tests on Fumbles.', 'Scarce', TRUE, null, null, null, null, null, null, null, null, null, 0, 'Equipment'),
+	('Pre-Fall Ammo', 10, 'Model must nominate a particular firearm. Firearm gains +1 bonus to Ranged when used. If Firearm fumbles during use, lose bonus.', 'Sporadic', TRUE, null, null, null, null, null, null, null, null, null, 0, 'Equipment'),
+	('Bayonet', 4, 'Doesn''t count against carry capacity; add unit Strength to weapon Strength during melee attack', 'N/A', FALSE, null, null, null, null, null, 0, null, 1, null, 0, 'Melee Weapon'),
+	('Fist', 0, 'Free; add unit Strength to weapon Strength during melee attack', 'N/A', FALSE, null, null, null, null, null, 0, null, -1, null, 0, 'Melee Weapon'),
 	('Spear', 5, 'Add unit Strength to weapon Strength during melee attack', 'N/A', FALSE, null, null, null, null, null, 1, 6, 1, null, 2, 'Melee Weapon'),
 	('Assault Rifle', 15, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 24, 7, 2, 2, 'Ranged Weapon'),
 	('Pistol', 12, 'N/A', 'N/A', FALSE, null, null, null, null, null, 0, 12, 6, 1, 1, 'Ranged Weapon'),

@@ -3,6 +3,9 @@ package my.TNTBuilder.dao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.model.FactionDTO;
 import my.TNTBuilder.model.Team;
+import my.TNTBuilder.service.UnitService;
+import my.TNTBuilder.validator.UnitValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +19,7 @@ import java.util.List;
 public class JdbcTeamDao implements TeamDao{
 
     private final JdbcTemplate jdbcTemplate;
+
     private final String SELECT_ALL_FROM_TEAM = "SELECT team_id, user_id, f.faction_id, team_name, money, " +
             "faction_name, bought_first_leader " +
             "FROM team JOIN faction f ON f.faction_id = team.faction_id ";
@@ -82,18 +86,6 @@ public class JdbcTeamDao implements TeamDao{
     }
 
     @Override
-    public void purchaseItem(int itemId, int teamId) {
-        String sql = "INSERT INTO team_item(item_id, team_id) VALUES (?, ?)";
-        try {
-
-        } catch (CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to server or database", e);
-        } catch (DataIntegrityViolationException e) {
-            throw new DaoException("Data integrity violation", e);
-        }
-    }
-
-    @Override
     public List<Team> getAllTeamsForUser(int userId) {
         List<Team> allTeams = new ArrayList<>();
         String sql = SELECT_ALL_FROM_TEAM + "WHERE user_id = ?";
@@ -149,8 +141,8 @@ public class JdbcTeamDao implements TeamDao{
         team.setName(row.getString("team_name"));
         team.setMoney(row.getInt("money"));
         team.setBoughtFirstLeader(row.getBoolean("bought_first_leader"));
-        JdbcUnitDao jdbcUnitDao = new JdbcUnitDao(jdbcTemplate);
-        team.setUnitList(jdbcUnitDao.getAllUnitsForTeam(team.getId()));
+        UnitDao unitDao = new JdbcUnitDao(jdbcTemplate);
+        team.setUnitList(unitDao.getAllUnitsForTeam(team.getId()));
         //TODO deal with inventory later (new method solely focused on inventory?)
         return team;
     }

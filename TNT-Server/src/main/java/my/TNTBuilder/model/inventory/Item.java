@@ -5,22 +5,28 @@ import java.util.Objects;
 
 public abstract class Item {
     private int id;
+    private int referenceId;
     private String name;
     private int cost;
     private String specialRules;
     private List<ItemTrait> itemTraits;
-    private String Rarity;
+    private String rarity;
     private boolean isRelic;
+    private int handsRequired;
+
 
     //Constructor
-    public Item(int id, String type, int cost, String specialRules, List<ItemTrait> itemTraits, String rarity, boolean isRelic) {
+    public Item(int id, int referenceId, String type, int cost, String specialRules, List<ItemTrait> itemTraits,
+                String rarity, boolean isRelic, int handsRequired) {
         this.id = id;
+        this.referenceId = id;
         this.name = type;
         this.cost = cost;
         this.specialRules = specialRules;
         this.itemTraits = itemTraits;
-        Rarity = rarity;
+        this.rarity = rarity;
         this.isRelic = isRelic;
+        this.handsRequired = handsRequired;
     }
 
     public Item() {
@@ -28,6 +34,22 @@ public abstract class Item {
 
     //Getters
 
+
+    public int getHandsRequired() {
+        return handsRequired;
+    }
+
+    public void setHandsRequired(int handsRequired) {
+        this.handsRequired = handsRequired;
+    }
+
+    public int getReferenceId() {
+        return referenceId;
+    }
+
+    public void setReferenceId(int referenceId) {
+        this.referenceId = referenceId;
+    }
 
     public int getId() {
         return id;
@@ -54,7 +76,7 @@ public abstract class Item {
     }
 
     public String getRarity() {
-        return Rarity;
+        return rarity;
     }
 
     public boolean isRelic() {
@@ -78,7 +100,7 @@ public abstract class Item {
     }
 
     public void setRarity(String rarity) {
-        Rarity = rarity;
+        this.rarity = rarity;
     }
 
     public void setRelic(boolean relic) {
@@ -92,11 +114,11 @@ public abstract class Item {
         Item that = (Item) o;
         return id == that.id && cost == that.cost && isRelic == that.isRelic && name.equals(that.name) &&
                 specialRules.equals(that.specialRules) && Objects.equals(itemTraits, that.itemTraits) &&
-                Rarity.equals(that.Rarity);
+                rarity.equals(that.rarity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, cost, specialRules, itemTraits, Rarity, isRelic);
+        return Objects.hash(id, name, cost, specialRules, itemTraits, rarity, isRelic);
     }
 }

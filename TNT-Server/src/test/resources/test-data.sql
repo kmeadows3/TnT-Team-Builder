@@ -356,4 +356,17 @@ VALUES (1, 3),
 INSERT INTO unit_skill (unit_id, skill_id)
 VALUES (3, 7);
 
+INSERT INTO item (unit_id, item_ref_id)
+VALUES (1, 1),
+       (1, 7),
+       (1, 17),
+       (2, 26);
+
+INSERT INTO item (team_id, item_ref_id)
+VALUES (1, 1),
+       (1, 7),
+       (1, 17),
+       (2, 26);
+
+
 COMMIT;

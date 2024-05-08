@@ -14,9 +14,9 @@ public class Armor extends Item{
 
     //Constructor
 
-    public Armor(int id, String type, int cost, String specialRules, List<ItemTrait> itemTraits, String rarity, boolean isRelic,
-                 int meleeDefenseBonus, int rangedDefenseBonus, boolean isShield, int cost2Wounds, int cost3Wounds) {
-        super(id, type, cost, specialRules, itemTraits, rarity, isRelic);
+    public Armor(int id, int referenceId, String type, int cost, String specialRules, List<ItemTrait> itemTraits, String rarity, boolean isRelic,
+                 int meleeDefenseBonus, int rangedDefenseBonus, boolean isShield, int cost2Wounds, int cost3Wounds, int handsRequired) {
+        super(id, referenceId, type, cost, specialRules, itemTraits, rarity, isRelic, handsRequired);
         this.meleeDefenseBonus = meleeDefenseBonus;
         this.rangedDefenseBonus = rangedDefenseBonus;
         this.isShield = isShield;

@@ -82,6 +82,18 @@ public class JdbcTeamDao implements TeamDao{
     }
 
     @Override
+    public void purchaseItem(int itemId, int teamId) {
+        String sql = "INSERT INTO team_item(item_id, team_id) VALUES (?, ?)";
+        try {
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+    }
+
+    @Override
     public List<Team> getAllTeamsForUser(int userId) {
         List<Team> allTeams = new ArrayList<>();
         String sql = SELECT_ALL_FROM_TEAM + "WHERE user_id = ?";

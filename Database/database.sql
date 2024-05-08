@@ -71,10 +71,10 @@ CREATE TABLE item_trait_reference(
 );
 
 CREATE TABLE item_reference(
-	item_id serial PRIMARY KEY NOT NULL,
+	item_ref_id serial PRIMARY KEY NOT NULL,
 	name varchar(50) NOT NULL,
 	cost int NOT NULL,
-	specialRules text NOT NULL,
+	special_rules text NOT NULL,
 	rarity varchar(12) NOT NULL,
 	is_relic boolean NOT NULL,
 	melee_defense_bonus int,
@@ -86,23 +86,16 @@ CREATE TABLE item_reference(
 	ranged_ranged int,
 	weapon_strength int,
 	reliablity int,
-	handsRequired int,
-	itemCategory varchar(50)
+	hands_required int,
+	item_category varchar(50)
 	);
 
-CREATE TABLE item_item_trait(
+CREATE TABLE item_ref_item_trait(
 	item_trait_id int NOT NULL,
-	item_id int NOT NULL,
-	CONSTRAINT FK_item_item_trait_join_item_trait_id FOREIGN KEY(item_trait_id) REFERENCES item_trait_reference(item_trait_id),
-	CONSTRAINT FK_item_item_trait_join_item_id FOREIGN KEY(item_id) REFERENCES item_reference(item_id)
-);
-
-
-CREATE TABLE team_item(
-	team_id int NOT NULL,
-	item_id int NOT NULL,
-	CONSTRAINT FK_team_item_join_item_id FOREIGN KEY(item_id) REFERENCES item_reference(item_id),
-	CONSTRAINT FK_team_item_join_team_id FOREIGN KEY(team_id) REFERENCES team(team_id)
+	item_ref_id int NOT NULL,
+	PRIMARY KEY (item_trait_id, item_ref_id),
+	CONSTRAINT FK_item_ref_item_trait_join_item_trait_id FOREIGN KEY(item_trait_id) REFERENCES item_trait_reference(item_trait_id),
+	CONSTRAINT FK_item_ref_item_trait_join_item_ref_id FOREIGN KEY(item_ref_id) REFERENCES item_reference(item_ref_id)
 );
 
 CREATE TABLE unit(
@@ -131,16 +124,22 @@ CREATE TABLE unit(
 	CONSTRAINT FK_unit_team FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
 
-CREATE TABLE unit_item(
-	unit_id int NOT NULL,
-	item_id int NOT NULL,
-	CONSTRAINT FK_unit_item_join_item_id FOREIGN KEY(item_id) REFERENCES item_reference(item_id),
-	CONSTRAINT FK_unit_item_join_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id)
+CREATE TABLE item(
+	item_id serial PRIMARY KEY NOT NULL,
+	item_ref_id int NOT NULL,
+	unit_id int,
+	team_id int,
+	CONSTRAINT CHK_item_unit_id_or_team_id_null CHECK ( unit_id IS NULL OR team_id IS NULL),
+	CONSTRAINT CHK_item_not_both_null CHECK (unit_id IS NULL AND team_id IS NULL),
+	CONSTRAINT FK_item_item_ref_id FOREIGN KEY(item_ref_id) REFERENCES item_reference(item_ref_id),
+	CONSTRAINT FK_item_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id),
+	CONSTRAINT FK_item_team_id FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
 
 CREATE TABLE unit_skillset(
 	unit_id int NOT NULL,
 	skillset_id int NOT NULL,
+	PRIMARY KEY (unit_id, skillset_id),
 	CONSTRAINT FK_unit_skillset_join_skillset_id FOREIGN KEY(skillset_id) REFERENCES skillset_reference(skillset_id),
 	CONSTRAINT FK_unit_skillset_join_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id)
 );
@@ -148,6 +147,7 @@ CREATE TABLE unit_skillset(
 CREATE TABLE unit_skill(
 	unit_id int NOT NULL,
 	skill_id int NOT NULL,
+	PRIMARY KEY (unit_id, skill_id),
 	CONSTRAINT FK_unit_skill_join_skill_id FOREIGN KEY(skill_id) REFERENCES skill_reference(skill_id),
 	CONSTRAINT FK_unit_skill_join_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id)
 );
@@ -241,9 +241,9 @@ INSERT INTO item_trait_reference (name, effect) VALUES
 	('Anti-Armor', 'When used against something with Armored Plating, target may not roll the extra dice.'),
 	('Laser', 'Roll 2d10 and pick highest result when making a Ranged attack. Malfunctions on 1s or any double result.');
 
-INSERT INTO item_reference (name, cost, specialRules, rarity, is_relic, melee_defense_bonus, ranged_defense_bonus, is_shield,
+INSERT INTO item_reference (name, cost, special_rules, rarity, is_relic, melee_defense_bonus, ranged_defense_bonus, is_shield,
 							cost_2_wounds, cost_3_wounds, melee_range, ranged_ranged, weapon_strength, reliablity, 
-							handsRequired, itemCategory) VALUES
+							hands_required, item_category) VALUES
 	('Ballistic Shield', 8, 'N/A', 'N/A', FALSE, 1, 1, TRUE, 10, 12, null, null, null, null, 1, 'Armor'),
 	('Combat Armor', 15, 'N/A', 'N/A', FALSE, 1, 2, FALSE, 20, 25, null, null, null, null, null, 'Armor'),
 	('Biohazard Suit', 5, 'Benefits against Gas attacks', 'N/A', FALSE, 1, 0, FALSE, 7, 9, null, null, null, null, null, 'Armor'),
@@ -274,7 +274,7 @@ INSERT INTO item_reference (name, cost, specialRules, rarity, is_relic, melee_de
 	('Gatling Laser', 55, 'N/A', 'Ultra Rare', TRUE, null, null, null, null, null, null, 24, 6, 3, 2, 'Support Weapon'),
 	('Plasma Grenade', 17, 'Deviate Small Blast; uses unit strength for range, maximum 6"', 'Rare', TRUE, null, null, null, null, null, null, 6, 8, null, 1, 'Grenade');
 
-INSERT INTO item_item_trait (item_id, item_trait_id) VALUES
+INSERT INTO item_ref_item_trait (item_ref_id, item_trait_id) VALUES
 	(1, 11),
 	(2, 12),
 	(3, 13),

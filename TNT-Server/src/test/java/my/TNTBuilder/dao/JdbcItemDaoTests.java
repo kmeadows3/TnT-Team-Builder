@@ -12,19 +12,6 @@ import java.util.List;
 
 public class JdbcItemDaoTests extends BaseDaoTests{
 
-    private final Armor ARMOR = new Armor(1, 1, "Armor 1", 1, "N/A",
-            List.of(new ItemTrait(1, "Trait 1", "Trait 1 Desc")), "N/A", false, 1,
-            1, true, 2, 3, 1);
-    private final Weapon WEAPON = new Weapon(2, 5, "Weapon 1", 5, "N/A",
-            new ArrayList<>(), "N/A", false, 0, 5, 5, 5,
-            1, "Ranged Weapon");
-    private final Equipment EQUIPMENT = new Equipment(3, 3, "Equipment 1", 3, "N/A",
-            new ArrayList<>(), "N/A", false, 0);
-
-    private final Weapon RELIC_WEAPON = new Weapon(4, 6, "Relic Weapon", 6,
-            "Relic Weapon Desc", new ArrayList<>(), "Rare", true, 6, 0,
-            6, 6, 2, "Melee Weapon");
-
     private JdbcItemDao sut;
 
     @Before
@@ -58,21 +45,17 @@ public class JdbcItemDaoTests extends BaseDaoTests{
     @Test
     public void getAllItemsForTeam_returns_full_list_multiple_items(){
         List<Item> testList = sut.getAllItemsForTeam(1);
-        ARMOR.setId(5);
-        WEAPON.setId(6);
-        EQUIPMENT.setId(7);
         Assert.assertEquals(3, testList.size());
-        Assert.assertTrue(testList.contains(ARMOR));
-        Assert.assertTrue(testList.contains(WEAPON));
-        Assert.assertTrue(testList.contains(EQUIPMENT));
+        Assert.assertTrue(testList.contains(TEAM_ARMOR));
+        Assert.assertTrue(testList.contains(TEAM_WEAPON));
+        Assert.assertTrue(testList.contains(TEAM_EQUIPMENT));
     }
 
     @Test
     public void getAllItemsForTeam_returns_full_list_single_item() {
-        RELIC_WEAPON.setId(8);
         List<Item> testList = sut.getAllItemsForTeam(2);
         Assert.assertEquals(1, testList.size());
-        Assert.assertTrue(testList.contains(RELIC_WEAPON));
+        Assert.assertTrue(testList.contains(TEAM_RELIC_WEAPON));
     }
 
     @Test
@@ -88,6 +71,7 @@ public class JdbcItemDaoTests extends BaseDaoTests{
         List<Item> testList = sut.getAllItemsForTeam(3);
         Assert.assertEquals(1, testList.size());
         Assert.assertTrue(testList.contains(ARMOR));
+        ARMOR.setId(1);
     }
 
     @Test (expected = DaoException.class)

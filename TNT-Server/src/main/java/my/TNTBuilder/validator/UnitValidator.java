@@ -6,6 +6,7 @@ import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Objects;
 
 @Component
@@ -137,7 +138,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
                     && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
-                    && Objects.equals(unit.getInventory(), updatedUnit.getInventory());
+                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
+                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
 
         }
         return false;
@@ -163,7 +165,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
                     && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
-                    && Objects.equals(unit.getInventory(), updatedUnit.getInventory());
+                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
+                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
 
         }
         return false;
@@ -190,7 +193,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
                     && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
-                    && Objects.equals(unit.getInventory(), updatedUnit.getInventory());
+                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
+                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
         return false;
     }
@@ -214,7 +218,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
                     && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
-                    && Objects.equals(unit.getInventory(), updatedUnit.getInventory());
+                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
+                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
         return false;
     }
@@ -240,7 +245,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
                     && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
-                    && Objects.equals(unit.getInventory(), updatedUnit.getInventory());
+                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
+                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
         return false;
     }
@@ -266,7 +272,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
                     && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
-                    && Objects.equals(unit.getInventory(), updatedUnit.getInventory());
+                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
+                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
         return false;
     }
@@ -292,7 +299,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
                     && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
-                    && Objects.equals(unit.getInventory(), updatedUnit.getInventory());
+                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
+                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
         return false;
     }
@@ -318,7 +326,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
                     && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
-                    && Objects.equals(unit.getInventory(), updatedUnit.getInventory());
+                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
+                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
         return false;
     }
@@ -344,7 +353,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
                     && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
-                    && Objects.equals(unit.getInventory(), updatedUnit.getInventory());
+                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
+                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
         return false;
     }
@@ -370,7 +380,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
                     && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
-                    && Objects.equals(unit.getInventory(), updatedUnit.getInventory());
+                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
+                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
         return false;
     }
@@ -400,7 +411,8 @@ public class UnitValidator {
         && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
         && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
         && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
-        && Objects.equals(unit.getInventory(), updatedUnit.getInventory());
+        && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
+        && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
      */
 
 

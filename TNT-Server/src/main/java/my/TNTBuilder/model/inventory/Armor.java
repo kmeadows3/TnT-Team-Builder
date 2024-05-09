@@ -76,13 +76,12 @@ public class Armor extends Item{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Armor armor = (Armor) o;
-        return meleeDefenseBonus == armor.meleeDefenseBonus && rangedDefenseBonus == armor.rangedDefenseBonus &&
-                isShield == armor.isShield && cost2Wounds == armor.cost2Wounds && cost3Wounds == armor.cost3Wounds;
+        return meleeDefenseBonus == armor.meleeDefenseBonus && rangedDefenseBonus == armor.rangedDefenseBonus
+                && isShield == armor.isShield && cost2Wounds == armor.cost2Wounds && cost3Wounds == armor.cost3Wounds;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(meleeDefenseBonus, rangedDefenseBonus, isShield, cost2Wounds, cost3Wounds);
+        return Objects.hash(super.hashCode(), meleeDefenseBonus, rangedDefenseBonus, isShield, cost2Wounds, cost3Wounds);
     }
-
 }

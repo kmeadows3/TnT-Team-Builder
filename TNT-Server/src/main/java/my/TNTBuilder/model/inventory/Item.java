@@ -19,7 +19,7 @@ public abstract class Item {
     public Item(int id, int referenceId, String type, int cost, String specialRules, List<ItemTrait> itemTraits,
                 String rarity, boolean isRelic, int handsRequired) {
         this.id = id;
-        this.referenceId = id;
+        this.referenceId = referenceId;
         this.name = type;
         this.cost = cost;
         this.specialRules = specialRules;
@@ -111,14 +111,15 @@ public abstract class Item {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Item that = (Item) o;
-        return id == that.id && cost == that.cost && isRelic == that.isRelic && name.equals(that.name) &&
-                specialRules.equals(that.specialRules) && Objects.equals(itemTraits, that.itemTraits) &&
-                rarity.equals(that.rarity);
+        Item item = (Item) o;
+        return id == item.id && referenceId == item.referenceId && cost == item.cost && isRelic == item.isRelic
+                && handsRequired == item.handsRequired && Objects.equals(name, item.name)
+                && Objects.equals(specialRules, item.specialRules) && Objects.equals(itemTraits, item.itemTraits)
+                && Objects.equals(rarity, item.rarity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, cost, specialRules, itemTraits, rarity, isRelic);
+        return Objects.hash(id, referenceId, name, cost, specialRules, itemTraits, rarity, isRelic, handsRequired);
     }
 }

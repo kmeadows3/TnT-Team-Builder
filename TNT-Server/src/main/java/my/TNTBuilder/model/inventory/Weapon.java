@@ -74,8 +74,7 @@ public class Weapon extends Item{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Weapon weapon = (Weapon) o;
-        return meleeRange == weapon.meleeRange && rangedRange == weapon.rangedRange && strength == weapon.strength &&
-                reliability == weapon.reliability && category.equals(weapon.category);
+        return meleeRange == weapon.meleeRange && rangedRange == weapon.rangedRange && strength == weapon.strength && reliability == weapon.reliability && Objects.equals(category, weapon.category);
     }
 
     @Override

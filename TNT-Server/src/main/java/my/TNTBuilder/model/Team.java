@@ -5,6 +5,7 @@ import my.TNTBuilder.model.inventory.Item;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -156,7 +157,9 @@ public class Team {
         Team team = (Team) o;
         return id == team.id && userId == team.userId && factionId == team.factionId && money == team.money
                 && Objects.equals(faction, team.faction) && Objects.equals(name, team.name)
-                && Objects.equals(unitList, team.unitList) && Objects.equals(inventory, team.inventory);
+                && Objects.equals(unitList, team.unitList)
+                && new HashSet<>(inventory).containsAll(team.inventory)
+                && new HashSet<>(team.inventory).containsAll(inventory);
     }
 
     @Override

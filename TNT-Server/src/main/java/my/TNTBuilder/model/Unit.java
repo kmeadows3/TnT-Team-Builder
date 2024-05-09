@@ -332,7 +332,7 @@ public class Unit {
                 Objects.equals(rank, unit.rank) && Objects.equals(species, unit.species) &&
                 Objects.equals(specialRules, unit.specialRules) &&
                 Objects.equals(availableSkillsets, unit.availableSkillsets) && Objects.equals(skills, unit.skills) &&
-                Objects.equals(inventory, unit.inventory);
+                new HashSet<>(inventory).containsAll(unit.inventory) && new HashSet<>(unit.inventory).containsAll(inventory);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class TeamValidatorTests extends BaseDaoTests {
     public void setup(){
         sut = new TeamValidator();
         teamToUpdate  = new Team(1, 1, "Team 1", "Caravanners", 1, 500,
-                Arrays.asList(UNIT1, UNIT3), new ArrayList<>());
+                Arrays.asList(UNIT1, UNIT3), Arrays.asList(TEAM_ARMOR, TEAM_WEAPON, TEAM_EQUIPMENT));
     }
 
     @Test

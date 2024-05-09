@@ -10,4 +10,5 @@ public class Equipment extends Item{
     public Equipment() {
     }
 
+
 }

@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class JdbcUnitDaoTests extends BaseDaoTests{
@@ -112,6 +113,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Skillset skillset2 = new Skillset(4, "Quickness", "Skill");
         updatedUnit.getAvailableSkillsets().add(skillset1);
         updatedUnit.getAvailableSkillsets().add(skillset2);
+        updatedUnit.setInventory(Arrays.asList(ARMOR, WEAPON, EQUIPMENT));
 
         sut.updateUnit(updatedUnit);
         Unit testUnit = sut.getUnitById(updatedUnit.getId(), 1);

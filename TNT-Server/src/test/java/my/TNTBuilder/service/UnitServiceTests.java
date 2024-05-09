@@ -273,6 +273,7 @@ public class UnitServiceTests extends BaseDaoTests {
     @Test
     public void getUnitById_returns_correct_unit(){
         Unit testUnit = sut.getUnitById(1,1);
+        Unit expected = UNIT1;
         Assert.assertNotNull(testUnit);
         Assert.assertEquals(UNIT1, testUnit);
     }

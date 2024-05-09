@@ -3,6 +3,7 @@ package my.TNTBuilder.validator;
 import my.TNTBuilder.model.Team;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Objects;
 
 @Component
@@ -16,7 +17,8 @@ public class TeamValidator {
                     && updatedTeam.isBoughtFirstLeader() == team.isBoughtFirstLeader()
                     && Objects.equals(updatedTeam.getFaction(), team.getFaction())
                     && Objects.equals(updatedTeam.getUnitList(), team.getUnitList())
-                    && Objects.equals(updatedTeam.getInventory(), team.getInventory());
+                    && new HashSet<>(updatedTeam.getInventory()).containsAll(team.getInventory())
+                    && new HashSet<>(team.getInventory()).containsAll(updatedTeam.getInventory());
         }
         return false;
     }
@@ -29,7 +31,8 @@ public class TeamValidator {
                     && Objects.equals(updatedTeam.getFaction(), team.getFaction())
                     && Objects.equals(updatedTeam.getName(), team.getName())
                     && Objects.equals(updatedTeam.getUnitList(), team.getUnitList())
-                    && Objects.equals(updatedTeam.getInventory(), team.getInventory());
+                    && new HashSet<>(updatedTeam.getInventory()).containsAll(team.getInventory())
+                    && new HashSet<>(team.getInventory()).containsAll(updatedTeam.getInventory());
         }
         return false;
     }
@@ -42,7 +45,8 @@ public class TeamValidator {
                     && Objects.equals(updatedTeam.getFaction(), team.getFaction())
                     && Objects.equals(updatedTeam.getName(), team.getName())
                     && Objects.equals(updatedTeam.getUnitList(), team.getUnitList())
-                    && Objects.equals(updatedTeam.getInventory(), team.getInventory());
+                    && new HashSet<>(updatedTeam.getInventory()).containsAll(team.getInventory())
+                    && new HashSet<>(team.getInventory()).containsAll(updatedTeam.getInventory());
         }
         return false;
     }
@@ -56,7 +60,8 @@ public class TeamValidator {
                     && Objects.equals(updatedTeam.getFaction(), team.getFaction())
                     && Objects.equals(updatedTeam.getName(), team.getName())
                     && Objects.equals(updatedTeam.getUnitList(), team.getUnitList())
-                    && Objects.equals(updatedTeam.getInventory(), team.getInventory());
+                    && new HashSet<>(updatedTeam.getInventory()).containsAll(team.getInventory())
+                    && new HashSet<>(team.getInventory()).containsAll(updatedTeam.getInventory());
      */
 
 

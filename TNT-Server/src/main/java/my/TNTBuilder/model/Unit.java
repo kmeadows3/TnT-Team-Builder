@@ -1,5 +1,6 @@
 package my.TNTBuilder.model;
 
+import my.TNTBuilder.model.inventory.Armor;
 import my.TNTBuilder.model.inventory.Item;
 
 import javax.validation.constraints.Min;
@@ -74,20 +75,22 @@ public class Unit {
     public int getBSCost() {
         int bsCost = baseCost;
         bsCost += (totalAdvances + tenPointAdvances) * 5;
-        //TODO calculate this after inventory is implemented
+
+        bsCost = inventory.stream().reduce( bsCost, (subtotal, item) -> {
+            if ("Armor".equals(item.getCategory()) && wounds > 1) {
+                int cost = wounds == 2 ? ((Armor) item).getCost2Wounds() :  ((Armor) item).getCost3Wounds();
+                return subtotal + cost;
+            }
+            return subtotal + item.getCost();
+        }, Integer::sum);
+
         return bsCost;
     }
 
     public int getUnitUpkeep() {
         int upkeep = 0;
 
-        List<String> skillNames = new ArrayList<>();
-        for (Skill skill : skills) {
-            skillNames.add(skill.getName());
-        }
-        boolean isScavenger = skillNames.contains("Scavenger");
-
-        if (isScavenger) {
+        if (skills.stream().anyMatch(item -> "Scavenger".equals(item.getName()))) {
             upkeep += 0;
         } else if (rank.equals("Leader")) {
             upkeep += 3;
@@ -96,7 +99,10 @@ public class Unit {
         } else if (rank.equals("Rank and File")) {
             upkeep += 1;
         }
-        // TODO: Deal with relics in inventory
+
+        upkeep = inventory.stream()
+                .reduce( upkeep, (subtotal, item) -> item.isRelic() ? subtotal + 1 : subtotal, Integer::sum);
+
         return upkeep;
     }
 

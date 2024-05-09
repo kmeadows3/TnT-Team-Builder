@@ -48,12 +48,27 @@ public class Team {
         for (Unit unit : unitList){
             bsCost += unit.getBSCost();
         }
-        //TODO: add inventory BS cost later
+
+        bsCost = inventory.stream()
+                .reduce(bsCost, (runningCount, item) ->
+                        item.isRelic() ? runningCount + item.getCost() : runningCount
+                        , Integer::sum);
         return bsCost;
     }
 
-    public int relicCount(){
-        return 0; // TODO: ADD METHOD
+    public int getRelicCount(){
+
+        int count = unitList.stream().reduce(0, (runningCount, unit) -> {
+            int unitRelicCount = unit.getInventory().stream()
+                    .reduce(0, (unitCount, item) -> item.isRelic() ? unitCount + 1 : unitCount, Integer::sum);
+            return runningCount + unitRelicCount;
+        }, Integer::sum);
+
+        count = inventory.stream()
+                .reduce( count, (subtotal, item) -> item.isRelic() ? subtotal + 1 : subtotal, Integer::sum);
+
+        return count;
+
     }
 
     public int getUpkeep(){
@@ -61,7 +76,10 @@ public class Team {
         for (Unit unit : unitList){
             upkeep += unit.getUnitUpkeep();
         }
-        // TODO: Deal with relics in inventory
+
+        upkeep = inventory.stream()
+                .reduce( upkeep, (subtotal, item) -> item.isRelic() ? subtotal + 1 : subtotal, Integer::sum);
+
         return upkeep;
     }
 

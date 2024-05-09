@@ -129,7 +129,6 @@ public class JdbcItemDao implements ItemDao {
         weapon.setRangedRange(row.getInt("ranged_range"));
         weapon.setStrength(row.getInt("weapon_strength"));
         weapon.setReliability(row.getInt("reliability"));
-        weapon.setCategory(row.getString("item_category"));
         return weapon;
     }
 
@@ -144,6 +143,7 @@ public class JdbcItemDao implements ItemDao {
         item.setRarity(row.getString("rarity"));
         item.setRelic(row.getBoolean("is_relic"));
         item.setHandsRequired(row.getInt("hands_required"));
+        item.setCategory(row.getString("item_category"));
 
         return item;
     }

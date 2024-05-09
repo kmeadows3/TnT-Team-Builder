@@ -196,7 +196,7 @@ public class UnitServiceTests extends BaseDaoTests {
         List<Unit> testList = sut.getUnitsForFaction(1, team);
 
         Assert.assertNotNull(testList);
-        Assert.assertEquals(3, testList.size());
+        Assert.assertEquals(4, testList.size());
         for (Unit unit : testList){
             Assert.assertFalse("Specialist".equalsIgnoreCase(unit.getRank()));
         }

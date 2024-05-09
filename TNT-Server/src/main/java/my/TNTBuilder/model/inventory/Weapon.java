@@ -8,19 +8,17 @@ public class Weapon extends Item{
     private int rangedRange;
     private int strength;
     private int reliability;
-    private String category;
 
     //Constructor
 
 
     public Weapon(int id, int referenceId, String type, int cost, String specialRules, List<ItemTrait> itemTraits, String rarity, boolean isRelic,
                   int meleeRange, int rangedRange, int strength, int reliability, int handsRequired, String category) {
-        super(id, referenceId, type, cost, specialRules, itemTraits, rarity, isRelic, handsRequired);
+        super(id, referenceId, type, cost, specialRules, itemTraits, rarity, isRelic, handsRequired, category);
         this.meleeRange = meleeRange;
         this.rangedRange = rangedRange;
         this.strength = strength;
         this.reliability = reliability;
-        this.category = category;
     }
 
     public Weapon() {
@@ -44,10 +42,6 @@ public class Weapon extends Item{
         this.reliability = reliability;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public int getMeleeRange() {
         return meleeRange;
     }
@@ -64,9 +58,6 @@ public class Weapon extends Item{
         return reliability;
     }
 
-    public String getCategory() {
-        return category;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -74,11 +65,12 @@ public class Weapon extends Item{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Weapon weapon = (Weapon) o;
-        return meleeRange == weapon.meleeRange && rangedRange == weapon.rangedRange && strength == weapon.strength && reliability == weapon.reliability && Objects.equals(category, weapon.category);
+        return meleeRange == weapon.meleeRange && rangedRange == weapon.rangedRange && strength == weapon.strength
+                && reliability == weapon.reliability;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), meleeRange, rangedRange, strength, reliability, category);
+        return Objects.hash(super.hashCode(), meleeRange, rangedRange, strength, reliability);
     }
 }

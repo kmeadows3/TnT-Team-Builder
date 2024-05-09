@@ -13,11 +13,12 @@ public abstract class Item {
     private String rarity;
     private boolean isRelic;
     private int handsRequired;
+    private String category;
 
 
     //Constructor
     public Item(int id, int referenceId, String type, int cost, String specialRules, List<ItemTrait> itemTraits,
-                String rarity, boolean isRelic, int handsRequired) {
+                String rarity, boolean isRelic, int handsRequired, String category) {
         this.id = id;
         this.referenceId = referenceId;
         this.name = type;
@@ -27,6 +28,7 @@ public abstract class Item {
         this.rarity = rarity;
         this.isRelic = isRelic;
         this.handsRequired = handsRequired;
+        this.category = category;
     }
 
     public Item() {
@@ -34,6 +36,14 @@ public abstract class Item {
 
     //Getters
 
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public int getHandsRequired() {
         return handsRequired;
@@ -115,11 +125,11 @@ public abstract class Item {
         return id == item.id && referenceId == item.referenceId && cost == item.cost && isRelic == item.isRelic
                 && handsRequired == item.handsRequired && Objects.equals(name, item.name)
                 && Objects.equals(specialRules, item.specialRules) && Objects.equals(itemTraits, item.itemTraits)
-                && Objects.equals(rarity, item.rarity);
+                && Objects.equals(rarity, item.rarity) && Objects.equals(category, item.category);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, referenceId, name, cost, specialRules, itemTraits, rarity, isRelic, handsRequired);
+        return Objects.hash(id, referenceId, name, cost, specialRules, itemTraits, rarity, isRelic, handsRequired, category);
     }
 }

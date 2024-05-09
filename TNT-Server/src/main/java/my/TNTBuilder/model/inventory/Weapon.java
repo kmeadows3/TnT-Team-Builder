@@ -45,7 +45,7 @@ public class Weapon extends Item{
     }
 
     public void setCategory(String category) {
-        category = category;
+        this.category = category;
     }
 
     public int getMeleeRange() {

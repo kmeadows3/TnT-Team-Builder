@@ -58,6 +58,8 @@ public class JdbcUnitDao implements UnitDao{
             }
             unit.setSkills(getUnitSkills(id));
             unit.setAvailableSkillsets(getAvailableSkillsets(id));
+            ItemDao itemDao = new JdbcItemDao(jdbcTemplate);
+            unit.setInventory(itemDao.getAllItemsForUnit(unit.getId()));
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to database", e);
         }
@@ -75,6 +77,8 @@ public class JdbcUnitDao implements UnitDao{
                 Unit unit = mapRowToUnit(results);
                 unit.setSkills(getUnitSkills(unit.getId()));
                 unit.setAvailableSkillsets(getAvailableSkillsets(unit.getId()));
+                ItemDao itemDao = new JdbcItemDao(jdbcTemplate);
+                unit.setInventory(itemDao.getAllItemsForUnit(unit.getId()));
                 unitList.add(unit);
             }
         } catch (CannotGetJdbcConnectionException e) {

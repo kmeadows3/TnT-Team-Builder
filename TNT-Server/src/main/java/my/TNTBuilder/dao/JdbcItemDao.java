@@ -16,11 +16,11 @@ public class JdbcItemDao implements ItemDao {
 
     private final String SELECT_ALL_FROM_ITEM = "SELECT item_id, i.item_ref_id, name, cost, special_rules, rarity, " +
             "is_relic, item_category, hands_required, melee_defense_bonus, ranged_defense_bonus, is_shield, " +
-            "cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliablity " +
+            "cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability " +
             "FROM item i " +
             "JOIN item_reference ir ON ir.item_ref_id = i.item_ref_id ";
 
-    private final String SELECT_ALL_FROM_ITEM_TRAIT = "SELECT item_trait_id, name, effect " +
+    private final String SELECT_ALL_FROM_ITEM_TRAIT = "SELECT itr.item_trait_id, name, effect " +
             "FROM item_trait_reference itr " +
             "JOIN item_ref_item_trait irit ON irit.item_trait_id = itr.item_trait_id ";
 
@@ -37,22 +37,6 @@ public class JdbcItemDao implements ItemDao {
     PUBLIC METHODS
      */
 
-    //TODO TEST THESE
-    @Override
-    public void purchaseItemForTeam(int itemRefId, int teamId) {
-
-        String sql = "INSERT INTO item(item_ref_id, team_id) VALUES (?, ?)";
-
-        try {
-            jdbcTemplate.update(sql, itemRefId, teamId );
-        } catch (CannotGetJdbcConnectionException e) {
-            throw new DaoException("Unable to connect to server or database", e);
-        } catch (DataIntegrityViolationException e) {
-            throw new DaoException("Data integrity violation", e);
-        }
-
-    }
-
     @Override
     public List<Item> getAllItemsForUnit(int unitId) {
         String sql = SELECT_ALL_FROM_ITEM + "WHERE unit_id = ? ORDER BY item_category, name";
@@ -65,6 +49,23 @@ public class JdbcItemDao implements ItemDao {
         String sql = SELECT_ALL_FROM_ITEM + "WHERE team_id = ? ORDER BY item_category, name";
 
         return getItemListFromRowSet(teamId,sql);
+    }
+
+    @Override
+    public int purchaseItemForTeam(int itemRefId, int teamId) {
+
+        String sql = "INSERT INTO item(item_ref_id, team_id) VALUES (?, ?) RETURNING item_id";
+        int itemId;
+
+        try {
+            itemId = jdbcTemplate.queryForObject(sql, Integer.class, itemRefId, teamId);
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+
+        return itemId;
     }
 
 
@@ -138,7 +139,7 @@ public class JdbcItemDao implements ItemDao {
         item.setReferenceId(row.getInt("item_ref_id"));
         item.setName(row.getString("name"));
         item.setCost(row.getInt("cost"));
-        item.setSpecialRules(row.getString("getSpecialRules"));
+        item.setSpecialRules(row.getString("special_rules"));
         item.setItemTraits(getItemTraitsForItem(item.getReferenceId()));
         item.setRarity(row.getString("rarity"));
         item.setRelic(row.getBoolean("is_relic"));

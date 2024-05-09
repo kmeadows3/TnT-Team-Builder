@@ -87,7 +87,7 @@ CREATE TABLE item_reference(
 	melee_range int,
 	ranged_range int,
 	weapon_strength int,
-	reliablity int,
+	reliability int,
 	CONSTRAINT CHK_item_ref_valid_category CHECK( item_category IN ('Armor', 'Equipment', 'Melee Weapon', 'Ranged Weapon', 'Support Weapon', 'Grenade'))
 	);
 
@@ -243,7 +243,7 @@ INSERT INTO item_trait_reference (name, effect) VALUES
 	('Laser', 'Roll 2d10 and pick highest result when making a Ranged attack. Malfunctions on 1s or any double result.');
 
 INSERT INTO item_reference (name, cost, special_rules, rarity, is_relic, melee_defense_bonus, ranged_defense_bonus, is_shield,
-							cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliablity, 
+							cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability, 
 							hands_required, item_category) VALUES
 	('Ballistic Shield', 8, 'N/A', 'N/A', FALSE, 1, 1, TRUE, 10, 12, null, null, null, null, 1, 'Armor'),
 	('Combat Armor', 15, 'N/A', 'N/A', FALSE, 1, 2, FALSE, 20, 25, null, null, null, null, 0, 'Armor'),

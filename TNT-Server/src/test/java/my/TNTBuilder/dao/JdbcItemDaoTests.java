@@ -17,6 +17,7 @@ public class JdbcItemDaoTests extends BaseDaoTests{
     public void setSut(){
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         sut = new JdbcItemDao(jdbcTemplate);
+        ARMOR.setId(1);
     }
 
     @Test
@@ -85,5 +86,61 @@ public class JdbcItemDaoTests extends BaseDaoTests{
         Assert.fail();
     }
 
+
+    @Test
+    public void purchaseItemForUnit_adds_item_to_Unit() {
+        int newId = sut.purchaseItemForUnit(1, 3);
+        ARMOR.setId(newId);
+        List<Item> testList = sut.getAllItemsForUnit(3);
+        Assert.assertEquals(1, testList.size());
+        Assert.assertTrue(testList.contains(ARMOR));
+    }
+
+    @Test (expected = DaoException.class)
+    public void purchaseItemForUnit_throws_exception_invalid_item() {
+        sut.purchaseItemForUnit(99, 3);
+        Assert.fail();
+    }
+
+    @Test (expected = DaoException.class)
+    public void purchaseItemForUnit_throws_exception_invalid_unit() {
+        sut.purchaseItemForUnit(1, 99);
+        Assert.fail();
+    }
+
+    @Test
+    public void transferItem_works_when_moving_item_from_unit_to_team() {
+        sut.transferItem(1, 1, 1);
+        List<Item> teamTestList = sut.getAllItemsForTeam(1);
+        List<Item> unitTestList = sut.getAllItemsForUnit(1);
+
+        Assert.assertEquals(4, teamTestList.size());
+        Assert.assertTrue(teamTestList.contains(ARMOR));
+        Assert.assertEquals(2, unitTestList.size());
+        Assert.assertFalse(unitTestList.contains(ARMOR));
+    }
+
+    @Test
+    public void transferItem_works_when_moving_item_from_team_to_item() {
+        sut.transferItem(5, 1, 1);
+        List<Item> teamTestList = sut.getAllItemsForTeam(1);
+        List<Item> unitTestList = sut.getAllItemsForUnit(1);
+
+        ARMOR.setId(5);
+        Assert.assertEquals(2, teamTestList.size());
+        Assert.assertFalse(teamTestList.contains(ARMOR));
+        Assert.assertEquals(4, unitTestList.size());
+        Assert.assertTrue(unitTestList.contains(ARMOR));
+    }
+
+    @Test (expected = DaoException.class)
+    public void transferItem_throws_exception_invalid_item_id() {
+        sut.transferItem(99, 1, 1);
+    }
+
+    @Test (expected = DaoException.class)
+    public void transferItem_throws_exception_item_not_owned_by_team_or_unit() {
+        sut.transferItem(4, 1, 1);
+    }
 
 }

@@ -55,10 +55,85 @@ public class JdbcItemDao implements ItemDao {
     public int purchaseItemForTeam(int itemRefId, int teamId) {
 
         String sql = "INSERT INTO item(item_ref_id, team_id) VALUES (?, ?) RETURNING item_id";
+        return purchaseItem(itemRefId, teamId, sql);
+    }
+
+    @Override
+    public int purchaseItemForUnit(int itemRefId, int unitId) {
+
+        String sql = "INSERT INTO item(item_ref_id, unit_id) VALUES (?, ?) RETURNING item_id";
+        return purchaseItem(itemRefId, unitId, sql);
+    }
+
+    @Override
+    public void transferItem(int itemId, int unitId, int teamId) {
+
+        boolean teamToUnit = itemBelongsToTeam(itemId, teamId, unitId);
+        String sql = "UPDATE item SET unit_id = ?, team_id = ? WHERE item_id = ?";
+
+        try {
+            int rowsUpdated = 0;
+            if (teamToUnit) {
+                rowsUpdated = jdbcTemplate.update(sql, unitId, null, itemId);
+            } else {
+                rowsUpdated = jdbcTemplate.update(sql, null, teamId, itemId);
+            }
+
+            if (rowsUpdated != 1) {
+                throw new DaoException("Incorrect number of rows updated");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+
+    }
+
+
+
+    /*
+    PRIVATE METHODS
+     */
+
+    /**
+     * This method returns true if the item belongs to the team, false if it instead belongs to the unit, and throws an
+     * exception if it doesn't belong to either
+     * @param itemId the id of the item
+     * @param teamId the id of the team the item may belong to
+     * @param unitId the id of the unit the item may belong to
+     * @return if the item belongs to the team
+     */
+    private boolean itemBelongsToTeam(int itemId, int teamId, int unitId){
+        String sql = "SELECT unit_id, team_id FROM item WHERE item_id = ?";
+        int teamIdOfItem = 0;
+        int unitIdOfItem = 0;
+
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, itemId);
+            while (results.next()){
+                teamIdOfItem = results.getInt("team_id");
+                unitIdOfItem = results.getInt("unit_id");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+
+        if (teamIdOfItem == teamId){
+            return true;
+        } else if (unitIdOfItem == unitId){
+            return false;
+        }
+
+        throw new DaoException("Invalid transfer.");
+
+    }
+
+    private int purchaseItem(int itemRefId, int purchaserId, String sql) {
         int itemId;
 
         try {
-            itemId = jdbcTemplate.queryForObject(sql, Integer.class, itemRefId, teamId);
+            itemId = jdbcTemplate.queryForObject(sql, Integer.class, itemRefId, purchaserId);
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {
@@ -67,12 +142,6 @@ public class JdbcItemDao implements ItemDao {
 
         return itemId;
     }
-
-
-
-    /*
-    PRIVATE METHODS
-     */
     private List<Item> getItemListFromRowSet(int unitId, String sql) {
         List<Item> itemList = new ArrayList<>();
 

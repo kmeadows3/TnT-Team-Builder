@@ -1,5 +1,6 @@
 package my.TNTBuilder.dao;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.model.inventory.*;
 import org.junit.Assert;
@@ -141,6 +142,21 @@ public class JdbcItemDaoTests extends BaseDaoTests{
     @Test (expected = DaoException.class)
     public void transferItem_throws_exception_item_not_owned_by_team_or_unit() {
         sut.transferItem(4, 1, 1);
+    }
+
+    @Test
+    public void deleteItem_deletes_item(){
+        sut.deleteItem(1);
+        List<Item> testList = sut.getAllItemsForUnit(1);
+
+        Assert.assertEquals(2, testList.size());
+        Assert.assertFalse(testList.contains(ARMOR));
+    }
+
+    @Test (expected = DaoException.class)
+    public void deleteItem_throws_exception_invalid_id(){
+        sut.deleteItem(99);
+        Assert.fail();
     }
 
 }

@@ -21,4 +21,6 @@ public interface ItemDao {
 
     void transferItem(int itemId, int unitId, int teamId);
 
+    void deleteItem(int itemId);
+
 }

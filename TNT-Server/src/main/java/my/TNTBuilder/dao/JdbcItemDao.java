@@ -90,6 +90,26 @@ public class JdbcItemDao implements ItemDao {
 
     }
 
+    @Override
+    public void deleteItem(int itemId){
+        String sql = "DELETE FROM item WHERE item_id = ?";
+
+        try {
+            int rowsDeleted = jdbcTemplate.update(sql, itemId);
+
+            if (rowsDeleted == 0) {
+                throw new DaoException("No rows deleted.");
+            } else if (rowsDeleted != 1){
+                throw new DaoException("Improper number of rows deleted");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+
+    }
+
 
 
     /*

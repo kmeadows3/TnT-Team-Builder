@@ -53,13 +53,11 @@ public class JdbcUnitDao implements UnitDao{
             while (results.next()){
                 unit = mapRowToUnit(results);
             }
-            if (unit == null){
-                throw new DaoException("Unit cannot be retrieved from database");
+
+            if (unit == null) {
+                throw new DaoException("Unable to retrieve unit. Either does not exist or does not belong to user.");
             }
-            unit.setSkills(getUnitSkills(id));
-            unit.setAvailableSkillsets(getAvailableSkillsets(id));
-            ItemDao itemDao = new JdbcItemDao(jdbcTemplate);
-            unit.setInventory(itemDao.getAllItemsForUnit(unit.getId()));
+
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to database", e);
         }
@@ -74,12 +72,10 @@ public class JdbcUnitDao implements UnitDao{
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, teamId);
             while (results.next()){
+
                 Unit unit = mapRowToUnit(results);
-                unit.setSkills(getUnitSkills(unit.getId()));
-                unit.setAvailableSkillsets(getAvailableSkillsets(unit.getId()));
-                ItemDao itemDao = new JdbcItemDao(jdbcTemplate);
-                unit.setInventory(itemDao.getAllItemsForUnit(unit.getId()));
                 unitList.add(unit);
+
             }
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to database", e);
@@ -197,6 +193,10 @@ public class JdbcUnitDao implements UnitDao{
             while (results.next()){
                 referenceUnit = mapRowToUnitFromUnitReference(results);
             }
+
+            if (referenceUnit == null){
+                throw new DaoException("Unable to find reference unit matching the given class name.");
+            }
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to database", e);
         }
@@ -207,8 +207,11 @@ public class JdbcUnitDao implements UnitDao{
     public List<Skill> getPotentialSkills(int unitId) {
         List<Integer> skillsetIds = new ArrayList<>();
         List<Skill> potentialSkills = new ArrayList<>();
+
         String getSkillsets = "SELECT skillset_id FROM unit_skillset WHERE unit_id = ?";
+
         String sql = SELECT_ALL_FROM_SKILL_REFERENCE + " WHERE sr.skillset_id = ?";
+
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(getSkillsets, unitId);
             while(results.next()){
@@ -273,7 +276,6 @@ public class JdbcUnitDao implements UnitDao{
         }
         return skillsets;
     }
-
     private void addSkillsToUnitSkillJoinTable(int unitId, List<Skill> skills){
         String sql = "INSERT INTO unit_skill (unit_id, skill_id) VALUES (?, ?)";
         List<Object[]> batch = new ArrayList<>();
@@ -283,7 +285,6 @@ public class JdbcUnitDao implements UnitDao{
         }
         jdbcTemplate.batchUpdate(sql, batch);
     }
-
     private void addSkillsetsToUnitSkillsetJoinTable(int unitId, List<Skillset> skillsets){
         String sql = "INSERT INTO unit_skillset (unit_id, skillset_id) VALUES (?, ?)";
         List<Object[]> batch = new ArrayList<>();
@@ -293,7 +294,6 @@ public class JdbcUnitDao implements UnitDao{
         }
         jdbcTemplate.batchUpdate(sql, batch);
     }
-
     private Unit initializeNewUnit(Unit providedUnit) {
         Unit newUnit = convertReferenceUnitToUnit(providedUnit.getId());
         if (newUnit == null){
@@ -303,7 +303,6 @@ public class JdbcUnitDao implements UnitDao{
         newUnit.setName(providedUnit.getName());
         return newUnit;
     }
-
     private Unit mapRowToUnitFromUnitReference(SqlRowSet row){
         Unit newUnit = new Unit();
         newUnit.setUnitClass(row.getString("class"));
@@ -335,7 +334,6 @@ public class JdbcUnitDao implements UnitDao{
             return 75;
         }
     }
-
     private List<Skillset> convertAvailableSkillsets(String skillsetsAsString){
         int[] skillsetsAsArray = referenceArraySplitter(skillsetsAsString);
         List<Skillset> availableSkillsets = new ArrayList<>();
@@ -345,7 +343,6 @@ public class JdbcUnitDao implements UnitDao{
         }
         return availableSkillsets;
     }
-
     private List<Skill> convertStartingSkills(String skillsAsString){
         List<Skill> startingSkills = new ArrayList<>();
         int[] skillArray = referenceArraySplitter(skillsAsString);
@@ -355,7 +352,6 @@ public class JdbcUnitDao implements UnitDao{
         }
         return  startingSkills;
     }
-
     private int[] referenceArraySplitter (String arrayAsString){
         if ( arrayAsString == null || arrayAsString.isEmpty()){
             return new int[0];
@@ -369,7 +365,6 @@ public class JdbcUnitDao implements UnitDao{
             return convertedArray;
         }
     }
-
     private Map<Integer, Skillset> generateSkillSetMap(){
         Map<Integer, Skillset> skillsetMap = new HashMap<>();
         try {
@@ -383,7 +378,6 @@ public class JdbcUnitDao implements UnitDao{
         }
         return skillsetMap;
     }
-
     private Map<Integer, Skill> generateSkillMap() {
         Map<Integer, Skill> skillMap = new HashMap<>();
         try {
@@ -397,7 +391,6 @@ public class JdbcUnitDao implements UnitDao{
         }
         return skillMap;
     }
-
     private Unit mapRowToUnit(SqlRowSet row){
         Unit newUnit = new Unit();
         newUnit.setId(row.getInt("unit_id"));
@@ -420,6 +413,13 @@ public class JdbcUnitDao implements UnitDao{
         newUnit.setUnspentExperience(row.getInt("unspent_exp"));
         newUnit.setTotalAdvances(row.getInt("total_advances"));
         newUnit.setTenPointAdvances(row.getInt("ten_point_advances"));
+
+        newUnit.setSkills(getUnitSkills(newUnit.getId()));
+
+        newUnit.setAvailableSkillsets(getAvailableSkillsets(newUnit.getId()));
+
+        ItemDao itemDao = new JdbcItemDao(jdbcTemplate);
+        newUnit.setInventory(itemDao.getAllItemsForUnit(newUnit.getId()));
 
         return newUnit;
     }

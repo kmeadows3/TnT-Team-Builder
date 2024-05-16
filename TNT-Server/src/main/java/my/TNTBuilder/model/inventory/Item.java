@@ -1,5 +1,7 @@
 package my.TNTBuilder.model.inventory;
 
+import my.TNTBuilder.model.Unit;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +34,18 @@ public abstract class Item {
     }
 
     public Item() {
+    }
+
+    public int calculateCostToPurchase(Unit unit) {
+        int cost = this.cost;
+        if (this.category.equals("Armor")){
+            if (unit.getWounds() == 2) {
+                cost = ((Armor) this).getCost2Wounds();
+            } else if (unit.getWounds() > 2) {
+                cost = ((Armor) this).getCost3Wounds();
+            }
+        }
+        return cost;
     }
 
     //Getters
@@ -116,6 +130,8 @@ public abstract class Item {
     public void setRelic(boolean relic) {
         isRelic = relic;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

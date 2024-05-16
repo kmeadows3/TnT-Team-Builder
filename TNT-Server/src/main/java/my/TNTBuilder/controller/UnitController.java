@@ -108,8 +108,11 @@ public class UnitController {
         List<Skill> skills = null;
         try {
             skills = unitService.getPotentialSkills(unitId);
+            if (skills == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No valid skills returned.");
+            }
         } catch (ServiceException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
         return skills;
@@ -144,10 +147,11 @@ public class UnitController {
         Unit unit = null;
         try {
             unit = unitService.getUnitById(unitId, userDao.getUserIdByUsername(principal.getName()));
+            if (unit == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find a unit with that id");
+            }
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (DaoException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return unit;
     }

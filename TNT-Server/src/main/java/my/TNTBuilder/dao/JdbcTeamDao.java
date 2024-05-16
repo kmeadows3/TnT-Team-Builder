@@ -20,9 +20,9 @@ public class JdbcTeamDao implements TeamDao{
 
     private final JdbcTemplate jdbcTemplate;
 
-    private final String SELECT_ALL_FROM_TEAM = "SELECT team_id, user_id, f.faction_id, team_name, money, " +
+    private final String SELECT_ALL_FROM_TEAM = "SELECT t.team_id, user_id, f.faction_id, team_name, money, " +
             "faction_name, bought_first_leader " +
-            "FROM team JOIN faction f ON f.faction_id = team.faction_id ";
+            "FROM team t JOIN faction f ON f.faction_id = t.faction_id ";
 
     /*
     CONSTRUCTOR
@@ -61,6 +61,10 @@ public class JdbcTeamDao implements TeamDao{
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, teamId, userId);
             while (results.next()){
                 team = mapRowToTeam(results);
+            }
+
+            if (team == null) {
+                throw new DaoException("Unable to retrieve team, either team does not exist or user does not own team");
             }
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -120,6 +124,27 @@ public class JdbcTeamDao implements TeamDao{
             throw new DaoException("Unable to connect to server or database", e);
         }
         return allFactions;
+    }
+
+    @Override
+    public Team getTeamByUnitId(int unitId){
+        String sql = SELECT_ALL_FROM_TEAM + "JOIN unit u ON u.team_id = t.team_id WHERE unit_id = ?";
+
+        Team team = null;
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, unitId);
+            while (results.next()){
+                team = mapRowToTeam(results);
+            }
+
+            if (team == null) {
+                throw new DaoException("Unable to retrieve team.");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+
+        return team;
     }
 
 

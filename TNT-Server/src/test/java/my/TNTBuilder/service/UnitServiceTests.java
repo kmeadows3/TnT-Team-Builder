@@ -19,14 +19,19 @@ import java.util.List;
 
 public class UnitServiceTests extends BaseDaoTests {
     private UnitService sut;
+    private TeamDao teamDao;
 
     @Before
     public void setup(){
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        TeamDao teamDao = new JdbcTeamDao(jdbcTemplate);
+        teamDao = new JdbcTeamDao(jdbcTemplate);
         UnitDao unitDao = new JdbcUnitDao(jdbcTemplate);
-        sut = new UnitService(unitDao, new UnitValidator(unitDao), new TeamService(teamDao, new TeamValidator()));
+        ItemDao itemDao = new JdbcItemDao(jdbcTemplate);
+        sut = new UnitService(unitDao, itemDao, new UnitValidator(unitDao), new TeamService(teamDao, new TeamValidator()));
 
+        WEAPON.setId(2);
+        WEAPON.setCost(5);
+        EQUIPMENT.setId(3);
     }
 
     @Test
@@ -304,8 +309,6 @@ public class UnitServiceTests extends BaseDaoTests {
         Assert.fail();
     }
 
-
-
     @Test
     public void updateUnit_updates_unit_with_valid_change(){
         Unit unitToUpdate = sut.getUnitById(1,1);
@@ -321,6 +324,47 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit unitToUpdate = sut.getUnitById(1,1);
         unitToUpdate.setUnitClass("New Class Name");
         sut.updateUnit(unitToUpdate, 1);
+        Assert.fail();
+    }
+
+    @Test
+    public void purchaseItemForUnit_correctly_purchases_item(){
+        int itemId = sut.purchaseItemForUnit(WEAPON.getReferenceId(), 3, 1);
+        WEAPON.setId(itemId);
+
+        Unit testUnit = sut.getUnitById(3, 1);
+        Team testTeam = teamDao.getTeamById(1,1);
+
+        Assert.assertEquals(1, testUnit.getInventory().size());
+        Assert.assertTrue(testUnit.getInventory().contains(WEAPON));
+        Assert.assertEquals(495, testTeam.getMoney());
+
+    }
+
+    @Test
+    public void purchaseItemForUnit_correctly_purchases_item_multiple_uses(){
+        WEAPON.setId (sut.purchaseItemForUnit(WEAPON.getReferenceId(), 3,1));
+        EQUIPMENT.setId (sut.purchaseItemForUnit(EQUIPMENT.getReferenceId(), 3,1));
+
+
+        Unit testUnit = sut.getUnitById(3, 1);
+        Team testTeam = teamDao.getTeamById(1,1);
+
+        Assert.assertEquals(2, testUnit.getInventory().size());
+        Assert.assertTrue(testUnit.getInventory().contains(WEAPON));
+        Assert.assertTrue(testUnit.getInventory().contains(EQUIPMENT));
+        Assert.assertEquals(492, testTeam.getMoney());
+    }
+
+    @Test (expected = ServiceException.class)
+    public void purchaseItemForUnit_throws_exception_if_item_is_too_expensive(){
+        sut.purchaseItemForUnit(WEAPON.getReferenceId(), 8,4);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void purchaseItemForUnit_throws_exception_if_user_does_not_own_unit(){
+        sut.purchaseItemForUnit(WEAPON.getReferenceId(), 1,4);
         Assert.fail();
     }
 

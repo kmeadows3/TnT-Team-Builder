@@ -1,6 +1,8 @@
 package my.TNTBuilder.service;
 
+import my.TNTBuilder.dao.ItemDao;
 import my.TNTBuilder.model.Skill;
+import my.TNTBuilder.model.inventory.Item;
 import my.TNTBuilder.validator.UnitValidator;
 import my.TNTBuilder.dao.UnitDao;
 import my.TNTBuilder.exception.DaoException;
@@ -9,8 +11,6 @@ import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
 import org.springframework.stereotype.Component;
 
-import javax.validation.ValidationException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,8 +21,11 @@ public class UnitService {
     private final UnitValidator unitValidator;
     private final TeamService teamService;
 
-    public UnitService(UnitDao unitDao, UnitValidator unitValidator, TeamService teamService) {
+    private final ItemDao itemDao;
+
+    public UnitService(UnitDao unitDao, ItemDao itemDao, UnitValidator unitValidator, TeamService teamService) {
         this.unitDao = unitDao;
+        this.itemDao = itemDao;
         this.unitValidator = unitValidator;
         this.teamService = teamService;
     }
@@ -76,20 +79,6 @@ public class UnitService {
         return unitDao.getUnitById(clientUnit.getId(), userId);
     }
 
-    public List<Skill> getPotentialSkills(int unitId){
-        List<Skill> skillList = null;
-        try {
-            skillList = unitDao.getPotentialSkills(unitId);
-            if (skillList == null){
-                throw new ServiceException("No valid skills");
-            }
-        } catch (DaoException e) {
-            throw new ServiceException(e.getMessage(), e);
-        }
-
-        return skillList;
-    }
-
     public void addSkillToUnit(int skillId, int unitId, int userId){
         try {
             if (unitCanAddSkill(unitId, skillId, userId)){
@@ -103,13 +92,53 @@ public class UnitService {
         }
     }
 
+    public int purchaseItemForUnit(int itemReferenceId, int unitId, int userId){
+
+        Item referenceItem = null;
+        Unit unit = null;
+        try {
+            referenceItem = itemDao.lookupReferenceItem(itemReferenceId);
+            unit = unitDao.getUnitById(unitId, userId);
+
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage());
+        }
+
+
+        //TODO logic to validate purchase
+
+        int itemId = 0;
+        try {
+
+           teamService.spendMoney( referenceItem.calculateCostToPurchase(unit), teamService.getTeamByUnitId(unitId));
+
+           itemId = itemDao.addItemToUnit(referenceItem.getReferenceId(), unit.getId());
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+
+        return itemId;
+    }
+
+
+    /*
+    Methods that go to DAO with no changes
+     */
+    public List<Skill> getPotentialSkills(int unitId){
+        List<Skill> skillList = null;
+        try {
+            skillList = unitDao.getPotentialSkills(unitId);
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+
+        return skillList;
+    }
+
     public Unit getUnitById(int unitId, int userId){
         Unit unit = null;
         try {
             unit = unitDao.getUnitById(unitId, userId);
-            if (unit == null){
-                throw new ServiceException("Unable to retrieve unit");
-            }
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -120,9 +149,6 @@ public class UnitService {
         Unit unit = null;
         try {
             unit = unitDao.convertReferenceUnitToUnit(unitClass);
-            if (unit == null){
-                throw new ServiceException("Unable to retrieve unit");
-            }
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -130,10 +156,10 @@ public class UnitService {
     }
 
 
+
     /*
         PRIVATE METHODS
      */
-
     public List<Unit> adjustUnitListForTeamStatus(Team team, List<Unit> units) {
         if ( unitValidator.teamMustBuyLeader(team) ) {
             units = units.stream()
@@ -195,6 +221,7 @@ public class UnitService {
 
         throw new ServiceException("Error, unit cannot have this skill.");
     }
+
 
 
 

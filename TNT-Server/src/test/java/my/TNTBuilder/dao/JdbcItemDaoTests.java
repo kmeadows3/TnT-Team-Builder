@@ -1,6 +1,5 @@
 package my.TNTBuilder.dao;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.model.inventory.*;
 import org.junit.Assert;
@@ -66,8 +65,8 @@ public class JdbcItemDaoTests extends BaseDaoTests{
     }
 
     @Test
-    public void purchaseItemForTeam_adds_item_to_team() {
-        int newId = sut.purchaseItemForTeam(1, 3);
+    public void addItemForTeam_adds_item_to_team() {
+        int newId = sut.addItemToTeam(1, 3);
         ARMOR.setId(newId);
         List<Item> testList = sut.getAllItemsForTeam(3);
         Assert.assertEquals(1, testList.size());
@@ -76,21 +75,20 @@ public class JdbcItemDaoTests extends BaseDaoTests{
     }
 
     @Test (expected = DaoException.class)
-    public void purchaseItemForTeam_throws_exception_invalid_item() {
-        sut.purchaseItemForTeam(99, 3);
+    public void addItemForTeam_throws_exception_invalid_item() {
+        sut.addItemToTeam(99, 3);
         Assert.fail();
     }
 
     @Test (expected = DaoException.class)
-    public void purchaseItemForTeam_throws_exception_invalid_team() {
-        sut.purchaseItemForTeam(1, 99);
+    public void addItemForTeam_throws_exception_invalid_team() {
+        sut.addItemToTeam(1, 99);
         Assert.fail();
     }
 
-
     @Test
-    public void purchaseItemForUnit_adds_item_to_Unit() {
-        int newId = sut.purchaseItemForUnit(1, 3);
+    public void addItemForUnit_adds_item_to_Unit() {
+        int newId = sut.addItemToUnit(1, 3);
         ARMOR.setId(newId);
         List<Item> testList = sut.getAllItemsForUnit(3);
         Assert.assertEquals(1, testList.size());
@@ -98,14 +96,14 @@ public class JdbcItemDaoTests extends BaseDaoTests{
     }
 
     @Test (expected = DaoException.class)
-    public void purchaseItemForUnit_throws_exception_invalid_item() {
-        sut.purchaseItemForUnit(99, 3);
+    public void addItemForUnit_throws_exception_invalid_item() {
+        sut.addItemToUnit(99, 3);
         Assert.fail();
     }
 
     @Test (expected = DaoException.class)
-    public void purchaseItemForUnit_throws_exception_invalid_unit() {
-        sut.purchaseItemForUnit(1, 99);
+    public void addItemForUnit_throws_exception_invalid_unit() {
+        sut.addItemToUnit(1, 99);
         Assert.fail();
     }
 
@@ -156,6 +154,19 @@ public class JdbcItemDaoTests extends BaseDaoTests{
     @Test (expected = DaoException.class)
     public void deleteItem_throws_exception_invalid_id(){
         sut.deleteItem(99);
+        Assert.fail();
+    }
+
+    @Test
+    public void lookupReferenceItem_returns_reference_item(){
+        Item testItem = sut.lookupReferenceItem(1);
+        ARMOR.setId(0);
+        Assert.assertEquals(ARMOR, testItem);
+    }
+
+    @Test (expected = DaoException.class)
+    public void lookupReferenceItem_throws_exception_invalid_id(){
+        sut.lookupReferenceItem(99);
         Assert.fail();
     }
 

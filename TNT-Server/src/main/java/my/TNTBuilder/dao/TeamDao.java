@@ -41,4 +41,11 @@ public interface TeamDao {
      * @param team the updated version of the team
      */
     void updateTeam(Team team);
+
+    /**
+     * Finds the team the unit belongs to
+     * @param unitId the ID of the unit
+     * @return the team the unit belongs to
+     */
+    Team getTeamByUnitId(int unitId);
 }

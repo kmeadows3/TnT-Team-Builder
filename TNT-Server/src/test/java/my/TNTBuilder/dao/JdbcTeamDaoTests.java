@@ -31,10 +31,23 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         Assert.assertEquals(TEAM_1, testTeam);
     }
 
+    @Test (expected = DaoException.class)
+    public void get_team_by_id_throws_exception_with_invalid_id(){
+        sut.getTeamById(99, 1);
+        Assert.fail();
+    }
+
     @Test
-    public void get_team_by_id_returns_null_with_invalid_id(){
-        Team testTeam = sut.getTeamById(99, 1);
-        Assert.assertNull(testTeam);
+    public void getTeamByUnitId_returns_correct_team(){
+        Team testTeam = sut.getTeamByUnitId(1);
+        Assert.assertNotNull(testTeam);
+        Assert.assertEquals(TEAM_1, testTeam);
+    }
+
+    @Test (expected = DaoException.class)
+    public void getTeamByUnitId_throws_exception_with_invalid_unit(){
+        sut.getTeamByUnitId(99);
+        Assert.fail();
     }
 
     @Test

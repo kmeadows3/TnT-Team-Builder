@@ -21,13 +21,11 @@ import java.util.List;
 @RestController
 @PreAuthorize("isAuthenticated()")
 public class TeamController {
-    private final TeamDao teamDao;
     private final UserDao userDao;
     private final UnitService unitService;
     private final TeamService teamService;
 
-    public TeamController(TeamDao teamDao, UserDao userDao, UnitService unitService, TeamService teamService){
-        this.teamDao = teamDao;
+    public TeamController(UserDao userDao, UnitService unitService, TeamService teamService){
         this.userDao = userDao;
         this.unitService = unitService;
         this.teamService = teamService;
@@ -44,7 +42,7 @@ public class TeamController {
         team.setUserId(userDao.getUserIdByUsername(principal.getName()));
         Team returnTeam = null;
         try{
-            returnTeam = teamDao.createTeam(team);
+            returnTeam = teamService.createTeam(team);
         } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -60,7 +58,7 @@ public class TeamController {
     public List<Team> getUsersTeams(Principal principal){
         List<Team> teamList = null;
         try{
-            teamList = teamDao.getAllTeamsForUser(userDao.getUserIdByUsername(principal.getName()));
+            teamList = teamService.getAllTeamsForUser(userDao.getUserIdByUsername(principal.getName()));
         } catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, e.getMessage());
         }
@@ -96,7 +94,7 @@ public class TeamController {
     public Team getTeam(@PathVariable int id, Principal principal){
         Team returnTeam = null;
         try{
-            returnTeam = teamDao.getTeamById(id, userDao.getUserIdByUsername(principal.getName()));
+            returnTeam = teamService.getTeamById(id, userDao.getUserIdByUsername(principal.getName()));
             if(returnTeam == null){
                 throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to find selected team belonging to logged in user");
             }
@@ -114,7 +112,7 @@ public class TeamController {
     @RequestMapping(path = "/factions", method = RequestMethod.GET)
     public List<FactionDTO> lookupAllFactions(){
         try {
-            return teamDao.getAllFactions();
+            return teamService.getAllFactions();
         }catch (DaoException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }

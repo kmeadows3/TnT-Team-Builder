@@ -77,7 +77,7 @@ public class Unit {
         bsCost += (totalAdvances + tenPointAdvances) * 5;
 
         bsCost = inventory.stream().reduce( bsCost, (subtotal, item) -> {
-            if ("Armor".equals(item.getCategory()) && wounds > 1) {
+            if (item instanceof Armor && wounds > 1) {
                 int cost = wounds == 2 ? ((Armor) item).getCost2Wounds() :  ((Armor) item).getCost3Wounds();
                 return subtotal + cost;
             }

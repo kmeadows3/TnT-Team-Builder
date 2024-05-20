@@ -3,7 +3,7 @@ package my.TNTBuilder.model.inventory;
 import java.util.List;
 import java.util.Objects;
 
-public class Weapon extends Item{
+public class Weapon extends Item {
     private int meleeRange;
     private int rangedRange;
     private int strength;

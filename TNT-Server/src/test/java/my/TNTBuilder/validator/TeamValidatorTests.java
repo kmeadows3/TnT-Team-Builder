@@ -2,12 +2,10 @@ package my.TNTBuilder.validator;
 
 import io.jsonwebtoken.lang.Assert;
 import my.TNTBuilder.dao.BaseDaoTests;
-import my.TNTBuilder.dao.JdbcTeamDao;
 import my.TNTBuilder.model.Team;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TeamValidatorTests extends BaseDaoTests {
@@ -19,7 +17,7 @@ public class TeamValidatorTests extends BaseDaoTests {
     public void setup(){
         sut = new TeamValidator();
         teamToUpdate  = new Team(1, 1, "Team 1", "Caravanners", 1, 500,
-                Arrays.asList(UNIT1, UNIT3), Arrays.asList(TEAM_ARMOR, TEAM_WEAPON, TEAM_EQUIPMENT));
+                Arrays.asList(UNIT1, UNIT3), Arrays.asList(TEAM_ARMOR, TEAM_WEAPON, TEAM_ITEM));
     }
 
     @Test

@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS item, unit_skillset, unit_skill, unit, team, unit_reference, faction, tnt_user, skill_reference, skillset_reference, item_ref_item_trait, item_trait_reference, item_reference;
+DROP TABLE IF EXISTS inventory, unit_skillset, unit_skill, unit, team, unit_reference, faction, tnt_user, skill_reference, skillset_reference, item_ref_item_trait, item_trait_reference, item_reference;
 DROP SEQUENCE IF EXISTS seq_user_id;
 
 CREATE SEQUENCE seq_user_id;
@@ -125,16 +125,16 @@ CREATE TABLE unit(
 	CONSTRAINT FK_unit_team FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
 
-CREATE TABLE item(
+CREATE TABLE inventory(
 	item_id serial PRIMARY KEY NOT NULL,
 	item_ref_id int NOT NULL,
 	unit_id int,
 	team_id int,
-	CONSTRAINT CHK_item_unit_id_or_team_id_null CHECK ( unit_id IS NULL OR team_id IS NULL),
-	CONSTRAINT CHK_item_not_both_null CHECK (NOT(unit_id IS NULL AND team_id IS NULL)),
-	CONSTRAINT FK_item_item_ref_id FOREIGN KEY(item_ref_id) REFERENCES item_reference(item_ref_id),
-	CONSTRAINT FK_item_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id),
-	CONSTRAINT FK_item_team_id FOREIGN KEY(team_id) REFERENCES team(team_id)
+	CONSTRAINT CHK_inventory_unit_id_or_team_id_null CHECK ( unit_id IS NULL OR team_id IS NULL),
+	CONSTRAINT CHK_inventory_not_both_null CHECK (NOT(unit_id IS NULL AND team_id IS NULL)),
+	CONSTRAINT FK_inventory_item_ref_id FOREIGN KEY(item_ref_id) REFERENCES item_reference(item_ref_id),
+	CONSTRAINT FK_inventory_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id),
+	CONSTRAINT FK_inventory_team_id FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
 
 CREATE TABLE unit_skillset(

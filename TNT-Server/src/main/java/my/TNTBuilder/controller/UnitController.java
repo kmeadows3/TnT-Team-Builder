@@ -5,7 +5,6 @@ import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Unit;
-import my.TNTBuilder.model.inventory.Item;
 import my.TNTBuilder.service.UnitService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;

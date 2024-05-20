@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-05-08T18:38:12.370Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0" etag="2YJz_UMLVUibxw8-KFvq" version="24.3.1" type="device">
+<mxfile host="app.diagrams.net" modified="2024-05-20T17:19:17.367Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0" etag="PvcOyTXgMs6JRFFN4uai" version="24.3.1" type="device">
   <diagram name="Page-1" id="2ca16b54-16f6-2749-3443-fa8db7711227">
     <mxGraphModel dx="1434" dy="2494" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
       <root>
@@ -445,7 +445,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="mcjpPevOKv6xlZ3D8F16-174" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=ERoneToMany;endFill=0;" parent="1" source="mcjpPevOKv6xlZ3D8F16-73" target="mcjpPevOKv6xlZ3D8F16-167" edge="1">
+        <mxCell id="mcjpPevOKv6xlZ3D8F16-174" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=ERzeroToMany;endFill=0;" parent="1" source="mcjpPevOKv6xlZ3D8F16-73" target="mcjpPevOKv6xlZ3D8F16-167" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="580" y="-765" />
@@ -754,7 +754,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="mcjpPevOKv6xlZ3D8F16-190" value="item" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" parent="1" vertex="1">
+        <mxCell id="mcjpPevOKv6xlZ3D8F16-190" value="inventory" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" parent="1" vertex="1">
           <mxGeometry x="670" y="-1120" width="180" height="150" as="geometry" />
         </mxCell>
         <mxCell id="mcjpPevOKv6xlZ3D8F16-194" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" parent="mcjpPevOKv6xlZ3D8F16-190" vertex="1">
@@ -809,12 +809,14 @@
             <mxRectangle width="150" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mcjpPevOKv6xlZ3D8F16-203" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=ERzeroToMany;endFill=0;" parent="1" source="mcjpPevOKv6xlZ3D8F16-73" target="mcjpPevOKv6xlZ3D8F16-197" edge="1">
+        <mxCell id="mcjpPevOKv6xlZ3D8F16-203" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=ERzeroToMany;endFill=0;" parent="1" target="mcjpPevOKv6xlZ3D8F16-197" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="580" y="-765" />
-              <mxPoint x="580" y="-1035" />
+              <mxPoint x="580" y="-769" />
+              <mxPoint x="580" y="-1045" />
             </Array>
+            <mxPoint x="670" y="-769" as="sourcePoint" />
+            <mxPoint x="620" y="-1050" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="mcjpPevOKv6xlZ3D8F16-204" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=ERzeroToMany;endFill=0;" parent="1" source="mcjpPevOKv6xlZ3D8F16-177" target="45I2ol6C3EuCy4si3rDP-1" edge="1">

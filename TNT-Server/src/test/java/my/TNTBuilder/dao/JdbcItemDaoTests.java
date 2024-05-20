@@ -26,7 +26,7 @@ public class JdbcItemDaoTests extends BaseDaoTests{
         Assert.assertEquals(3, testList.size());
         Assert.assertTrue(testList.contains(ARMOR));
         Assert.assertTrue(testList.contains(WEAPON));
-        Assert.assertTrue(testList.contains(EQUIPMENT));
+        Assert.assertTrue(testList.contains(ITEM));
     }
 
     @Test
@@ -48,7 +48,7 @@ public class JdbcItemDaoTests extends BaseDaoTests{
         Assert.assertEquals(3, testList.size());
         Assert.assertTrue(testList.contains(TEAM_ARMOR));
         Assert.assertTrue(testList.contains(TEAM_WEAPON));
-        Assert.assertTrue(testList.contains(TEAM_EQUIPMENT));
+        Assert.assertTrue(testList.contains(TEAM_ITEM));
     }
 
     @Test

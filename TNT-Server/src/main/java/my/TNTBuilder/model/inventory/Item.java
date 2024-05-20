@@ -5,7 +5,7 @@ import my.TNTBuilder.model.Unit;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class Item {
+public class Item {
     private int id;
     private int referenceId;
     private String name;

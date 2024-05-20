@@ -31,7 +31,7 @@ public class UnitServiceTests extends BaseDaoTests {
 
         WEAPON.setId(2);
         WEAPON.setCost(5);
-        EQUIPMENT.setId(3);
+        ITEM.setId(3);
     }
 
     @Test
@@ -344,7 +344,7 @@ public class UnitServiceTests extends BaseDaoTests {
     @Test
     public void purchaseItemForUnit_correctly_purchases_item_multiple_uses(){
         WEAPON.setId (sut.purchaseItemForUnit(WEAPON.getReferenceId(), 3,1));
-        EQUIPMENT.setId (sut.purchaseItemForUnit(EQUIPMENT.getReferenceId(), 3,1));
+        ITEM.setId (sut.purchaseItemForUnit(ITEM.getReferenceId(), 3,1));
 
 
         Unit testUnit = sut.getUnitById(3, 1);
@@ -352,7 +352,7 @@ public class UnitServiceTests extends BaseDaoTests {
 
         Assert.assertEquals(2, testUnit.getInventory().size());
         Assert.assertTrue(testUnit.getInventory().contains(WEAPON));
-        Assert.assertTrue(testUnit.getInventory().contains(EQUIPMENT));
+        Assert.assertTrue(testUnit.getInventory().contains(ITEM));
         Assert.assertEquals(492, testTeam.getMoney());
     }
 

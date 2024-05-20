@@ -113,7 +113,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Skillset skillset2 = new Skillset(4, "Quickness", "Skill");
         updatedUnit.getAvailableSkillsets().add(skillset1);
         updatedUnit.getAvailableSkillsets().add(skillset2);
-        updatedUnit.setInventory(Arrays.asList(ARMOR, WEAPON, EQUIPMENT));
+        updatedUnit.setInventory(Arrays.asList(ARMOR, WEAPON, ITEM));
 
         sut.updateUnit(updatedUnit);
         Unit testUnit = sut.getUnitById(updatedUnit.getId(), 1);

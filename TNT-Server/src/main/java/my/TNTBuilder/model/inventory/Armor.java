@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class Armor extends Item{
+public class Armor extends Item {
     private int meleeDefenseBonus;
     private int rangedDefenseBonus;
     private boolean isShield;

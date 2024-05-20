@@ -2,7 +2,7 @@ package my.TNTBuilder.dao;
 
 import my.TNTBuilder.model.*;
 import my.TNTBuilder.model.inventory.Armor;
-import my.TNTBuilder.model.inventory.Equipment;
+import my.TNTBuilder.model.inventory.Item;
 import my.TNTBuilder.model.inventory.ItemTrait;
 import my.TNTBuilder.model.inventory.Weapon;
 import my.TNTBuilder.model.userModels.User;
@@ -32,7 +32,7 @@ public abstract class BaseDaoTests {
     protected static final Weapon WEAPON = new Weapon(2, 5, "Weapon 1", 5, "N/A",
             new ArrayList<>(), "N/A", false, 0, 5, 5, 5,
             1, "Ranged Weapon");
-    protected static final Equipment EQUIPMENT = new Equipment(3, 3, "Equipment 1", 3, "N/A",
+    protected static final Item ITEM = new Item(3, 3, "Equipment 1", 3, "N/A",
             new ArrayList<>(), "N/A", false, 0, "Equipment");
 
     protected static final Weapon RELIC_WEAPON = new Weapon(4, 6, "Relic Weapon", 6,
@@ -46,7 +46,7 @@ public abstract class BaseDaoTests {
     protected static final Weapon TEAM_WEAPON = new Weapon(6, 5, "Weapon 1", 5, "N/A",
             new ArrayList<>(), "N/A", false, 0, 5, 5, 5,
             1, "Ranged Weapon");
-    protected static final Equipment TEAM_EQUIPMENT = new Equipment(7, 3, "Equipment 1", 3, "N/A",
+    protected static final Item TEAM_ITEM = new Item(7, 3, "Equipment 1", 3, "N/A",
             new ArrayList<>(), "N/A", false, 0, "Equipment");
 
     protected static final Weapon TEAM_RELIC_WEAPON = new Weapon(8, 6, "Relic Weapon", 6,
@@ -59,7 +59,7 @@ public abstract class BaseDaoTests {
             "Special rules description",100,0,0,0,
             Arrays.asList(new Skillset(3, "Survival", "Skill"),
                     new Skillset(4, "Quickness", "Skill")),
-            new ArrayList<>(), Arrays.asList(ARMOR, WEAPON, EQUIPMENT));
+            new ArrayList<>(), Arrays.asList(ARMOR, WEAPON, ITEM));
     protected static final Unit UNIT2 = new Unit(2, 3, "UnitName2", "Soldier", "Elite",
             "Mutant", 51,11,6,8,7,9,7,6,1,
             "Special rules description",50,0,0,0,
@@ -73,7 +73,7 @@ public abstract class BaseDaoTests {
                     " close combat are knocked prone in addition to any other combat result.", 6, "Brawn")),
             new ArrayList<>());
     protected final Team TEAM_1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500,
-            Arrays.asList(UNIT1, UNIT3), Arrays.asList(TEAM_ARMOR, TEAM_WEAPON, TEAM_EQUIPMENT));
+            Arrays.asList(UNIT1, UNIT3), Arrays.asList(TEAM_ARMOR, TEAM_WEAPON, TEAM_ITEM));
     protected final Team TEAM_2 = new Team(2, 1, "Team 2", "Raiders", 3, 1500,
             new ArrayList<>(), List.of(TEAM_RELIC_WEAPON));
     protected final Team TEAM_3 = new Team(3, 2, "Team 3", "Mutants", 2, 1000,

@@ -17,7 +17,7 @@ public class JdbcItemDao implements ItemDao {
     private final String SELECT_ALL_FROM_ITEM = "SELECT item_id, i.item_ref_id, name, cost, special_rules, rarity, " +
             "is_relic, item_category, hands_required, melee_defense_bonus, ranged_defense_bonus, is_shield, " +
             "cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability " +
-            "FROM item i " +
+            "FROM inventory i " +
             "JOIN item_reference ir ON ir.item_ref_id = i.item_ref_id ";
 
     private final String SELECT_ALL_FROM_ITEM_REFERENCE = "SELECT item_ref_id, name, cost, special_rules, rarity, " +
@@ -58,14 +58,14 @@ public class JdbcItemDao implements ItemDao {
     @Override
     public int addItemToTeam(int itemRefId, int teamId) {
 
-        String sql = "INSERT INTO item(item_ref_id, team_id) VALUES (?, ?) RETURNING item_id";
+        String sql = "INSERT INTO inventory(item_ref_id, team_id) VALUES (?, ?) RETURNING item_id";
         return purchaseItem(itemRefId, teamId, sql);
     }
 
     @Override
     public int addItemToUnit(int itemRefId, int unitId) {
 
-        String sql = "INSERT INTO item(item_ref_id, unit_id) VALUES (?, ?) RETURNING item_id";
+        String sql = "INSERT INTO inventory(item_ref_id, unit_id) VALUES (?, ?) RETURNING item_id";
         return purchaseItem(itemRefId, unitId, sql);
     }
 
@@ -73,7 +73,7 @@ public class JdbcItemDao implements ItemDao {
     public void transferItem(int itemId, int unitId, int teamId) {
 
         boolean teamToUnit = itemBelongsToTeam(itemId, teamId, unitId);
-        String sql = "UPDATE item SET unit_id = ?, team_id = ? WHERE item_id = ?";
+        String sql = "UPDATE inventory SET unit_id = ?, team_id = ? WHERE item_id = ?";
 
         try {
             int rowsUpdated = 0;
@@ -96,7 +96,7 @@ public class JdbcItemDao implements ItemDao {
 
     @Override
     public void deleteItem(int itemId){
-        String sql = "DELETE FROM item WHERE item_id = ?";
+        String sql = "DELETE FROM inventory WHERE item_id = ?";
 
         try {
             int rowsDeleted = jdbcTemplate.update(sql, itemId);
@@ -149,7 +149,7 @@ public class JdbcItemDao implements ItemDao {
      * @return if the item belongs to the team
      */
     private boolean itemBelongsToTeam(int itemId, int teamId, int unitId){
-        String sql = "SELECT unit_id, team_id FROM item WHERE item_id = ?";
+        String sql = "SELECT unit_id, team_id FROM inventory WHERE item_id = ?";
         int teamIdOfItem = 0;
         int unitIdOfItem = 0;
 
@@ -237,9 +237,9 @@ public class JdbcItemDao implements ItemDao {
     }
 
     private Item initializeEquipment(SqlRowSet row) {
-        Equipment equipment = new Equipment();
-        initializeItem(row, equipment);
-        return equipment;
+        Item item = new Item();
+        initializeItem(row, item);
+        return item;
     }
 
     private Item initializeWeapon(SqlRowSet row) {

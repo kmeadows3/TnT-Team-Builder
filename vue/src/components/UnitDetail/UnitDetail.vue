@@ -1,6 +1,7 @@
 <template>
     <UnitBasics/>
     <UnitStats/>
+    <UnitInventory/>
     <UnitSkills/>
     <UnitExperience />
     <UnitActions />
@@ -12,6 +13,7 @@ import UnitStats from './UnitStats.vue';
 import UnitExperience from './UnitExperience.vue';
 import UnitSkills from './UnitSkills.vue';
 import UnitActions from './UnitActions.vue';
+import UnitInventory from './UnitInventory.vue';
 
 export default {
     components: {
@@ -19,7 +21,8 @@ export default {
         UnitStats,
         UnitExperience,
         UnitSkills,
-        UnitActions
+        UnitActions,
+        UnitInventory
     }
 }
 </script>

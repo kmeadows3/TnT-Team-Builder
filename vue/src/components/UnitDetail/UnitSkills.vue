@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="abilities">
+        <div class="reference">
             <h2>Special Abilities</h2>
-            <div v-for="skill in $store.state.currentUnit.skills" :key="skill.id">
+            <div v-for="skill in sortedSkills" :key="skill.id">
                 <h3>{{ skill.name }}</h3>
                 <p>{{ skill.description }}</p>
             </div>
@@ -42,6 +42,7 @@ export default {
     data() {
         return {
             potentialSkills: [],
+            sortedSkills: [],
             newSkill: {}
         }
     },
@@ -58,54 +59,23 @@ export default {
                     TeamsService.getUnit(this.$store.state.currentUnit.id)
                         .then(response => this.$store.commit('SET_CURRENT_UNIT', response.data))
                         .catch(error => console.error(error));
+                    this.sortSkills();
                     this.getPotentialSkills();
                 }).catch(error => console.error(error));
+        },
+        sortSkills(){
+            this.sortedSkills = this.$store.state.currentUnit.skills.sort((a,b)=> a.name.localeCompare(b.name));
         }
     },
     created() {
         this.getPotentialSkills();
+        this.sortSkills();
     },
 }
 </script>
 
 
 <style scoped>
-div.abilities {
-    border: solid 3px black;
-    border-radius: 7px;
-    text-align: center;
-}
-
-div.abilities>div {
-    display: flex;
-    text-align: left;
-    gap: 20px;
-    padding: 0px;
-    border-bottom: solid 1px black;
-}
-
-div.abilities>div:last-child{
-    border-bottom: 0px;
-}
-
-div.abilities>div>h3 {
-    min-width: 100px;
-    margin: 5px;
-    margin-left: 20px;
-    text-align: center;
-}
-
-div.abilities>div>p {
-    min-width: 100px;
-    margin: 5px;
-    text-align: left;
-}
-
-div.skillsets {
-    border: solid 3px black;
-    border-radius: 7px;
-    text-align: center;
-}
 
 div.skillFinder {
     display: flex;
@@ -131,7 +101,6 @@ div.skillFinder>select {
 div.skillFinder>p {
     flex-grow: 3;
 }
-
 
 div.purchaseSkills {
     border: solid 3px black;

@@ -1,52 +1,23 @@
 <template>
-    <div>
-        <h1>UNIT INVENTORY</h1>
-        <div>
-            <h3>Weapons</h3>
-            <div class="labels weapon-list">
-                <div>Type</div>
-                <div>Cost</div>
-                <div>Range </div>
-                <div>Strength</div>
-                <div>Reliability</div>
-                <div>Hands Required</div>
-                <div>Special Rules</div>
-            </div>
-
-            <div class="weapon-list" v-for="weapon in weapons" :key="weapon.id">
-                <div>{{ weapon.name }}</div>
-                <div>{{ weapon.cost }}</div>
-                <div>{{ weapon.meleeRange }} / {{ weapon.rangedRange }}</div>
-                <div>{{ weapon.strength }}</div>
-                <div>{{ weapon.reliability }}</div>
-                <div>{{ weapon.handsRequired }}</div>
-                <div>{{ weapon.specialRules }}</div>
-            </div>
-        </div>
-        <div>
-            <h3>Armor</h3>
-            <div v-for="armor in armors" :key="armor.id">
-                {{ armor }}
-            </div>
-        </div>
-        <div>
-            <h3>Equipment</h3>
-            <div v-for="equipment in equipments" :key="equipment.id">
-                {{ equipment }}
-            </div>
-        </div>
-        <div class="reference">
-            <h2>Item Rules Reference</h2>
-            <div v-for="trait in itemTraitReference" :key="trait.id">
-                <h3> {{ trait.name }}</h3>
-                <p>{{ trait.effect }}</p>
-            </div>
+    <div class="inventory">
+        <h2>UNIT INVENTORY</h2>
+        <UnitWeapons :weapons="this.weapons" />
+        <UnitArmor :armors="this.armors" />
+        <UnitEquipment :equipments="this.equipments" />
+    </div>
+    <div class="reference">
+        <h2>Item Rules Reference</h2>
+        <div v-for="trait in itemTraitReference" :key="'itemTrait' + trait.id">
+            <h3> {{ trait.name }}</h3>
+            <p>{{ trait.effect }}</p>
         </div>
     </div>
-
 </template>
 
 <script>
+import UnitWeapons from './UnitWeapons.vue';
+import UnitArmor from './UnitArmor.vue';
+import UnitEquipment from './UnitEquipment.vue';
 
 export default {
     data() {
@@ -56,6 +27,11 @@ export default {
             equipments: [],
             itemTraitReference: []
         }
+    },
+    components: {
+        UnitWeapons,
+        UnitArmor,
+        UnitEquipment
     },
     methods: {
         loadInventory() {
@@ -96,11 +72,7 @@ export default {
 </script>
 
 <style scoped>
-div.weapon-list {
-    display: flex;
-}
-
-div.weapon-list>div {
+div.inventory {
     border: solid 3px black;
     border-radius: 7px;
     text-align: center;

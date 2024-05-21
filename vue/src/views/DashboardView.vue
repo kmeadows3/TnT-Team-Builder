@@ -44,6 +44,11 @@ export default {
 
     }
 
+    div.table-label {
+    text-align: center;
+    font-weight: bold;
+    }
+
     section.main-display {
         border: solid 3px black;
         border-radius: 7px;

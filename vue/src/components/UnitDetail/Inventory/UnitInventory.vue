@@ -72,9 +72,6 @@ export default {
 </script>
 
 <style scoped>
-div.inventory {
-    border: solid 3px black;
-    border-radius: 7px;
-    text-align: center;
-}
+
+
 </style>

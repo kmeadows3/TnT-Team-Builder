@@ -134,6 +134,24 @@ public class JdbcItemDao implements ItemDao {
         return referenceItem;
     }
 
+    @Override
+    public List<Item> getListOfItemsForPurchase() {
+        List<Item> purchaseList = new ArrayList<>();
+        String sql = SELECT_ALL_FROM_ITEM_REFERENCE;
+
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+            while (results.next()){
+                Item newItem = mapItemReferenceValuesFromRow(results);
+                purchaseList.add(newItem);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+
+        return purchaseList;
+    }
+
 
 
     /*

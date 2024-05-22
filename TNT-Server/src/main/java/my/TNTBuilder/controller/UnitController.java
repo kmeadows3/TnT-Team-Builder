@@ -137,24 +137,6 @@ public class UnitController {
     }
 
 
-    /**
-     * Adds a new item to the unit inventory
-     * @param itemId the skill to be added
-     * @param unitId the id of the unit
-     * @param principal the logged-in user
-     */
-    @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(path="/units/{unitId}/inventory", method = RequestMethod.POST)
-    public void addSkillToUnit(@RequestBody Integer itemId, @PathVariable int unitId, Principal principal){
-        try {
-            unitService.purchaseItemForUnit(itemId, unitId, userDao.getUserIdByUsername(principal.getName()));
-        } catch (ServiceException e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (DaoException e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-    }
-
 
     /**
      * Returns a specific unit based on the unit's id

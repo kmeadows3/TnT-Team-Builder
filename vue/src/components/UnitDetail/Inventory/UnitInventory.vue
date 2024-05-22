@@ -4,7 +4,11 @@
         <UnitWeapons :weapons="this.weapons" />
         <UnitArmor :armors="this.armors" />
         <UnitEquipment :equipments="this.equipments" />
+        <UnitInventoryActions />
     </div>
+
+
+
     <div class="reference">
         <h2>Item Rules Reference</h2>
         <div v-for="trait in itemTraitReference" :key="'itemTrait' + trait.id">
@@ -18,6 +22,7 @@
 import UnitWeapons from './UnitWeapons.vue';
 import UnitArmor from './UnitArmor.vue';
 import UnitEquipment from './UnitEquipment.vue';
+import UnitInventoryActions from './UnitInventoryActions.vue';
 
 export default {
     data() {
@@ -31,7 +36,8 @@ export default {
     components: {
         UnitWeapons,
         UnitArmor,
-        UnitEquipment
+        UnitEquipment,
+        UnitInventoryActions
     },
     methods: {
         loadInventory() {

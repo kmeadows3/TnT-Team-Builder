@@ -25,4 +25,6 @@ public interface ItemDao {
 
     Item lookupReferenceItem(int itemRefId);
 
+    List<Item> getListOfItemsForPurchase();
+
 }

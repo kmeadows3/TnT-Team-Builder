@@ -2,6 +2,7 @@ package my.TNTBuilder.dao;
 
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.model.inventory.*;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,12 @@ public class JdbcItemDaoTests extends BaseDaoTests{
     public void setSut(){
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         sut = new JdbcItemDao(jdbcTemplate);
+    }
+
+    @After
+    public void resetItemIds(){
         ARMOR.setId(1);
+        WEAPON.setId(2);
     }
 
     @Test
@@ -168,6 +174,17 @@ public class JdbcItemDaoTests extends BaseDaoTests{
     public void lookupReferenceItem_throws_exception_invalid_id(){
         sut.lookupReferenceItem(99);
         Assert.fail();
+    }
+
+    @Test
+    public void getListOfItemsForPurchase_returns_list_of_all_reference_items(){
+        List<Item> testList = sut.getListOfItemsForPurchase();
+        ARMOR.setId(0);
+        WEAPON.setId(0);
+        Assert.assertEquals(10, testList.size());
+        Assert.assertTrue(testList.contains(ARMOR));
+        Assert.assertTrue(testList.contains(WEAPON));
+
     }
 
 }

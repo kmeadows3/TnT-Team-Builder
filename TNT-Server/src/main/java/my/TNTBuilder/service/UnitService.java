@@ -92,34 +92,6 @@ public class UnitService {
         }
     }
 
-    public int purchaseItemForUnit(int itemReferenceId, int unitId, int userId){
-
-        Item referenceItem = null;
-        Unit unit = null;
-        try {
-            referenceItem = itemDao.lookupReferenceItem(itemReferenceId);
-            unit = unitDao.getUnitById(unitId, userId);
-
-        } catch (DaoException e) {
-            throw new ServiceException(e.getMessage());
-        }
-
-
-        //TODO logic to validate purchase
-
-        int itemId = 0;
-        try {
-
-           teamService.spendMoney( referenceItem.calculateCostToPurchase(unit), teamService.getTeamByUnitId(unitId));
-
-           itemId = itemDao.addItemToUnit(referenceItem.getReferenceId(), unit.getId());
-        } catch (DaoException e) {
-            throw new ServiceException(e.getMessage(), e);
-        }
-
-        return itemId;
-    }
-
 
     /*
     Methods that go to DAO with no changes

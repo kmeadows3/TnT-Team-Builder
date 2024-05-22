@@ -133,6 +133,10 @@ div.item-list>div {
     overflow-wrap: break-word;
     border-style: dotted;
     border-width: 0px 1px 0px 0px;
+}
+
+div.item-list>div:last-child {
+    border-style: none;
 
 }
 

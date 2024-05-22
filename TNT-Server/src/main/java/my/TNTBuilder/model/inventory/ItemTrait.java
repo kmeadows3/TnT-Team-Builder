@@ -44,7 +44,7 @@ public class ItemTrait {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ItemTrait itemTrait = (ItemTrait) o;
-        return id == itemTrait.id && name.equals(itemTrait.name) && effect.equals(itemTrait.effect);
+        return id == itemTrait.id && Objects.equals(name, itemTrait.name) && Objects.equals(effect, itemTrait.effect);
     }
 
     @Override

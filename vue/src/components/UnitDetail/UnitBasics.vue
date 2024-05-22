@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import TeamsService from '../../services/TeamsService.js';
+import UnitService from '../../services/UnitService.js';
 
 export default {
     data() {
@@ -63,7 +63,7 @@ export default {
         },
         changeName(){
             this.$store.commit('CHANGE_UNIT_NAME', this.unitName);
-            TeamsService.updateUnit(this.$store.state.currentUnit)
+            UnitService.updateUnit(this.$store.state.currentUnit)
                 .then( response => {
                     this.$store.commit('SET_CURRENT_UNIT', response.data);
                 }).catch(error => console.error(error));

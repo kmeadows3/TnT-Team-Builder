@@ -3,7 +3,6 @@ package my.TNTBuilder.model.inventory;
 import java.util.List;
 import java.util.Objects;
 
-
 public class Armor extends Item {
     private int meleeDefenseBonus;
     private int rangedDefenseBonus;

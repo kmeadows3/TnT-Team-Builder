@@ -2,12 +2,12 @@ package my.TNTBuilder.validator;
 import my.TNTBuilder.dao.UnitDao;
 import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.exception.ValidatorException;
+import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 public class UnitValidator {
@@ -137,7 +137,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
+                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
+                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
                     && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
                     && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
 
@@ -164,7 +165,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
+                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
+                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
                     && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
                     && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
 
@@ -192,7 +194,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
+                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
+                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
                     && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
                     && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
@@ -217,7 +220,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
+                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
+                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
                     && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
                     && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
@@ -244,7 +248,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
+                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
+                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
                     && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
                     && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
@@ -271,7 +276,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
+                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
+                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
                     && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
                     && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
@@ -298,7 +304,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
+                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
+                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
                     && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
                     && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
@@ -325,7 +332,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
+                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
+                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
                     && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
                     && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
@@ -352,7 +360,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
+                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
+                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
                     && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
                     && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
@@ -379,7 +388,8 @@ public class UnitValidator {
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
                     && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
                     && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
+                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
+                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
                     && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
                     && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
         }
@@ -410,7 +420,8 @@ public class UnitValidator {
         && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
         && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
         && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-        && Objects.equals(unit.getSkills(), updatedUnit.getSkills())
+        && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
+        && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
         && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
         && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
      */

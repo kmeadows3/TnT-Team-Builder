@@ -43,14 +43,14 @@ public class JdbcItemDao implements ItemDao {
 
     @Override
     public List<Item> getAllItemsForUnit(int unitId) {
-        String sql = SELECT_ALL_FROM_ITEM + "WHERE unit_id = ? ORDER BY item_category, name";
+        String sql = SELECT_ALL_FROM_ITEM + "WHERE unit_id = ? ORDER BY item_category, name, item_id";
 
         return getItemListFromRowSet(unitId,sql);
     }
 
     @Override
     public List<Item> getAllItemsForTeam(int teamId) {
-        String sql = SELECT_ALL_FROM_ITEM + "WHERE team_id = ? ORDER BY item_category, name";
+        String sql = SELECT_ALL_FROM_ITEM + "WHERE team_id = ? ORDER BY item_category, name, item_id";
 
         return getItemListFromRowSet(teamId,sql);
     }

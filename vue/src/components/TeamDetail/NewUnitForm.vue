@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import TeamsService from '../../services/TeamsService';
+import UnitService from '../../services/UnitService';
 
 export default {
     data() {
@@ -27,7 +27,7 @@ export default {
     },
     methods: {
         loadPossibleUnits() {
-            TeamsService.getUnitsForTeam(this.$store.state.currentTeam)
+            UnitService.getUnitsForTeam(this.$store.state.currentTeam)
                 .then(response => {
                     this.possibleUnits = response.data;
                 }).catch ( error => console.error(error));
@@ -38,7 +38,7 @@ export default {
         },
         buyUnit(){
             this.newUnit.teamId = this.$store.state.currentTeam.id;
-            TeamsService.buyUnit(this.newUnit)
+            UnitService.buyUnit(this.newUnit)
                 .then(response => {
                     this.$store.dispatch('loadTeams');
                     this.$store.commit('SET_CURRENT_UNIT', response.data);

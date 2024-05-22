@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import TeamsService from '../../services/TeamsService';
+import UnitService from '../../services/UnitService';
 
 export default {
     data() {
@@ -273,19 +273,20 @@ export default {
             }
         },
         getBaseUnit() {
-            TeamsService.getBaseUnit(this.$store.state.currentUnit.unitClass)
+            UnitService.getBaseUnit(this.$store.state.currentUnit.unitClass)
                 .then(response => this.baseUnit = response.data)
                 .catch(error => console.log(error));
         },
         buyAdvance(option) {
             this.updateCurrentUnit(option);
-            TeamsService.updateUnit(this.$store.state.currentUnit)
+            UnitService.updateUnit(this.$store.state.currentUnit)
                 .then(response => {
                     this.$store.commit('SET_CURRENT_UNIT', response.data);
                 }).catch(error => {
                     console.error(error);
                     this.$store.dispatch('reloadCurrentUnit');
                 });
+            this.clearForm();
         },
         updateCurrentUnit(option){
             if (option == 'skill'){

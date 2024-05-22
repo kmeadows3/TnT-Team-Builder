@@ -1,9 +1,23 @@
 package my.TNTBuilder.model.inventory;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import my.TNTBuilder.model.Unit;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+
+
+@JsonTypeInfo(use = Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "@class")
+@JsonSubTypes({
+        @Type(value = Armor.class),
+        @Type(value = Weapon.class),
+})
 
 public class Item {
     private int id;
@@ -132,7 +146,6 @@ public class Item {
     }
 
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -140,8 +153,10 @@ public class Item {
         Item item = (Item) o;
         return id == item.id && referenceId == item.referenceId && cost == item.cost && isRelic == item.isRelic
                 && handsRequired == item.handsRequired && Objects.equals(name, item.name)
-                && Objects.equals(specialRules, item.specialRules) && Objects.equals(itemTraits, item.itemTraits)
-                && Objects.equals(rarity, item.rarity) && Objects.equals(category, item.category);
+                && Objects.equals(specialRules, item.specialRules) && Objects.equals(rarity, item.rarity)
+                && Objects.equals(category, item.category)
+                && new HashSet<>(itemTraits).containsAll(item.itemTraits)
+                && new HashSet<>(item.itemTraits).containsAll(itemTraits);
     }
 
     @Override

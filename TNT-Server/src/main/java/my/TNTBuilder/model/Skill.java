@@ -21,6 +21,7 @@ public class Skill {
     public Skill() {
     }
 
+    //Getters and Setters
     public int getSkillsetId() {
         return skillsetId;
     }
@@ -67,4 +68,6 @@ public class Skill {
     public int hashCode() {
         return Objects.hash(name, description, id);
     }
+
+
 }

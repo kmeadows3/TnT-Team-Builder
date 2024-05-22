@@ -46,6 +46,10 @@ public class ItemController {
     }
 
 
+    /**
+     * Returns list of all inventory that can be bought at this time.
+     * @return
+     */
     @RequestMapping(path="/inventory", method = RequestMethod.GET)
     public List<Item> getItemsForPurchase(){
         List<Item> purchaseList;

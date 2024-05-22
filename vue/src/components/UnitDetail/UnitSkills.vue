@@ -36,7 +36,7 @@
 
 
 <script>
-import TeamsService from '../../services/TeamsService';
+import UnitService from '../../services/UnitService';
 
 export default {
     data() {
@@ -48,15 +48,15 @@ export default {
     },
     methods: {
         getPotentialSkills() {
-            TeamsService.getPotentialSkills(this.$store.state.currentUnit.id)
+            UnitService.getPotentialSkills(this.$store.state.currentUnit.id)
                 .then(response => this.potentialSkills = response.data)
                 .catch(error => console.error(error));
         },
         addSkill() {
-            TeamsService.addSkill(this.$store.state.currentUnit.id, this.newSkill)
+            UnitService.addSkill(this.$store.state.currentUnit.id, this.newSkill)
                 .then(() => {
                     this.$store.dispatch('loadTeams');
-                    TeamsService.getUnit(this.$store.state.currentUnit.id)
+                    UnitService.getUnit(this.$store.state.currentUnit.id)
                         .then(response => this.$store.commit('SET_CURRENT_UNIT', response.data))
                         .catch(error => console.error(error));
                     this.sortSkills();

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import TeamsService from '../../services/TeamsService';
+import UnitService from '../../services/UnitService';
 import AdvanceUnit from './AdvanceUnit.vue';
 
 export default {
@@ -48,7 +48,7 @@ export default {
         gainExp(experience) {
             try {
                 this.$store.commit('GAIN_UNSPENT_EXP', experience);
-                TeamsService.updateUnit(this.$store.state.currentUnit)
+                UnitService.updateUnit(this.$store.state.currentUnit)
                     .then(response => {
                         this.$store.commit('SET_CURRENT_UNIT', response.data);
                     }).catch(error => console.error(error));

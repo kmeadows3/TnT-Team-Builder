@@ -1,6 +1,7 @@
 import { createStore as _createStore } from 'vuex';
 import axios from 'axios';
 import TeamsService from '../services/TeamsService';
+import UnitService from '../services/UnitService';
 
 export function createStore(currentToken, currentUser) {
   let store = _createStore({
@@ -101,8 +102,11 @@ export function createStore(currentToken, currentUser) {
           });
       },
       reloadCurrentUnit(context) {
-        TeamsService.getUnit(context.state.currentUnit.id)
-          .then(response => store.commit('SET_CURRENT_UNIT', response.data))
+        UnitService.getUnit(context.state.currentUnit.id)
+          .then(response => {
+            store.commit('SET_CURRENT_UNIT', response.data);
+            return store.state.currentUnit;
+          })
           .catch(err => console.error(err));
       }
     }

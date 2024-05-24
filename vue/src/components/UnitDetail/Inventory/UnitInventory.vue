@@ -1,9 +1,9 @@
 <template>
     <div class="inventory">
         <h2>UNIT INVENTORY</h2>
-        <UnitWeapons :weapons="this.weapons" />
-        <UnitArmor :armors="this.armors" />
-        <UnitEquipment :equipments="this.equipments" />
+        <UnitWeapons />
+        <UnitArmor />
+        <UnitEquipment />
         <UnitInventoryActions />
     </div>
 
@@ -23,13 +23,11 @@ import UnitWeapons from './UnitWeapons.vue';
 import UnitArmor from './UnitArmor.vue';
 import UnitEquipment from './UnitEquipment.vue';
 import UnitInventoryActions from './UnitInventoryActions.vue';
+import ItemService from '../../../services/ItemService';
 
 export default {
     data() {
         return {
-            weapons: [],
-            armors: [],
-            equipments: [],
             itemTraitReference: []
         }
     },
@@ -40,38 +38,24 @@ export default {
         UnitInventoryActions
     },
     methods: {
-        loadInventory() {
 
+        setupItemTraits() {
             let inventory = this.$store.state.currentUnit.inventory;
-            inventory = this.setupItemTraits(inventory);
-
-            this.armors = inventory.filter(item => item.category == "Armor");
-            this.equipments = inventory.filter(item => item.category == "Equipment");
-            this.weapons = inventory.filter(item => item.category != "Armor" && item.category != "Equipment");
-
             inventory.forEach(item => item.itemTraits.forEach(
                 trait => {
-                    if (!this.itemTraitReference.includes(trait)) {
+                    if (!this.itemTraitReference.some((x) => x.id == trait.id)) {
                         this.itemTraitReference.push(trait)
                     }
                 })
             );
+
             this.itemTraitReference = this.itemTraitReference.sort((a, b) => a.name.localeCompare(b.name));
-        },
-        setupItemTraits(inventory) {
-            inventory.forEach(item => item.itemTraits.forEach(
-                trait => {
-                    if (!this.itemTraitReference.includes(trait)) {
-                        this.itemTraitReference.push(trait)
-                    }
-                })
-            );
 
             return inventory;
         }
     },
     beforeMount() {
-        this.loadInventory();
+        this.setupItemTraits();
     }
 }
 

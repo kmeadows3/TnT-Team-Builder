@@ -27,7 +27,11 @@
 
 <script>
 export default {
-    props: ['equipments']
+    computed: {
+        equipments() {
+            return this.$store.state.currentUnit.inventory.filter(item => item.category == "Equipment");
+        }
+    }
 }
 </script>
 

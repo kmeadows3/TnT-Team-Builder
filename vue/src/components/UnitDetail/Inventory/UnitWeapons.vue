@@ -35,7 +35,11 @@
 
 <script>
 export default {
-    props: ['weapons']
+    computed: {
+        weapons() {
+            return this.$store.state.currentUnit.inventory.filter(item => item.category != "Armor"  && item.category != "Equipment");
+        }
+    }
 }
 </script>
 

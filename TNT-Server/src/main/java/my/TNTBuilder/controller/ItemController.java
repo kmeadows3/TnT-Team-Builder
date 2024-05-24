@@ -35,9 +35,9 @@ public class ItemController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path="/units/{unitId}/inventory", method = RequestMethod.POST)
-    public void addSkillToUnit(@RequestBody Integer itemId, @PathVariable int unitId, Principal principal){
+    public void addSkillToUnit(@RequestBody int[] itemId, @PathVariable int unitId, Principal principal){
         try {
-            itemService.purchaseItemForUnit(itemId, unitId, userDao.getUserIdByUsername(principal.getName()));
+            itemService.purchaseItemForUnit(itemId[0], unitId, userDao.getUserIdByUsername(principal.getName()));
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (DaoException e){

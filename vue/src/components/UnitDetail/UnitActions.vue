@@ -51,9 +51,11 @@ export default {
                 UnitService.updateUnit(this.$store.state.currentUnit)
                     .then(response => {
                         this.$store.commit('SET_CURRENT_UNIT', response.data);
-                    }).catch(error => console.error(error));
+                    }).catch(error => {
+                        this.$store.dispatch('showHttpError', error);
+            });
             } catch (error) {
-                console.error(error);
+                this.$store.commit('SHOW_ERROR_ON', error);
             }
             this.clearForm();
         }

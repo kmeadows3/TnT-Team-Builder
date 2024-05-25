@@ -40,7 +40,7 @@
                     this.$store.commit('LOSE_MONEY', upkeep);
                     this.updateTeam()
                 } catch (error) {
-                    console.error(error)
+                    this.$store.commit('SHOW_ERROR_ON', error);
                 }
             },
             loseMoney(money){
@@ -49,10 +49,10 @@
                     this.$store.commit('LOSE_MONEY', money);
                     this.updateTeam();
                     } catch (error){
-                        console.error(error);
+                        this.$store.commit('SHOW_ERROR_ON', error);
                     }    
                 } else {
-                    console.error("You may not lose negative money.")
+                    this.$store.commit('SHOW_ERROR_ON', 'You may not lose negative money.');
                 }
                 this.clearForm();
             },
@@ -61,7 +61,7 @@
                     this.$store.commit('GAIN_MONEY', money);
                     this.updateTeam();
                 } else {
-                    console.error("You must gain positive money.")
+                    this.$store.commit('SHOW_ERROR_ON', 'You must gain positive money.');
                 }
                 this.clearForm();
             },
@@ -70,7 +70,7 @@
                     .then( response => {
                         this.$store.commit('SET_CURRENT_TEAM', response.data);
                     })
-                    .catch(error => console.error(error))
+                    .catch(error => this.$store.dispatch('showHttpError', error))
             },
             clearForm(){
                 this.bsGained='';

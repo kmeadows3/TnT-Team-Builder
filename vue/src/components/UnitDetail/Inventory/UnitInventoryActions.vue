@@ -105,14 +105,11 @@ export default {
             this.getItemsForPurchase();
         },
         getItemsForPurchase() {
-            try {
+            
                 ItemService.retrieveItemsForPurchase()
                     .then(response => {
                         this.itemsForPurchase = response.data;
-                    }).catch(error => console.error(error));
-            } catch (error) {
-                console.error(error);
-            }
+                    }).catch(error => this.$store.dispatch('showHttpError', error));
         },
         purchaseItem(itemId){
             ItemService.purchaseItemForUnit(this.$store.state.currentUnit.id, itemId)
@@ -121,7 +118,7 @@ export default {
                         console.log(x);
                     })                    
                 })
-                .catch( err => console.error(err))
+                .catch( err => this.$store.dispatch('showHttpError', err))
         }
     }
 }

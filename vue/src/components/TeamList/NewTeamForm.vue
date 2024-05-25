@@ -31,7 +31,7 @@ export default {
             TeamsService.getFactionList()
                 .then(response => {
                     this.factions = response.data;
-                }).catch ( error => console.error(error));
+                }).catch ( error => this.$store.dispatch('showHttpError', error));
         },
         clearForm(){
             this.newTeam = {};
@@ -43,7 +43,7 @@ export default {
                 .then(response => {
                     this.$store.dispatch('loadTeams');
                     this.$store.commit('SET_CURRENT_TEAM', response.data);
-                }).catch (error => console.error(error));
+                }).catch (error => this.$store.dispatch('showHttpError', error));
             this.clearForm();
         }
     },

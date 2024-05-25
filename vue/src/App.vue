@@ -1,5 +1,6 @@
 <template>
   <div id="capstone-app">
+    <ErrorBanner />
     <MainNavigation />
     <router-view />
   </div>
@@ -8,10 +9,12 @@
 
 <script>
 import MainNavigation from "./components/MainNavigation.vue";
+import ErrorBanner from "./components/ErrorBanner.vue";
 
 export default{
   components: {
-    MainNavigation
+    MainNavigation,
+    ErrorBanner
   }
 }
 </script>

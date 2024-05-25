@@ -15,7 +15,9 @@ export function createStore(currentToken, currentUser) {
       showNewTeamForm: false,
       teamList: [],
       currentTeam: {},
-      currentUnit: {}
+      currentUnit: {},
+      showError: false,
+      errorMessage: ''
     },
     mutations: {
       SET_AUTH_TOKEN(state, token) {
@@ -88,6 +90,14 @@ export function createStore(currentToken, currentUser) {
         } else {
           throw "Experience gained must be positive."
         }
+      },
+      SHOW_ERROR_OFF(state){
+        state.showError = false;
+        state.errorMessage = '';
+      },
+      SHOW_ERROR_ON(state, newMessage){
+        state.errorMessage = newMessage;
+        state.showError = true;
       }
 
     },
@@ -98,7 +108,7 @@ export function createStore(currentToken, currentUser) {
             store.commit('SET_TEAM_LIST', response.data);
           })
           .catch(err => {
-            console.error(err)
+            store.commit('SHOW_ERROR_ON', err.response.data.message)
           });
       },
       reloadCurrentUnit(context) {
@@ -107,7 +117,15 @@ export function createStore(currentToken, currentUser) {
             store.commit('SET_CURRENT_UNIT', response.data);
             return store.state.currentUnit;
           })
-          .catch(err => console.error(err));
+          .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
+      },
+      showHttpError(state, error){
+        store.commit('SHOW_ERROR_ON', error.response.data.message);
+        store.dispatch('loadTeams');
+        if(state.currentUnit){
+          store.dispatch('reloadCurrentUnit', state);
+        }
+        
       }
     }
   });

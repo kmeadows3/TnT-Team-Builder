@@ -52,7 +52,7 @@ export default {
             TeamsService.updateTeam(this.$store.state.currentTeam)
                 .then( response => {
                     this.$store.commit('SET_CURRENT_TEAM', response.data);
-                }).catch(error => console.error(error));
+                }).catch(error => this.$store.dispatch('showHttpError', error));
             this.toggleEditName();
         }
     },

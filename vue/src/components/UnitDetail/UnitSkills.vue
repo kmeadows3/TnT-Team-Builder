@@ -50,7 +50,7 @@ export default {
         getPotentialSkills() {
             UnitService.getPotentialSkills(this.$store.state.currentUnit.id)
                 .then(response => this.potentialSkills = response.data)
-                .catch(error => console.error(error));
+                .catch(error => this.$store.dispatch('showHttpError', error));
         },
         addSkill() {
             UnitService.addSkill(this.$store.state.currentUnit.id, this.newSkill)
@@ -58,10 +58,10 @@ export default {
                     this.$store.dispatch('loadTeams');
                     UnitService.getUnit(this.$store.state.currentUnit.id)
                         .then(response => this.$store.commit('SET_CURRENT_UNIT', response.data))
-                        .catch(error => console.error(error));
+                        .catch(error => this.$store.dispatch('showHttpError', error));
                     this.sortSkills();
                     this.getPotentialSkills();
-                }).catch(error => console.error(error));
+                }).catch(error => this.$store.dispatch('showHttpError', error));
         },
         sortSkills(){
             this.sortedSkills = this.$store.state.currentUnit.skills.sort((a,b)=> a.name.localeCompare(b.name));

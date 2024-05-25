@@ -29,7 +29,7 @@ export default {
             this.teams = response.data;
           })
           .catch(err => {
-            console.error(err)
+            this.$store.dispatch('showHttpError', err);
           });
     },
     components: {

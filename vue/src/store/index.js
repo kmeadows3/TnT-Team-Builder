@@ -17,7 +17,9 @@ export function createStore(currentToken, currentUser) {
       currentTeam: {},
       currentUnit: {},
       showError: false,
-      errorMessage: ''
+      errorMessage: '',
+      unitInventoryTraits: [],
+      teamInventoryTraits: []
     },
     mutations: {
       SET_AUTH_TOKEN(state, token) {
@@ -98,6 +100,9 @@ export function createStore(currentToken, currentUser) {
       SHOW_ERROR_ON(state, newMessage){
         state.errorMessage = newMessage;
         state.showError = true;
+      },
+      SET_UNIT_INVENTORY_TRAITS(state, traits){
+        state.unitInventoryTraits = traits;
       }
 
     },
@@ -115,17 +120,32 @@ export function createStore(currentToken, currentUser) {
         UnitService.getUnit(context.state.currentUnit.id)
           .then(response => {
             store.commit('SET_CURRENT_UNIT', response.data);
-            return store.state.currentUnit;
+            store.dispatch('updateUnitInventoryTraits');
           })
           .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
       },
-      showHttpError(state, error){
+      showHttpError(context, error){
         store.commit('SHOW_ERROR_ON', error.response.data.message);
         store.dispatch('loadTeams');
-        if(state.currentUnit){
-          store.dispatch('reloadCurrentUnit', state);
+        if(context.state.currentUnit){
+          store.dispatch('reloadCurrentUnit');
         }
+      },
+      updateUnitInventoryTraits(context){
+        let unitInventory = store.state.currentUnit.inventory;
+        let unitTraits = [];
         
+        unitInventory.forEach(item => item.itemTraits.forEach(
+            trait => {
+                if (!unitTraits.some((x) => x.id == trait.id)) {
+                    unitTraits.push(trait)
+                }
+            })
+        );
+
+        unitTraits = unitTraits.sort((a, b) => a.name.localeCompare(b.name));
+
+        store.commit('SET_UNIT_INVENTORY_TRAITS', unitTraits);
       }
     }
   });

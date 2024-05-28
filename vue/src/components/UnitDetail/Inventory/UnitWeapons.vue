@@ -1,5 +1,5 @@
 <template>
-    <div class="item-container">
+    <div class="item-container" v-show="weapons.length > 0">
         <h3>Weapons</h3>
         <div class="item-table">
             <div class="item-list table-label">

@@ -59,7 +59,7 @@
                         :disabled="trueItemCost(item) > $store.state.currentTeam.money">
                         Buy
                     </button>
-                    <button>Gain for Free</button>
+                    <button @click="gainItem(item.referenceId)">Gain for Free</button>
                 </div>
             </div>
         </div>
@@ -122,6 +122,13 @@ export default {
                     this.$store.dispatch('showHttpError', err);
                 })
         },
+        gainItem(itemId){
+            ItemService.gainItemForFree(this.$store.state.currentUnit.id, itemId)
+                .then(response => {
+                    this.$store.dispatch('reloadCurrentUnit');
+                })
+                .catch (err => this.$store.dispatch('showHttpError', err));
+        },
         trueItemCost(item) {
             let wounds = this.$store.state.currentUnit.wounds;
 
@@ -173,6 +180,10 @@ export default {
     grid-area: "Buttons";
 }
 
+.grid-buttons>button {
+    margin: 0px 3px;
+}
+
 .too-expensive {
     background-color: rgb(236, 173, 173);
 }
@@ -208,7 +219,7 @@ input.tab {
         border: 1px solid #aaa;
         border-bottom: 0;
         background-color: #fff;
-        margin-right: 3px;
+        margin-right: -1px;
         padding: .5em 1em;
         position: relative;
         vertical-align: middle;

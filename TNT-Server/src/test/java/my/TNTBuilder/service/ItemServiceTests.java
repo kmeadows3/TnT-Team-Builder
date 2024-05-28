@@ -5,6 +5,7 @@ import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
 import my.TNTBuilder.model.inventory.Item;
+import my.TNTBuilder.model.inventory.Weapon;
 import my.TNTBuilder.validator.TeamValidator;
 import org.junit.After;
 import org.junit.Assert;
@@ -47,8 +48,8 @@ public class ItemServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void purchaseItemForUnit_correctly_purchases_item(){
-        int itemId = sut.purchaseItemForUnit(WEAPON.getReferenceId(), 3, 1);
+    public void addItemToUnit_correctly_purchases_item_when_not_free(){
+        int itemId = sut.addItemToUnit(WEAPON.getReferenceId(), 3, 1, false);
         WEAPON.setId(itemId);
 
         Unit testUnit = unitDao.getUnitById(3, 1);
@@ -61,9 +62,23 @@ public class ItemServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void purchaseItemForUnit_correctly_purchases_item_multiple_uses(){
-        WEAPON.setId (sut.purchaseItemForUnit(WEAPON.getReferenceId(), 3,1));
-        ITEM.setId (sut.purchaseItemForUnit(ITEM.getReferenceId(), 3,1));
+    public void addItemToUnit_correctly_purchases_item_when_free(){
+        int itemId = sut.addItemToUnit(WEAPON.getReferenceId(), 3, 1, true);
+        WEAPON.setId(itemId);
+
+        Unit testUnit = unitDao.getUnitById(3, 1);
+        Team testTeam = teamDao.getTeamById(1,1);
+
+        Assert.assertEquals(1, testUnit.getInventory().size());
+        Assert.assertTrue(testUnit.getInventory().contains(WEAPON));
+        Assert.assertEquals(500, testTeam.getMoney());
+
+    }
+
+    @Test
+    public void addItemToUnit_correctly_purchases_item_multiple_uses_not_free(){
+        WEAPON.setId (sut.addItemToUnit(WEAPON.getReferenceId(), 3,1, false));
+        ITEM.setId (sut.addItemToUnit(ITEM.getReferenceId(), 3,1, false));
 
 
         Unit testUnit = unitDao.getUnitById(3, 1);
@@ -75,15 +90,43 @@ public class ItemServiceTests extends BaseDaoTests {
         Assert.assertEquals(492, testTeam.getMoney());
     }
 
-    @Test (expected = ServiceException.class)
-    public void purchaseItemForUnit_throws_exception_if_item_is_too_expensive(){
-        sut.purchaseItemForUnit(WEAPON.getReferenceId(), 8,4);
-        Assert.fail();
+    @Test
+    public void addItemToUnit_correctly_purchases_item_multiple_uses_free(){
+        WEAPON.setId (sut.addItemToUnit(WEAPON.getReferenceId(), 3,1, true));
+        ITEM.setId (sut.addItemToUnit(ITEM.getReferenceId(), 3,1, true));
+
+
+        Unit testUnit = unitDao.getUnitById(3, 1);
+        Team testTeam = teamDao.getTeamById(1,1);
+
+        Assert.assertEquals(2, testUnit.getInventory().size());
+        Assert.assertTrue(testUnit.getInventory().contains(WEAPON));
+        Assert.assertTrue(testUnit.getInventory().contains(ITEM));
+        Assert.assertEquals(500, testTeam.getMoney());
     }
 
     @Test (expected = ServiceException.class)
-    public void purchaseItemForUnit_throws_exception_if_user_does_not_own_unit(){
-        sut.purchaseItemForUnit(WEAPON.getReferenceId(), 1,4);
+    public void addItemToUnit_throws_exception_if_item_is_too_expensive_and_is_not_free(){
+        sut.addItemToUnit(WEAPON.getReferenceId(), 8,4, false);
+        Assert.fail();
+    }
+
+    @Test
+    public void addItemToUnit_works_if_item_is_too_expensive_but_is_free(){
+        WEAPON.setId(sut.addItemToUnit(WEAPON.getReferenceId(), 8,4, true));
+
+        Unit testUnit = unitDao.getUnitById(8, 4);
+        Team testTeam = teamDao.getTeamById(5,4);
+
+        Assert.assertEquals(1, testUnit.getInventory().size());
+        Assert.assertTrue(testUnit.getInventory().contains(WEAPON));
+        Assert.assertEquals(1, testTeam.getMoney());
+    }
+
+
+    @Test (expected = ServiceException.class)
+    public void addItemToUnit_throws_exception_if_user_does_not_own_unit(){
+        sut.addItemToUnit(WEAPON.getReferenceId(), 1,4, false);
         Assert.fail();
     }
 

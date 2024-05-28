@@ -36,7 +36,7 @@ public class ItemService {
     }
 
 
-    public int purchaseItemForUnit(int itemReferenceId, int unitId, int userId){
+    public int addItemToUnit(int itemReferenceId, int unitId, int userId, boolean isFree){
 
         Item referenceItem = null;
         Unit unit = null;
@@ -52,15 +52,38 @@ public class ItemService {
         //TODO logic to validate purchase
 
         int itemId = 0;
+        if (isFree){
+            itemId = gainItemForFree(referenceItem, unit);
+        } else {
+            itemId = purchaseItem(referenceItem, unit);
+        }
+        return itemId;
+    }
+
+
+    /*
+    PRIVATE METHODS
+     */
+
+    private int purchaseItem(Item referenceItem, Unit unit) {
+        int itemId = 0;
         try {
-
-            teamService.spendMoney( referenceItem.calculateCostToPurchase(unit), teamService.getTeamByUnitId(unitId));
-
+            teamService.spendMoney( referenceItem.calculateCostToPurchase(unit), teamService.getTeamByUnitId(unit.getId()));
             itemId = itemDao.addItemToUnit(referenceItem.getReferenceId(), unit.getId());
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage(), e);
         }
 
+        return itemId;
+    }
+
+    private int gainItemForFree(Item referenceItem, Unit unit) {
+        int itemId = 0;
+        try {
+            itemId = itemDao.addItemToUnit(referenceItem.getReferenceId(), unit.getId());
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
         return itemId;
     }
 

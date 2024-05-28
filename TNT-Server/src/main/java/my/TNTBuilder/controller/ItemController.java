@@ -35,9 +35,10 @@ public class ItemController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path="/units/{unitId}/inventory", method = RequestMethod.POST)
-    public void addSkillToUnit(@RequestBody int[] itemId, @PathVariable int unitId, Principal principal){
+    public void addItemToUnit(@RequestBody int[] itemId, @PathVariable int unitId,
+                              @RequestParam(defaultValue = "false") Boolean isFree, Principal principal){
         try {
-            itemService.purchaseItemForUnit(itemId[0], unitId, userDao.getUserIdByUsername(principal.getName()));
+            itemService.addItemToUnit(itemId[0], unitId, userDao.getUserIdByUsername(principal.getName()), isFree);
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (DaoException e){

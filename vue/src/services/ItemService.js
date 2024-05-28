@@ -5,7 +5,11 @@ export default {
         return axios.get('/inventory')
       },
     purchaseItemForUnit(unitId, itemRefId){
-      let body = [itemRefId]
+      let body = [itemRefId];
       return axios.post(`/units/${unitId}/inventory`, body);
+    },
+    gainItemForFree(unitId, itemRefId){
+      let body = [itemRefId];
+      return axios.post(`/units/${unitId}/inventory?isFree=True`, body);
     }
 }

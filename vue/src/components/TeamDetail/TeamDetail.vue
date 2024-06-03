@@ -2,15 +2,15 @@
     <section class="main-display">
         <h1 class="page-title" v-show="!showChangeNameForm">
             <span>{{this.$store.state.currentTeam.name}}</span>
-            <i class="bi bi-pencil-square" @click="toggleEditName()"></i>
+            <i class="bi bi-pencil-square" @click="toggleEditName()" title="Edit Name"></i>
         </h1>
         <h1 class="page-title" v-show="showChangeNameForm">
             <form>
                 <input type="text" id="changeName" v-model="teamName">
             </form>
             <span class="action-buttons">
-            <i class="bi bi-check-circle" @click="changeName()"></i>
-            <i class="bi bi-x-square" @click="resetName()"></i>
+            <i class="bi bi-check-circle" @click="changeName()" title="Submit"></i>
+            <i class="bi bi-x-square" @click="resetName()" title="Cancel"></i>
         </span>
         </h1>
         <div class="team-box">

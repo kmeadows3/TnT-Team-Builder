@@ -7,6 +7,8 @@
                 <div class="armor-small">Cost</div>
                 <div class="armor-med">Defense Bonus (melee/ranged)</div>
                 <div class="armor-large">Special Rules</div>
+                <div class="armor-small" v-show="($store.state.currentUnit.id && $store.state.manageUnitInventory) || (!$store.state.currentUnit.id && $store.state.manageTeamInventory)">
+                    Actions</div>
             </div>
             <div class="item-list" v-for="armor in armors" :key="'armor' + armor.id">
                 <div class="armor-med">{{ armor.name }}</div>
@@ -24,13 +26,19 @@
                             {{ trait.name }}</span>
                     </span>
                 </div>
+                <ItemActions class ="armor-small" :item='armor'/>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import ItemActions from '../../InventoryShared/ItemActions.vue';
+
 export default {
+    components: {
+        ItemActions
+    },
     computed: {
         armors() {
             return this.$store.state.currentUnit.inventory.filter(item => item.category == "Armor");
@@ -41,9 +49,12 @@ export default {
 
 <style scoped>
 div.item-list>.armor-small {
-    min-width: 50px;
+    min-width: 75px;
     flex-grow: 1;
     flex-basis: 5%;
+    display: flex;
+    justify-content: center;
+    align-content: baseline;
 }
 
 div.item-list>.armor-med {

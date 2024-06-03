@@ -68,11 +68,22 @@ span.action-buttons i {
     border-radius: 5px;
 }
 
+i.bi {
+    border: solid 1px black;
+    cursor: pointer;
+}
+
+i.inventory-icon {
+
+    font-size: .8em;
+    border-radius: 3px;
+    padding: 2px;
+}
+
 i.bi-pencil-square {
     font-size: 1.2rem;
     cursor: pointer;
     padding: 3px 4px;
-    border: solid 1px black;
     border-radius: 5px;
 }
 

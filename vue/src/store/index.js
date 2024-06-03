@@ -19,7 +19,9 @@ export function createStore(currentToken, currentUser) {
       showError: false,
       errorMessage: '',
       unitInventoryTraits: [],
-      teamInventoryTraits: []
+      teamInventoryTraits: [],
+      manageUnitInventory: false,
+      manageTeamInventory: false
     },
     mutations: {
       SET_AUTH_TOKEN(state, token) {
@@ -103,6 +105,9 @@ export function createStore(currentToken, currentUser) {
       },
       SET_UNIT_INVENTORY_TRAITS(state, traits){
         state.unitInventoryTraits = traits;
+      },
+      SET_MANAGE_UNIT_INVENTORY(state, value){
+        state.manageUnitInventory = value;
       }
 
     },
@@ -124,10 +129,14 @@ export function createStore(currentToken, currentUser) {
           })
           .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
       },
-      showHttpError(context, error){
-        store.commit('SHOW_ERROR_ON', error.response.data.message);
+      showError(context, error){
+        if(error.response){
+          store.commit('SHOW_ERROR_ON', error.response.data.message);
+        } else {
+          store.commit('SHOW_ERROR_ON', error);
+        }
         store.dispatch('loadTeams');
-        if(context.state.currentUnit){
+        if(context.state.currentUnit.id){
           store.dispatch('reloadCurrentUnit');
         }
       },

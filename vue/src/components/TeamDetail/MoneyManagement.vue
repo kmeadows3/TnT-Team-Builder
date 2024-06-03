@@ -61,7 +61,7 @@
                     this.$store.commit('GAIN_MONEY', money);
                     this.updateTeam();
                 } else {
-                    this.$store.commit('SHOW_ERROR_ON', 'You must gain positive money.');
+                    this.$store.dispatch('showError', 'You must gain positive money.')
                 }
                 this.clearForm();
             },
@@ -70,7 +70,7 @@
                     .then( response => {
                         this.$store.commit('SET_CURRENT_TEAM', response.data);
                     })
-                    .catch(error => this.$store.dispatch('showHttpError', error))
+                    .catch(error => this.$store.dispatch('showError', error))
             },
             clearForm(){
                 this.bsGained='';

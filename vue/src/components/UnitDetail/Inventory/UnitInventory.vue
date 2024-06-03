@@ -4,7 +4,7 @@
         <UnitWeapons />
         <UnitArmor />
         <UnitEquipment />
-        <UnitInventoryActions @updateTraits="emitResponse()" />
+        <UnitInventoryActions />
     </div>
 
     <div class="reference">
@@ -45,8 +45,3 @@ export default {
 }
 
 </script>
-
-<style scoped>
-
-
-</style>

@@ -69,7 +69,7 @@
 
 <script>
 
-import ItemService from '../../../services/ItemService';
+import ItemService from '../../services/ItemService';
 
 
 export default {

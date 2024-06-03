@@ -39,13 +39,14 @@ div.error-bar>h1 {
     display: inline-block;
 }
 
-i {
+i.bi-x-square {
     position: absolute;
     top: 0px;
     right: 0px;
     font-weight: bold;
     font-size: 1.5em;
     margin: 5px;
+    border: 0px;
 }
 
 </style>

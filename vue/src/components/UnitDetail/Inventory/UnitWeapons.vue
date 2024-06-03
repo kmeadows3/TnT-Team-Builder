@@ -10,6 +10,8 @@
                 <div class="weapon-small">Reliability</div>
                 <div class="weapon-small">Hands</div>
                 <div class="weapon-large">Special Rules</div>
+                <div class="weapon-actions" v-show="($store.state.currentUnit.id && $store.state.manageUnitInventory) || (!$store.state.currentUnit.id && $store.state.manageTeamInventory)">
+                    Actions</div>
             </div>
             <div class="item-list" v-for="weapon in weapons" :key="'weapon' + weapon.id">
                 <div class="weapon-med">{{ weapon.name }}</div>
@@ -28,13 +30,19 @@
                             {{ trait.name }}</span>
                     </span>
                 </div>
+                <ItemActions class="weapon-actions" :item="weapon"/>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import ItemActions from '../../InventoryShared/ItemActions.vue';
+
 export default {
+    components: {
+        ItemActions
+    },
     computed: {
         weapons() {
             return this.$store.state.currentUnit.inventory.filter(item => item.category != "Armor"  && item.category != "Equipment");
@@ -49,6 +57,16 @@ div.item-list>.weapon-small {
     min-width: 50px;
     flex-grow: 1;
     flex-basis: 7%;
+}
+
+div.item-list>.weapon-actions {
+    min-width: 75px;
+    flex-grow: 1;
+    flex-basis: 7%;
+    display: flex;
+    justify-content: center;
+    align-content: baseline;
+
 }
 
 div.item-list>.weapon-med {

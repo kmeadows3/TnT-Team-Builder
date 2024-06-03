@@ -6,6 +6,8 @@
                 <div class="equipment-med">Type</div>
                 <div class="equipment-small">Cost</div>
                 <div class="equipment-large">Special Rules</div>
+                <div class="equipment-small" v-show="($store.state.currentUnit.id && $store.state.manageUnitInventory) || (!$store.state.currentUnit.id && $store.state.manageTeamInventory)">
+                    Actions</div>
             </div>
             <div class="item-list" v-for="equipment in equipments" :key="'equipment' + equipment.id">
                 <div class="equipment-med">{{ equipment.name }}</div>
@@ -20,13 +22,19 @@
                             {{ trait.name }}</span>
                     </span>
                 </div>
+                <ItemActions class ="equipment-small" :item='equipment'/>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import ItemActions from '../../InventoryShared/ItemActions.vue';
+
 export default {
+    components: {
+        ItemActions
+    },
     computed: {
         equipments() {
             return this.$store.state.currentUnit.inventory.filter(item => item.category == "Equipment");
@@ -38,9 +46,12 @@ export default {
 <style scoped>
 
 div.item-list>.equipment-small {
-    min-width: 50px;
+    min-width: 75px;
     flex-grow: 1;
     flex-basis: 5%;
+    display: flex;
+    justify-content: center;
+    align-content: baseline;
 }
 
 div.item-list>.equipment-med {

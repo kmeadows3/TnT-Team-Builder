@@ -11,5 +11,8 @@ export default {
     gainItemForFree(unitId, itemRefId){
       let body = [itemRefId];
       return axios.post(`/units/${unitId}/inventory?isFree=True`, body);
+    },
+    transferItem(itemId, unitId){
+      return axios.put(`/units/${unitId}/inventory/${itemId}/transfer`)
     }
 }

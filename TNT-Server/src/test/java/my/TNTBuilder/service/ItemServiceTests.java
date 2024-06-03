@@ -1,6 +1,7 @@
 package my.TNTBuilder.service;
 
 import my.TNTBuilder.dao.*;
+import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
@@ -130,6 +131,46 @@ public class ItemServiceTests extends BaseDaoTests {
         Assert.fail();
     }
 
+
+    @Test
+    public void transferItem_works_when_moving_item_from_unit_to_team() {
+        sut.transferItem(1, 1,1 );
+        List<Item> teamTestList = sut.itemDao.getAllItemsForTeam(1);
+        List<Item> unitTestList = sut.itemDao.getAllItemsForUnit(1);
+
+        Assert.assertEquals(4, teamTestList.size());
+        Assert.assertTrue(teamTestList.contains(ARMOR));
+        Assert.assertEquals(2, unitTestList.size());
+        Assert.assertFalse(unitTestList.contains(ARMOR));
+    }
+
+    @Test
+    public void transferItem_works_when_moving_item_from_team_to_item() {
+        sut.transferItem(5, 1, 1);
+        List<Item> teamTestList = sut.itemDao.getAllItemsForTeam(1);
+        List<Item> unitTestList = sut.itemDao.getAllItemsForUnit(1);
+
+        ARMOR.setId(5);
+        Assert.assertEquals(2, teamTestList.size());
+        Assert.assertFalse(teamTestList.contains(ARMOR));
+        Assert.assertEquals(4, unitTestList.size());
+        Assert.assertTrue(unitTestList.contains(ARMOR));
+    }
+
+    @Test (expected = ServiceException.class)
+    public void transferItem_throws_exception_invalid_item_id() {
+        sut.transferItem(99, 1, 1);
+    }
+
+    @Test (expected = ServiceException.class)
+    public void transferItem_throws_exception_item_not_owned_by_team_or_unit() {
+        sut.transferItem(4, 1, 1);
+    }
+
+    @Test (expected = ServiceException.class)
+    public void transferItem_throws_exception_unit_not_owned_by_user() {
+        sut.transferItem(4, 1, 2);
+    }
 
 
 }

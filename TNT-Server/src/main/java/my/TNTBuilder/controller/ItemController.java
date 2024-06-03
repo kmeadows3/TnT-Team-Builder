@@ -63,5 +63,17 @@ public class ItemController {
         return purchaseList;
     }
 
+    @RequestMapping(path="/units/{unitId}/inventory/{itemId}/transfer", method = RequestMethod.PUT)
+    public void transferItem(@PathVariable int itemId, @PathVariable int unitId, Principal principal){
+        try {
+            itemService.transferItem(itemId, unitId, userDao.getUserIdByUsername(principal.getName()));
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+
+
+
+
+    }
 
 }

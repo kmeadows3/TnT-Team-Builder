@@ -1,9 +1,11 @@
 package my.TNTBuilder.service;
 
 import my.TNTBuilder.dao.ItemDao;
+import my.TNTBuilder.dao.TeamDao;
 import my.TNTBuilder.dao.UnitDao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
+import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
 import my.TNTBuilder.model.inventory.Item;
 import org.springframework.stereotype.Component;
@@ -58,6 +60,21 @@ public class ItemService {
             itemId = purchaseItem(referenceItem, unit);
         }
         return itemId;
+    }
+
+    public void transferItem(int itemId, int unitId, int userId){
+        Team team = teamService.getTeamByUnitId(unitId);
+        if (team.getUserId() == userId){
+            try {
+                itemDao.transferItem(itemId, unitId, team.getId());
+            } catch (DaoException e){
+                throw new ServiceException(e.getMessage(), e);
+            }
+
+        } else {
+            throw new ServiceException("Unit does not belong to user.");
+        }
+
     }
 
 

@@ -5,6 +5,7 @@ import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.FactionDTO;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
+import my.TNTBuilder.model.inventory.Item;
 import my.TNTBuilder.validator.TeamValidator;
 import my.TNTBuilder.dao.*;
 import org.junit.Assert;
@@ -202,6 +203,5 @@ public class TeamServiceTests extends BaseDaoTests {
         sut.getAllTeamsForUser(3);
         Assert.fail();
     }
-
 
 }

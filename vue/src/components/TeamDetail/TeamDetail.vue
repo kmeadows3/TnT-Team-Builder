@@ -17,6 +17,7 @@
             <TeamSummary/>
             <UnitList/>
             <MoneyManagment/>
+            <TeamInventory/>
         </div>
     </section>
 </template>
@@ -25,6 +26,7 @@
 import UnitList from './UnitList.vue';
 import TeamSummary from './TeamSummary.vue';
 import MoneyManagment from './MoneyManagement.vue';
+import TeamInventory from './TeamInventory.vue';
 import TeamsService from '../../services/TeamsService';
 
 export default {
@@ -37,7 +39,8 @@ export default {
     components: {
         UnitList,
         TeamSummary,
-        MoneyManagment
+        MoneyManagment,
+        TeamInventory
     },
     methods: {
         toggleEditName(){

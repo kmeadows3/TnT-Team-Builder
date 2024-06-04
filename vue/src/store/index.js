@@ -108,6 +108,9 @@ export function createStore(currentToken, currentUser) {
       },
       SET_MANAGE_UNIT_INVENTORY(state, value){
         state.manageUnitInventory = value;
+      },
+      SET_MANAGE_TEAM_INVENTORY(state, value){
+        state.manageTeamInventory = value;
       }
 
     },

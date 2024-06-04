@@ -1,5 +1,5 @@
 <template>
-    <div v-show="($store.state.currentUnit.id && $store.state.manageUnitInventory) || (!$store.state.currentUnit.id && $store.state.manageTeamInventory)">
+    <div v-if="($store.state.currentUnit.id && $store.state.manageUnitInventory) || (!$store.state.currentUnit.id && $store.state.manageTeamInventory)">
         <i class="bi inventory-icon bi-cash" title="Sell"></i>
         <i class="bi inventory-icon bi-trash" title="Delete"></i>
         <i class="bi inventory-icon bi-arrow-left-right" title="Transfer" @click="transferItem()"></i>

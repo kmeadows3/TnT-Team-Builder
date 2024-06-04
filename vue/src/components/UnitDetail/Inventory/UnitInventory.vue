@@ -4,7 +4,7 @@
         <UnitWeapons />
         <UnitArmor />
         <UnitEquipment />
-        <UnitInventoryActions />
+        <InventoryActions />
     </div>
 
     <div class="reference">
@@ -20,7 +20,7 @@
 import UnitWeapons from './UnitWeapons.vue';
 import UnitArmor from './UnitArmor.vue';
 import UnitEquipment from './UnitEquipment.vue';
-import UnitInventoryActions from './UnitInventoryActions.vue';
+import InventoryActions from '../../InventoryShared/InventoryActions.vue';
 
 export default {
     data() {
@@ -32,7 +32,7 @@ export default {
         UnitWeapons,
         UnitArmor,
         UnitEquipment,
-        UnitInventoryActions
+        InventoryActions
     },
     methods: {
         setupItemTraits() {

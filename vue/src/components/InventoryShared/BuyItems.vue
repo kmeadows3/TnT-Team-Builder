@@ -113,21 +113,25 @@ export default {
                 }).catch(error => this.$store.dispatch('showHttpError', error));
         },
         purchaseItem(itemId) {
-            ItemService.purchaseItemForUnit(this.$store.state.currentUnit.id, itemId)
+            if (this.$store.state.currentUnit.id){
+                ItemService.purchaseItemForUnit(this.$store.state.currentUnit.id, itemId)
                 .then(response => {
                     this.$store.dispatch('reloadCurrentUnit');
                 })
                 .catch(err => {
                     console.log(err);
-                    this.$store.dispatch('showHttpError', err);
+                    this.$store.dispatch('showError', err);
                 })
+            }            
         },
         gainItem(itemId){
-            ItemService.gainItemForFree(this.$store.state.currentUnit.id, itemId)
+            if (this.$store.state.currentUnit.id){
+                ItemService.gainItemForFree(this.$store.state.currentUnit.id, itemId)
                 .then(response => {
                     this.$store.dispatch('reloadCurrentUnit');
                 })
-                .catch (err => this.$store.dispatch('showHttpError', err));
+                .catch (err => this.$store.dispatch('showError', err));
+            }
         },
         trueItemCost(item) {
             let wounds = this.$store.state.currentUnit.wounds;

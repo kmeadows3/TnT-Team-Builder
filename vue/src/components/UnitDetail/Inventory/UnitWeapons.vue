@@ -10,7 +10,7 @@
                 <div class="weapon-small">Reliability</div>
                 <div class="weapon-small">Hands</div>
                 <div class="weapon-large">Special Rules</div>
-                <div class="weapon-actions" v-show="($store.state.currentUnit.id && $store.state.manageUnitInventory) || (!$store.state.currentUnit.id && $store.state.manageTeamInventory)">
+                <div class="weapon-actions" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
             <div class="item-list" v-for="weapon in weapons" :key="'weapon' + weapon.id">

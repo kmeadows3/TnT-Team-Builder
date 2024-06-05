@@ -13,6 +13,7 @@ export default {
     props: ['unit'],
     methods: {
         toUnitDetail(){
+            this.$store.commit('SET_MANAGE_INVENTORY', false);
             this.$store.commit('SET_CURRENT_UNIT', this.unit);
         }
     }

@@ -20,8 +20,7 @@ export function createStore(currentToken, currentUser) {
       errorMessage: '',
       unitInventoryTraits: [],
       teamInventoryTraits: [],
-      manageUnitInventory: false,
-      manageTeamInventory: false
+      manageInventory: false
     },
     mutations: {
       SET_AUTH_TOKEN(state, token) {
@@ -106,11 +105,8 @@ export function createStore(currentToken, currentUser) {
       SET_UNIT_INVENTORY_TRAITS(state, traits){
         state.unitInventoryTraits = traits;
       },
-      SET_MANAGE_UNIT_INVENTORY(state, value){
-        state.manageUnitInventory = value;
-      },
-      SET_MANAGE_TEAM_INVENTORY(state, value){
-        state.manageTeamInventory = value;
+      SET_MANAGE_INVENTORY(state, value){
+        state.manageInventory = value;
       }
 
     },

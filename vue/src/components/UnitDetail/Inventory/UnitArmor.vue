@@ -7,7 +7,7 @@
                 <div class="armor-small">Cost</div>
                 <div class="armor-med">Defense Bonus (melee/ranged)</div>
                 <div class="armor-large">Special Rules</div>
-                <div class="armor-small" v-show="($store.state.currentUnit.id && $store.state.manageUnitInventory) || (!$store.state.currentUnit.id && $store.state.manageTeamInventory)">
+                <div class="armor-small" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
             <div class="item-list" v-for="armor in armors" :key="'armor' + armor.id">

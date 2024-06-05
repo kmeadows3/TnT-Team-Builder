@@ -6,7 +6,7 @@
                 <div class="equipment-med">Type</div>
                 <div class="equipment-small">Cost</div>
                 <div class="equipment-large">Special Rules</div>
-                <div class="equipment-small" v-show="($store.state.currentUnit.id && $store.state.manageUnitInventory) || (!$store.state.currentUnit.id && $store.state.manageTeamInventory)">
+                <div class="equipment-small" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
             <div class="item-list" v-for="equipment in equipments" :key="'equipment' + equipment.id">

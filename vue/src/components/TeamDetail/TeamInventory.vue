@@ -7,8 +7,7 @@
                 <div class="item-large">Special Rules</div>
                 <div class="item-small">Relic</div>
                 <div class="item-small">Support</div>
-                <div class="item-small" v-if="($store.state.currentUnit.id && $store.state.manageUnitInventory) || (!$store.state.currentUnit.id && $store.state.manageTeamInventory)">
-                    Actions</div>
+                <div class="item-action" v-if="$store.state.manageInventory"> Actions</div>
             </div>
             <div class="item-list" v-for="item in sortedInventory" :key="'teamInventory' + item.id">
                 <div class="item-med">{{ item.name }}</div>
@@ -24,16 +23,16 @@
                     </span>
                 </div>
                 <div class="item-small">
-                    <i class="bi bi-check-circle" title="Relic" v-if="item.relic"></i>
-                    <i class="bi bi-x-circle" v-if="!item.relic"></i>
+                    <i class="bi bi-check-circle" title="Relic" v-show="item.relic"></i>
+                    <i class="bi bi-x-circle" v-show="!item.relic"></i>
 
                 </div>
                 <div class="item-small">
-                    <i class="bi bi-check-circle" title="Support" v-if="item.category=='Support Weapon'"></i>
-                    <i class="bi bi-x-circle" v-if="!(item.category=='Support Weapon')"></i>
+                    <i class="bi bi-check-circle" title="Support" v-show="item.category=='Support Weapon'"></i>
+                    <i class="bi bi-x-circle" v-show="!(item.category=='Support Weapon')"></i>
 
                 </div>
-                <ItemActions class ="item-small" :item='item'/>
+                <ItemActions class ="item-action" :item='item'/>
             </div>
         </div>
 
@@ -85,6 +84,15 @@ div.item-list>.item-small {
     display: flex;
     justify-content: center;
     align-content: baseline;
+}
+
+div.item-list>.item-action {
+    min-width: 200px;
+    flex-grow: 1;
+    flex-basis: 3%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 div.item-list>.item-small>.bi {

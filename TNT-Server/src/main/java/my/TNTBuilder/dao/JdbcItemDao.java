@@ -152,6 +152,44 @@ public class JdbcItemDao implements ItemDao {
         return purchaseList;
     }
 
+    @Override
+    public Item getItemById(int itemId) {
+        String sql = SELECT_ALL_FROM_ITEM + "WHERE item_id = ?";
+        Item item = null;
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, itemId);
+            while(results.next()){
+                item = mapRowToItem(results);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+
+        return item;
+    }
+
+    @Override
+    public int getTeamIdByItemId(int itemId) {
+        String sql = "SELECT u.team_id AS unitTeamId, t.team_id AS teamId FROM inventory i " +
+                "LEFT JOIN team t ON t.team_id = i.team_id " +
+                "LEFT JOIN unit u ON u.unit_id = i.unit_id " +
+                "WHERE item_id = ?";
+        int teamId = 0;
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, itemId);
+            while(results.next()){
+                teamId = results.getInt("teamId") != 0 ? results.getInt("teamId") : results.getInt("unitTeamId");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+
+        if (teamId == 0){
+            throw new DaoException("Invalid item id.");
+        }
+        return teamId;
+    }
+
 
 
     /*

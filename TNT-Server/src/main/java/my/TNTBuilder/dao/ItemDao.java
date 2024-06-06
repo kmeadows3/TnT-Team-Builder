@@ -27,4 +27,8 @@ public interface ItemDao {
 
     List<Item> getListOfItemsForPurchase();
 
+    Item getItemById(int itemId);
+
+    int getTeamIdByItemId(int itemId);
+
 }

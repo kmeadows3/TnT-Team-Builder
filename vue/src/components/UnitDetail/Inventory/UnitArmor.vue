@@ -6,7 +6,7 @@
                 <div class="armor-med">Type</div>
                 <div class="armor-small">Cost</div>
                 <div class="armor-med">Defense Bonus (melee/ranged)</div>
-                <div class="armor-large">Special Rules</div>
+                <div class="armor-large table-label">Special Rules</div>
                 <div class="armor-small" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
@@ -64,8 +64,14 @@ div.item-list>.armor-med {
 }
 
 div.item-list>.armor-large {
+    padding-left: 3px;
     min-width: 150px;
     flex-grow: 5;
     flex-basis: 33%;
+    text-align: start;
+}
+
+div.item-list>.armor-large.table-label{
+    text-align: center;
 }
 </style>

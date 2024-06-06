@@ -1,7 +1,7 @@
 <template>
     <div v-if="$store.state.manageInventory">
 
-        <i class="bi inventory-icon bi-cash" title="Sell"></i>
+        <i class="bi inventory-icon bi-coin" title="Sell"></i>
         <i class="bi inventory-icon bi-trash" title="Delete"></i>
         <i class="bi inventory-icon bi-arrow-left-right" title="Transfer to/from Team Inventory" @click="transferButton()"></i>
 

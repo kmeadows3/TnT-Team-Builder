@@ -9,7 +9,7 @@
                 <div class="weapon-small">Strength</div>
                 <div class="weapon-small">Reliability</div>
                 <div class="weapon-small">Hands</div>
-                <div class="weapon-large">Special Rules</div>
+                <div class="weapon-large table-label">Special Rules</div>
                 <div class="weapon-actions" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
@@ -76,8 +76,14 @@ div.item-list>.weapon-med {
 }
 
 div.item-list>.weapon-large {
+    padding-left: 3px;
     min-width: 150px;
     flex-grow: 5;
     flex-basis: 50%;
+    text-align: start;
+}
+
+div.item-list>.weapon-large.table-label{
+    text-align: center;
 }
 </style>

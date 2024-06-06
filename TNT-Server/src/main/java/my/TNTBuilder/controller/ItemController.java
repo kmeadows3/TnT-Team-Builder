@@ -70,10 +70,20 @@ public class ItemController {
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
 
-
-
-
+    @RequestMapping(path="/inventory/{itemId}", method = RequestMethod.DELETE)
+    public void removeItem(@PathVariable int itemId, @RequestParam(defaultValue = "false") Boolean sell,
+                           Principal principal){
+        try {
+            if (sell){
+                itemService.sellItem(itemId, userDao.getUserIdByUsername(principal.getName()));
+            } else {
+                itemService.deleteItem(itemId, userDao.getUserIdByUsername(principal.getName()));
+            }
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
 }

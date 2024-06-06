@@ -69,14 +69,13 @@ export default {
 
 
 <style scoped>
-
 div.item-list>.item-small {
     min-width: 75px;
     flex-grow: 1;
     flex-basis: 3%;
     display: flex;
     justify-content: center;
-    align-content: baseline;
+    align-items: center;
 }
 
 div.item-list>.item-action {
@@ -104,6 +103,7 @@ div.item-list>.item-med {
     min-width: 75px;
     flex-grow: 1;
     flex-basis: 15%;
+    align-content: center;
 }
 
 div.item-list>.item-large {

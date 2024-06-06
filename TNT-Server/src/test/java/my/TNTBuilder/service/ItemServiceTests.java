@@ -21,13 +21,15 @@ public class ItemServiceTests extends BaseDaoTests {
     ItemService sut;
     TeamDao teamDao;
     UnitDao unitDao;
+    ItemDao itemDao;
 
     @Before
     public void setSut(){
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         teamDao = new JdbcTeamDao(jdbcTemplate);
         unitDao = new JdbcUnitDao(jdbcTemplate);
-        sut = new ItemService(new JdbcItemDao(jdbcTemplate), unitDao, new TeamService(teamDao, new TeamValidator()));
+        itemDao = new JdbcItemDao(jdbcTemplate);
+        sut = new ItemService(itemDao, unitDao, new TeamService(teamDao, new TeamValidator()));
     }
 
     @After
@@ -124,19 +126,23 @@ public class ItemServiceTests extends BaseDaoTests {
         Assert.assertEquals(1, testTeam.getMoney());
     }
 
-
     @Test (expected = ServiceException.class)
     public void addItemToUnit_throws_exception_if_user_does_not_own_unit(){
         sut.addItemToUnit(WEAPON.getReferenceId(), 1,4, false);
         Assert.fail();
     }
 
+    @Test (expected = ServiceException.class)
+    public void addItemToUnit_throws_exception_if_invalid_item_ref_id(){
+        sut.addItemToUnit(99, 1,4, false);
+        Assert.fail();
+    }
 
     @Test
     public void transferItem_works_when_moving_item_from_unit_to_team() {
         sut.transferItem(1, 1,1 );
-        List<Item> teamTestList = sut.itemDao.getAllItemsForTeam(1);
-        List<Item> unitTestList = sut.itemDao.getAllItemsForUnit(1);
+        List<Item> teamTestList = itemDao.getAllItemsForTeam(1);
+        List<Item> unitTestList = itemDao.getAllItemsForUnit(1);
 
         Assert.assertEquals(4, teamTestList.size());
         Assert.assertTrue(teamTestList.contains(ARMOR));
@@ -147,8 +153,8 @@ public class ItemServiceTests extends BaseDaoTests {
     @Test
     public void transferItem_works_when_moving_item_from_team_to_item() {
         sut.transferItem(5, 1, 1);
-        List<Item> teamTestList = sut.itemDao.getAllItemsForTeam(1);
-        List<Item> unitTestList = sut.itemDao.getAllItemsForUnit(1);
+        List<Item> teamTestList = itemDao.getAllItemsForTeam(1);
+        List<Item> unitTestList = itemDao.getAllItemsForUnit(1);
 
         ARMOR.setId(5);
         Assert.assertEquals(2, teamTestList.size());
@@ -170,6 +176,61 @@ public class ItemServiceTests extends BaseDaoTests {
     @Test (expected = ServiceException.class)
     public void transferItem_throws_exception_unit_not_owned_by_user() {
         sut.transferItem(4, 1, 2);
+    }
+
+    @Test
+    public void deleteItem_deletes_item(){
+        sut.deleteItem(1, 1);
+        List<Item> testList = itemDao.getAllItemsForUnit(1);
+
+        Assert.assertEquals(2, testList.size());
+        Assert.assertFalse(testList.contains(ARMOR));
+    }
+
+    @Test (expected = ServiceException.class)
+    public void deleteItem_throws_exception_user_does_not_own_item(){
+        sut.deleteItem(1, 2);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void deleteItem_throws_exception_invalid_item_id(){
+        sut.deleteItem(99, 1);
+        Assert.fail();
+    }
+
+    @Test
+    public void sellItem_removes_item_and_updates_money_correctly(){
+        sut.sellItem(2, 1);
+        List<Item> testList = itemDao.getAllItemsForUnit(1);
+        Team testTeam = teamDao.getTeamById(1,1);
+
+        Assert.assertEquals(2, testList.size());
+        Assert.assertFalse(testList.contains(WEAPON));
+        Assert.assertEquals(502, testTeam.getMoney());
+    }
+
+    @Test
+    public void sellItem_handles_zero_cost_items(){
+        sut.sellItem(1, 1);
+        List<Item> testList = itemDao.getAllItemsForUnit(1);
+        Team testTeam = teamDao.getTeamById(1,1);
+
+        Assert.assertEquals(2, testList.size());
+        Assert.assertFalse(testList.contains(ARMOR));
+        Assert.assertEquals(500, testTeam.getMoney());
+    }
+
+    @Test (expected = ServiceException.class)
+    public void sellItem_throws_exception_user_does_not_own_item(){
+        sut.sellItem(1, 2);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void sellItem_throws_exception_invalid_item_id(){
+        sut.sellItem(99, 1);
+        Assert.fail();
     }
 
 

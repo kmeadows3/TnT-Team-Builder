@@ -5,7 +5,7 @@
             <div class="table-label item-list">
                 <div class="equipment-med">Type</div>
                 <div class="equipment-small">Cost</div>
-                <div class="equipment-large">Special Rules</div>
+                <div class="equipment-large table-label">Special Rules</div>
                 <div class="equipment-small" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
@@ -61,8 +61,14 @@ div.item-list>.equipment-med {
 }
 
 div.item-list>.equipment-large {
+    padding-left: 3px;
     min-width: 150px;
     flex-grow: 5;
     flex-basis: 50%;
+    text-align: start;
+}
+
+div.item-list>.equipment-large.table-label{
+    text-align: center;
 }
 </style>

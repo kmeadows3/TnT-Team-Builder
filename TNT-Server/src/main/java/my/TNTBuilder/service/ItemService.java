@@ -15,10 +15,10 @@ import java.util.List;
 @Component
 public class ItemService {
 
-    ItemDao itemDao;
-    UnitDao unitDao;
+    private final ItemDao itemDao;
+    private final UnitDao unitDao;
 
-    TeamService teamService;
+    private final TeamService teamService;
 
     public ItemService(ItemDao itemDao, UnitDao unitDao, TeamService teamService){
         this.itemDao = itemDao;
@@ -77,10 +77,47 @@ public class ItemService {
 
     }
 
+    public void deleteItem(int itemId, int userId) {
+        try {
+            Team team = teamService.getTeamById(itemDao.getTeamIdByItemId(itemId), userId);
+            deleteItemFromDatabase(itemId, userId, team);
+        }catch (DaoException e){
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    public void sellItem(int itemId, int userId){
+        try {
+            Team team = teamService.getTeamById(itemDao.getTeamIdByItemId(itemId), userId);
+            updateTeamMoneyFromSellingItem(itemId, userId, team);
+            deleteItemFromDatabase(itemId, userId, team);
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+
 
     /*
     PRIVATE METHODS
      */
+    private void updateTeamMoneyFromSellingItem(int itemId, int userId, Team team) {
+        Item item = itemDao.getItemById(itemId);
+        if (item.getCost()/2 != 0){
+            team.setMoney(team.getMoney() + (item.getCost()/2) );
+            teamService.updateTeam(team, userId);
+        }
+    }
+
+    private void deleteItemFromDatabase(int itemId, int userId, Team team) throws DaoException {
+
+        if (team.getUserId() == userId) {
+            itemDao.deleteItem(itemId);
+        } else {
+            throw new ServiceException("User does not own item.");
+        }
+
+    }
 
     private int purchaseItem(Item referenceItem, Unit unit) {
         int itemId = 0;
@@ -103,5 +140,6 @@ public class ItemService {
         }
         return itemId;
     }
+
 
 }

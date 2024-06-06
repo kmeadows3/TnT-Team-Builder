@@ -187,7 +187,31 @@ public class JdbcItemDaoTests extends BaseDaoTests{
 
     }
 
+    @Test
+    public void getItemById_returns_correct_item(){
+        Item testItem = sut.getItemById(1);
+        Assert.assertEquals(ARMOR, testItem);
+    }
+
+    @Test
+    public void getTeamIdByItemId_returns_expected_teamId_with_valid_item_belonging_to_team(){
+        int testTeamId = sut.getTeamIdByItemId(5);
+        Assert.assertEquals(1, testTeamId);
+    }
+
+    @Test
+    public void getTeamIdByItemId_returns_expected_teamId_with_valid_item_belonging_to_unit(){
+        int testTeamId = sut.getTeamIdByItemId(1);
+        Assert.assertEquals(1, testTeamId);
+    }
+
+    @Test (expected = DaoException.class)
+    public void getTeamIdByItemId_throws_exception_invalid_item() {
+        sut.getTeamIdByItemId(99);
+        Assert.fail();
+    }
 
 
 
-}
+
+    }

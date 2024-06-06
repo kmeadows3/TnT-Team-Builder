@@ -128,6 +128,13 @@ export function createStore(currentToken, currentUser) {
           })
           .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
       },
+      reloadCurrentTeam(context){
+        TeamsService.getTeamById(context.state.currentTeam.id)
+        .then(response => {
+          store.commit('SET_CURRENT_TEAM', response.data);
+        })
+        .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
+      },
       showError(context, error){
         if(error.response){
           store.commit('SHOW_ERROR_ON', error.response.data.message);

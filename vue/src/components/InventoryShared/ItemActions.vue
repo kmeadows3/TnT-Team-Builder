@@ -36,9 +36,7 @@ export default {
         transferItemToUnit(){
             if (this.transferTarget != -1){
                 ItemService.transferItem(this.item.id, this.transferTarget)
-                .then(() => {
-                    //RELOAD TEAM FUNCTION NEEDED
-                })
+                .then(() => this.$store.dispatch('reloadCurrentTeam'))
                 .catch(error => this.$store.dispatch('showError', error))
             } else {
                 this.$store.dispatch('showError', "You must select which unit will be receiving the item.")

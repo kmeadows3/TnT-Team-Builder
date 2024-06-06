@@ -45,19 +45,14 @@ import InventoryActions from '../InventoryShared/InventoryActions.vue';
 import ItemActions from '../InventoryShared/ItemActions.vue';
 
 export default {
-    data () {
-        return {
-            sortedInventory: []
-        }
-    },
     components: {
         InventoryActions,
         ItemActions
     },
-    methods: {
-        sortInventory() {
+    computed: {
+        sortedInventory() {
             let inventory = this.$store.state.currentTeam.inventory;
-            this.sortedInventory = inventory.sort( (a,b) => a.name.localeCompare(b.name)).sort( (a,b) => {
+            inventory = inventory.sort( (a,b) => a.name.localeCompare(b.name)).sort( (a,b) => {
                 if (a.relic == true && b.relic == false){
                     return -1;
                 } else if (b.relic == true && a.relic == false){
@@ -66,10 +61,8 @@ export default {
 
                 return 0;
             });
+            return inventory;
         }
-    },
-    beforeMount() {
-        this.sortInventory();
     }
 }
 </script>

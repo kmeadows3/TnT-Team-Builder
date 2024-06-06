@@ -14,5 +14,8 @@ export default {
   updateTeam(team){
     return axios.put(`/teams/${team.id}`, team);
   },
+  getTeamById(teamId){
+    return axios.get(`/teams/${teamId}`);
+  }
 
 }

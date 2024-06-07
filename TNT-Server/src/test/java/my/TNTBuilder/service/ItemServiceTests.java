@@ -38,6 +38,7 @@ public class ItemServiceTests extends BaseDaoTests {
         WEAPON.setId(2);
         WEAPON.setCost(5);
         ITEM.setId(3);
+        RELIC_WEAPON.setId(6);
     }
 
     @Test
@@ -134,7 +135,96 @@ public class ItemServiceTests extends BaseDaoTests {
 
     @Test (expected = ServiceException.class)
     public void addItemToUnit_throws_exception_if_invalid_item_ref_id(){
-        sut.addItemToUnit(99, 1,4, false);
+        sut.addItemToUnit(99, 1,1, false);
+        Assert.fail();
+    }
+
+    @Test
+    public void addItemToTeam_correctly_purchases_item_when_not_free(){
+        int itemId = sut.addItemToTeam(RELIC_WEAPON.getReferenceId(), 1, 1, false);
+        RELIC_WEAPON.setId(itemId);
+
+        Team testTeam = teamDao.getTeamById(1,1);
+
+        Assert.assertEquals(4, testTeam.getInventory().size());
+        Assert.assertTrue(testTeam.getInventory().contains(RELIC_WEAPON));
+        Assert.assertEquals(494, testTeam.getMoney());
+
+    }
+
+    @Test
+    public void addItemToTeam_correctly_purchases_item_when_free(){
+        int itemId = sut.addItemToTeam(RELIC_WEAPON.getReferenceId(), 1, 1, true);
+        RELIC_WEAPON.setId(itemId);
+
+        Team testTeam = teamDao.getTeamById(1,1);
+
+        Assert.assertEquals(4, testTeam.getInventory().size());
+        Assert.assertTrue(testTeam.getInventory().contains(RELIC_WEAPON));
+        Assert.assertEquals(500, testTeam.getMoney());
+
+
+    }
+
+    @Test
+    public void addItemToTeam_correctly_purchases_item_multiple_uses_not_free(){
+        int itemId = sut.addItemToTeam(RELIC_WEAPON.getReferenceId(), 1, 1, false);
+        RELIC_WEAPON.setId(itemId);
+        int item2Id = sut.addItemToTeam(WEAPON.getReferenceId(), 1, 1, false);
+        WEAPON.setId(item2Id);
+
+
+        Team testTeam = teamDao.getTeamById(1,1);
+
+        Assert.assertEquals(5, testTeam.getInventory().size());
+        Assert.assertTrue(testTeam.getInventory().contains(RELIC_WEAPON));
+        Assert.assertTrue(testTeam.getInventory().contains(WEAPON));
+        Assert.assertEquals(489, testTeam.getMoney());
+
+    }
+
+    @Test
+    public void addItemToTeam_correctly_purchases_item_multiple_uses_free(){
+        int itemId = sut.addItemToTeam(RELIC_WEAPON.getReferenceId(), 1, 1, true);
+        RELIC_WEAPON.setId(itemId);
+        int item2Id = sut.addItemToTeam(WEAPON.getReferenceId(), 1, 1, true);
+        WEAPON.setId(item2Id);
+
+
+        Team testTeam = teamDao.getTeamById(1,1);
+
+        Assert.assertEquals(5, testTeam.getInventory().size());
+        Assert.assertTrue(testTeam.getInventory().contains(RELIC_WEAPON));
+        Assert.assertTrue(testTeam.getInventory().contains(WEAPON));
+        Assert.assertEquals(500, testTeam.getMoney());
+    }
+
+    @Test (expected = ServiceException.class)
+    public void addItemToTeam_throws_exception_if_item_is_too_expensive_and_is_not_free(){
+        sut.addItemToTeam(WEAPON.getReferenceId(), 5,4, false);
+        Assert.fail();
+    }
+
+    @Test
+    public void addItemToTeam_works_if_item_is_too_expensive_but_is_free(){
+        WEAPON.setId(sut.addItemToTeam(WEAPON.getReferenceId(), 5,4, true));
+
+        Team testTeam = teamDao.getTeamById(5,4);
+
+        Assert.assertEquals(1, testTeam.getInventory().size());
+        Assert.assertTrue(testTeam.getInventory().contains(WEAPON));
+        Assert.assertEquals(1, testTeam.getMoney());
+    }
+
+    @Test (expected = ServiceException.class)
+    public void addItemToTeam_throws_exception_if_user_does_not_own_unit(){
+        sut.addItemToTeam(WEAPON.getReferenceId(), 1,4, false);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void addItemToTeam_throws_exception_if_invalid_item_ref_id(){
+        sut.addItemToTeam(99, 1,1, false);
         Assert.fail();
     }
 

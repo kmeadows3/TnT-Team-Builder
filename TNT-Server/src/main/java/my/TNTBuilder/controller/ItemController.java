@@ -46,6 +46,26 @@ public class ItemController {
         }
     }
 
+    /**
+     * Adds a new item to the unit inventory
+     * @param itemId the skill to be added
+     * @param teamId the id of the unit
+     * @param isFree whether the item will be free or cost money
+     * @param principal the logged-in user
+     */
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(path="/teams/{teamId}/inventory", method = RequestMethod.POST)
+    public void addItemToTeam(@RequestBody int[] itemId, @PathVariable int teamId,
+                              @RequestParam(defaultValue = "false") Boolean isFree, Principal principal){
+        try {
+            itemService.addItemToTeam(itemId[0], teamId, userDao.getUserIdByUsername(principal.getName()), isFree);
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (DaoException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
 
     /**
      * Returns list of all inventory that can be bought at this time.

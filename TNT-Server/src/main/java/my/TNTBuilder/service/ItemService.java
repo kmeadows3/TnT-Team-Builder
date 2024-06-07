@@ -62,6 +62,30 @@ public class ItemService {
         return itemId;
     }
 
+    public int addItemToTeam(int itemReferenceId, int teamId, int userId, boolean isFree){
+
+        Item referenceItem = null;
+        Team team = null;
+        try {
+            referenceItem = itemDao.lookupReferenceItem(itemReferenceId);
+            team = teamService.getTeamById(teamId, userId);
+
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage());
+        }
+
+
+        //TODO logic to validate purchase
+
+        int itemId = 0;
+        if (isFree){
+            itemId = gainItemForFree(referenceItem, team);
+        } else {
+            itemId = purchaseItem(referenceItem, team);
+        }
+        return itemId;
+    }
+
     public void transferItem(int itemId, int unitId, int userId){
         Team team = teamService.getTeamByUnitId(unitId);
         if (team.getUserId() == userId){
@@ -131,10 +155,32 @@ public class ItemService {
         return itemId;
     }
 
+    private int purchaseItem(Item referenceItem, Team team) {
+        int itemId = 0;
+        try {
+            teamService.spendMoney(referenceItem.getCost(), team);
+            itemId = itemDao.addItemToTeam(referenceItem.getReferenceId(), team.getId());
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+
+        return itemId;
+    }
+
     private int gainItemForFree(Item referenceItem, Unit unit) {
         int itemId = 0;
         try {
             itemId = itemDao.addItemToUnit(referenceItem.getReferenceId(), unit.getId());
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+        return itemId;
+    }
+
+    private int gainItemForFree(Item referenceItem, Team team) {
+        int itemId = 0;
+        try {
+            itemId = itemDao.addItemToTeam(referenceItem.getReferenceId(), team.getId());
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage(), e);
         }

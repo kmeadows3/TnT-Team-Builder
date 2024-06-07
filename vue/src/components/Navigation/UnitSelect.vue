@@ -1,0 +1,28 @@
+<template>
+    <section class="flex-nav">
+        <h1>Change Unit</h1>
+        <div class="flex-nav-option" v-for="unit in filteredUnits" :key="'unit-select-' + unit.id" @click="changeUnit(unit)">
+            {{ unit.name }} - {{ unit.unitClass }}
+        </div>
+    </section>
+</template>
+
+<script>
+    export default {
+        computed: {
+            filteredUnits() {
+                let units = this.$store.state.currentTeam.unitList;
+
+                units = units.filter( (unit) => unit.id != this.$store.state.currentUnit.id);
+
+                return units;
+            }
+        },
+        methods: {
+            changeUnit(unit){
+                this.$store.commit('SET_CURRENT_UNIT', unit);
+            }
+        }
+    }
+
+</script>

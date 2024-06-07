@@ -1,9 +1,9 @@
 <template>
-    <div class = "team-card" @click="toTeamDetail()">
-        <h2>{{ team.name }}</h2>
-        <h3>{{ team.faction }}</h3>
-        <p>Barter Scrip: {{ team.money }}</p>
-        <p>Units: {{ team.unitList.length }}</p>
+    <div class="team card" @click="toTeamDetail()">
+        <h1 class="card-title">{{ team.name }}</h1>
+        <h2 class="card-subtitle">{{ team.faction }}</h2>
+        <h3 class="card-small">Barter Scrip: {{ team.money }}</h3>
+        <h3 class="card-small">Units: {{ team.unitList.length }}</h3>
     </div>
     
 </template>
@@ -20,18 +20,3 @@ export default {
 }
 
 </script>
-
-<style>
-div.team-card {
-    border: solid 3px black;
-    min-width: 300px;
-    border-radius: 10px;
-    padding: 10px;
-    margin: 10px;
-    text-align: center;
-}
-
-div.team-card h2{
-    margin: 5px;
-}
-</style>

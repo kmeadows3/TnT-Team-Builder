@@ -1,17 +1,17 @@
 <template>
     <div class="inventory">
-        <h2>UNIT INVENTORY</h2>
+        <h1 class="section-title">Inventory</h1>
+        <InventoryActions />
         <UnitWeapons />
         <UnitArmor />
         <UnitEquipment />
-        <InventoryActions />
     </div>
 
     <div class="reference">
-        <h2>Item Rules Reference</h2>
+        <h1 class="section-title">Item Rules Reference</h1>
         <div v-for="trait in $store.state.unitInventoryTraits" :key="'itemTrait' + trait.id">
-            <h3> {{ trait.name }}</h3>
-            <p>{{ trait.effect }}</p>
+            <h2 class="reference-label"> {{ trait.name }}</h2>
+            <p class="reference-desc">{{ trait.effect }}</p>
         </div>
     </div>
 </template>

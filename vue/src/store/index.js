@@ -49,6 +49,7 @@ export function createStore(currentToken, currentUser) {
         state.currentTeam = team;
         state.showTeamDetail = true;
         state.showTeamList = false;
+        state.showUnitDetail = false;
       },
       CLEAR_CURRENT_TEAM(state){
         state.currentTeam = {};

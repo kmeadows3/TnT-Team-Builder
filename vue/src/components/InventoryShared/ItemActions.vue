@@ -1,12 +1,12 @@
 <template>
     <div v-if="$store.state.manageInventory">
-
-        <i class="bi inventory-icon bi-coin" title="Sell" @click="sellItem()"></i>
-        <i class="bi inventory-icon bi-trash" title="Delete" @click="deleteItem()"></i>
-        <i class="bi inventory-icon bi-arrow-left-right" title="Transfer to/from Team Inventory" 
+        
+        <i class="bi inventory-icon bi-coin button" title="Sell" @click="sellItem()"></i>
+        <i class="bi inventory-icon bi-trash button" title="Delete" @click="deleteItem()"></i>
+        <i class="bi inventory-icon bi-arrow-left-right button" title="Transfer to/from Team Inventory" 
             @click="transferButton()"></i>
 
-        <span v-show="!$store.state.currentUnit.id">
+        <span v-show="!$store.state.showUnitDetail">
             <select :id="'unitTransferSelect' + item.id" v-model.number="transferTarget">
                 <option value="-1">Transfer to: </option>
                 <option v-for="unit in $store.state.currentTeam.unitList" :key="'transferTarget' + unit.id"
@@ -28,7 +28,7 @@ export default {
     },
     methods: {
         transferButton() {
-            if (this.$store.state.currentUnit.id) {
+            if (this.$store.state.showUnitDetail) {
                 this.transferItemFromUnit();
             } else {
                 this.transferItemToUnit();
@@ -51,7 +51,7 @@ export default {
         sellItem(){
             ItemService.sellItem(this.item.id)
                 .then( () => {
-                    if(this.$store.state.currentUnit.id){
+                    if(this.$store.state.showUnitDetail){
                         this.$store.dispatch('reloadCurrentUnit');
                     } else {
                         this.$store.dispatch('reloadCurrentTeam');
@@ -61,7 +61,7 @@ export default {
         deleteItem(){
             ItemService.deleteItem(this.item.id)
                 .then( () => {
-                    if(this.$store.state.currentUnit.id){
+                    if(this.$store.state.showUnitDetail){
                         this.$store.dispatch('reloadCurrentUnit');
                     } else {
                         this.$store.dispatch('reloadCurrentTeam');

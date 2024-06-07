@@ -1,10 +1,10 @@
 <template>
     <div>
         <div class="reference">
-            <h2>Special Abilities</h2>
+            <h1 class="section-title">Special Abilities</h1>
             <div v-for="skill in sortedSkills" :key="skill.id">
-                <h3>{{ skill.name }}</h3>
-                <p>{{ skill.description }}</p>
+                <h2 class="reference-label">{{ skill.name }}</h2>
+                <p class="reference-desc">{{ skill.description }}</p>
             </div>
         </div>
         <div class="skillsets"><strong>Available Skillsets: </strong>
@@ -76,6 +76,13 @@ export default {
 
 
 <style scoped>
+
+
+div.skillsets {
+    border: solid 3px black;
+    border-radius: 7px;
+    text-align: center;
+}
 
 div.skillFinder {
     display: flex;

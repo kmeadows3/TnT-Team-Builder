@@ -1,12 +1,12 @@
 <template>
     <div class="item-container" v-show="armors.length > 0">
-        <h3>Armor</h3>
+        <h2 class="subsection-title">Armor</h2>
         <div class="item-table">
             <div class="table-label item-list">
                 <div class="armor-med">Type</div>
                 <div class="armor-small">Cost</div>
                 <div class="armor-med">Defense Bonus (melee/ranged)</div>
-                <div class="armor-large table-label">Special Rules</div>
+                <div class="armor-large">Special Rules</div>
                 <div class="armor-small" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
@@ -16,7 +16,7 @@
                     ($store.state.currentUnit.wounds == 2 ? armor.cost2Wounds : armor.cost3Wounds) }}</div>
                 <!--TODO: Logic around armor bonuses once items can be equipped-->
                 <div class="armor-med">{{ armor.meleeDefenseBonus }} / {{ armor.rangedDefenseBonus }}</div>
-                <div class="armor-large">
+                <div class="armor-large item-special-rules">
                     <span v-show="armor.itemTraits.length == 0 || armor.specialRules != 'N/A'">
                         {{ armor.specialRules }}<span v-show="armor.itemTraits.length > 0">, </span>
                     </span>
@@ -58,20 +58,15 @@ div.item-list>.armor-small {
 }
 
 div.item-list>.armor-med {
-    min-width: 75px;
+    min-width: 80px;
     flex-grow: 1;
     flex-basis: 15%;
 }
 
 div.item-list>.armor-large {
-    padding-left: 3px;
     min-width: 150px;
     flex-grow: 5;
     flex-basis: 33%;
-    text-align: start;
 }
 
-div.item-list>.armor-large.table-label{
-    text-align: center;
-}
 </style>

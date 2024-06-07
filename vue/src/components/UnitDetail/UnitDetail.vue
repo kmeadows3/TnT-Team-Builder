@@ -1,10 +1,12 @@
 <template>
-    <UnitBasics/>
-    <UnitStats/>
-    <UnitInventory/>
-    <UnitSkills/>
-    <UnitExperience />
-    <UnitActions />
+    <section class="main-display">
+        <UnitBasics />
+        <UnitStats />
+        <UnitInventory />
+        <UnitSkills />
+        <UnitExperience />
+        <UnitActions />
+    </section>
 </template>
 
 <script>
@@ -26,7 +28,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-</style>

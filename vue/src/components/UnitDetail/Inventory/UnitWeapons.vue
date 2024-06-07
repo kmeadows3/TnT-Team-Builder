@@ -1,6 +1,6 @@
 <template>
     <div class="item-container" v-show="weapons.length > 0">
-        <h3>Weapons</h3>
+        <h2 class="subsection-title">Weapons</h2>
         <div class="item-table">
             <div class="item-list table-label">
                 <div class="weapon-med">Type</div>
@@ -9,7 +9,7 @@
                 <div class="weapon-small">Strength</div>
                 <div class="weapon-small">Reliability</div>
                 <div class="weapon-small">Hands</div>
-                <div class="weapon-large table-label">Special Rules</div>
+                <div class="weapon-large">Special Rules</div>
                 <div class="weapon-actions" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
@@ -20,7 +20,7 @@
                 <div class="weapon-small">{{ weapon.strength }}</div>
                 <div class="weapon-small">{{ weapon.reliability }}</div>
                 <div class="weapon-small">{{ weapon.handsRequired }}</div>
-                <div class="weapon-large">
+                <div class="weapon-large item-special-rules">
                     <span v-show="weapon.itemTraits.length == 0 || weapon.specialRules != 'N/A'">
                         {{ weapon.specialRules }}<span v-show="weapon.itemTraits.length > 0">, </span>
                     </span>
@@ -76,14 +76,10 @@ div.item-list>.weapon-med {
 }
 
 div.item-list>.weapon-large {
-    padding-left: 3px;
     min-width: 150px;
     flex-grow: 5;
     flex-basis: 50%;
-    text-align: start;
 }
 
-div.item-list>.weapon-large.table-label{
-    text-align: center;
-}
+
 </style>

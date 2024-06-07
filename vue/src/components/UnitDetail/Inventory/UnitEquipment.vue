@@ -1,18 +1,18 @@
 <template>
     <div class="item-container" v-show="equipments.length > 0">
-        <h3>Equipment</h3>
+        <h2 class="subsection-title">Equipment</h2>
         <div class="item-table">
             <div class="table-label item-list">
                 <div class="equipment-med">Type</div>
                 <div class="equipment-small">Cost</div>
-                <div class="equipment-large table-label">Special Rules</div>
+                <div class="equipment-large">Special Rules</div>
                 <div class="equipment-small" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
             <div class="item-list" v-for="equipment in equipments" :key="'equipment' + equipment.id">
                 <div class="equipment-med">{{ equipment.name }}</div>
                 <div class="equipment-small">{{ equipment.cost }}</div>
-                <div class="equipment-large">
+                <div class="equipment-large item-special-rules">
                     <span v-show="equipment.itemTraits.length == 0 || equipment.specialRules != 'N/A'">
                         {{ equipment.specialRules }}<span v-show="equipment.itemTraits.length > 0">, </span>
                     </span>
@@ -61,14 +61,8 @@ div.item-list>.equipment-med {
 }
 
 div.item-list>.equipment-large {
-    padding-left: 3px;
     min-width: 150px;
     flex-grow: 5;
     flex-basis: 50%;
-    text-align: start;
-}
-
-div.item-list>.equipment-large.table-label{
-    text-align: center;
 }
 </style>

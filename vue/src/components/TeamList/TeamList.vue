@@ -6,8 +6,8 @@
             <NewTeamForm v-show="$store.state.showNewTeamForm"/>
         </div>
         
-        <div class="team-list">
-            <TeamCard v-for ='team in teams' v-bind:key="team.id" v-bind:team='team'/>
+        <div class="card-container">
+            <TeamCard v-for ='team in $store.state.teamList' v-bind:key="team.id" v-bind:team='team'/>
         </div>
     </section>
 </template>
@@ -18,18 +18,13 @@ import NewTeamForm from './NewTeamForm.vue';
 import TeamsService from '../../services/TeamsService';
 
 export default {
-    data() {
-        return {
-            teams: []
-        }
-    },
     created(){
         TeamsService.retrieveTeamList()
           .then(response => {
-            this.teams = response.data;
+            this.$store.commit('SET_TEAM_LIST', response.data);
           })
           .catch(err => {
-            this.$store.dispatch('showHttpError', err);
+            this.$store.dispatch('showError', err);
           });
     },
     components: {
@@ -38,13 +33,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-div.team-list {
-    display: flex;
-    justify-content: space-around;
-    width:auto;
-    flex-wrap: wrap;
-}
-</style>

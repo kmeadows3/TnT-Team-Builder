@@ -32,7 +32,6 @@
             </div>
         </div>
 
-
         <div class='item-purchase-list'>
             <span>Current Barter Scrip: {{ $store.state.currentTeam.money }}</span>
             <div class="grid-row table-label">
@@ -50,7 +49,7 @@
                     {{ item.rarity }}
                 </div>
                 <div class="grid-cost">
-                    {{ item.category != 'Armor' || !this.$store.state.currentUnit.id ||this.$store.state.currentUnit.wounds == 1 ? item.cost :
+                    {{ item.category != 'Armor' || !$store.state.showUnitDetail ||this.$store.state.currentUnit.wounds == 1 ? item.cost :
                         this.$store.state.currentUnit.wounds == 2 ? item.cost2Wounds : item.cost3Wounds }} BS
                 </div>
 
@@ -113,10 +112,11 @@ export default {
                 }).catch(error => this.$store.dispatch('showError', error));
         },
         purchaseItem(itemId) {
-            if (this.$store.state.currentUnit.id){
+            if (this.$store.state.showUnitDetail){
                 ItemService.purchaseItemForUnit(this.$store.state.currentUnit.id, itemId)
                 .then(response => {
                     this.$store.dispatch('reloadCurrentUnit');
+                    this.$store.dispatch('reloadCurrentTeam');
                 })
                 .catch(err => {
                     console.log(err);
@@ -134,7 +134,7 @@ export default {
             }           
         },
         gainItem(itemId){
-            if (this.$store.state.currentUnit.id){
+            if (this.$store.state.showUnitDetail){
                 ItemService.gainItemForFree(this.$store.state.currentUnit.id, itemId)
                 .then(response => {
                     this.$store.dispatch('reloadCurrentUnit');

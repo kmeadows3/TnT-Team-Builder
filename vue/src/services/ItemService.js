@@ -14,5 +14,11 @@ export default {
     },
     transferItem(itemId, unitId){
       return axios.put(`/units/${unitId}/inventory/${itemId}/transfer`)
+    },
+    sellItem(itemId){
+      return axios.delete(`/inventory/${itemId}?sell=True`);
+    },
+    deleteItem(itemId){
+      return axios.delete(`/inventory/${itemId}`);
     }
 }

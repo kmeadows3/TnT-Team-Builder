@@ -16,8 +16,9 @@
         <div class="team-box">
             <TeamSummary/>
             <UnitList/>
+            <TeamInventory />
             <MoneyManagment/>
-            <TeamInventory/>
+
         </div>
     </section>
 </template>
@@ -55,7 +56,7 @@ export default {
             TeamsService.updateTeam(this.$store.state.currentTeam)
                 .then( response => {
                     this.$store.commit('SET_CURRENT_TEAM', response.data);
-                }).catch(error => this.$store.dispatch('showHttpError', error));
+                }).catch(error => this.$store.dispatch('showError', error));
             this.toggleEditName();
         }
     },

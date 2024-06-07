@@ -1,9 +1,10 @@
 <template>
     <div v-if="$store.state.manageInventory">
 
-        <i class="bi inventory-icon bi-coin" title="Sell"></i>
-        <i class="bi inventory-icon bi-trash" title="Delete"></i>
-        <i class="bi inventory-icon bi-arrow-left-right" title="Transfer to/from Team Inventory" @click="transferButton()"></i>
+        <i class="bi inventory-icon bi-coin" title="Sell" @click="sellItem()"></i>
+        <i class="bi inventory-icon bi-trash" title="Delete" @click="deleteItem()"></i>
+        <i class="bi inventory-icon bi-arrow-left-right" title="Transfer to/from Team Inventory" 
+            @click="transferButton()"></i>
 
         <span v-show="!$store.state.currentUnit.id">
             <select :id="'unitTransferSelect' + item.id" v-model.number="transferTarget">
@@ -47,7 +48,26 @@ export default {
                 .then(() => this.$store.dispatch('reloadCurrentUnit'))
                 .catch(error => this.$store.dispatch('showError', error))
         },
-
+        sellItem(){
+            ItemService.sellItem(this.item.id)
+                .then( () => {
+                    if(this.$store.state.currentUnit.id){
+                        this.$store.dispatch('reloadCurrentUnit');
+                    } else {
+                        this.$store.dispatch('reloadCurrentTeam');
+                    }
+                }).catch( error => this.$store.dispatch('showError', error) )
+        },
+        deleteItem(){
+            ItemService.deleteItem(this.item.id)
+                .then( () => {
+                    if(this.$store.state.currentUnit.id){
+                        this.$store.dispatch('reloadCurrentUnit');
+                    } else {
+                        this.$store.dispatch('reloadCurrentTeam');
+                    }
+                }).catch( error => this.$store.dispatch('showError', error) )
+        }
     }
 }
 

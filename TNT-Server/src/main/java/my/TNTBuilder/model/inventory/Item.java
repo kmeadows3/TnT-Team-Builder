@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.Unit;
 
 import java.util.HashSet;
@@ -63,6 +64,29 @@ public class Item {
         }
         return cost;
     }
+
+    //Validation Methods
+
+    private boolean validateEquipItem(Unit unit) throws ValidationException{
+        int handsUsed = unit.getInventory().stream().filter( (item) ->  item.isEquipped ).mapToInt(Item::getHandsRequired).sum();
+        handsUsed += this.handsRequired;
+
+        //TODO: Add logic here once mutations are added
+        boolean cannotHoldItems = false; //Weapons Growth (2 natural weapons), Crushing Claws
+        boolean canOnlyHoldOneItem = false; //No Arms, Weapons Growth (one natural weapon)
+
+        if (cannotHoldItems){
+            throw new ValidationException("Unit is incapable of holding items.");
+        } else if (handsUsed >= 2 && canOnlyHoldOneItem) {
+            throw new ValidationException("Unit can only equip a single 1-handed item.");
+        } else if (handsUsed > 2){
+            throw new ValidationException("Unit's hands are full, cannot equip any more items.");
+        }
+
+        return true;
+
+    }
+
 
     //Getters
 
@@ -147,6 +171,21 @@ public class Item {
         isRelic = relic;
     }
 
+    public boolean isEquipped() {
+        return isEquipped;
+    }
+
+    public void setEquipped(boolean equipped) {
+        isEquipped = equipped;
+    }
+
+    public void setEquippedValidated(boolean equipped, Unit unit) throws ValidationException {
+
+        if (!equipped || this.validateEquipItem(unit)){
+            isEquipped = equipped;
+        }
+
+    }
 
     @Override
     public boolean equals(Object o) {

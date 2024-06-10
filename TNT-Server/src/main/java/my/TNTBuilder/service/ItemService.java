@@ -1,7 +1,6 @@
 package my.TNTBuilder.service;
 
 import my.TNTBuilder.dao.ItemDao;
-import my.TNTBuilder.dao.TeamDao;
 import my.TNTBuilder.dao.UnitDao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
@@ -90,7 +89,8 @@ public class ItemService {
         Team team = teamService.getTeamByUnitId(unitId);
         if (team.getUserId() == userId){
             try {
-                itemDao.transferItem(itemId, unitId, team.getId());
+                boolean teamToUnit = itemDao.isItemOwnedByTeam(itemId, unitId, team.getId());
+                itemDao.transferItem(itemId, unitId, team.getId(), teamToUnit);
             } catch (DaoException e){
                 throw new ServiceException(e.getMessage(), e);
             }
@@ -119,6 +119,8 @@ public class ItemService {
             throw new ServiceException(e.getMessage(), e);
         }
     }
+
+    //TODO service to update items to equipped
 
 
 

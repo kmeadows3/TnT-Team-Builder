@@ -1,6 +1,7 @@
 package my.TNTBuilder.dao;
 
 import my.TNTBuilder.exception.DaoException;
+import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.inventory.Item;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface ItemDao {
 
     int addItemToUnit(int itemRefId, int unitId) throws DaoException;
 
-    void transferItem(int itemId, int unitId, int teamId) throws DaoException;
+    void transferItem(int itemId, int unitId, int teamId, boolean teamToUnit) throws DaoException;
 
     void deleteItem(int itemId) throws DaoException;
 
@@ -31,5 +32,9 @@ public interface ItemDao {
     Item getItemById(int itemId) throws DaoException;
 
     int getTeamIdByItemId(int itemId) throws DaoException;
+
+    void updateEquipped(Item item) throws DaoException;
+
+    boolean isItemOwnedByTeam(int itemId, int teamId, int unitId) throws ValidationException;
 
 }

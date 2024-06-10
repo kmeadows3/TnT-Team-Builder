@@ -1,9 +1,8 @@
 package my.TNTBuilder.service;
 
 import my.TNTBuilder.dao.ItemDao;
-import my.TNTBuilder.exception.ValidatorException;
+import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.Skill;
-import my.TNTBuilder.model.inventory.Item;
 import my.TNTBuilder.validator.UnitValidator;
 import my.TNTBuilder.dao.UnitDao;
 import my.TNTBuilder.exception.DaoException;
@@ -40,7 +39,7 @@ public class UnitService {
             newUnit = unitDao.createUnit(clientUnit);
             teamService.updateTeamAfterNewUnitPurchase(userId, newUnit);
 
-        } catch (DaoException|ValidatorException e){
+        } catch (DaoException | ValidationException e){
             throw new ServiceException(e.getMessage());
         }
 

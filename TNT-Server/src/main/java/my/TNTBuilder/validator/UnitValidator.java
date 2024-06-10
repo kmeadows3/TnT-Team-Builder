@@ -1,9 +1,7 @@
 package my.TNTBuilder.validator;
 import my.TNTBuilder.dao.UnitDao;
 import my.TNTBuilder.exception.DaoException;
-import my.TNTBuilder.exception.ServiceException;
-import my.TNTBuilder.exception.ValidatorException;
-import my.TNTBuilder.model.Skill;
+import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
 import org.springframework.stereotype.Component;
@@ -35,10 +33,10 @@ public class UnitValidator {
         return unit.getUnspentExperience() - unit.getCostToAdvance() >= 0;
     }
 
-    public void validateUpdatedUnit(Unit updatedUnit, Unit currentUnit) throws ValidatorException{
+    public void validateUpdatedUnit(Unit updatedUnit, Unit currentUnit) throws ValidationException {
 
         if (currentUnit == null){
-            throw new ValidatorException("Update failed. User does not own unit.");
+            throw new ValidationException("Update failed. User does not own unit.");
         }
 
         if (    !( onlyNameChanged(currentUnit, updatedUnit)
@@ -47,25 +45,25 @@ public class UnitValidator {
                 || ( validTenPointLevel(currentUnit, updatedUnit)  && unitCanAffordAdvance(currentUnit) )
                 )
         ) {
-            throw new ValidatorException("Unit update is not valid");
+            throw new ValidationException("Unit update is not valid");
         }
 
     }
 
-    public void validateNewClientUnit(Unit unit, Team team) throws ValidatorException, DaoException {
+    public void validateNewClientUnit(Unit unit, Team team) throws ValidationException, DaoException {
 
         if (team == null) {
-            throw new ValidatorException("Invalid Unit. Logged in user does not own team.");
+            throw new ValidationException("Invalid Unit. Logged in user does not own team.");
         }
 
         Unit potentialUnit = unitDao.convertReferenceUnitToUnit(unit.getId());
         if (team.getMoney() - potentialUnit.getBaseCost() < 0){
-            throw new ValidatorException("Team cannot afford this unit");
+            throw new ValidationException("Team cannot afford this unit");
         }
 
         int unitFaction = unitDao.getFactionIdByUnitReferenceId(unit.getId());
         if (unitFaction != team.getFactionId() && unitFaction != FREELANCER_FACTION_ID) {
-            throw new ValidatorException("Invalid unit. Unit does not belong to same faction as team.");
+            throw new ValidationException("Invalid unit. Unit does not belong to same faction as team.");
         }
 
         confirmNewUnitRankIsValidOption(potentialUnit, team);
@@ -98,18 +96,18 @@ public class UnitValidator {
     /*
     Private Methods
     */
-    private void confirmNewUnitRankIsValidOption(Unit potentialUnit, Team team) throws ValidatorException {
+    private void confirmNewUnitRankIsValidOption(Unit potentialUnit, Team team) throws ValidationException {
 
         if (potentialUnit.getRank().equalsIgnoreCase("Leader") && !teamMustBuyLeader(team)) {
-            throw new ValidatorException("Team cannot have two leaders.");
+            throw new ValidationException("Team cannot have two leaders.");
         } else if (potentialUnit.getRank().equalsIgnoreCase("Elite") && teamCanNotBuyElite(team)) {
-            throw new ValidatorException("Team cannot take more than 3 elites.");
+            throw new ValidationException("Team cannot take more than 3 elites.");
         } else if (potentialUnit.getRank().equalsIgnoreCase("Specialist") && teamCanNotBuySpecialist(team)) {
-            throw new ValidatorException("Specialists may not exceed more than 1/3rd of the team");
+            throw new ValidationException("Specialists may not exceed more than 1/3rd of the team");
         } else if (potentialUnit.getRank().equalsIgnoreCase("Freelancer") && teamCanNotBuyFreelancer(team)) {
-            throw new ValidatorException("Team can only have one freelancer per 200 BS cost");
+            throw new ValidationException("Team can only have one freelancer per 200 BS cost");
         }else if (teamMustBuyLeader(team) && !potentialUnit.getRank().equalsIgnoreCase("Leader")){
-            throw new ValidatorException("Team cannot purchase units until it has a leader");
+            throw new ValidationException("Team cannot purchase units until it has a leader");
         }
 
     }

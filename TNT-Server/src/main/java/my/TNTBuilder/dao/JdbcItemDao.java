@@ -1,6 +1,7 @@
 package my.TNTBuilder.dao;
 
 import my.TNTBuilder.exception.DaoException;
+import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.inventory.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
@@ -14,7 +15,7 @@ import java.util.List;
 @Component
 public class JdbcItemDao implements ItemDao {
 
-    private final String SELECT_ALL_FROM_ITEM = "SELECT item_id, i.item_ref_id, name, cost, special_rules, rarity, " +
+    private final String SELECT_ALL_FROM_ITEM = "SELECT item_id, i.item_ref_id, isEquipped, name, cost, special_rules, rarity, " +
             "is_relic, item_category, hands_required, melee_defense_bonus, ranged_defense_bonus, is_shield, " +
             "cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability " +
             "FROM inventory i " +
@@ -70,13 +71,13 @@ public class JdbcItemDao implements ItemDao {
     }
 
     @Override
-    public void transferItem(int itemId, int unitId, int teamId) throws DaoException {
+    public void transferItem(int itemId, int unitId, int teamId, boolean teamToUnit) throws DaoException {
 
-        boolean teamToUnit = itemBelongsToTeam(itemId, teamId, unitId);
         String sql = "UPDATE inventory SET unit_id = ?, team_id = ? WHERE item_id = ?";
 
         try {
             int rowsUpdated = 0;
+
             if (teamToUnit) {
                 rowsUpdated = jdbcTemplate.update(sql, unitId, null, itemId);
             } else {
@@ -191,11 +192,6 @@ public class JdbcItemDao implements ItemDao {
     }
 
 
-
-    /*
-    PRIVATE METHODS
-     */
-
     /**
      * This method returns true if the item belongs to the team, false if it instead belongs to the unit, and throws an
      * exception if it doesn't belong to either
@@ -204,7 +200,47 @@ public class JdbcItemDao implements ItemDao {
      * @param unitId the id of the unit the item may belong to
      * @return if the item belongs to the team
      */
-    private boolean itemBelongsToTeam(int itemId, int teamId, int unitId) throws DaoException{
+    @Override
+    public boolean isItemOwnedByTeam(int itemId, int teamId, int unitId) throws ValidationException {
+        int[] itemOwner = getPotentialOwnersOfItem(itemId);
+
+        if (itemOwner[0] == teamId){
+            return true;
+        } else if (itemOwner[1] == unitId){
+            return false;
+        }
+
+        throw new ValidationException("Invalid Transfer.");
+    }
+
+    @Override
+    public void updateEquipped(Item item) throws DaoException {
+
+        String sql = "UPDATE inventory SET isEquipped = ? WHERE item_id = ?";
+
+        try {
+            int rowsUpdated = jdbcTemplate.update(sql, item.isEquipped(), item.getId());
+
+            if (rowsUpdated != 1) {
+                throw new DaoException("Incorrect number of rows updated");
+            }
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+
+    }
+
+
+
+
+    /*
+    PRIVATE METHODS
+     */
+
+    private int[] getPotentialOwnersOfItem(int itemId) throws DaoException{
         String sql = "SELECT unit_id, team_id FROM inventory WHERE item_id = ?";
         int teamIdOfItem = 0;
         int unitIdOfItem = 0;
@@ -219,14 +255,7 @@ public class JdbcItemDao implements ItemDao {
             throw new DaoException("Unable to connect to server or database", e);
         }
 
-        if (teamIdOfItem == teamId){
-            return true;
-        } else if (unitIdOfItem == unitId){
-            return false;
-        }
-
-        throw new DaoException("Invalid transfer.");
-
+        return new int[]{teamIdOfItem, unitIdOfItem};
     }
 
     private int purchaseItem(int itemRefId, int purchaserId, String sql) throws DaoException {
@@ -263,6 +292,7 @@ public class JdbcItemDao implements ItemDao {
     private Item mapRowToItem(SqlRowSet row) throws DaoException {
         Item newItem = mapItemReferenceValuesFromRow(row);
         newItem.setId(row.getInt("item_id"));
+        newItem.setEquipped(row.getBoolean("isEquipped"));
         return newItem;
     }
 

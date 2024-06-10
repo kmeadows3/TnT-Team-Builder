@@ -1,6 +1,7 @@
 package my.TNTBuilder.dao;
 
 import my.TNTBuilder.exception.DaoException;
+import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.inventory.*;
 import org.junit.After;
 import org.junit.Assert;
@@ -24,6 +25,7 @@ public class JdbcItemDaoTests extends BaseDaoTests{
     public void resetItemIds(){
         ARMOR.setId(1);
         WEAPON.setId(2);
+        WEAPON.setEquipped(false);
     }
 
     @Test
@@ -115,7 +117,7 @@ public class JdbcItemDaoTests extends BaseDaoTests{
 
     @Test
     public void transferItem_works_when_moving_item_from_unit_to_team() {
-        sut.transferItem(1, 1, 1);
+        sut.transferItem(1, 1, 1, false);
         List<Item> teamTestList = sut.getAllItemsForTeam(1);
         List<Item> unitTestList = sut.getAllItemsForUnit(1);
 
@@ -126,8 +128,8 @@ public class JdbcItemDaoTests extends BaseDaoTests{
     }
 
     @Test
-    public void transferItem_works_when_moving_item_from_team_to_item() {
-        sut.transferItem(5, 1, 1);
+    public void transferItem_works_when_moving_item_from_team_to_unit() {
+        sut.transferItem(5, 1, 1, true);
         List<Item> teamTestList = sut.getAllItemsForTeam(1);
         List<Item> unitTestList = sut.getAllItemsForUnit(1);
 
@@ -140,12 +142,25 @@ public class JdbcItemDaoTests extends BaseDaoTests{
 
     @Test (expected = DaoException.class)
     public void transferItem_throws_exception_invalid_item_id() {
-        sut.transferItem(99, 1, 1);
+        sut.transferItem(99, 1, 1, true);
     }
 
-    @Test (expected = DaoException.class)
-    public void transferItem_throws_exception_item_not_owned_by_team_or_unit() {
-        sut.transferItem(4, 1, 1);
+    @Test
+    public void isItemOwnedByTeam_returns_false_if_unit_owns_item() throws ValidationException {
+        boolean test = sut.isItemOwnedByTeam(1,1,1);
+        Assert.assertFalse(test);
+    }
+
+    @Test
+    public void isItemOwnedByTeam_returns_true_if_team_owns_item() throws ValidationException {
+        boolean test = sut.isItemOwnedByTeam(5,1,1);
+        Assert.assertTrue(test);
+    }
+
+    @Test (expected = ValidationException.class)
+    public void isItemOwnedByTeam_throws_exception_if_item_not_owned_by_team_or_unit() throws ValidationException {
+        sut.isItemOwnedByTeam(4,1,1);
+        Assert.fail();
     }
 
     @Test
@@ -211,7 +226,28 @@ public class JdbcItemDaoTests extends BaseDaoTests{
         Assert.fail();
     }
 
+    @Test
+    public void updateEquipped_updates_equipped_to_true(){
+        WEAPON.setEquipped(true);
+        sut.updateEquipped(WEAPON);
 
+        Item testWeapon = sut.getItemById(WEAPON.getId());
+
+        Assert.assertTrue(testWeapon.isEquipped());
+    }
+
+    @Test
+    public void updateEquipped_updates_equipped_to_false(){
+        WEAPON.setEquipped(true);
+        sut.updateEquipped(WEAPON);
+
+        WEAPON.setEquipped(false);
+        sut.updateEquipped(WEAPON);
+
+        Item testWeapon = sut.getItemById(WEAPON.getId());
+
+        Assert.assertFalse(testWeapon.isEquipped());
+    }
 
 
     }

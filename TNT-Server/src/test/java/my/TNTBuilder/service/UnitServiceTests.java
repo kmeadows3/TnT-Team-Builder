@@ -31,7 +31,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void createNewUnit_creates_new_unit(){
+    public void createNewUnit_creates_new_unit() throws ServiceException{
 
         Unit expectedUnit = generateExpectedRankAndFileCaravanner();
         expectedUnit.setTeamId(1);
@@ -46,7 +46,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test (expected = ServiceException.class)
-    public void createNewUnit_throws_exception_if_team_does_not_belong_to_user(){
+    public void createNewUnit_throws_exception_if_team_does_not_belong_to_user() throws ServiceException{
         Unit invalidUnit = new Unit();
         invalidUnit.setId(9);
         invalidUnit.setTeamId(3);
@@ -55,7 +55,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test (expected = ServiceException.class)
-    public void createNewUnit_throws_exception_if_team_can_not_afford_unit(){
+    public void createNewUnit_throws_exception_if_team_can_not_afford_unit() throws ServiceException{
 
         Unit invalidUnit = new Unit();
         invalidUnit.setId(1);
@@ -65,7 +65,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test (expected = ServiceException.class)
-    public void createNewUnit_throws_exception_if_unit_can_not_belong_to_faction(){
+    public void createNewUnit_throws_exception_if_unit_can_not_belong_to_faction() throws ServiceException{
         Unit invalidUnit = new Unit();
         invalidUnit.setId(1);
         invalidUnit.setTeamId(2);
@@ -74,7 +74,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void createNewUnit_does_not_throw_exception_if_team_can_purchase_freelancer_units(){
+    public void createNewUnit_does_not_throw_exception_if_team_can_purchase_freelancer_units() throws ServiceException{
         Unit validUnit = new Unit();
         validUnit.setId(10);
         validUnit.setTeamId(4);
@@ -87,7 +87,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test (expected = ServiceException.class)
-    public void createNewUnit_throws_exception_if_team_tries_to_buy_leader_while_having_leader(){
+    public void createNewUnit_throws_exception_if_team_tries_to_buy_leader_while_having_leader() throws ServiceException{
         Unit invalidUnit = new Unit();
         invalidUnit.setId(1);
         invalidUnit.setTeamId(1);
@@ -96,7 +96,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test (expected = ServiceException.class)
-    public void createNewUnit_throws_exception_if_team_has_no_leader_and_does_not_buy_leader(){
+    public void createNewUnit_throws_exception_if_team_has_no_leader_and_does_not_buy_leader() throws ServiceException{
         Unit invalidUnit = new Unit();
         invalidUnit.setId(4);
         invalidUnit.setTeamId(6);
@@ -105,7 +105,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test (expected = ServiceException.class)
-    public void createNewUnit_throws_exception_if_team_cannot_buy_elites(){
+    public void createNewUnit_throws_exception_if_team_cannot_buy_elites() throws ServiceException{
         Unit invalidUnit = new Unit();
         invalidUnit.setId(2);
         invalidUnit.setTeamId(7);
@@ -114,7 +114,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test (expected = ServiceException.class)
-    public void createNewUnit_throws_exception_if_team_cannot_buy_specialists(){
+    public void createNewUnit_throws_exception_if_team_cannot_buy_specialists() throws ServiceException{
         Unit invalidUnit = new Unit();
         invalidUnit.setId(11);
         invalidUnit.setTeamId(1);
@@ -123,7 +123,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void getUnitsForFaction_returns_only_leader_if_team_has_no_leader(){
+    public void getUnitsForFaction_returns_only_leader_if_team_has_no_leader() throws ServiceException{
 
         List<Unit> testList = sut.getUnitsForFaction(1, new Team());
 
@@ -133,7 +133,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void getUnitsForFaction_returns_list_of_all_non_leaders_if_team_has_leader_and_no_restrictions(){
+    public void getUnitsForFaction_returns_list_of_all_non_leaders_if_team_has_leader_and_no_restrictions() throws ServiceException{
         Team team = instantiateTeamWithLeader();
         Unit expectedUnit = generateExpectedRankAndFileCaravanner();
 
@@ -156,7 +156,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void getUnitsForFaction_does_not_include_freelancers_when_they_are_invalid(){
+    public void getUnitsForFaction_does_not_include_freelancers_when_they_are_invalid() throws ServiceException{
         Team team = instantiateTeamWithLeader();
         Unit expectedUnit = generateExpectedRankAndFileCaravanner();
         team.getUnitList().add(expectedUnit);
@@ -172,7 +172,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void getUnitsForFaction_returns_list_without_elites_if_team_has_3_elites(){
+    public void getUnitsForFaction_returns_list_without_elites_if_team_has_3_elites() throws ServiceException{
         Team team = instantiateTeamWithLeader();
         team.getUnitList().add(UNIT2);
         team.getUnitList().add(UNIT2);
@@ -188,7 +188,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void getUnitsForFaction_returns_list_without_specialists_if_team_has_too_many_specialists(){
+    public void getUnitsForFaction_returns_list_without_specialists_if_team_has_too_many_specialists() throws ServiceException{
         Team team = instantiateTeamWithLeader();
         team.getUnitList().add(UNIT2);
         team.getUnitList().add(UNIT2);
@@ -204,7 +204,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void getPotentialSkills_returns_correct_list_one_skillset(){
+    public void getPotentialSkills_returns_correct_list_one_skillset() throws ServiceException{
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
                 "Ignore heavy weapons rule.", 6, "Brawn");
         Skill skill2 = new Skill(7, "Bully", "All enemies defeated by this model in close combat are knocked prone " +
@@ -219,7 +219,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void getPotentialSkills_returns_correct_list_multiple_skillsets(){
+    public void getPotentialSkills_returns_correct_list_multiple_skillsets() throws ServiceException{
         Skill skill1 = new Skill(3, "Reconnoiter", "At the start of the game after all models have " +
                 "deployed but before init is determined make a free move action.", 4, "Quickness");
         Skill skill2 = new Skill(4, "Trekker", "When moving through Difficult Terrain attempt an " +
@@ -235,7 +235,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void getPotentialSkills_does_not_return_existing_skills(){
+    public void getPotentialSkills_does_not_return_existing_skills() throws ServiceException{
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
                 "Ignore heavy weapons rule.", 6, "Brawn");
         Skill skill2 = new Skill(7, "Bully", "All enemies defeated by this model in close combat are knocked prone " +
@@ -250,7 +250,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void addSkillToUnit_adds_skill_to_unit(){
+    public void addSkillToUnit_adds_skill_to_unit() throws ServiceException{
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
                 "Ignore heavy weapons rule.", 6, "Brawn");
         sut.addSkillToUnit(6, 2, 2);
@@ -260,19 +260,19 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test (expected = ServiceException.class)
-    public void addSkillToUnit_throws_exception_if_user_does_not_own_unit(){
+    public void addSkillToUnit_throws_exception_if_user_does_not_own_unit() throws ServiceException{
         sut.addSkillToUnit(6, 2, 1);
         Assert.fail();
     }
 
     @Test (expected = ServiceException.class)
-    public void addSkillToUnit_throws_exception_if_unit_cannot_have_skill(){
+    public void addSkillToUnit_throws_exception_if_unit_cannot_have_skill() throws ServiceException{
         sut.addSkillToUnit(3, 2, 2);
         Assert.fail();
     }
 
     @Test
-    public void getUnitById_returns_correct_unit(){
+    public void getUnitById_returns_correct_unit() throws ServiceException{
         Unit testUnit = sut.getUnitById(1,1);
         Unit expected = UNIT1;
         Assert.assertNotNull(testUnit);
@@ -280,13 +280,13 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test (expected = ServiceException.class)
-    public void getUnitById_throws_exception_incorrect_user(){
+    public void getUnitById_throws_exception_incorrect_user() throws ServiceException{
         sut.getUnitById(1,2);
         Assert.fail();
     }
 
     @Test
-    public void getReferenceUnitByClass_returns_expected_unit(){
+    public void getReferenceUnitByClass_returns_expected_unit() throws ServiceException{
         Unit expectedUnit = new Unit (0, 0, "", "Raider", "Rank and File",
                 "Human", 20, 1, 6, 5, 5, 4, 4, 5,
                 0, "N/A", 0, 0, 0, 0,
@@ -300,13 +300,13 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test(expected = ServiceException.class)
-    public void getReferenceUnitByClass_throws_error_for_invalid_classes(){
+    public void getReferenceUnitByClass_throws_error_for_invalid_classes() throws ServiceException{
         sut.getReferenceUnitByClass("Not A Real Class");
         Assert.fail();
     }
 
     @Test
-    public void updateUnit_updates_unit_with_valid_change(){
+    public void updateUnit_updates_unit_with_valid_change() throws ServiceException{
         Unit unitToUpdate = sut.getUnitById(1,1);
         unitToUpdate.setName("New Name");
 
@@ -316,7 +316,7 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test (expected = ServiceException.class)
-    public void updateUnit_throws_exception_with_invalid_change(){
+    public void updateUnit_throws_exception_with_invalid_change() throws ServiceException{
         Unit unitToUpdate = sut.getUnitById(1,1);
         unitToUpdate.setUnitClass("New Class Name");
         sut.updateUnit(unitToUpdate, 1);

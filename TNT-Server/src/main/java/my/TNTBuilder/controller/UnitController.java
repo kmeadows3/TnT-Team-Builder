@@ -154,6 +154,8 @@ public class UnitController {
             }
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No user with this username");
         }
         return unit;
     }

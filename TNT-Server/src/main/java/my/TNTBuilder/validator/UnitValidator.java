@@ -1,5 +1,6 @@
 package my.TNTBuilder.validator;
 import my.TNTBuilder.dao.UnitDao;
+import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.exception.ValidatorException;
 import my.TNTBuilder.model.Skill;
@@ -34,10 +35,10 @@ public class UnitValidator {
         return unit.getUnspentExperience() - unit.getCostToAdvance() >= 0;
     }
 
-    public void validateUpdatedUnit(Unit updatedUnit, Unit currentUnit){
+    public void validateUpdatedUnit(Unit updatedUnit, Unit currentUnit) throws ValidatorException{
 
         if (currentUnit == null){
-            throw new ServiceException("Update failed. User does not own unit.");
+            throw new ValidatorException("Update failed. User does not own unit.");
         }
 
         if (    !( onlyNameChanged(currentUnit, updatedUnit)
@@ -46,12 +47,12 @@ public class UnitValidator {
                 || ( validTenPointLevel(currentUnit, updatedUnit)  && unitCanAffordAdvance(currentUnit) )
                 )
         ) {
-            throw new ServiceException("Unit update is not valid");
+            throw new ValidatorException("Unit update is not valid");
         }
 
     }
 
-    public void validateNewClientUnit(Unit unit, Team team) {
+    public void validateNewClientUnit(Unit unit, Team team) throws ValidatorException, DaoException {
 
         if (team == null) {
             throw new ValidatorException("Invalid Unit. Logged in user does not own team.");
@@ -97,7 +98,7 @@ public class UnitValidator {
     /*
     Private Methods
     */
-    private void confirmNewUnitRankIsValidOption(Unit potentialUnit, Team team) {
+    private void confirmNewUnitRankIsValidOption(Unit potentialUnit, Team team) throws ValidatorException {
 
         if (potentialUnit.getRank().equalsIgnoreCase("Leader") && !teamMustBuyLeader(team)) {
             throw new ValidatorException("Team cannot have two leaders.");

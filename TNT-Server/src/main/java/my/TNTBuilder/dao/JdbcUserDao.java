@@ -25,7 +25,7 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User getUserById(int userId) {
+    public User getUserById(int userId) throws DaoException {
         User user = null;
         String sql = "SELECT user_id, username, password_hash FROM tnt_user WHERE user_id = ?";
         try {
@@ -40,7 +40,7 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<User> getUsers() throws DaoException {
         List<User> users = new ArrayList<>();
         String sql = "SELECT user_id, username, password_hash FROM tnt_user";
         try {
@@ -56,7 +56,7 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User getUserByUsername(String username) {
+    public User getUserByUsername(String username) throws DaoException {
         if (username == null) throw new IllegalArgumentException("Username cannot be null");
         User user = null;
         String sql = "SELECT user_id, username, password_hash FROM tnt_user WHERE username = LOWER(TRIM(?));";
@@ -72,7 +72,7 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public int getUserIdByUsername(String username) {
+    public int getUserIdByUsername(String username) throws DaoException {
         if (username == null) throw new IllegalArgumentException("Username cannot be null");
         int userid = -1;
         String sql = "SELECT user_id FROM tnt_user WHERE username = LOWER(TRIM(?));";
@@ -87,7 +87,7 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public User createUser(RegisterUserDto user) {
+    public User createUser(RegisterUserDto user) throws DaoException {
         User newUser = null;
         // create user
         String sql = "INSERT INTO tnt_user (username, password_hash) VALUES (LOWER(TRIM(?)), ?) RETURNING user_id";

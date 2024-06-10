@@ -45,7 +45,7 @@ public class JdbcUnitDao implements UnitDao{
     PUBLIC METHODS
      */
     @Override
-    public Unit getUnitById(int id, int userId) {
+    public Unit getUnitById(int id, int userId) throws DaoException{
         String sql = SELECT_ALL_FROM_UNIT + "WHERE unit_id = ? AND user_id = ?";
         Unit unit = null;
         try {
@@ -66,7 +66,7 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
-    public List<Unit> getAllUnitsForTeam(int teamId){
+    public List<Unit> getAllUnitsForTeam(int teamId) throws DaoException{
         String sql = SELECT_ALL_FROM_UNIT + "WHERE t.team_id = ? ORDER BY base_cost desc, unit_id";
         List<Unit> unitList = new ArrayList<>();
         try {
@@ -84,7 +84,7 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
-    public Unit createUnit(Unit clientUnit) {
+    public Unit createUnit(Unit clientUnit) throws DaoException{
         Unit newUnit = initializeNewUnit(clientUnit);
         String sql = "INSERT INTO unit (team_id, name, class, rank, species, base_cost, wounds, defense, mettle, " +
                 "move, ranged, melee, strength, empty_skills, special_rules, spent_exp) " +
@@ -107,7 +107,7 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
-    public int getFactionIdByUnitReferenceId(int referenceUnitId){
+    public int getFactionIdByUnitReferenceId(int referenceUnitId) throws DaoException{
         String sql = "SELECT faction_id FROM unit_reference WHERE unit_ref_id = ?";
         int id = 0;
         try {
@@ -126,7 +126,7 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
-    public List<Unit> getListOfUnitsByFactionId(int factionId) {
+    public List<Unit> getListOfUnitsByFactionId(int factionId) throws DaoException {
         String sql = "SELECT unit_ref_id FROM unit_reference WHERE faction_id = ? OR faction_id = " + FREELANCER_FACTION_ID;
         List<Unit> unitList = new ArrayList<>();
         try {
@@ -147,7 +147,7 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
-    public void updateUnit(Unit updatedUnit){
+    public void updateUnit(Unit updatedUnit) throws DaoException{
         String sql = "UPDATE unit SET name = ?, rank = ?, wounds = ?, defense = ?, mettle = ?, move = ?, " +
                 "ranged = ?, melee = ?, strength = ?, empty_skills = ?, spent_exp = ?, unspent_exp = ?, " +
                 "total_advances = ?, ten_point_advances = ?, is_banged_up = ?, is_long_recovery = ? " +
@@ -170,7 +170,7 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
-    public Unit convertReferenceUnitToUnit(int referenceUnitId){
+    public Unit convertReferenceUnitToUnit(int referenceUnitId) throws DaoException{
         Unit referenceUnit = null;
         String sql = SELECT_ALL_FROM_UNIT_REFERENCE + "WHERE unit_ref_id = ?";
         try {
@@ -185,7 +185,7 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
-    public Unit convertReferenceUnitToUnit(String unitClass) {
+    public Unit convertReferenceUnitToUnit(String unitClass) throws DaoException {
         Unit referenceUnit = null;
         String sql = SELECT_ALL_FROM_UNIT_REFERENCE + "WHERE class = ?";
         try {
@@ -204,7 +204,7 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
-    public List<Skill> getPotentialSkills(int unitId) {
+    public List<Skill> getPotentialSkills(int unitId) throws DaoException {
         List<Integer> skillsetIds = new ArrayList<>();
         List<Skill> potentialSkills = new ArrayList<>();
 
@@ -239,7 +239,7 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
-    public void addSkillToUnit(int skillId, int unitId) {
+    public void addSkillToUnit(int skillId, int unitId)  throws DaoException{
         String sql = "INSERT INTO unit_skill (unit_id, skill_id) VALUES (?, ?)";
         try {
             int rowsAffected = jdbcTemplate.update(sql, unitId, skillId);
@@ -294,7 +294,7 @@ public class JdbcUnitDao implements UnitDao{
         }
         jdbcTemplate.batchUpdate(sql, batch);
     }
-    private Unit initializeNewUnit(Unit providedUnit) {
+    private Unit initializeNewUnit(Unit providedUnit)  throws DaoException{
         Unit newUnit = convertReferenceUnitToUnit(providedUnit.getId());
         if (newUnit == null){
             throw new DaoException("Invalid unit provided, cannot create unit.");
@@ -303,7 +303,7 @@ public class JdbcUnitDao implements UnitDao{
         newUnit.setName(providedUnit.getName());
         return newUnit;
     }
-    private Unit mapRowToUnitFromUnitReference(SqlRowSet row){
+    private Unit mapRowToUnitFromUnitReference(SqlRowSet row) throws DaoException{
         Unit newUnit = new Unit();
         newUnit.setUnitClass(row.getString("class"));
         newUnit.setRank(row.getString("rank"));
@@ -334,7 +334,7 @@ public class JdbcUnitDao implements UnitDao{
             return 75;
         }
     }
-    private List<Skillset> convertAvailableSkillsets(String skillsetsAsString){
+    private List<Skillset> convertAvailableSkillsets(String skillsetsAsString) throws DaoException{
         int[] skillsetsAsArray = referenceArraySplitter(skillsetsAsString);
         List<Skillset> availableSkillsets = new ArrayList<>();
         Map<Integer, Skillset> skillsetMap = generateSkillSetMap();
@@ -343,7 +343,7 @@ public class JdbcUnitDao implements UnitDao{
         }
         return availableSkillsets;
     }
-    private List<Skill> convertStartingSkills(String skillsAsString){
+    private List<Skill> convertStartingSkills(String skillsAsString) throws DaoException{
         List<Skill> startingSkills = new ArrayList<>();
         int[] skillArray = referenceArraySplitter(skillsAsString);
         Map<Integer, Skill> skillMap = generateSkillMap();
@@ -365,7 +365,7 @@ public class JdbcUnitDao implements UnitDao{
             return convertedArray;
         }
     }
-    private Map<Integer, Skillset> generateSkillSetMap(){
+    private Map<Integer, Skillset> generateSkillSetMap() throws DaoException{
         Map<Integer, Skillset> skillsetMap = new HashMap<>();
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(SELECT_ALL_FROM_SKILLSET_REFERENCE);
@@ -378,7 +378,7 @@ public class JdbcUnitDao implements UnitDao{
         }
         return skillsetMap;
     }
-    private Map<Integer, Skill> generateSkillMap() {
+    private Map<Integer, Skill> generateSkillMap() throws DaoException{
         Map<Integer, Skill> skillMap = new HashMap<>();
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(SELECT_ALL_FROM_SKILL_REFERENCE);
@@ -391,7 +391,7 @@ public class JdbcUnitDao implements UnitDao{
         }
         return skillMap;
     }
-    private Unit mapRowToUnit(SqlRowSet row){
+    private Unit mapRowToUnit(SqlRowSet row)  throws DaoException{
         Unit newUnit = new Unit();
         newUnit.setId(row.getInt("unit_id"));
         newUnit.setTeamId(row.getInt("team_id"));

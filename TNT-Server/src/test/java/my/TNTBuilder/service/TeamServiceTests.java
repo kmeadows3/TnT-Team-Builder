@@ -30,79 +30,79 @@ public class TeamServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void updateTeam_updates_team_with_valid_change(){
+    public void updateTeam_updates_team_with_valid_change() throws ServiceException{
         TEAM_1.setName("Test Name");
         Team testTeam = sut.updateTeam(TEAM_1, 1);
         Assert.assertEquals(TEAM_1, testTeam);
     }
 
     @Test (expected = ServiceException.class)
-    public void updateTeam_throws_exception_with_invalid_change(){
+    public void updateTeam_throws_exception_with_invalid_change() throws ServiceException{
         TEAM_1.setFactionId(3);
         sut.updateTeam(TEAM_1, 1);
         Assert.fail();
     }
 
     @Test (expected = ServiceException.class)
-    public void updateTeam_throws_exception_with_invalid_user(){
+    public void updateTeam_throws_exception_with_invalid_user() throws ServiceException{
         TEAM_1.setName("Test Name");
         sut.updateTeam(TEAM_1, 2);
         Assert.fail();
     }
 
     @Test
-    public void getTeamById_returns_expected_team(){
+    public void getTeamById_returns_expected_team() throws ServiceException{
         Team testTeam = sut.getTeamById(1,1);
         Assert.assertNotNull(testTeam);
         Assert.assertEquals(TEAM_1, testTeam);
     }
 
     @Test (expected = ServiceException.class)
-    public void getTeamById_throws_exception_for_incorrect_user(){
+    public void getTeamById_throws_exception_for_incorrect_user() throws ServiceException{
         sut.getTeamById(1,2);
         Assert.fail();
     }
 
     @Test (expected = ServiceException.class)
-    public void getTeamById_throws_exception_if_team_does_not_exist(){
+    public void getTeamById_throws_exception_if_team_does_not_exist() throws ServiceException{
         sut.getTeamById(41,1);
         Assert.fail();
     }
 
     @Test
-    public void getTeamByUnitId_returns_correct_team(){
+    public void getTeamByUnitId_returns_correct_team() throws ServiceException{
         Team testTeam = sut.getTeamByUnitId(1);
         Assert.assertNotNull(testTeam);
         Assert.assertEquals(TEAM_1, testTeam);
     }
 
     @Test (expected = ServiceException.class)
-    public void getTeamByUnitId_throws_exception_with_invalid_unit(){
+    public void getTeamByUnitId_throws_exception_with_invalid_unit() throws ServiceException{
         sut.getTeamByUnitId(99);
         Assert.fail();
     }
 
     @Test
-    public void spendMoney_spends_money_on_valid_purchase_amount(){
+    public void spendMoney_spends_money_on_valid_purchase_amount() throws ServiceException{
         sut.spendMoney(50, TEAM_1);
         Assert.assertEquals(450, TEAM_1.getMoney());
     }
 
     @Test
-    public void spendMoney_spends_money_correctly_multiple_purcahses(){
+    public void spendMoney_spends_money_correctly_multiple_purcahses() throws ServiceException{
         sut.spendMoney(50, TEAM_1);
         sut.spendMoney(300, TEAM_1);
         Assert.assertEquals(150, TEAM_1.getMoney());
     }
 
     @Test (expected = ServiceException.class)
-    public void spendMoney_throws_exception_if_not_enough_money_for_purchase(){
+    public void spendMoney_throws_exception_if_not_enough_money_for_purchase() throws ServiceException{
         sut.spendMoney(5000, TEAM_1);
         Assert.fail();
     }
 
     @Test
-    public void updateTeamAfterPurchase_correctly_updates_with_non_leader(){
+    public void updateTeamAfterPurchase_correctly_updates_with_non_leader() throws ServiceException{
         Unit boughtUnit = new Unit(5, 1, "Name", "Defender", "Rank and File",
                 "Human", 50,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
@@ -115,7 +115,7 @@ public class TeamServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void updateTeamAfterPurchase_correctly_updates_with_buying_first_leader(){
+    public void updateTeamAfterPurchase_correctly_updates_with_buying_first_leader() throws ServiceException{
         Unit boughtUnit = new Unit(5, 1, "Name", "Defender", "Leader",
                 "Human", 50,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
@@ -128,7 +128,7 @@ public class TeamServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void updateTeamAfterPurchase_correctly_discounts_price_with_buying_second_leader(){
+    public void updateTeamAfterPurchase_correctly_discounts_price_with_buying_second_leader() throws ServiceException{
         Team team1 = sut.getTeamById(1,1);
         team1.setBoughtFirstLeader(true);
         sut.updateTeam(team1,1);
@@ -146,7 +146,7 @@ public class TeamServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void create_team_creates_new_empty_team(){
+    public void create_team_creates_new_empty_team() throws ServiceException{
         Team newTeam = new Team();
         newTeam.setUserId(1);
         newTeam.setFactionId(1);
@@ -162,19 +162,19 @@ public class TeamServiceTests extends BaseDaoTests {
     }
 
     @Test(expected = ServiceException.class)
-    public void create_team_invalid_faction_throws_exception(){
+    public void create_team_invalid_faction_throws_exception() throws ServiceException{
         sut.createTeam(new Team(4, 1, "Name", "Mutants", 99, 500, new ArrayList<>(), new ArrayList<>()));
         Assert.fail();
     }
 
     @Test(expected = ServiceException.class)
-    public void create_team_invalid_user_throws_exception(){
+    public void create_team_invalid_user_throws_exception() throws ServiceException{
         sut.createTeam(new Team(4, 99, "Name", "Caravanners", 1, 500, new ArrayList<>(), new ArrayList<>()));
         Assert.fail();
     }
 
     @Test
-    public void getAllFactions_returns_all_factions(){
+    public void getAllFactions_returns_all_factions() throws ServiceException{
         List<FactionDTO> testList = sut.getAllFactions();
         Assert.assertNotNull(testList);
         Assert.assertEquals(6, testList.size());
@@ -182,7 +182,7 @@ public class TeamServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void getAllTeamsForUser_returns_team(){
+    public void getAllTeamsForUser_returns_team() throws ServiceException{
         List<Team> testList = sut.getAllTeamsForUser(2);
         Assert.assertNotNull(testList);
         Assert.assertEquals(1, testList.size());
@@ -190,7 +190,7 @@ public class TeamServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void getAllTeamsForUser_returns_multiple_teams(){
+    public void getAllTeamsForUser_returns_multiple_teams() throws ServiceException{
         List<Team> testList = sut.getAllTeamsForUser(1);
         Assert.assertNotNull(testList);
         Assert.assertEquals(2, testList.size());
@@ -199,7 +199,7 @@ public class TeamServiceTests extends BaseDaoTests {
     }
 
     @Test(expected = ServiceException.class)
-    public void getAllTeamsForUser_throws_exception_if_no_teams(){
+    public void getAllTeamsForUser_throws_exception_if_no_teams() throws ServiceException{
         sut.getAllTeamsForUser(3);
         Assert.fail();
     }

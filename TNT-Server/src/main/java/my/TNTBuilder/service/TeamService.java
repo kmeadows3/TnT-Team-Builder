@@ -23,7 +23,7 @@ public class TeamService {
     /*
     PUBLIC METHODS
      */
-    public Team updateTeam(Team updatedTeam, int userId){
+    public Team updateTeam(Team updatedTeam, int userId) throws ServiceException{
         int teamId = updatedTeam.getId();
 
         Team currentTeam = null;
@@ -39,6 +39,7 @@ public class TeamService {
                 || teamValidator.validFirstLeaderChange(currentTeam, updatedTeam)){
             try {
                 teamDao.updateTeam(updatedTeam);
+                updatedTeam = teamDao.getTeamById(teamId, userId);
             } catch (DaoException e){
                 throw new ServiceException(e.getMessage(), e);
             }
@@ -46,10 +47,10 @@ public class TeamService {
             throw new ServiceException("Invalid update to Team");
         }
 
-        return teamDao.getTeamById(teamId, userId);
+        return updatedTeam;
     }
 
-    public Team spendMoney(int amountToSpend, Team team){
+    public Team spendMoney(int amountToSpend, Team team) throws ServiceException{
 
         if (team.getMoney() - amountToSpend < 0){
             throw new ServiceException("Team does not have enough money for this action.");
@@ -66,7 +67,7 @@ public class TeamService {
         return team;
     }
 
-    public void updateTeamAfterNewUnitPurchase(int userId, Unit newUnit) {
+    public void updateTeamAfterNewUnitPurchase(int userId, Unit newUnit)  throws ServiceException {
         Team team = getTeamById(newUnit.getTeamId(), userId);
 
         int cost = getUnitBaseCostWithDiscounts(team, newUnit);
@@ -84,7 +85,7 @@ public class TeamService {
     /*
     METHODS THAT GO TO THE TEAM DAO WITH NO ALTERATIONS
      */
-    public Team getTeamById(int teamId, int userId){
+    public Team getTeamById(int teamId, int userId)  throws ServiceException {
         Team team = null;
         try{
             team = teamDao.getTeamById(teamId, userId);
@@ -95,7 +96,7 @@ public class TeamService {
         return team;
     }
 
-    public Team createTeam(Team newTeam){
+    public Team createTeam(Team newTeam)  throws ServiceException{
 
         try {
             newTeam = teamDao.createTeam(newTeam);
@@ -106,7 +107,7 @@ public class TeamService {
         return newTeam;
     }
 
-    public List<FactionDTO> getAllFactions(){
+    public List<FactionDTO> getAllFactions()  throws ServiceException {
         List<FactionDTO> factionList = null;
         try {
             factionList = teamDao.getAllFactions();
@@ -116,7 +117,7 @@ public class TeamService {
         return factionList;
     }
 
-    public List<Team> getAllTeamsForUser(int userId){
+    public List<Team> getAllTeamsForUser(int userId)  throws ServiceException {
         List<Team> allTeams = null;
 
         try {
@@ -128,7 +129,7 @@ public class TeamService {
         return allTeams;
     }
 
-    public Team getTeamByUnitId(int unitId){
+    public Team getTeamByUnitId(int unitId) throws ServiceException{
         Team team = null;
         try {
             team = teamDao.getTeamByUnitId(unitId);

@@ -42,35 +42,35 @@ public class JdbcItemDao implements ItemDao {
      */
 
     @Override
-    public List<Item> getAllItemsForUnit(int unitId) {
+    public List<Item> getAllItemsForUnit(int unitId) throws DaoException {
         String sql = SELECT_ALL_FROM_ITEM + "WHERE unit_id = ? ORDER BY item_category, name, item_id";
 
         return getItemListFromRowSet(unitId,sql);
     }
 
     @Override
-    public List<Item> getAllItemsForTeam(int teamId) {
+    public List<Item> getAllItemsForTeam(int teamId) throws DaoException {
         String sql = SELECT_ALL_FROM_ITEM + "WHERE team_id = ? ORDER BY item_category, name, item_id";
 
         return getItemListFromRowSet(teamId,sql);
     }
 
     @Override
-    public int addItemToTeam(int itemRefId, int teamId) {
+    public int addItemToTeam(int itemRefId, int teamId) throws DaoException {
 
         String sql = "INSERT INTO inventory(item_ref_id, team_id) VALUES (?, ?) RETURNING item_id";
         return purchaseItem(itemRefId, teamId, sql);
     }
 
     @Override
-    public int addItemToUnit(int itemRefId, int unitId) {
+    public int addItemToUnit(int itemRefId, int unitId) throws DaoException {
 
         String sql = "INSERT INTO inventory(item_ref_id, unit_id) VALUES (?, ?) RETURNING item_id";
         return purchaseItem(itemRefId, unitId, sql);
     }
 
     @Override
-    public void transferItem(int itemId, int unitId, int teamId) {
+    public void transferItem(int itemId, int unitId, int teamId) throws DaoException {
 
         boolean teamToUnit = itemBelongsToTeam(itemId, teamId, unitId);
         String sql = "UPDATE inventory SET unit_id = ?, team_id = ? WHERE item_id = ?";
@@ -95,7 +95,7 @@ public class JdbcItemDao implements ItemDao {
     }
 
     @Override
-    public void deleteItem(int itemId){
+    public void deleteItem(int itemId) throws DaoException {
         String sql = "DELETE FROM inventory WHERE item_id = ?";
 
         try {
@@ -115,7 +115,7 @@ public class JdbcItemDao implements ItemDao {
     }
 
     @Override
-    public Item lookupReferenceItem(int itemRefId) {
+    public Item lookupReferenceItem(int itemRefId) throws DaoException{
         Item referenceItem = null;
         String sql = SELECT_ALL_FROM_ITEM_REFERENCE + "WHERE item_ref_id = ?";
         try {
@@ -135,7 +135,7 @@ public class JdbcItemDao implements ItemDao {
     }
 
     @Override
-    public List<Item> getListOfItemsForPurchase() {
+    public List<Item> getListOfItemsForPurchase() throws DaoException {
         List<Item> purchaseList = new ArrayList<>();
         String sql = SELECT_ALL_FROM_ITEM_REFERENCE;
 
@@ -153,7 +153,7 @@ public class JdbcItemDao implements ItemDao {
     }
 
     @Override
-    public Item getItemById(int itemId) {
+    public Item getItemById(int itemId) throws DaoException {
         String sql = SELECT_ALL_FROM_ITEM + "WHERE item_id = ?";
         Item item = null;
         try {
@@ -169,7 +169,7 @@ public class JdbcItemDao implements ItemDao {
     }
 
     @Override
-    public int getTeamIdByItemId(int itemId) {
+    public int getTeamIdByItemId(int itemId) throws DaoException {
         String sql = "SELECT u.team_id AS unitTeamId, t.team_id AS teamId FROM inventory i " +
                 "LEFT JOIN team t ON t.team_id = i.team_id " +
                 "LEFT JOIN unit u ON u.unit_id = i.unit_id " +
@@ -204,7 +204,7 @@ public class JdbcItemDao implements ItemDao {
      * @param unitId the id of the unit the item may belong to
      * @return if the item belongs to the team
      */
-    private boolean itemBelongsToTeam(int itemId, int teamId, int unitId){
+    private boolean itemBelongsToTeam(int itemId, int teamId, int unitId) throws DaoException{
         String sql = "SELECT unit_id, team_id FROM inventory WHERE item_id = ?";
         int teamIdOfItem = 0;
         int unitIdOfItem = 0;
@@ -229,7 +229,7 @@ public class JdbcItemDao implements ItemDao {
 
     }
 
-    private int purchaseItem(int itemRefId, int purchaserId, String sql) {
+    private int purchaseItem(int itemRefId, int purchaserId, String sql) throws DaoException {
         int itemId;
 
         try {
@@ -242,7 +242,7 @@ public class JdbcItemDao implements ItemDao {
 
         return itemId;
     }
-    private List<Item> getItemListFromRowSet(int unitId, String sql) {
+    private List<Item> getItemListFromRowSet(int unitId, String sql) throws DaoException {
         List<Item> itemList = new ArrayList<>();
 
         try {
@@ -260,13 +260,13 @@ public class JdbcItemDao implements ItemDao {
         return itemList;
     }
 
-    private Item mapRowToItem(SqlRowSet row) {
+    private Item mapRowToItem(SqlRowSet row) throws DaoException {
         Item newItem = mapItemReferenceValuesFromRow(row);
         newItem.setId(row.getInt("item_id"));
         return newItem;
     }
 
-    private Item mapItemReferenceValuesFromRow(SqlRowSet row) {
+    private Item mapItemReferenceValuesFromRow(SqlRowSet row) throws DaoException {
         String itemType = row.getString("item_category");
         Item newItem;
 
@@ -281,7 +281,7 @@ public class JdbcItemDao implements ItemDao {
         return newItem;
     }
 
-    private Item initializeArmor(SqlRowSet row) {
+    private Item initializeArmor(SqlRowSet row) throws DaoException{
         Armor armor = new Armor();
         initializeItem(row, armor);
         armor.setMeleeDefenseBonus(row.getInt("melee_defense_bonus"));
@@ -292,13 +292,13 @@ public class JdbcItemDao implements ItemDao {
         return armor;
     }
 
-    private Item initializeEquipment(SqlRowSet row) {
+    private Item initializeEquipment(SqlRowSet row)  throws DaoException{
         Item item = new Item();
         initializeItem(row, item);
         return item;
     }
 
-    private Item initializeWeapon(SqlRowSet row) {
+    private Item initializeWeapon(SqlRowSet row)  throws DaoException{
         Weapon weapon = new Weapon();
         initializeItem(row, weapon);
         weapon.setMeleeRange(row.getInt("melee_range"));
@@ -308,7 +308,7 @@ public class JdbcItemDao implements ItemDao {
         return weapon;
     }
 
-    private void initializeItem(SqlRowSet row, Item item){
+    private void initializeItem(SqlRowSet row, Item item) throws DaoException{
 
         item.setReferenceId(row.getInt("item_ref_id"));
         item.setName(row.getString("name"));
@@ -322,7 +322,7 @@ public class JdbcItemDao implements ItemDao {
 
     }
 
-    private List<ItemTrait> getItemTraitsForItem(int itemRefId){
+    private List<ItemTrait> getItemTraitsForItem(int itemRefId) throws DaoException{
         String sql = SELECT_ALL_FROM_ITEM_TRAIT + "WHERE item_ref_id =  ?";
 
         List<ItemTrait> traits = new ArrayList<>();

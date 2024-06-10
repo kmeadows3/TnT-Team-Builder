@@ -39,12 +39,14 @@ public class TeamController {
      */
     @RequestMapping(path = "/teams", method = RequestMethod.POST)
     public Team createTeam(@Valid @RequestBody Team team, Principal principal){
-        team.setUserId(userDao.getUserIdByUsername(principal.getName()));
         Team returnTeam = null;
         try{
+            team.setUserId(userDao.getUserIdByUsername(principal.getName()));
             returnTeam = teamService.createTeam(team);
-        } catch (DaoException e) {
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No user with this username");
         }
         return returnTeam;
     }
@@ -59,8 +61,10 @@ public class TeamController {
         List<Team> teamList = null;
         try{
             teamList = teamService.getAllTeamsForUser(userDao.getUserIdByUsername(principal.getName()));
-        } catch (DaoException e) {
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, e.getMessage());
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No user with this username");
         }
 
         return teamList;
@@ -79,6 +83,8 @@ public class TeamController {
             teamAfterUpdate = teamService.updateTeam(updatedTeam, userDao.getUserIdByUsername(principal.getName()));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No user with this username");
         }
 
         return teamAfterUpdate;
@@ -98,8 +104,10 @@ public class TeamController {
             if(returnTeam == null){
                 throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to find selected team belonging to logged in user");
             }
-        } catch (DaoException e) {
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No user with this username");
         }
 
         return returnTeam;
@@ -113,7 +121,7 @@ public class TeamController {
     public List<FactionDTO> lookupAllFactions(){
         try {
             return teamService.getAllFactions();
-        }catch (DaoException e) {
+        }catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }

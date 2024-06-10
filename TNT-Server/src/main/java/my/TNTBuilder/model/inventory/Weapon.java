@@ -13,8 +13,8 @@ public class Weapon extends Item {
 
 
     public Weapon(int id, int referenceId, String type, int cost, String specialRules, List<ItemTrait> itemTraits, String rarity, boolean isRelic,
-                  int meleeRange, int rangedRange, int strength, int reliability, int handsRequired, String category) {
-        super(id, referenceId, type, cost, specialRules, itemTraits, rarity, isRelic, handsRequired, category);
+                  int meleeRange, int rangedRange, int strength, int reliability, int handsRequired, String category, boolean isEquipped) {
+        super(id, referenceId, type, cost, specialRules, itemTraits, rarity, isRelic, handsRequired, category, isEquipped);
         this.meleeRange = meleeRange;
         this.rangedRange = rangedRange;
         this.strength = strength;

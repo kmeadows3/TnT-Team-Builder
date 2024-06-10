@@ -16,14 +16,14 @@ public class UnitTests {
 
     protected static final Armor ARMOR = new Armor(1, 1, "Armor 1", 1, "N/A",
             List.of(new ItemTrait(1, "Trait 1", "Trait 1 Desc")), "N/A", false, 1,
-            1, true, 2, 3, 1, "Armor");
+            1, true, 2, 3, 1, "Armor", false);
     protected static final Weapon WEAPON = new Weapon(2, 5, "Weapon 1", 5, "N/A",
             new ArrayList<>(), "N/A", false, 0, 5, 5, 5,
-            1, "Ranged Weapon");
+            1, "Ranged Weapon", false);
 
     protected static final Weapon RELIC_WEAPON = new Weapon(4, 6, "Relic Weapon", 6,
             "Relic Weapon Desc", new ArrayList<>(), "Rare", true, 6, 0,
-            6, 6, 2, "Melee Weapon");
+            6, 6, 2, "Melee Weapon", false);
 
 
     private Unit unit;

@@ -20,13 +20,13 @@ public class ItemService {
 
     private final TeamService teamService;
 
-    public ItemService(ItemDao itemDao, UnitDao unitDao, TeamService teamService){
+    public ItemService(ItemDao itemDao, UnitDao unitDao, TeamService teamService) {
         this.itemDao = itemDao;
         this.unitDao = unitDao;
         this.teamService = teamService;
     }
 
-    public List<Item> getItemsForPurchase(){
+    public List<Item> getItemsForPurchase()  throws ServiceException{
         List<Item> purchaseList;
         try {
             purchaseList = itemDao.getListOfItemsForPurchase();
@@ -38,7 +38,7 @@ public class ItemService {
     }
 
 
-    public int addItemToUnit(int itemReferenceId, int unitId, int userId, boolean isFree){
+    public int addItemToUnit(int itemReferenceId, int unitId, int userId, boolean isFree) throws ServiceException{
 
         Item referenceItem = null;
         Unit unit = null;
@@ -62,7 +62,7 @@ public class ItemService {
         return itemId;
     }
 
-    public int addItemToTeam(int itemReferenceId, int teamId, int userId, boolean isFree){
+    public int addItemToTeam(int itemReferenceId, int teamId, int userId, boolean isFree) throws ServiceException{
 
         Item referenceItem = null;
         Team team = null;
@@ -86,7 +86,7 @@ public class ItemService {
         return itemId;
     }
 
-    public void transferItem(int itemId, int unitId, int userId){
+    public void transferItem(int itemId, int unitId, int userId) throws ServiceException{
         Team team = teamService.getTeamByUnitId(unitId);
         if (team.getUserId() == userId){
             try {
@@ -101,7 +101,7 @@ public class ItemService {
 
     }
 
-    public void deleteItem(int itemId, int userId) {
+    public void deleteItem(int itemId, int userId)  throws ServiceException{
         try {
             Team team = teamService.getTeamById(itemDao.getTeamIdByItemId(itemId), userId);
             deleteItemFromDatabase(itemId, userId, team);
@@ -110,7 +110,7 @@ public class ItemService {
         }
     }
 
-    public void sellItem(int itemId, int userId){
+    public void sellItem(int itemId, int userId) throws ServiceException{
         try {
             Team team = teamService.getTeamById(itemDao.getTeamIdByItemId(itemId), userId);
             updateTeamMoneyFromSellingItem(itemId, userId, team);
@@ -125,7 +125,7 @@ public class ItemService {
     /*
     PRIVATE METHODS
      */
-    private void updateTeamMoneyFromSellingItem(int itemId, int userId, Team team) {
+    private void updateTeamMoneyFromSellingItem(int itemId, int userId, Team team)  throws ServiceException, DaoException{
         Item item = itemDao.getItemById(itemId);
         if (item.getCost()/2 != 0){
             team.setMoney(team.getMoney() + (item.getCost()/2) );
@@ -133,7 +133,7 @@ public class ItemService {
         }
     }
 
-    private void deleteItemFromDatabase(int itemId, int userId, Team team) throws DaoException {
+    private void deleteItemFromDatabase(int itemId, int userId, Team team)  throws ServiceException, DaoException {
 
         if (team.getUserId() == userId) {
             itemDao.deleteItem(itemId);
@@ -143,7 +143,7 @@ public class ItemService {
 
     }
 
-    private int purchaseItem(Item referenceItem, Unit unit) {
+    private int purchaseItem(Item referenceItem, Unit unit)  throws ServiceException {
         int itemId = 0;
         try {
             teamService.spendMoney( referenceItem.calculateCostToPurchase(unit), teamService.getTeamByUnitId(unit.getId()));
@@ -155,7 +155,7 @@ public class ItemService {
         return itemId;
     }
 
-    private int purchaseItem(Item referenceItem, Team team) {
+    private int purchaseItem(Item referenceItem, Team team)  throws ServiceException{
         int itemId = 0;
         try {
             teamService.spendMoney(referenceItem.getCost(), team);
@@ -167,7 +167,7 @@ public class ItemService {
         return itemId;
     }
 
-    private int gainItemForFree(Item referenceItem, Unit unit) {
+    private int gainItemForFree(Item referenceItem, Unit unit)  throws ServiceException{
         int itemId = 0;
         try {
             itemId = itemDao.addItemToUnit(referenceItem.getReferenceId(), unit.getId());
@@ -177,7 +177,7 @@ public class ItemService {
         return itemId;
     }
 
-    private int gainItemForFree(Item referenceItem, Team team) {
+    private int gainItemForFree(Item referenceItem, Team team) throws ServiceException {
         int itemId = 0;
         try {
             itemId = itemDao.addItemToTeam(referenceItem.getReferenceId(), team.getId());

@@ -1,5 +1,6 @@
 package my.TNTBuilder.dao;
 
+import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.model.inventory.Item;
 
 import java.util.List;
@@ -11,24 +12,24 @@ public interface ItemDao {
      * Adds an item to the team-item join table
      * @param itemRefId the id of the item in the reference table
      */
-    int addItemToTeam(int itemRefId, int teamId);
+    int addItemToTeam(int itemRefId, int teamId) throws DaoException;
 
-    List<Item> getAllItemsForUnit(int unitId);
+    List<Item> getAllItemsForUnit(int unitId) throws DaoException;
 
-    List<Item> getAllItemsForTeam(int teamId);
+    List<Item> getAllItemsForTeam(int teamId)throws DaoException;
 
-    int addItemToUnit(int itemRefId, int unitId);
+    int addItemToUnit(int itemRefId, int unitId) throws DaoException;
 
-    void transferItem(int itemId, int unitId, int teamId);
+    void transferItem(int itemId, int unitId, int teamId) throws DaoException;
 
-    void deleteItem(int itemId);
+    void deleteItem(int itemId) throws DaoException;
 
-    Item lookupReferenceItem(int itemRefId);
+    Item lookupReferenceItem(int itemRefId) throws DaoException;
 
-    List<Item> getListOfItemsForPurchase();
+    List<Item> getListOfItemsForPurchase() throws DaoException;
 
-    Item getItemById(int itemId);
+    Item getItemById(int itemId) throws DaoException;
 
-    int getTeamIdByItemId(int itemId);
+    int getTeamIdByItemId(int itemId) throws DaoException;
 
 }

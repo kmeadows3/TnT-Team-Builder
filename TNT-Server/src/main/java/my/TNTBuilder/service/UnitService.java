@@ -1,6 +1,7 @@
 package my.TNTBuilder.service;
 
 import my.TNTBuilder.dao.ItemDao;
+import my.TNTBuilder.exception.ValidatorException;
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.inventory.Item;
 import my.TNTBuilder.validator.UnitValidator;
@@ -30,23 +31,23 @@ public class UnitService {
         this.teamService = teamService;
     }
 
-    public Unit createNewUnit(Unit clientUnit, int userId){
+    public Unit createNewUnit(Unit clientUnit, int userId)  throws ServiceException{
         Unit newUnit = null;
 
-        unitValidator.validateNewClientUnit(clientUnit, teamService.getTeamById(clientUnit.getTeamId(), userId) );
 
         try {
+            unitValidator.validateNewClientUnit(clientUnit, teamService.getTeamById(clientUnit.getTeamId(), userId) );
             newUnit = unitDao.createUnit(clientUnit);
             teamService.updateTeamAfterNewUnitPurchase(userId, newUnit);
 
-        } catch (DaoException e){
+        } catch (DaoException|ValidatorException e){
             throw new ServiceException(e.getMessage());
         }
 
         return newUnit;
     }
 
-    public List<Unit> getUnitsForFaction(int factionId, Team team){
+    public List<Unit> getUnitsForFaction (int factionId, Team team) throws ServiceException{
         List<Unit> units = null;
         try {
             units = unitDao.getListOfUnitsByFactionId(factionId);
@@ -59,9 +60,11 @@ public class UnitService {
         return units;
     }
 
-    public Unit updateUnit(Unit clientUnit, int userId){
+    public Unit updateUnit(Unit clientUnit, int userId) throws ServiceException{
+
+        Unit currentUnit = null;
         try {
-            Unit currentUnit = unitDao.getUnitById(clientUnit.getId(), userId);
+            currentUnit = unitDao.getUnitById(clientUnit.getId(), userId);
 
             unitValidator.validateUpdatedUnit(clientUnit, currentUnit);
 
@@ -73,13 +76,14 @@ public class UnitService {
             }
 
             unitDao.updateUnit(clientUnit);
+            currentUnit = unitDao.getUnitById(clientUnit.getId(), userId);
         } catch (DaoException e){
             throw new ServiceException(e.getMessage(), e);
         }
-        return unitDao.getUnitById(clientUnit.getId(), userId);
+        return currentUnit;
     }
 
-    public void addSkillToUnit(int skillId, int unitId, int userId){
+    public void addSkillToUnit(int skillId, int unitId, int userId) throws ServiceException{
         try {
             if (unitCanAddSkill(unitId, skillId, userId)){
                 unitDao.addSkillToUnit(skillId, unitId);
@@ -96,7 +100,7 @@ public class UnitService {
     /*
     Methods that go to DAO with no changes
      */
-    public List<Skill> getPotentialSkills(int unitId){
+    public List<Skill> getPotentialSkills(int unitId) throws ServiceException{
         List<Skill> skillList = null;
         try {
             skillList = unitDao.getPotentialSkills(unitId);
@@ -107,7 +111,7 @@ public class UnitService {
         return skillList;
     }
 
-    public Unit getUnitById(int unitId, int userId){
+    public Unit getUnitById(int unitId, int userId) throws ServiceException{
         Unit unit = null;
         try {
             unit = unitDao.getUnitById(unitId, userId);
@@ -117,7 +121,7 @@ public class UnitService {
         return unit;
     }
 
-    public Unit getReferenceUnitByClass(String unitClass){
+    public Unit getReferenceUnitByClass(String unitClass) throws ServiceException{
         Unit unit = null;
         try {
             unit = unitDao.convertReferenceUnitToUnit(unitClass);
@@ -169,7 +173,7 @@ public class UnitService {
         updatedUnit.setTotalAdvances(updatedUnit.getTotalAdvances() + 1);
     }
 
-    private boolean unitCanAddSkill(int unitId, int skillId, int userId){
+    private boolean unitCanAddSkill(int unitId, int skillId, int userId) throws ServiceException, DaoException{
 
         Unit unit = unitDao.getUnitById(unitId, userId);
         if (unit == null){

@@ -36,7 +36,7 @@ public class JdbcTeamDao implements TeamDao{
      */
 
     @Override
-    public Team createTeam(Team newTeam) {
+    public Team createTeam(Team newTeam) throws DaoException {
         String sql = "INSERT INTO team(user_id, faction_id, team_name, money) VALUES " +
                 "(?, ?, ?, ?) RETURNING team_id";
         Team team = null;
@@ -54,7 +54,7 @@ public class JdbcTeamDao implements TeamDao{
     }
 
     @Override
-    public Team getTeamById(int teamId, int userId) {
+    public Team getTeamById(int teamId, int userId) throws DaoException {
         String sql = SELECT_ALL_FROM_TEAM + "WHERE team_id = ? AND user_id = ?";
         Team team = null;
         try {
@@ -73,7 +73,7 @@ public class JdbcTeamDao implements TeamDao{
     }
 
     @Override
-    public void updateTeam(Team team){
+    public void updateTeam(Team team) throws DaoException{
         String sql = "UPDATE team SET team_name = ?, money = ?, bought_first_leader = ? WHERE team_id = ?";
         Team updatedTeam = null;
         try {
@@ -90,7 +90,7 @@ public class JdbcTeamDao implements TeamDao{
     }
 
     @Override
-    public List<Team> getAllTeamsForUser(int userId) {
+    public List<Team> getAllTeamsForUser(int userId) throws DaoException {
         List<Team> allTeams = new ArrayList<>();
         String sql = SELECT_ALL_FROM_TEAM + "WHERE user_id = ?";
         try {
@@ -109,7 +109,7 @@ public class JdbcTeamDao implements TeamDao{
     }
 
     @Override
-    public List<FactionDTO> getAllFactions() {
+    public List<FactionDTO> getAllFactions() throws DaoException {
         List<FactionDTO> allFactions = new ArrayList<>();
         String sql = "SELECT faction_id, faction_name FROM faction WHERE faction_name != 'Freelancers' ORDER BY faction_id";
         try {
@@ -127,7 +127,7 @@ public class JdbcTeamDao implements TeamDao{
     }
 
     @Override
-    public Team getTeamByUnitId(int unitId){
+    public Team getTeamByUnitId(int unitId) throws DaoException {
         String sql = SELECT_ALL_FROM_TEAM + "JOIN unit u ON u.team_id = t.team_id WHERE unit_id = ?";
 
         Team team = null;
@@ -157,7 +157,7 @@ public class JdbcTeamDao implements TeamDao{
      * @param row the SqlRowSet from the database
      * @return The team extracted from the SqlRowSet
      */
-    private Team mapRowToTeam(SqlRowSet row){
+    private Team mapRowToTeam(SqlRowSet row) throws DaoException{
         Team team = new Team();
         team.setId(row.getInt("team_id"));
         team.setFactionId(row.getInt("faction_id"));

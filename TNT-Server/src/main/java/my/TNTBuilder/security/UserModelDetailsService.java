@@ -1,6 +1,7 @@
 package my.TNTBuilder.security;
 
 import my.TNTBuilder.dao.UserDao;
+import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.model.userModels.Authority;
 import my.TNTBuilder.model.userModels.User;
 import org.slf4j.Logger;

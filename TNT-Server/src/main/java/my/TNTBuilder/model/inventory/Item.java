@@ -30,11 +30,12 @@ public class Item {
     private boolean isRelic;
     private int handsRequired;
     private String category;
+    private boolean isEquipped;
 
 
     //Constructor
     public Item(int id, int referenceId, String type, int cost, String specialRules, List<ItemTrait> itemTraits,
-                String rarity, boolean isRelic, int handsRequired, String category) {
+                String rarity, boolean isRelic, int handsRequired, String category, boolean isEquipped) {
         this.id = id;
         this.referenceId = referenceId;
         this.name = type;
@@ -45,6 +46,7 @@ public class Item {
         this.isRelic = isRelic;
         this.handsRequired = handsRequired;
         this.category = category;
+        this.isEquipped = isEquipped;
     }
 
     public Item() {
@@ -152,7 +154,8 @@ public class Item {
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
         return id == item.id && referenceId == item.referenceId && cost == item.cost && isRelic == item.isRelic
-                && handsRequired == item.handsRequired && Objects.equals(name, item.name)
+                && isEquipped == item.isEquipped && handsRequired == item.handsRequired
+                && Objects.equals(name, item.name)
                 && Objects.equals(specialRules, item.specialRules) && Objects.equals(rarity, item.rarity)
                 && Objects.equals(category, item.category)
                 && new HashSet<>(itemTraits).containsAll(item.itemTraits)

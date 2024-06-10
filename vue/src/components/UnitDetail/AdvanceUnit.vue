@@ -275,7 +275,7 @@ export default {
         getBaseUnit() {
             UnitService.getBaseUnit(this.$store.state.currentUnit.unitClass)
                 .then(response => this.baseUnit = response.data)
-                .catch(error => this.$store.dispatch('showHttpError', error));
+                .catch(error => this.$store.dispatch('showError', error));
         },
         buyAdvance(option) {
             this.updateCurrentUnit(option);
@@ -283,7 +283,7 @@ export default {
                 .then(response => {
                     this.$store.commit('SET_CURRENT_UNIT', response.data);
                 }).catch(error => {
-                    this.$store.dispatch('showHttpError', error);
+                    this.$store.dispatch('showError', error);
                 });
             this.clearForm();
         },

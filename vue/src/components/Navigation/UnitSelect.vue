@@ -1,6 +1,9 @@
 <template>
     <section class="flex-nav">
         <h1>Change Unit</h1>
+        <div class="flex-nav-option selected" @click="changeUnit($store.state.currentUnit)">
+            {{ $store.state.currentUnit.name }} - {{ $store.state.currentUnit.unitClass }}
+        </div>
         <div class="flex-nav-option" v-for="unit in filteredUnits" :key="'unit-select-' + unit.id" @click="changeUnit(unit)">
             {{ unit.name }} - {{ unit.unitClass }}
         </div>

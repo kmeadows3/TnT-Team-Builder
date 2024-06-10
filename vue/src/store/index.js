@@ -2,6 +2,7 @@ import { createStore as _createStore } from 'vuex';
 import axios from 'axios';
 import TeamsService from '../services/TeamsService';
 import UnitService from '../services/UnitService';
+import { app } from '../main';
 
 export function createStore(currentToken, currentUser) {
   let store = _createStore({
@@ -20,6 +21,7 @@ export function createStore(currentToken, currentUser) {
       errorMessage: '',
       unitInventoryTraits: [],
       teamInventoryTraits: [],
+      unitSkillsSorted:[],
       manageInventory: false
     },
     mutations: {
@@ -42,72 +44,75 @@ export function createStore(currentToken, currentUser) {
         state.currentUnit = {};
         axios.defaults.headers.common = {};
       },
-      SET_TEAM_LIST(state, teamList){
+      SET_TEAM_LIST(state, teamList) {
         state.teamList = teamList;
       },
-      SET_CURRENT_TEAM(state, team){
+      SET_CURRENT_TEAM(state, team) {
         state.currentTeam = team;
         state.showTeamDetail = true;
         state.showTeamList = false;
         state.showUnitDetail = false;
       },
-      CLEAR_CURRENT_TEAM(state){
+      CLEAR_CURRENT_TEAM(state) {
         state.currentTeam = {};
         state.showTeamDetail = false;
         state.showTeamList = true;
       },
-      SET_CURRENT_UNIT(state, unit){
+      SET_CURRENT_UNIT(state, unit) {
         state.currentUnit = unit;
         state.showUnitDetail = true;
         state.showTeamDetail = false;
       },
-      CLEAR_CURRENT_UNIT(state){
+      CLEAR_CURRENT_UNIT(state) {
         state.currentUnit = {};
         state.showUnitDetail = false;
         state.showTeamDetail = true;
       },
-      TOGGLE_NEW_UNIT_FORM(state){
+      TOGGLE_NEW_UNIT_FORM(state) {
         state.showNewUnitForm = !state.showNewUnitForm;
       },
-      TOGGLE_NEW_TEAM_FORM(state){
+      TOGGLE_NEW_TEAM_FORM(state) {
         state.showNewTeamForm = !state.showNewTeamForm;
       },
-      CHANGE_TEAM_NAME(state, newName){
+      CHANGE_TEAM_NAME(state, newName) {
         state.currentTeam.name = newName;
       },
-      GAIN_MONEY(state, addedMoney){
+      GAIN_MONEY(state, addedMoney) {
         state.currentTeam.money += addedMoney;
       },
-      LOSE_MONEY(state, lostMoney){
-        if(state.currentTeam.money - lostMoney >= 0){
-            state.currentTeam.money -= lostMoney;
+      LOSE_MONEY(state, lostMoney) {
+        if (state.currentTeam.money - lostMoney >= 0) {
+          state.currentTeam.money -= lostMoney;
         } else {
           throw "Not enough money for this action";
         }
       },
-      CHANGE_UNIT_NAME(state, newName){
+      CHANGE_UNIT_NAME(state, newName) {
         state.currentUnit.name = newName;
       },
-      GAIN_UNSPENT_EXP(state, expToGain){
-        if(expToGain > 0){
+      GAIN_UNSPENT_EXP(state, expToGain) {
+        if (expToGain > 0) {
           state.currentUnit.unspentExperience += expToGain;
         } else {
           throw "Experience gained must be positive."
         }
       },
-      SHOW_ERROR_OFF(state){
+      SHOW_ERROR_OFF(state) {
         state.showError = false;
         state.errorMessage = '';
       },
-      SHOW_ERROR_ON(state, newMessage){
+      SHOW_ERROR_ON(state, newMessage) {
         state.errorMessage = newMessage;
         state.showError = true;
       },
-      SET_UNIT_INVENTORY_TRAITS(state, traits){
+      SET_UNIT_INVENTORY_TRAITS(state, traits) {
         state.unitInventoryTraits = traits;
       },
-      SET_MANAGE_INVENTORY(state, value){
+      SET_MANAGE_INVENTORY(state, value) {
         state.manageInventory = value;
+      },
+      SET_UNIT_SKILLS_SORTED(state, value){
+        state.unitSkillsSorted = value;
       }
 
     },
@@ -126,42 +131,49 @@ export function createStore(currentToken, currentUser) {
           .then(response => {
             store.commit('SET_CURRENT_UNIT', response.data);
             store.dispatch('updateUnitInventoryTraits');
+            store.dispatch('sortUnitSkills');
+            return null;
           })
           .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
       },
-      reloadCurrentTeam(context){
+      reloadCurrentTeam(context) {
         TeamsService.getTeamById(context.state.currentTeam.id)
-        .then(response => {
-          store.commit('SET_CURRENT_TEAM', response.data);
-        })
-        .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
+          .then(response => {
+            store.commit('SET_CURRENT_TEAM', response.data);
+          })
+          .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
       },
-      showError(context, error){
-        if(error.response){
+      showError(context, error) {
+        if (error.response) {
           store.commit('SHOW_ERROR_ON', error.response.data.message);
         } else {
           store.commit('SHOW_ERROR_ON', error);
         }
         store.dispatch('loadTeams');
-        if(context.state.currentUnit.id){
+        if (context.state.currentUnit.id) {
           store.dispatch('reloadCurrentUnit');
         }
       },
-      updateUnitInventoryTraits(context){
+      updateUnitInventoryTraits(context) {
         let unitInventory = store.state.currentUnit.inventory;
         let unitTraits = [];
-        
+
         unitInventory.forEach(item => item.itemTraits.forEach(
-            trait => {
-                if (!unitTraits.some((x) => x.id == trait.id)) {
-                    unitTraits.push(trait)
-                }
-            })
+          trait => {
+            if (!unitTraits.some((x) => x.id == trait.id)) {
+              unitTraits.push(trait)
+            }
+          })
         );
 
         unitTraits = unitTraits.sort((a, b) => a.name.localeCompare(b.name));
 
         store.commit('SET_UNIT_INVENTORY_TRAITS', unitTraits);
+      },
+      sortUnitSkills(context) {
+        let unitSkills = store.state.currentUnit.skills;
+        unitSkills = unitSkills.sort((a, b) => a.name.localeCompare(b.name))
+        store.commit('SET_UNIT_SKILLS_SORTED', unitSkills);
       }
     }
   });

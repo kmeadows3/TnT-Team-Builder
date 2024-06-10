@@ -3,7 +3,7 @@
         <h1 class ="page-title">Choose Your Team</h1>
         <div class="controls">
             <button @click="$store.commit('TOGGLE_NEW_TEAM_FORM')" v-show="!this.$store.state.showNewTeamForm">New Team</button>
-            <NewTeamForm v-show="$store.state.showNewTeamForm"/>
+            <NewTeamForm v-if="$store.state.showNewTeamForm"/>
         </div>
         
         <div class="card-container">

@@ -2,7 +2,7 @@
     <div>
         <div class="reference">
             <h1 class="section-title">Special Abilities</h1>
-            <div v-for="skill in sortedSkills" :key="skill.id">
+            <div v-for="skill in $store.state.unitSkillsSorted" :key="skill.id">
                 <h2 class="reference-label">{{ skill.name }}</h2>
                 <p class="reference-desc">{{ skill.description }}</p>
             </div>
@@ -42,7 +42,6 @@ export default {
     data() {
         return {
             potentialSkills: [],
-            sortedSkills: [],
             newSkill: {}
         }
     },
@@ -50,34 +49,26 @@ export default {
         getPotentialSkills() {
             UnitService.getPotentialSkills(this.$store.state.currentUnit.id)
                 .then(response => this.potentialSkills = response.data)
-                .catch(error => this.$store.dispatch('showHttpError', error));
+                .catch(error => this.$store.dispatch('showError', error));
         },
         addSkill() {
             UnitService.addSkill(this.$store.state.currentUnit.id, this.newSkill)
                 .then(() => {
-                    this.$store.dispatch('loadTeams');
-                    UnitService.getUnit(this.$store.state.currentUnit.id)
-                        .then(response => this.$store.commit('SET_CURRENT_UNIT', response.data))
-                        .catch(error => this.$store.dispatch('showHttpError', error));
-                    this.sortSkills();
+                    this.$store.dispatch('reloadCurrentUnit');
                     this.getPotentialSkills();
-                }).catch(error => this.$store.dispatch('showHttpError', error));
+                })               
+                .catch(error => this.$store.dispatch('showError', error));
         },
-        sortSkills(){
-            this.sortedSkills = this.$store.state.currentUnit.skills.sort((a,b)=> a.name.localeCompare(b.name));
-        }
     },
     created() {
         this.getPotentialSkills();
-        this.sortSkills();
+        this.$store.dispatch('sortUnitSkills');
     },
 }
 </script>
 
 
 <style scoped>
-
-
 div.skillsets {
     border: solid 3px black;
     border-radius: 7px;

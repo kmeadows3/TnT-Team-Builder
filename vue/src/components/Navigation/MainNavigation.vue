@@ -71,6 +71,12 @@ nav div.flex-nav-option{
 
 }
 
+nav div.flex-nav-option.selected{
+  border: solid 3px #666;
+  background-color:lightyellow;
+  margin-bottom: 10px;
+}
+
 nav div.flex-nav-option:hover{
   transform: translateY(-1px);
   background-color:#eee;

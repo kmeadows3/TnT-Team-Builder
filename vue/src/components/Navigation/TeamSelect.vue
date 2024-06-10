@@ -1,15 +1,12 @@
 <template>
-        <section class="flex-nav">
-        <h1>Change Team</h1>
+    <section class="flex-nav">
+        <h1>Team Selection</h1>
+        <div class="flex-nav-option selected" @click="changeTeam($store.state.currentTeam)">
+            {{ $store.state.currentTeam.name }}
+        </div>
         <div class="flex-nav-option" v-for="team in filteredTeams" :key="'team-select-' + team.id"
             @click="changeTeam(team)">{{ team.name }}
         </div>
-    </section>
-    <section class="flex-nav" v-show="!$store.state.showTeamDetail">
-            <h1>Return to Team</h1>
-            <div class="flex-nav-option" @click="changeTeam($store.state.currentTeam)">
-                {{ $store.state.currentTeam.name }}
-            </div>
     </section>
 
 </template>

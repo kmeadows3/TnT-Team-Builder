@@ -6,7 +6,8 @@
                 <div class="equipment-med">Type</div>
                 <div class="equipment-small">Cost</div>
                 <div class="equipment-large">Special Rules</div>
-                <div class="equipment-small" v-if="$store.state.manageInventory">
+                <div class="equipment-small">Equipped</div>
+                <div class="item-action" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
             <div class="item-list" v-for="equipment in equipments" :key="'equipment' + equipment.id">
@@ -22,7 +23,11 @@
                             {{ trait.name }}</span>
                     </span>
                 </div>
-                <ItemActions class ="equipment-small" :item='equipment'/>
+                <div class="equipment-small item-check">
+                    <i class="bi bi-check-circle" title="Currently Equipped" v-show="equipment.equipped"></i>
+                    <i class="bi bi-x-circle" title="Currently Unequipped" v-show="!equipment.equipped"></i>
+                </div>
+                <ItemActions class ="item-action" :item='equipment'/>
             </div>
         </div>
     </div>

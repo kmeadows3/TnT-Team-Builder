@@ -1,10 +1,12 @@
 <template>
     <div v-if="$store.state.manageInventory">
-        
-        <i class="bi inventory-icon bi-coin button" title="Sell" @click="sellItem()"></i>
+        <i class="bi inventory-icon bi-explicit-fill button" v-show="$store.state.showUnitDetail" 
+            title="Equip" @click="equipItem()"></i>
+        <i class="bi inventory-icon bi-currency-dollar button" title="Sell" @click="sellItem()"></i>
         <i class="bi inventory-icon bi-trash button" title="Delete" @click="deleteItem()"></i>
         <i class="bi inventory-icon bi-arrow-left-right button" title="Transfer to/from Team Inventory" 
             @click="transferButton()"></i>
+
 
         <span v-show="!$store.state.showUnitDetail">
             <select :id="'unitTransferSelect' + item.id" v-model.number="transferTarget">
@@ -67,6 +69,11 @@ export default {
                         this.$store.dispatch('reloadCurrentTeam');
                     }
                 }).catch( error => this.$store.dispatch('showError', error) )
+        },
+        equipItem(){
+            ItemService.toggleEquip(this.item.id, this.$store.state.currentUnit.id)
+                .then(() => this.$store.dispatch('reloadCurrentUnit'))
+                .catch(error => this.$store.dispatch('showError', error));
         }
     }
 }

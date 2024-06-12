@@ -33,7 +33,6 @@
                     <div class="item-small">
                         <i class="bi bi-check-circle" title="Support" v-show="item.category == 'Support Weapon'"></i>
                         <i class="bi bi-x-circle" v-show="!(item.category == 'Support Weapon')"></i>
-
                     </div>
                     <ItemActions class="item-action" :item='item' />
                 </div>
@@ -85,8 +84,8 @@ div.item-list>.item-small {
     align-items: center;
 }
 
-div.item-list>.item-action {
-    min-width: 200px;
+div.item-list>div.item-action {
+    min-width: 220px;
     flex-grow: 1;
     flex-basis: 3%;
     display: flex;

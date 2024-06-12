@@ -100,6 +100,7 @@ div.table-label>div {
     align-content: center;
 }
 
+
 /*
 CARDS
 */
@@ -174,6 +175,10 @@ ICONS
 
 i.bi {
     border: solid 1px black;
+}
+
+.item-check>i.bi {
+    border: none;
 }
 
 i.button {
@@ -271,7 +276,7 @@ div.inventory {
 }
 
 div.item-container {
-    width: 90%;
+    width: 95%;
     padding: 0px 20px;
 }
 
@@ -312,6 +317,16 @@ div.item-list>div:last-child {
 div.item-list>div.item-special-rules{
     text-align: start;
     padding-left: 3px;
+}
+
+div>div.item-action {
+    padding: 0px 3px 0px 3px;
+    min-width: 105px;
+    flex-grow: 1;
+    flex-basis: 3%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 

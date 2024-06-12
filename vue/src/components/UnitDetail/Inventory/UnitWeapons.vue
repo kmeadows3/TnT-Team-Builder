@@ -10,7 +10,8 @@
                 <div class="weapon-small">Reliability</div>
                 <div class="weapon-small">Hands</div>
                 <div class="weapon-large">Special Rules</div>
-                <div class="weapon-actions" v-if="$store.state.manageInventory">
+                <div class="weapon-small">Equipped</div>
+                <div class="item-action" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
             <div class="item-list" v-for="weapon in weapons" :key="'weapon' + weapon.id">
@@ -30,7 +31,11 @@
                             {{ trait.name }}</span>
                     </span>
                 </div>
-                <ItemActions class="weapon-actions" :item="weapon"/>
+                <div class="weapon-small item-check">
+                    <i class="bi bi-check-circle" title="Currently Equipped" v-show="weapon.equipped"></i>
+                    <i class="bi bi-x-circle" title="Currently Unequipped" v-show="!weapon.equipped"></i>
+                </div>
+                <ItemActions class="item-action" :item="weapon"/>
             </div>
         </div>
     </div>
@@ -57,16 +62,6 @@ div.item-list>.weapon-small {
     min-width: 50px;
     flex-grow: 1;
     flex-basis: 7%;
-}
-
-div.item-list>.weapon-actions {
-    min-width: 75px;
-    flex-grow: 1;
-    flex-basis: 7%;
-    display: flex;
-    justify-content: center;
-    align-content: baseline;
-
 }
 
 div.item-list>.weapon-med {

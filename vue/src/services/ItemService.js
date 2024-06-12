@@ -28,5 +28,8 @@ export default {
     },
     deleteItem(itemId){
       return axios.delete(`/inventory/${itemId}`);
+    },
+    toggleEquip(itemId, unitId){
+      return axios.put(`/units/${unitId}/inventory/${itemId}?equip=true`)
     }
 }

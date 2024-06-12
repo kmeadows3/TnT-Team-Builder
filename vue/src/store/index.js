@@ -49,6 +49,7 @@ export function createStore(currentToken, currentUser) {
       },
       SET_CURRENT_TEAM(state, team) {
         state.currentTeam = team;
+        state.manageInventory = false;
         state.showTeamDetail = true;
         state.showTeamList = false;
         state.showUnitDetail = false;
@@ -69,6 +70,7 @@ export function createStore(currentToken, currentUser) {
       CLEAR_CURRENT_UNIT(state) {
         store.dispatch('ReloadCurrentTeam');
         state.currentUnit = {};
+        state.manageInventory = false;
         state.showUnitDetail = false;
         state.showTeamDetail = true;
       },

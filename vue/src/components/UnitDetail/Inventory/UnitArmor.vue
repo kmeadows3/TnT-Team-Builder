@@ -7,7 +7,8 @@
                 <div class="armor-small">Cost</div>
                 <div class="armor-med">Defense Bonus (melee/ranged)</div>
                 <div class="armor-large">Special Rules</div>
-                <div class="armor-small" v-if="$store.state.manageInventory">
+                <div class="armor-small">Equipped</div>
+                <div class="item-action" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
             <div class="item-list" v-for="armor in armors" :key="'armor' + armor.id">
@@ -26,7 +27,11 @@
                             {{ trait.name }}</span>
                     </span>
                 </div>
-                <ItemActions class ="armor-small" :item='armor'/>
+                <div class="armor-small item-check"> 
+                    <i class="bi bi-check-circle" title="Currently Equipped" v-show="armor.equipped"></i>
+                    <i class="bi bi-x-circle" title="Currently Unequipped" v-show="!armor.equipped"></i>
+                </div>
+                <ItemActions class ="item-action" :item='armor'/>
             </div>
         </div>
     </div>

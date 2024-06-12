@@ -4,6 +4,7 @@ import my.TNTBuilder.dao.ItemDao;
 import my.TNTBuilder.dao.UnitDao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
+import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
 import my.TNTBuilder.model.inventory.Item;
@@ -16,7 +17,6 @@ public class ItemService {
 
     private final ItemDao itemDao;
     private final UnitDao unitDao;
-
     private final TeamService teamService;
 
     public ItemService(ItemDao itemDao, UnitDao unitDao, TeamService teamService) {
@@ -120,7 +120,46 @@ public class ItemService {
         }
     }
 
-    //TODO service to update items to equipped
+    public void toggleEquipItem(int itemId, int unitId, int userId) throws ServiceException{
+        Unit unit = null;
+        Item item = null;
+        try {
+            unit = unitDao.getUnitById(unitId, userId);
+            item = itemDao.getItemById(itemId);
+            if (!unit.getInventory().contains(item)){
+                throw new ValidationException("This item is not equipped to the indicated unit.");
+            }
+            item.setEquippedValidated(!item.isEquipped(), unit);
+            itemDao.updateEquipped(item);
+        } catch (DaoException|ValidationException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+
+    }
+
+    public void unequipItem(int itemId, int unitId, int userId) throws ServiceException{
+
+        Item item = null;
+        Unit unit = null;
+        try {
+            item = itemDao.getItemById(itemId);
+            if (!item.isEquipped()) {
+                return;
+            }
+
+            unit = unitDao.getUnitById(unitId, userId);
+
+            if (!unit.getInventory().contains(item)){
+                throw new ValidationException("This item is not equipped to the indicated unit.");
+            }
+
+            item.setEquipped(false);
+            itemDao.updateEquipped(item);
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+
+    }
 
 
 

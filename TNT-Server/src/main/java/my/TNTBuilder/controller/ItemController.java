@@ -83,10 +83,20 @@ public class ItemController {
         return purchaseList;
     }
 
-    @RequestMapping(path="/units/{unitId}/inventory/{itemId}/transfer", method = RequestMethod.PUT)
-    public void transferItem(@PathVariable int itemId, @PathVariable int unitId, Principal principal){
+    @RequestMapping(path="/units/{unitId}/inventory/{itemId}", method = RequestMethod.PUT)
+    public void transferItem(@PathVariable int itemId, @PathVariable int unitId, Principal principal,
+                             @RequestParam(defaultValue = "false") Boolean transfer,
+                             @RequestParam(defaultValue = "false") Boolean equip) {
         try {
-            itemService.transferItem(itemId, unitId, userDao.getUserIdByUsername(principal.getName()));
+            if (transfer && equip){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: Item may only undergo one update at a time");
+            } else if (transfer) {
+                itemService.transferItem(itemId, unitId, userDao.getUserIdByUsername(principal.getName()));
+            } else if (equip) {
+                itemService.toggleEquipItem(itemId, unitId, userDao.getUserIdByUsername(principal.getName()));
+            }
+
+
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (DaoException e) {

@@ -21,7 +21,7 @@ export default {
       return axios.post(`/teams/${teamId}/inventory?isFree=True`, body);
     },
     transferItem(itemId, unitId){
-      return axios.put(`/units/${unitId}/inventory/${itemId}/transfer`)
+      return axios.put(`/units/${unitId}/inventory/${itemId}?transfer=true`)
     },
     sellItem(itemId){
       return axios.delete(`/inventory/${itemId}?sell=True`);

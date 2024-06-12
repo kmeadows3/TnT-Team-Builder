@@ -53,6 +53,9 @@ export function createStore(currentToken, currentUser) {
         state.showTeamList = false;
         state.showUnitDetail = false;
       },
+      SET_CURRENT_TEAM_NO_PAGE_CHANGE(state, team){
+        state.currentTeam = team;
+      },
       CLEAR_CURRENT_TEAM(state) {
         state.currentTeam = {};
         state.showTeamDetail = false;
@@ -64,6 +67,7 @@ export function createStore(currentToken, currentUser) {
         state.showTeamDetail = false;
       },
       CLEAR_CURRENT_UNIT(state) {
+        store.dispatch('ReloadCurrentTeam');
         state.currentUnit = {};
         state.showUnitDetail = false;
         state.showTeamDetail = true;
@@ -139,7 +143,7 @@ export function createStore(currentToken, currentUser) {
       reloadCurrentTeam(context) {
         TeamsService.getTeamById(context.state.currentTeam.id)
           .then(response => {
-            store.commit('SET_CURRENT_TEAM', response.data);
+            store.commit('SET_CURRENT_TEAM_NO_PAGE_CHANGE', response.data);
           })
           .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
       },

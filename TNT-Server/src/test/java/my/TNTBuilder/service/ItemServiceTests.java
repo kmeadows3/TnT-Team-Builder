@@ -1,5 +1,6 @@
 package my.TNTBuilder.service;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import my.TNTBuilder.dao.*;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
@@ -37,6 +38,7 @@ public class ItemServiceTests extends BaseDaoTests {
         ARMOR.setId(1);
         WEAPON.setId(2);
         WEAPON.setCost(5);
+        WEAPON.setEquipped(false);
         ITEM.setId(3);
         TEAM_RELIC_WEAPON.setId(8);
     }
@@ -323,5 +325,88 @@ public class ItemServiceTests extends BaseDaoTests {
         Assert.fail();
     }
 
+    @Test
+    public void toggleEquipItem_updates_equipped_to_true() throws ServiceException {
+        sut.toggleEquipItem(WEAPON.getId(), 1, 1);
+
+        Item testWeapon = itemDao.getItemById(WEAPON.getId());
+
+        Assert.assertTrue(testWeapon.isEquipped());
+    }
+
+    @Test
+    public void toggleEquipItem_updates_equipped_to_false() throws ServiceException {
+
+        try {
+            sut.toggleEquipItem(WEAPON.getId(), 1, 1);
+        } catch (ServiceException e){
+            Assert.fail("Test failed during the arrange step.");
+        }
+
+        sut.toggleEquipItem(WEAPON.getId(), 1, 1);
+        Item testWeapon = itemDao.getItemById(WEAPON.getId());
+        Assert.assertFalse(testWeapon.isEquipped());
+    }
+
+    @Test (expected = ServiceException.class)
+    public void toggleEquipItem_fails_if_user_does_not_own_unit() throws ServiceException {
+
+        sut.toggleEquipItem(WEAPON.getId(), 1, 2);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void toggleEquipItem_fails_if_item_not_in_unit_inventory() throws ServiceException {
+        sut.toggleEquipItem(WEAPON.getId(), 2, 2);
+        Assert.fail();
+    }
+
+    @Test
+    public void unequipItem_updates_equipped_to_false_when_equipped_starts_true() throws ServiceException {
+
+        try {
+            sut.toggleEquipItem(WEAPON.getId(), 1, 1);
+        } catch (ServiceException e){
+            Assert.fail("Test failed during the arrange step.");
+        }
+
+        sut.unequipItem(WEAPON.getId(), 1, 1);
+        Item testWeapon = itemDao.getItemById(WEAPON.getId());
+        Assert.assertFalse(testWeapon.isEquipped());
+    }
+
+    @Test
+    public void unequipItem_does_nothing_if_equipped_starts_false() throws ServiceException {
+
+        sut.unequipItem(WEAPON.getId(), 1, 1);
+        Item testWeapon = itemDao.getItemById(WEAPON.getId());
+        Assert.assertFalse(testWeapon.isEquipped());
+    }
+
+    @Test (expected = ServiceException.class)
+    public void unequipItem_throws_exception_if_unit_not_owned_by_user() throws ServiceException {
+
+        try {
+            sut.toggleEquipItem(WEAPON.getId(), 1, 1);
+        } catch (ServiceException e){
+            Assert.fail("Test failed during the arrange step.");
+        }
+
+        sut.unequipItem(WEAPON.getId(), 1, 2);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void unequipItem_throws_exception_if_item_does_not_belong_to_unit() throws ServiceException {
+
+        try {
+            sut.toggleEquipItem(WEAPON.getId(), 1, 1);
+        } catch (ServiceException e){
+            Assert.fail("Test failed during the arrange step.");
+        }
+
+        sut.unequipItem(WEAPON.getId(), 2, 2);
+        Assert.fail();
+    }
 
 }

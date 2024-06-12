@@ -162,6 +162,10 @@ public class JdbcItemDao implements ItemDao {
             while(results.next()){
                 item = mapRowToItem(results);
             }
+
+            if( item == null){
+                throw new DaoException("No item with that id found in database");
+            }
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         }

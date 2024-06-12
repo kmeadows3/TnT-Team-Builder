@@ -90,6 +90,9 @@ public class ItemService {
         if (team.getUserId() == userId){
             try {
                 boolean teamToUnit = itemDao.isItemOwnedByTeam(itemId, unitId, team.getId());
+                if (!teamToUnit){
+                    unequipItem(itemId, unitId, userId);
+                }
                 itemDao.transferItem(itemId, unitId, team.getId(), teamToUnit);
             } catch (DaoException e){
                 throw new ServiceException(e.getMessage(), e);
@@ -166,6 +169,8 @@ public class ItemService {
     /*
     PRIVATE METHODS
      */
+
+
     private void updateTeamMoneyFromSellingItem(int itemId, int userId, Team team)  throws ServiceException, DaoException{
         Item item = itemDao.getItemById(itemId);
         if (item.getCost()/2 != 0){

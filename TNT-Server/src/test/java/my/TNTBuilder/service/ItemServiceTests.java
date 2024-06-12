@@ -255,6 +255,18 @@ public class ItemServiceTests extends BaseDaoTests {
         Assert.assertTrue(unitTestList.contains(ARMOR));
     }
 
+    @Test
+    public void transferItem_unequips_equipped_item() throws ServiceException {
+        sut.toggleEquipItem(2, 1, 1);
+        sut.transferItem(2, 1, 1);
+        List<Item> teamTestList = itemDao.getAllItemsForTeam(1);
+
+        Assert.assertEquals(4, teamTestList.size());
+        Assert.assertFalse(WEAPON.isEquipped());
+        Assert.assertTrue(teamTestList.contains(WEAPON));
+
+    }
+
     @Test (expected = ServiceException.class)
     public void transferItem_throws_exception_invalid_item_id() throws ServiceException {
         sut.transferItem(99, 1, 1);

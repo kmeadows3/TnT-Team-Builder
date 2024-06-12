@@ -61,7 +61,7 @@ div.item-list>.equipment-small {
 
 div.item-list>.equipment-med {
     min-width: 75px;
-    flex-grow: 1;
+    flex-grow: 2;
     flex-basis: 15%;
 }
 

@@ -177,9 +177,7 @@ i.bi {
     border: solid 1px black;
 }
 
-.item-check>i.bi {
-    border: none;
-}
+
 
 i.button {
     cursor: pointer;
@@ -206,6 +204,17 @@ i.bi-pencil-square {
     padding: 3px 3px 0px 3px;
 }
 
+.item-check>i.bi {
+    border: none;
+}
+
+div.item-table .bi-check-circle {
+    color: green;
+}
+
+div.item-table .bi-x-circle {
+    color: red;
+}
 span.name-change-buttons {
     display: flex;
     flex-direction: column;
@@ -218,6 +227,8 @@ span.name-change-buttons i {
     border: solid 1px black;
     border-radius: 5px;
 }
+
+
 
 /*
 REFERENCE LIST
@@ -304,17 +315,21 @@ div.item-table>div.item-list:last-child {
 }
 
 div.item-list>div {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow-wrap: break-word;
     border-style: dotted;
     border-width: 0px 1px 0px 0px;
 }
+
 
 div.item-list>div:last-child {
     border-style: none;
 }
 
 div.item-list>div.item-special-rules{
+    display: block;
     text-align: start;
     padding-left: 3px;
 }

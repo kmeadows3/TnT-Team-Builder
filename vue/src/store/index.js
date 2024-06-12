@@ -138,7 +138,7 @@ export function createStore(currentToken, currentUser) {
             store.commit('SET_CURRENT_UNIT', response.data);
             store.dispatch('updateUnitInventoryTraits');
             store.dispatch('sortUnitSkills');
-            return null;
+            store.dispatch('reloadCurrentTeam');
           })
           .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
       },

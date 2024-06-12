@@ -44,7 +44,7 @@ public class JdbcItemDao implements ItemDao {
 
     @Override
     public List<Item> getAllItemsForUnit(int unitId) throws DaoException {
-        String sql = SELECT_ALL_FROM_ITEM + "WHERE unit_id = ? ORDER BY item_category, name, item_id";
+        String sql = SELECT_ALL_FROM_ITEM + "WHERE unit_id = ? ORDER BY isEquipped DESC, item_category, name, item_id";
 
         return getItemListFromRowSet(unitId,sql);
     }

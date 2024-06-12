@@ -116,7 +116,6 @@ export default {
                 ItemService.purchaseItemForUnit(this.$store.state.currentUnit.id, itemId)
                 .then(response => {
                     this.$store.dispatch('reloadCurrentUnit');
-                    this.$store.dispatch('reloadCurrentTeam');
                 })
                 .catch(err => {
                     console.log(err);

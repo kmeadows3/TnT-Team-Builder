@@ -5,7 +5,8 @@
             <div class="table-label item-list">
                 <div class="armor-med">Type</div>
                 <div class="armor-small">Cost</div>
-                <div class="armor-med">Defense Bonus (melee/ranged)</div>
+                <div class="armor-small">Melee Defense</div>
+                <div class="armor-small">Ranged Defense</div>
                 <div class="armor-large">Special Rules</div>
                 <div class="armor-small">Equipped</div>
                 <div class="item-action" v-if="$store.state.manageInventory">
@@ -16,7 +17,8 @@
                 <div class="armor-small">{{ $store.state.currentUnit.wounds == 1 ? armor.cost :
                     ($store.state.currentUnit.wounds == 2 ? armor.cost2Wounds : armor.cost3Wounds) }}</div>
                 <!--TODO: Logic around armor bonuses once items can be equipped-->
-                <div class="armor-med">{{ armor.meleeDefenseBonus }} / {{ armor.rangedDefenseBonus }}</div>
+                <div class="armor-small"> {{ armor.meleeDefenseBonus > 0 ? "+"+armor.meleeDefenseBonus : "No Bonus" }}</div>
+                <div class="armor-small">{{ armor.rangedDefenseBonus > 0 ? "+"+armor.rangedDefenseBonus : "0" }} </div>
                 <div class="armor-large item-special-rules">
                     <span v-show="armor.itemTraits.length == 0 || armor.specialRules != 'N/A'">
                         {{ armor.specialRules }}<span v-show="armor.itemTraits.length > 0">, </span>
@@ -64,14 +66,14 @@ div.item-list>.armor-small {
 
 div.item-list>.armor-med {
     min-width: 80px;
-    flex-grow: 1;
+    flex-grow: 2;
     flex-basis: 15%;
 }
 
 div.item-list>.armor-large {
     min-width: 150px;
     flex-grow: 5;
-    flex-basis: 33%;
+    flex-basis: 50%;
 }
 
 </style>

@@ -71,6 +71,8 @@ public class Item {
         int handsUsed = unit.getInventory().stream().filter( (item) ->  item.isEquipped ).mapToInt(Item::getHandsRequired).sum();
         handsUsed += this.handsRequired;
 
+        validateUnitNotWearing2SetsOfArmor(unit);
+
         //TODO: Add logic here once mutations are added
         boolean cannotHoldItems = false; //Weapons Growth (2 natural weapons), Crushing Claws
         boolean canOnlyHoldOneItem = false; //No Arms, Weapons Growth (one natural weapon)
@@ -85,6 +87,20 @@ public class Item {
 
         return true;
 
+    }
+
+    private void validateUnitNotWearing2SetsOfArmor(Unit unit) throws ValidationException {
+
+        if (this.category.equals("Armor") && !( ((Armor)this).isShield()) ){
+
+            int armorWorn = (int) unit.getInventory().stream()
+                    .filter( (item) -> item.isEquipped && item.category.equals("Armor") && !((Armor)item).isShield())
+                    .count();
+
+            if(armorWorn > 0){
+                throw new ValidationException("Unit is already wearing armor.");
+            }
+        }
     }
 
 

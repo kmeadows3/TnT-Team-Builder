@@ -30,7 +30,7 @@ export default {
             UnitService.getUnitsForTeam(this.$store.state.currentTeam)
                 .then(response => {
                     this.possibleUnits = response.data;
-                }).catch ( error => this.$store.dispatch('showHttpError', error));
+                }).catch ( error => this.$store.dispatch('showError', error));
         },
         clearForm(){
             this.newUnit = {};
@@ -42,7 +42,7 @@ export default {
                 .then(response => {
                     this.$store.dispatch('loadTeams');
                     this.$store.commit('SET_CURRENT_UNIT', response.data);
-                }).catch (error => this.$store.dispatch('showHttpError', error));
+                }).catch (error => this.$store.dispatch('showError', error));
             this.clearForm();
         }
     },

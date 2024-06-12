@@ -52,10 +52,10 @@ export default {
                     .then(response => {
                         this.$store.commit('SET_CURRENT_UNIT', response.data);
                     }).catch(error => {
-                        this.$store.dispatch('showHttpError', error);
+                        this.$store.dispatch('showError', error);
             });
             } catch (error) {
-                this.$store.commit('SHOW_ERROR_ON', error);
+                this.$store.dispatch('showError', error);
             }
             this.clearForm();
         }

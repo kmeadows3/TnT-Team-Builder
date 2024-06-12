@@ -25,12 +25,12 @@
                                 {{ trait.name }}</span>
                         </span>
                     </div>
-                    <div class="item-small">
+                    <div class="item-small item-check">
                         <i class="bi bi-check-circle" title="Relic" v-show="item.relic"></i>
                         <i class="bi bi-x-circle" v-show="!item.relic"></i>
 
                     </div>
-                    <div class="item-small">
+                    <div class="item-small item-check">
                         <i class="bi bi-check-circle" title="Support" v-show="item.category == 'Support Weapon'"></i>
                         <i class="bi bi-x-circle" v-show="!(item.category == 'Support Weapon')"></i>
                     </div>
@@ -91,18 +91,6 @@ div.item-list>div.item-action {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-div.item-list>.item-small>.bi {
-    border: 0px;
-}
-
-div.item-list>.item-small>.bi-check-circle {
-    color: green;
-}
-
-div.item-list>.item-small>.bi-x-circle {
-    color: red;
 }
 
 div.item-list>.item-med {

@@ -6,31 +6,40 @@
                 <h2 class="reference-label">{{ skill.name }}</h2>
                 <p class="reference-desc">{{ skill.description }}</p>
             </div>
-        </div>
-        <div class="skillsets"><strong>Available Skillsets: </strong>
-            <span v-for="(skillset, index) in $store.state.currentUnit.availableSkillsets" :key="skillset.id">
-                {{ index == 0 ? '' : ', ' }}
-                {{ skillset.name }}
-            </span>
-        </div>
-        <div class="purchaseSkills" v-show="$store.state.currentUnit.emptySkills > 0">
 
-            <strong>Remaining Skills to Purchase: </strong>{{ $store.state.currentUnit.emptySkills }}
-            <form>
-                <div class="skillFinder">
-                    <label for="skillSelect">Skill </label>
-                    <select id="skillSelect" v-model="newSkill">
-                        <option value=""></option>
-                        <option v-for="potentialSkill in potentialSkills" :key="potentialSkill.id"
-                            :value="potentialSkill">{{ potentialSkill.name }} </option>
-                    </select>
-                    <p>{{ newSkill.description }}</p>
+            <div class="purchaseSkills" v-if="$store.state.currentUnit.emptySkills > 0">
+                <h2 class="subsection-title">Select New Skill</h2>
+                <div class="skill-purchase-info">
+                    <div>
+                        <strong>Remaining Skills to Purchase: </strong>{{ $store.state.currentUnit.emptySkills }}
+                    </div>
+                    <div class="skillsets"><strong>Available Skillsets: </strong>
+                        <span v-for="(skillset, index) in $store.state.currentUnit.availableSkillsets"
+                            :key="skillset.id">
+                            {{ index == 0 ? '' : ', ' }}
+                            {{ skillset.name }}
+                        </span>
+                    </div>
                 </div>
-                <div>
+                <form>
+                    <strong>Skill Options:</strong>
+                    <div class="skillFinder">
+                        <select id="skillSelect" v-model="newSkill">
+                            <option value=""></option>
+                            <option v-for="potentialSkill in potentialSkills" :key="potentialSkill.id"
+                                :value="potentialSkill">{{ potentialSkill.name }} </option>
+                        </select>
+                        <p>{{ newSkill.description }}</p>
+                    </div>
                     <button @click.prevent="addSkill()">Purchase Skill</button>
-                </div>
-            </form>
+                </form>
+
+
+
+            </div>
         </div>
+
+
     </div>
 </template>
 
@@ -56,7 +65,7 @@ export default {
                 .then(() => {
                     this.$store.dispatch('reloadCurrentUnit');
                     this.getPotentialSkills();
-                })               
+                })
                 .catch(error => this.$store.dispatch('showError', error));
         },
     },
@@ -70,8 +79,7 @@ export default {
 
 <style scoped>
 div.skillsets {
-    border: solid 3px black;
-    border-radius: 7px;
+    display: inline-block;
     text-align: center;
 }
 
@@ -84,13 +92,6 @@ div.skillFinder {
     gap: 20px;
 }
 
-div.skillFinder>label {
-    flex-grow: 1;
-    max-width: 100px;
-    text-align: center;
-    font-weight: bold;
-}
-
 div.skillFinder>select {
     flex-grow: 1;
     max-width: 150px;
@@ -98,10 +99,31 @@ div.skillFinder>select {
 
 div.skillFinder>p {
     flex-grow: 3;
+    margin: 5px 0px;
+}
+
+div.skill-purchase-info {
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 div.purchaseSkills {
-    border: solid 3px black;
-    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+form {
+    width: 85%;
+}
+
+form button {
+    margin: auto;
 }
 </style>

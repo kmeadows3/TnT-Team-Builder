@@ -1,10 +1,11 @@
 <template>
     <div class="inventory">
         <h1 class="section-title">Inventory</h1>
-        <InventoryActions />
         <UnitWeapons />
         <UnitArmor />
         <UnitEquipment />
+        <InventoryActions />
+
     </div>
 
     <div class="reference">

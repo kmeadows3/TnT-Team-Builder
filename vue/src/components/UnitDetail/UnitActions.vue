@@ -1,4 +1,5 @@
 <template>
+    <section class="subsection">
         <div v-show="!showExp && !showAdvance">
             <button @click="toggleShowExp()">Gain Experience</button>
             <button @click="toggleShowAdvance()" v-show="$store.state.currentUnit.unspentExperience >= $store.state.currentUnit.costToAdvance">Gain Advance</button>
@@ -15,7 +16,7 @@
         <div>
             <AdvanceUnit v-show="showAdvance" @exit-advance="toggleShowAdvance()"/>
         </div>
-        
+    </section>    
 </template>
 
 <script>

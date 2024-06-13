@@ -26,6 +26,7 @@ div.stat-container{
     border: solid 3px black;
     border-radius: 7px;
     text-align: center;
+    margin: 3px;
 }
 
 div.stat-box {

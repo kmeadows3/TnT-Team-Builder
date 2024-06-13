@@ -40,6 +40,10 @@ section.main-display {
     flex-grow: 15;
 }
 
+section.subsection{
+    margin: 3px;
+}
+
 form {
     display: flex;
     align-items: center;
@@ -237,6 +241,7 @@ div.reference {
     border: solid 3px black;
     border-radius: 7px;
     text-align: center;
+    margin: 3px;
 }
 
 div.reference>h1{
@@ -260,15 +265,21 @@ div.reference h2.reference-label {
     max-width: 120px;
     margin: 5px;
     margin-left: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     text-wrap: wrap;
+    text-overflow: break-word;
     font-size: 1.3rem;
 }
 
 div.reference p.reference-desc {
     min-width: 100px;
     margin: 5px;
-    text-align: left;
+    display: flex;
+    justify-content: start;
+    align-items: center;
 }
 
 
@@ -284,6 +295,8 @@ div.inventory {
     border-radius: 7px;
     text-align: center;
     align-items: center;
+    margin: 3px;
+    padding-bottom: 5px
 }
 
 div.item-container {

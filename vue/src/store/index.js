@@ -150,7 +150,10 @@ export function createStore(currentToken, currentUser) {
           .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
       },
       showError(context, error) {
-        if (error.response) {
+        if (error.response.status == 401){
+          store.commit('LOGOUT');
+          return;
+        } else if (error.response) {
           store.commit('SHOW_ERROR_ON', error.response.data.message);
         } else {
           store.commit('SHOW_ERROR_ON', error);

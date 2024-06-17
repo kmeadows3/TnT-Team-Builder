@@ -70,7 +70,8 @@ public abstract class BaseDaoTests {
             "Special rules description",100,0,0,0,
             List.of(new Skillset(6, "Brawn", "Skill")),
             List.of(new Skill(7, "Bully", "All enemies defeated by this model in" +
-                    " close combat are knocked prone in addition to any other combat result.", 6, "Brawn")),
+                    " close combat are knocked prone in addition to any other combat result.", 6, "Brawn"),
+                    new Skill(9, "Up-Armed", "Can Equip Support Weapons", 15, "General Abilities")),
             new ArrayList<>());
     protected final Team TEAM_1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500,
             Arrays.asList(UNIT1, UNIT3), Arrays.asList(TEAM_ARMOR, TEAM_WEAPON, TEAM_ITEM));

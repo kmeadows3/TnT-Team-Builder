@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import my.TNTBuilder.dao.*;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
+import my.TNTBuilder.exception.ValidationException;
+import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
 import my.TNTBuilder.model.inventory.Item;
@@ -15,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemServiceTests extends BaseDaoTests {
@@ -141,6 +144,86 @@ public class ItemServiceTests extends BaseDaoTests {
         Assert.fail();
     }
 
+    @Test (expected = ValidationException.class)
+    public void addItemToUnit_throws_exception_if_new_item_is_copy_of_relic_in_team_inventory() throws ServiceException{
+        sut.addItemToTeam(2, 1, 1, true);
+        sut.addItemToUnit(2, 1, 1, true);
+        Assert.fail();
+    }
+
+    @Test (expected = ValidationException.class)
+    public void addItemToUnit_throws_exception_if_new_item_is_copy_of_relic_in_unit_inventory() throws ServiceException{
+        sut.addItemToUnit(2, 3, 1, true);
+        sut.addItemToUnit(2, 1, 1, true);
+        Assert.fail();
+    }
+
+    @Test (expected = ValidationException.class)
+    public void addItemToUnit_throws_exception_if_new_item_is_units_third_relic() throws ServiceException{
+        try {
+            sut.addItemToUnit(2, 1, 1, true);
+            sut.addItemToUnit(4, 1, 1, true);
+        } catch (ValidationException e){
+            Assert.fail("Validation Exception occurred at wrong area.");
+        }
+        sut.addItemToUnit(6, 1, 1, true);
+        Assert.fail();
+    }
+
+    @Test (expected = ValidationException.class)
+    public void addItemToUnit_throws_exception_if_support_weapon_unit_not_uparmed() throws ServiceException{
+        sut.addItemToUnit(7, 1, 1, true);
+        Assert.fail();
+    }
+
+    @Test
+    public void addItemToUnit_works_with_support_weapon_if_unit_has_Uparmed() throws ServiceException{
+        Item targetItem = new Weapon(0, 7, "Support Weapon", 7, "N/A",
+                new ArrayList<>(), "N/A", false, 0, 0, 7, 7,
+                2, "Support Weapon", false);
+
+        targetItem.setId(sut.addItemToUnit(7, 3, 1, true));
+        List<Item> testInventory = unitDao.getUnitById(3, 1).getInventory();
+        Assert.assertTrue(testInventory.contains(targetItem));
+    }
+
+    @Test (expected = ValidationException.class)
+    public void addItemToUnit_throws_exception_if_unit_has_ragtag_and_item_costs_more_than_15() throws ServiceException{
+        sut.addItemToUnit(11, 7, 4, true);
+        Assert.fail();
+    }
+
+    @Test (expected = ValidationException.class)
+    public void addItemToUnit_throws_exception_if_unit_has_ragtag_and_item_brings_total_BS_above_15() throws ServiceException{
+        try {
+            sut.addItemToUnit(9, 7, 4, true);
+        } catch (ValidationException e){
+            Assert.fail("Validation Exception occurred at wrong area.");
+        }
+
+        sut.addItemToUnit(9, 7, 4, true);
+        Assert.fail();
+    }
+
+    @Test (expected = ValidationException.class)
+    public void addItemToUnit_throws_exception_if_rank_and_file_unit_adds_relic() throws ServiceException{
+        sut.addItemToUnit(2, 9, 4, true);
+        Assert.fail();
+    }
+
+    @Test (expected = ValidationException.class)
+    public void addItemToUnit_throws_exception_if_4th_relic_equipped_to_unit() throws ServiceException{
+        try {
+            sut.addItemToUnit(2, 6, 4, true);
+            sut.addItemToUnit(4, 6, 4, true);
+            sut.addItemToUnit(6, 5, 4, true);
+        } catch (ValidationException e){
+            Assert.fail("Validation Exception occurred at wrong area.");
+        }
+        sut.addItemToUnit(10, 5, 4, true);
+        Assert.fail();
+    }
+
     @Test
     public void addItemToTeam_correctly_purchases_item_when_not_free() throws ServiceException{
         int itemId = sut.addItemToTeam(TEAM_RELIC_WEAPON.getReferenceId(), 1, 1, false);
@@ -230,6 +313,20 @@ public class ItemServiceTests extends BaseDaoTests {
         Assert.fail();
     }
 
+    @Test (expected = ValidationException.class)
+    public void addItemToTeam_throws_exception_if_new_item_is_copy_of_relic_in_team_inventory() throws ServiceException{
+        sut.addItemToTeam(2, 1, 1, true);
+        sut.addItemToTeam(2, 1, 1, true);
+        Assert.fail();
+    }
+
+    @Test (expected = ValidationException.class)
+    public void addItemToTeam_throws_exception_if_new_item_is_copy_of_relic_in_unit_inventory() throws ServiceException{
+        sut.addItemToUnit(2, 1, 1, true);
+        sut.addItemToTeam(2, 1, 1, true);
+        Assert.fail();
+    }
+
     @Test
     public void transferItem_works_when_moving_item_from_unit_to_team()  throws ServiceException{
         sut.transferItem(1, 1,1 );
@@ -280,6 +377,14 @@ public class ItemServiceTests extends BaseDaoTests {
     @Test (expected = ServiceException.class)
     public void transferItem_throws_exception_unit_not_owned_by_user() throws ServiceException {
         sut.transferItem(4, 1, 2);
+        Assert.fail();
+    }
+
+    @Test (expected = ValidationException.class)
+    public void transferItem_throws_exception_unit_not_allowed_item() throws ServiceException {
+        int itemId = sut.addItemToTeam(2, 7, 4, true);
+        sut.transferItem(itemId, 9, 4);
+        Assert.fail();
     }
 
     @Test

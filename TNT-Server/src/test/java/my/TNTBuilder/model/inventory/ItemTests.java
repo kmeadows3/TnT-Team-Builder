@@ -36,6 +36,7 @@ public class ItemTests {
     @Before
     public void setSut(){
         sut = new Item();
+        sut.setCategory("");
     }
 
     @After

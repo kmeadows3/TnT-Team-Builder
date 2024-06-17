@@ -219,6 +219,8 @@ INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(6, 'Brute', 'Gain +1 to Strength Stat when making Melee attacks. Ignore heavy weapons rule.'),
 	(6, 'Bully', 'All enemies defeated by this model in close combat are knocked prone in addition to any other combat result.'),
 	(15, 'Dumb', 'Takes a -2 penalty to intelligence tests'),
+	(15, 'Up-Armed', 'Can Equip Support Weapons'),
+	(15, 'RagTag', 'Cannot equip more than 15BS worth of gear'),
 	(16, 'Gashed Leg', '-1 penalty to Move'),
 	(16, 'Banged Head', '-1 penalty to Mettle');
 
@@ -239,7 +241,8 @@ INSERT INTO item_reference (name, cost, special_rules, rarity, is_relic, melee_d
     ('Support Weapon', 7, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, 7, 7, 2, 'Support Weapon'),
 	('Relic Support Weapon', 8, 'Relic Support Desc', 'Ultra Rare', TRUE, null, null, null, null, null, null, 8, 8, 8, 2, 'Support Weapon'),
     ('Grenade', 9, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Grenade'),
-	('Relic Grenade', 10, 'Relic Grenade Desc', 'Rare', TRUE, null, null, null, null, null, null, 10, 10, null, 1, 'Grenade');
+	('Relic Grenade', 10, 'Relic Grenade Desc', 'Rare', TRUE, null, null, null, null, null, null, 10, 10, null, 1, 'Grenade'),
+	('Expensive Item', 20, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Grenade');
 
 INSERT INTO item_ref_item_trait (item_ref_id, item_trait_id) VALUES
 	(1, 1),
@@ -271,7 +274,8 @@ VALUES (1, 'UnitName1', 'Trade Master', 'Leader', 'Human', 50, 10, 5, 7, 6, 8, 6
     (7, 'UnitName5', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
     (7, 'UnitName6', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
     (7, 'UnitName7', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
-    (5, 'UnitName8', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100);
+    (5, 'UnitName8', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
+    (7, 'UnitName9', 'Class Name', 'Rank and File','Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100);
 
 INSERT INTO unit_skillset (unit_id, skillset_id)
 VALUES (1, 3),
@@ -280,7 +284,9 @@ VALUES (1, 3),
     (3, 6);
 
 INSERT INTO unit_skill (unit_id, skill_id)
-VALUES (3, 7);
+VALUES (3, 7),
+    (3, 9),
+    (7, 10);
 
 INSERT INTO inventory (unit_id, item_ref_id)
 VALUES (1, 1), -- ID 1

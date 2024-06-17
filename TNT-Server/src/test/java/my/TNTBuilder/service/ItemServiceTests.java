@@ -51,7 +51,7 @@ public class ItemServiceTests extends BaseDaoTests {
         List<Item> testList = sut.getItemsForPurchase();
         ARMOR.setId(0);
         WEAPON.setId(0);
-        Assert.assertEquals(10, testList.size());
+        Assert.assertEquals(11, testList.size());
         Assert.assertTrue(testList.contains(ARMOR));
         Assert.assertTrue(testList.contains(WEAPON));
     }

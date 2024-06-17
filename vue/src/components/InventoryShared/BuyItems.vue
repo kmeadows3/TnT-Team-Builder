@@ -20,7 +20,7 @@
             <input type="radio" class="tab" name="filterTab" value="Grenade" id="grenadeTab"
                 v-model="filter.itemCategory" />
             <label for="grenadeTab">Grenades</label>
-            <div>
+            <div v-if="$store.state.currentUnit.rank != 'Rank and File'">
                 <label for="filterRarity">Max Relic Rarity: </label>
                 <select id="filterRarity" v-model.number="filter.maxRarity">
                     <option :value="0">No Relics</option>
@@ -45,11 +45,12 @@
             <div class="grid-row" v-for="item in filteredItems" :key="'refItem' + item.referenceId"
                 :class="{ 'too-expensive': trueItemCost(item) > $store.state.currentTeam.money }">
                 <div class="grid-name">{{ item.name }}</div>
-                                <div class="grid-rarity">
+                <div class="grid-rarity">
                     {{ item.rarity }}
                 </div>
                 <div class="grid-cost">
-                    {{ item.category != 'Armor' || !$store.state.showUnitDetail ||this.$store.state.currentUnit.wounds == 1 ? item.cost :
+                    {{ item.category != 'Armor' || !$store.state.showUnitDetail || this.$store.state.currentUnit.wounds
+                        == 1 ? item.cost :
                         this.$store.state.currentUnit.wounds == 2 ? item.cost2Wounds : item.cost3Wounds }} BS
                 </div>
 
@@ -112,45 +113,45 @@ export default {
                 }).catch(error => this.$store.dispatch('showError', error));
         },
         purchaseItem(itemId) {
-            if (this.$store.state.showUnitDetail){
+            if (this.$store.state.showUnitDetail) {
                 ItemService.purchaseItemForUnit(this.$store.state.currentUnit.id, itemId)
-                .then(response => {
-                    this.$store.dispatch('reloadCurrentUnit');
-                })
-                .catch(err => {
-                    console.log(err);
-                    this.$store.dispatch('showError', err);
-                })
+                    .then(response => {
+                        this.$store.dispatch('reloadCurrentUnit');
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        this.$store.dispatch('showError', err);
+                    })
             } else {
                 ItemService.purchaseItemForTeam(this.$store.state.currentTeam.id, itemId)
-                .then(response => {
-                    this.$store.dispatch('reloadCurrentTeam');
-                })
-                .catch(err => {
-                    console.log(err);
-                    this.$store.dispatch('showError', err);
-                })
-            }           
+                    .then(response => {
+                        this.$store.dispatch('reloadCurrentTeam');
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        this.$store.dispatch('showError', err);
+                    })
+            }
         },
-        gainItem(itemId){
-            if (this.$store.state.showUnitDetail){
+        gainItem(itemId) {
+            if (this.$store.state.showUnitDetail) {
                 ItemService.gainItemForFree(this.$store.state.currentUnit.id, itemId)
-                .then(response => {
-                    this.$store.dispatch('reloadCurrentUnit');
-                })
-                .catch (err => this.$store.dispatch('showError', err));
+                    .then(response => {
+                        this.$store.dispatch('reloadCurrentUnit');
+                    })
+                    .catch(err => this.$store.dispatch('showError', err));
             } else {
                 ItemService.gainItemForFreeForTeam(this.$store.state.currentTeam.id, itemId)
-                .then(response => {
-                    this.$store.dispatch('reloadCurrentTeam');
-                })
-                .catch (err => this.$store.dispatch('showError', err));
+                    .then(response => {
+                        this.$store.dispatch('reloadCurrentTeam');
+                    })
+                    .catch(err => this.$store.dispatch('showError', err));
             }
         },
         trueItemCost(item) {
             let wounds = this.$store.state.currentUnit.wounds;
 
-            if ( item.category != 'Armor' || wounds == 1) {
+            if (item.category != 'Armor' || wounds == 1) {
                 return item.cost;
             } else if (wounds == 2) {
                 return item.cost2Wounds;

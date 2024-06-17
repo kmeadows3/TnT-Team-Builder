@@ -91,7 +91,6 @@ public class ItemService {
             try {
                 boolean teamToUnit = itemDao.isItemOwnedByTeam(itemId, unitId, team.getId());
 
-                //TODO test validation
                 if (teamToUnit){
                     validateUnitCanHaveItem(itemDao.getItemById(itemId), unitDao.getUnitById(unitId, userId));
                 } else {

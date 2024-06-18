@@ -89,7 +89,7 @@ public class ItemService {
         Team team = teamService.getTeamByUnitId(unitId);
         if (team.getUserId() == userId){
             try {
-                boolean teamToUnit = itemDao.isItemOwnedByTeam(itemId, unitId, team.getId());
+                boolean teamToUnit = itemDao.isItemOwnedByTeam(itemId, team.getId(), unitId);
 
                 if (teamToUnit){
                     validateUnitCanHaveItem(itemDao.getItemById(itemId), unitDao.getUnitById(unitId, userId));

@@ -2,8 +2,7 @@
     <section class="main-display">
         <h1 class ="page-title">Choose Your Team</h1>
         <div class="controls">
-            <button @click="$store.commit('TOGGLE_NEW_TEAM_FORM')" v-show="!this.$store.state.showNewTeamForm">New Team</button>
-            <NewTeamForm v-if="$store.state.showNewTeamForm"/>
+            <button @click="openForm()">Create New Team</button>
         </div>
         
         <div class="card-container">
@@ -14,7 +13,6 @@
 
 <script>
 import TeamCard from './TeamCard.vue';
-import NewTeamForm from './NewTeamForm.vue';
 import TeamsService from '../../services/TeamsService';
 
 export default {
@@ -28,8 +26,13 @@ export default {
           });
     },
     components: {
-        TeamCard,
-        NewTeamForm
+        TeamCard
+    },
+    methods: {
+        openForm(){
+            this.$store.commit('TOGGLE_NEW_TEAM_FORM');
+            this.$store.commit('TOGGLE_SHOW_POPUP');
+        }
     }
 }
 </script>

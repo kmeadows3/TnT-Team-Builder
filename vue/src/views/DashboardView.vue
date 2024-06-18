@@ -44,13 +44,6 @@ section.subsection{
     margin: 3px;
 }
 
-form {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-
 
 input#changeName {
     margin: 3px;
@@ -356,5 +349,58 @@ div>div.item-action {
     align-items: center;
 }
 
+/**
+FORMS
+*/
+
+form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+div.popup-form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+}
+
+div.popup-form form{
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 5;
+    padding: 10px;
+    gap: 20px;
+}
+
+div.popup-form span{
+    display: flex;
+    width: 80%;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+div.popup-form label{
+    font-size: 1.1em;
+    min-width: 100px;
+    max-width: 100px;
+    text-align: right;
+    text-wrap: wrap;
+}
+
+div.popup-form select{
+    font-size: 1.0rem;
+    flex-grow: 5;
+}
+
+div.popup-form input{
+    font-size: 1.0rem;
+    flex-grow: 5;
+}
 
 </style>

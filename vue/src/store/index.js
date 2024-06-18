@@ -71,7 +71,7 @@ export function createStore(currentToken, currentUser) {
         state.showTeamDetail = false;
       },
       CLEAR_CURRENT_UNIT(state) {
-        store.dispatch('ReloadCurrentTeam');
+        store.dispatch('reloadCurrentTeam');
         state.currentUnit = {};
         state.manageInventory = false;
         state.showUnitDetail = false;
@@ -131,6 +131,13 @@ export function createStore(currentToken, currentUser) {
       },
       TOGGLE_CONFIRM_TEAM_DELETE(state){
         state.confirmTeamDelete = !state.confirmTeamDelete;
+      },
+      REMOVE_SHOW_POPUP(state){
+        state.showPopup = false;
+        state.confirmTeamDelete = false;
+        state.confirmUnitDelete = false;
+        state.showNewTeamForm = false;
+        state.showNewUnitForm = false;
       }
 
     },

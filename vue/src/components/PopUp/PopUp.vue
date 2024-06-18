@@ -2,24 +2,21 @@
     <div v-if="$store.state.showPopup" class="popup-background">
         <div class="popup">
             <i class="bi bi-x-square" @click ="closePopUp()"></i>
-            <h2> POPUP</h2>
             <NewTeamForm v-if="$store.state.showNewTeamForm"/>
             <NewUnitForm v-if="$store.state.showNewUnitForm"/>
         </div>
-
-
     </div>
 </template>
 
 
 <script>
-import NewTeamForm from '../TeamList/NewTeamForm.vue';
-import NewUnitForm from '../TeamDetail/NewUnitForm.vue';
+import NewTeamForm from './NewTeamForm.vue';
+import NewUnitForm from './NewUnitForm.vue';
 
 export default {
     methods: {
         closePopUp() {
-            this.$store.commit('TOGGLE_SHOW_POPUP');
+            this.$store.commit('REMOVE_SHOW_POPUP');
         }
     },
     components: {
@@ -49,8 +46,12 @@ div.popup {
     position: absolute;
     background-color: white;
     border: solid 3px black;
+    border-radius: 10px;
     width: 33%;
-    height: 50%;
+    max-width: 450px;
+    max-height: 50%;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, .2);
+
 }
 
 i.bi-x-square {

@@ -245,7 +245,7 @@ public class ItemService {
 
         for (Item relic : relicList){
             if (relic.getReferenceId() == itemToAddToInventory.getReferenceId() && !(isPreservers && isPowerArmor)) {
-                throw new ValidationException("Team may not have copies of the same relic, unless they are Reclaimers wearing Power Armor.");
+                throw new ValidationException("Team may not have copies of the same relic, unless it is Power Armor worn by a Reclaimer.");
             }
         }
     }

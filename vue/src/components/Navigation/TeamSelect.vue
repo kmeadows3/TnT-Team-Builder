@@ -23,6 +23,7 @@ export default {
     methods: {
         changeTeam(team) {
             this.$store.commit('SET_CURRENT_TEAM', team);
+            this.$store.commit('CLEAR_CURRENT_UNIT', team);
         }
     }
 }

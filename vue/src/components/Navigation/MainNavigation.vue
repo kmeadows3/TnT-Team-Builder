@@ -10,6 +10,7 @@
       <TeamSelect v-if="$store.state.showTeamDetail || $store.state.showUnitDetail"/>
       <UnitSelect v-if="$store.state.showUnitDetail"/>
     </div>
+    <button @click="showPopUp">Pop Up</button>
   </nav>
 
 </template>
@@ -27,6 +28,9 @@ export default {
     showTeamListOn() {
       this.$store.commit('CLEAR_CURRENT_UNIT');
       this.$store.commit('CLEAR_CURRENT_TEAM');
+    },
+    showPopUp() {
+      this.$store.commit('TOGGLE_SHOW_POPUP');
     }
   }
 }

@@ -22,7 +22,10 @@ export function createStore(currentToken, currentUser) {
       unitInventoryTraits: [],
       teamInventoryTraits: [],
       unitSkillsSorted:[],
-      manageInventory: false
+      manageInventory: false,
+      showPopup: false,
+      confirmUnitDelete: false,
+      confirmTeamDelete: false
     },
     mutations: {
       SET_AUTH_TOKEN(state, token) {
@@ -119,6 +122,15 @@ export function createStore(currentToken, currentUser) {
       },
       SET_UNIT_SKILLS_SORTED(state, value){
         state.unitSkillsSorted = value;
+      },
+      TOGGLE_SHOW_POPUP (state){
+        state.showPopup = !state.showPopup;
+      },
+      TOGGLE_CONFIRM_UNIT_DELETE(state){
+        state.confirmUnitDelete = !state.confirmUnitDelete;
+      },
+      TOGGLE_CONFIRM_TEAM_DELETE(state){
+        state.confirmTeamDelete = !state.confirmTeamDelete;
       }
 
     },

@@ -1,6 +1,7 @@
 <template>
   <div id="capstone-app">
     <ErrorBanner />
+    <PopUp />
     <h1 class="main-title">
       <span><em>"This is Not a Test"</em></span>
       <span>&nbsp;Team Builder</span>
@@ -16,11 +17,13 @@
 <script>
 import MainNavigation from "./components/Navigation/MainNavigation.vue";
 import ErrorBanner from "./components/ErrorBanner.vue";
+import PopUp from "./components/PopUp/PopUp.vue";
 
 export default {
   components: {
     MainNavigation,
-    ErrorBanner
+    ErrorBanner,
+    PopUp
   }
 }
 </script>

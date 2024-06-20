@@ -6,9 +6,9 @@
         <router-link v-bind:to="{ name: 'dashboard' }" @click="showTeamListOn()">Team List</router-link>&nbsp;|&nbsp;
         <router-link v-bind:to="{ name: 'logout' }">Logout</router-link></span>
     </div>
-    <div id="flexible-nav" v-show="$store.state.showUnitDetail || $store.state.showTeamDetail">
-      <TeamSelect v-if="$store.state.showTeamDetail || $store.state.showUnitDetail"/>
-      <UnitSelect v-if="$store.state.showUnitDetail"/>
+    <div id="flexible-nav" v-if="$store.state.showUnitDetail || $store.state.showTeamDetail">
+      <TeamSelect v-if="$store.state.showTeamDetail || $store.state.showUnitDetail" />
+      <UnitSelect v-if="$store.state.showUnitDetail" />
     </div>
     <button @click="showPopUp">Pop Up</button>
   </nav>
@@ -26,8 +26,12 @@ export default {
   },
   methods: {
     showTeamListOn() {
-      this.$store.commit('CLEAR_CURRENT_UNIT');
-      this.$store.commit('CLEAR_CURRENT_TEAM');
+      if (this.$store.state.showUnitDetail) {
+        this.$store.commit('CLEAR_CURRENT_UNIT');
+      }
+      if (this.$store.state.showTeamDetail) {
+        this.$store.commit('CLEAR_CURRENT_TEAM');
+      }
     },
     showPopUp() {
       this.$store.commit('TOGGLE_SHOW_POPUP');
@@ -37,13 +41,13 @@ export default {
 </script>
 
 <style>
-nav{
+nav {
   min-width: 200px;
   flex-basis: 15;
   flex-grow: 1;
 
   border: solid 3px black;
-    border-radius: 7px;
+  border-radius: 7px;
 }
 
 nav>div {
@@ -51,18 +55,18 @@ nav>div {
   border-radius: 7px;
 }
 
-nav > div#flexible-nav {
+nav>div#flexible-nav {
   padding-bottom: 10px;
 }
 
-nav section.flex-nav{
+nav section.flex-nav {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
 }
 
-nav div.flex-nav-option{
+nav div.flex-nav-option {
   min-width: 80%;
   max-width: 80%;
   padding: 5px;
@@ -71,19 +75,18 @@ nav div.flex-nav-option{
   cursor: pointer;
   text-align: center;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, .2),
-              2px 2px 10px rgba(0, 0, 0, .2);
+    2px 2px 10px rgba(0, 0, 0, .2);
 
 }
 
-nav div.flex-nav-option.selected{
+nav div.flex-nav-option.selected {
   border: solid 3px #666;
-  background-color:lightyellow;
+  background-color: lightyellow;
   margin-bottom: 10px;
 }
 
-nav div.flex-nav-option:hover{
+nav div.flex-nav-option:hover {
   transform: translateY(-1px);
-  background-color:#eee;
+  background-color: #eee;
 }
-
 </style>

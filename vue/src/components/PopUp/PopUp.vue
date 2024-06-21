@@ -4,6 +4,10 @@
             <i class="bi bi-x-square" @click ="closePopUp()"></i>
             <NewTeamForm v-if="$store.state.showNewTeamForm"/>
             <NewUnitForm v-if="$store.state.showNewUnitForm"/>
+            <BuyItems v-if="$store.state.showBuyItems"/>
+            <SimpleForms v-if="showSimpleForm" />
+            <AdvanceUnit v-if="$store.state.popupSubForm == 'AdvanceUnit'" />
+            <GainUnitSkill v-if="$store.state.popupSubForm == 'GainUnitSkill'" />
         </div>
     </div>
 </template>
@@ -12,6 +16,10 @@
 <script>
 import NewTeamForm from './NewTeamForm.vue';
 import NewUnitForm from './NewUnitForm.vue';
+import BuyItems from './BuyItems.vue';
+import SimpleForms from './SimpleForms.vue';
+import AdvanceUnit from './AdvanceUnit.vue';
+import GainUnitSkill from './GainUnitSkill.vue';
 
 export default {
     methods: {
@@ -21,7 +29,18 @@ export default {
     },
     components: {
         NewTeamForm,
-        NewUnitForm
+        NewUnitForm,
+        BuyItems,
+        SimpleForms,
+        AdvanceUnit,
+        GainUnitSkill
+    },
+    computed: {
+        showSimpleForm() {
+            return this.$store.state.showGainMoneyForm 
+                || this.$store.state.showLoseMoneyForm
+                || this.$store.state.showGainExpForm;
+        }
     }
 }
 </script>
@@ -47,11 +66,11 @@ div.popup {
     background-color: white;
     border: solid 3px black;
     border-radius: 10px;
-    width: 33%;
-    max-width: 450px;
+    min-width: 33%;
+    max-width: 100%;
     max-height: 50%;
     box-shadow: 2px 2px 6px rgba(0, 0, 0, .2);
-
+    padding: 5px 0px;
 }
 
 i.bi-x-square {

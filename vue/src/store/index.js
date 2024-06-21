@@ -25,7 +25,12 @@ export function createStore(currentToken, currentUser) {
       manageInventory: false,
       showPopup: false,
       confirmUnitDelete: false,
-      confirmTeamDelete: false
+      confirmTeamDelete: false,
+      showBuyItems: false,
+      showGainMoneyForm: false,
+      showLoseMoneyForm: false,
+      showGainExpForm: false,
+      popupSubForm: ''
     },
     mutations: {
       SET_AUTH_TOKEN(state, token) {
@@ -69,6 +74,8 @@ export function createStore(currentToken, currentUser) {
         state.currentUnit = unit;
         state.showUnitDetail = true;
         state.showTeamDetail = false;
+        store.dispatch('updateUnitInventoryTraits');
+        store.dispatch('sortUnitSkills');
       },
       CLEAR_CURRENT_UNIT(state) {
         store.dispatch('reloadCurrentTeam');
@@ -138,6 +145,26 @@ export function createStore(currentToken, currentUser) {
         state.confirmUnitDelete = false;
         state.showNewTeamForm = false;
         state.showNewUnitForm = false;
+        state.showBuyItems = false;
+        state.showGainMoneyForm = false;
+        state.showLoseMoneyForm = false;
+        state.showGainExpForm = false;
+        state.popupSubForm = '';
+      },
+      SET_SHOW_BUY_ITEMS(state, value){
+        state.showBuyItems = value;
+      },
+      SET_SHOW_GAIN_MONEY_FORM(state, value){
+        state.showGainMoneyForm = value;
+      },
+      SET_SHOW_LOSE_MONEY_FORM(state, value){
+        state.showLoseMoneyForm = value;
+      },
+      SET_SHOW_GAIN_EXP_FORM(state, value){
+        state.showGainExpForm = value;
+      },
+      SET_POPUP_SUBFORM(state, value){
+        state.popupSubForm = value;
       }
 
     },
@@ -155,8 +182,6 @@ export function createStore(currentToken, currentUser) {
         UnitService.getUnit(context.state.currentUnit.id)
           .then(response => {
             store.commit('SET_CURRENT_UNIT', response.data);
-            store.dispatch('updateUnitInventoryTraits');
-            store.dispatch('sortUnitSkills');
             store.dispatch('reloadCurrentTeam');
           })
           .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
@@ -169,7 +194,7 @@ export function createStore(currentToken, currentUser) {
           .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
       },
       showError(context, error) {
-        if (error.response.status == 401){
+        if (error.response &&error.response.status == 401){
           store.commit('LOGOUT');
           return;
         } else if (error.response) {

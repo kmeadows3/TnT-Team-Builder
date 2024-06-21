@@ -1,37 +1,56 @@
 <template>
     <div>
-        <div v-show="!showRandom && !showOptions">
-            <button @click="pickStat()">Pick Advance</button>
-            <button @click="rollRandom()">Roll Advance</button>
-            <button @click="$emit('exitAdvance')">Cancel</button>
+        <h1 class="section-title">Gain Advance</h1>
+
+        <div v-show="!showRandom && !showOptions" class="advance-unit">
+            <button @click="rollRandom()">Roll For Random Advance</button>
+            <button @click="pickStat()">Pick Advance (After Rolling Physical Die)</button>
+            <span>
+                <button @click="cancel()">Cancel</button>
+            </span>
+
         </div>
-        <div v-show="showOptions">
-            <div v-show="showRandom">
-                <p>You rolled: {{ randomNum }}</p>
-                <p>{{ rollResult }}</p>
+
+        <div v-show="showOptions" class="advance-unit">
+            <div v-show="showRandom" class="advance-options">
+                <p class="dice-roll">You rolled: <span class="dice-roll">{{ randomNum }}</span></p>
+                <p class="roll-result" v-show="rollResult">{{ rollResult }}</p>
             </div>
-            <div v-show="showPick">
-                <p>You opted to pick a stat. Only do this if you've already rolled a physical die and just need to record the result.</p>
+            <div v-show="showPick" class="advance-options">
+                <p class="roll-result">Note: Picking advances should only be used to record the result from rolling a
+                    physical die.</p>
             </div>
-            <div class="advance-options">
+            <div class="advance-options button-list">
                 <button class="advance-btn" @click="buyAdvance('skill')" v-show="canGainSkill">
                     Gain a Skill or Mutation</button>
-                <button class="advance-btn" @click="buyAdvance('melee')" v-show="isMeleeLegal && (pickFromAllStats || rolledMeleeStrength)">
-                    +1 Melee</button>
-                <button class="advance-btn" @click="buyAdvance('strength')" v-show="isStrengthLegal && (pickFromAllStats || rolledMeleeStrength)">
-                    +1 Strength</button>
-                <button class="advance-btn" @click="buyAdvance('move')" v-show="isMoveLegal && (pickFromAllStats || rolledMoveRanged)">
-                    +1 Move</button>
-                <button class="advance-btn" @click="buyAdvance('ranged')" v-show="isRangedLegal && (pickFromAllStats || rolledMoveRanged)">
-                    +1 Ranged</button>
-                <button class="advance-btn" @click="buyAdvance('defense')" v-show="isDefenseLegal && (pickFromAllStats || rolledDefenseWound)">
-                    +1 Defense</button>
-                <button class="advance-btn" @click="buyAdvance('wounds')" v-show="isWoundsLegal && (pickFromAllStats || rolledDefenseWound)">
-                    +1 Wound</button>
+                <span v-show="(pickFromAllStats || rolledMeleeStrength) && (isMeleeLegal || isStrengthLegal)">
+                    <button class="advance-btn" @click="buyAdvance('melee')" v-show="isMeleeLegal">
+                        +1 Melee
+                    </button>
+                    <button class="advance-btn" @click="buyAdvance('strength')" v-show="isStrengthLegal">
+                        +1 Strength
+                    </button>
+                </span>
+                <span v-show="pickFromAllStats || rolledMoveRanged && (isMoveLegal || isRangedLegal)">
+                    <button class="advance-btn" @click="buyAdvance('move')" v-show="isMoveLegal">
+                        +1 Move
+                    </button>
+                    <button class="advance-btn" @click="buyAdvance('ranged')" v-show="isRangedLegal">
+                        +1 Ranged
+                    </button>
+                </span>
+                <span v-show="pickFromAllStats || rolledDefenseWound && (isDefenseLegal || isWoundsLegal)">
+                    <button class="advance-btn" @click="buyAdvance('defense')" v-show="isDefenseLegal">
+                        +1 Defense
+                    </button>
+                    <button class="advance-btn" @click="buyAdvance('wounds')" v-show="isWoundsLegal">
+                        +1 Wound
+                    </button>
+                </span>
                 <button class="advance-btn" @click="buyAdvance('promotion')" v-show="isPromotionLegal && canPromote">
                     Gain Promotion</button>
                 <button class="advance-btn cancel" @click="clearForm()">
-                    Cancel</button>
+                    Go Back</button>
             </div>
         </div>
     </div>
@@ -122,7 +141,7 @@ export default {
             return true;
         },
         isPromotionLegal() {
-            if ( this.canPromote == false
+            if (this.canPromote == false
                 || (this.$store.state.currentUnit.mettle >= 8)
                 || (this.mettleIncrease >= 1 && this.currentRank == 'Rank and File')
                 || (this.mettleIncrease >= 2 && this.currentRank == 'Specialist')
@@ -148,7 +167,7 @@ export default {
             return true;
         },
         allStatsMaxed() {
-            return (!this.isDefenseLegal && !this.isMeleeLegal && !this.isMoveLegal && !this.isRangedLegal && !this.isStrengthLegal &&!this.isWoundsLegal)
+            return (!this.isDefenseLegal && !this.isMeleeLegal && !this.isMoveLegal && !this.isRangedLegal && !this.isStrengthLegal && !this.isWoundsLegal)
         },
         moveIncrease() {
             return this.$store.state.currentUnit.move - this.baseUnit.move;
@@ -181,6 +200,10 @@ export default {
         }
     },
     methods: {
+        cancel() {
+            this.clearForm();
+            this.$store.commit('REMOVE_SHOW_POPUP');
+        },
         clearForm() {
             this.showRandom = false;
             this.showPick = false;
@@ -206,7 +229,7 @@ export default {
             this.showRandom = true;
             if (this.randomNum <= 2) {
                 this.canGainSkill = true;
-                this.rollResult = 'Pick a Skill (or a Mutation if the unit is a mutant).'
+                this.rollResult = '';
             } else if (this.randomNum <= 4) {
                 this.pickFromMeleeStrength();
             } else if (this.randomNum <= 6) {
@@ -217,53 +240,53 @@ export default {
                 this.canPromote = true;
                 this.canGainSkill = true;
                 this.pickFromAllStats = true;
-                this.rollResult = 'either a promotion (unit ranks up if possible and gains +1 mettle) or any other option. If an option is missing, your unit is at the current max for that stat.';
+                this.rollResult = 'Gain either a promotion (unit ranks up if possible and gains +1 mettle) or any other option that is not maxed out';
             } else {
                 console.error("WTF? You didn't roll a d10");
             }
             this.showOptions = true;
         },
-        pickFromMeleeStrength(){
+        pickFromMeleeStrength() {
             this.rolledMeleeStrength = true;
-                if (this.isMeleeLegal && this.isStrengthLegal){
-                    this.rollResult = "Choose to gain either +1 Melee or Strength."
-                } else if (this.isMeleeLegal){
-                    this.rollResult = "Unit's Strength is currently maxed out, so they can only gain +1 Melee."
-                } else if (this.isStrengthLegal){
-                    this.rollResult = "Unit's Melee is currently maxed out, so they can only gain +1 Strength."
-                } else {
-                    this.dealWithMaxedStats("Melee and Strength");
-                }
+            if (this.isMeleeLegal && this.isStrengthLegal) {
+                this.rollResult = "Choose to gain either +1 Melee or Strength."
+            } else if (this.isMeleeLegal) {
+                this.rollResult = "Unit's Strength is currently maxed out, so they can only gain +1 Melee."
+            } else if (this.isStrengthLegal) {
+                this.rollResult = "Unit's Melee is currently maxed out, so they can only gain +1 Strength."
+            } else {
+                this.dealWithMaxedStats("Melee and Strength");
+            }
         },
-        pickFromMoveRanged(){
+        pickFromMoveRanged() {
             this.rolledMoveRanged = true;
-                if (this.isMeleeLegal && this.isRangedLegal){
-                    this.rollResult = "Choose to gain either +1 Move or Ranged."
-                } else if (this.isMoveLegal){
-                    this.rollResult = "Unit's Ranged is currently maxed out, so they can only gain +1 Move."
-                } else if (this.isRangedLegal){
-                    this.rollResult = "Unit's Move is currently maxed out, so they can only gain +1 Ranged."
-                } else {
-                    this.dealWithMaxedStats("Move and Ranged");
-                }
+            if (this.isMeleeLegal && this.isRangedLegal) {
+                this.rollResult = "Choose to gain either +1 Move or Ranged."
+            } else if (this.isMoveLegal) {
+                this.rollResult = "Unit's Ranged is currently maxed out, so they can only gain +1 Move."
+            } else if (this.isRangedLegal) {
+                this.rollResult = "Unit's Move is currently maxed out, so they can only gain +1 Ranged."
+            } else {
+                this.dealWithMaxedStats("Move and Ranged");
+            }
         },
-        pickFromDefenseWound(){
+        pickFromDefenseWound() {
             this.rolledDefenseWound = true;
-                if (this.isDefenseLegal && this.isWoundsLegal){
-                    this.rollResult = "Choose to gain either +1 Wound or Defense."
-                } else if (this.isDefenseLegal){
-                    this.rollResult = "Unit's Wounds are currently maxed out, so they can only gain +1 Defense."
-                } else if (this.isWoundsLegal){
-                    this.rollResult = "Unit's Defense is currently maxed out, so they can only gain +1 Wound."
-                } else {
-                    this.dealWithMaxedStats("Defense and Wounds");
-                }
+            if (this.isDefenseLegal && this.isWoundsLegal) {
+                this.rollResult = "Choose to gain either +1 Wound or Defense."
+            } else if (this.isDefenseLegal) {
+                this.rollResult = "Unit's Wounds are currently maxed out, so they can only gain +1 Defense."
+            } else if (this.isWoundsLegal) {
+                this.rollResult = "Unit's Defense is currently maxed out, so they can only gain +1 Wound."
+            } else {
+                this.dealWithMaxedStats("Defense and Wounds");
+            }
         },
         dealWithMaxedStats(maxedStats) {
-            if (!this.allStatsMaxed){
+            if (!this.allStatsMaxed) {
                 this.pickFromAllStats = true;
                 this.rollResult = "Both " + maxedStats + " are currently maxed out. Therefore, you can pick from any other stat the unit hasn't maxed."
-            } else if (this.isPromotionLegal){
+            } else if (this.isPromotionLegal) {
                 this.canGainSkill = true;
                 this.canPromote = true;
                 this.rollResult = "Very impressive, all of the unit's stats are currently maxed out. They may either gain a Skill (or Mutation, if they're a mutant) or Promote."
@@ -285,28 +308,28 @@ export default {
                 }).catch(error => {
                     this.$store.dispatch('showError', error);
                 });
-            this.clearForm();
+            this.cancel();
         },
-        updateCurrentUnit(option){
-            if (option == 'skill'){
+        updateCurrentUnit(option) {
+            if (option == 'skill') {
                 this.$store.state.currentUnit.emptySkills++;
-            } else if (option == 'melee'){
+            } else if (option == 'melee') {
                 this.$store.state.currentUnit.melee++;
-            } else if (option == 'strength'){
+            } else if (option == 'strength') {
                 this.$store.state.currentUnit.strength++;
-            } else if (option == 'move'){
+            } else if (option == 'move') {
                 this.$store.state.currentUnit.move++;
-            } else if (option == 'ranged'){
+            } else if (option == 'ranged') {
                 this.$store.state.currentUnit.ranged++;
-            } else if (option == 'defense'){
+            } else if (option == 'defense') {
                 this.$store.state.currentUnit.defense++;
-            } else if (option == 'wounds'){
+            } else if (option == 'wounds') {
                 this.$store.state.currentUnit.wounds++;
-            } else if (option == 'promotion'){
+            } else if (option == 'promotion') {
                 this.$store.state.currentUnit.mettle++;
-                if (this.$store.state.currentUnit.rank == 'Rank and File'){
+                if (this.$store.state.currentUnit.rank == 'Rank and File') {
                     this.$store.state.currentUnit.rank = 'Specialist';
-                } else if (this.$store.state.currentUnit.rank == 'Specialist'){
+                } else if (this.$store.state.currentUnit.rank == 'Specialist') {
                     this.$store.state.currentUnit.rank = 'Elite';
                 }
             } else {
@@ -325,15 +348,75 @@ export default {
 div.advance-options {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    gap: 4px;
+    margin-bottom: 4px;
 }
 
-button.advance-btn {
-    width: 20%;
-    min-width: 150px;
+div.advance-options.button-list{
+    width: 50%;
+
+}
+
+div.advance-options>p {
+    margin: 0;
+}
+
+p.dice-roll {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 3px;
+    padding-top: 6px;
+    font-weight: bold;
+}
+
+span.dice-roll {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border: solid 3px black;
+    border-radius: 3px;
+}
+
+p.roll-result {
+    align-self: center;
+    padding: 6px;
+    max-width: 90%;
+    text-align: center;
+}
+
+.advance-options>span{
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+span>button.advance-btn{
+    width: 100%;
 }
 
 button.cancel {
-    margin-top: 10px;
+    margin-top: 6px;
+    min-width: 0px;
+    width: fit-content;
+    align-self: center;
+}
+
+div.advance-unit {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+div.advance-unit>button {
+    min-width: 300px;
+    max-width: 300px;
 }
 </style>

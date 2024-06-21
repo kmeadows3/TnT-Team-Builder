@@ -66,7 +66,6 @@ h1.page-title {
     width: 80%;
     border: solid 3px black;
     border-radius: 7px;
-    margin-top: 10px;
 }
 
 h1.section-title {
@@ -162,6 +161,14 @@ BUTTONS
 */
 button:hover{
     transform: translateY(-1px);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
 }
 
 

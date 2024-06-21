@@ -3,7 +3,7 @@
         <div class="item-container">
             <h1 class="section-title">Team Inventory</h1>
             <InventoryActions />
-            <div class="item-table" v-show="$store.state.currentTeam.inventory.length != 0">
+            <div class="item-table team-inventory" v-show="$store.state.currentTeam.inventory.length != 0">
                 <div class="table-label item-list">
                     <div class="item-med">Type</div>
                     <div class="item-small">BS Cost</div>
@@ -104,5 +104,9 @@ div.item-list>.item-large {
     min-width: 150px;
     flex-grow: 5;
     flex-basis: 50%;
+}
+
+div.team-inventory {
+    margin-top: 10px;
 }
 </style>

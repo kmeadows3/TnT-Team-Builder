@@ -10,7 +10,6 @@
       <TeamSelect v-if="$store.state.showTeamDetail || $store.state.showUnitDetail" />
       <UnitSelect v-if="$store.state.showUnitDetail" />
     </div>
-    <button @click="showPopUp">Pop Up</button>
   </nav>
 
 </template>
@@ -32,9 +31,6 @@ export default {
       if (this.$store.state.showTeamDetail) {
         this.$store.commit('CLEAR_CURRENT_TEAM');
       }
-    },
-    showPopUp() {
-      this.$store.commit('TOGGLE_SHOW_POPUP');
     }
   }
 }
@@ -43,8 +39,7 @@ export default {
 <style>
 nav {
   min-width: 200px;
-  flex-basis: 15;
-  flex-grow: 1;
+  max-width: 200px;
 
   border: solid 3px black;
   border-radius: 7px;

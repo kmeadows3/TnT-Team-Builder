@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>Purchase Items</h3>
+        <h1 class="section-title">Purchase Items</h1>
         <div class="radio-tab-wrapper">
             <input type="radio" class="tab" name="filterTab" value="Armor" id="armorTab" checked
                 v-model="filter.itemCategory" />
@@ -31,7 +31,6 @@
                 </select>
             </div>
         </div>
-
         <div class='item-purchase-list'>
             <span>Current Barter Scrip: {{ $store.state.currentTeam.money }}</span>
             <div class="grid-row table-label">
@@ -63,6 +62,10 @@
                 </div>
             </div>
         </div>
+        <span class="button-container">
+            <button @click="cancel()">Cancel</button>
+        </span>
+        
     </div>
 </template>
 
@@ -157,6 +160,9 @@ export default {
                 return item.cost2Wounds;
             }
             return item.cost3Wounds;
+        },
+        cancel(){
+            this.$store.commit('REMOVE_SHOW_POPUP');
         }
     },
     beforeMount() {
@@ -169,7 +175,7 @@ export default {
 
 <style scoped>
 .item-purchase-list {
-    padding: 10px;
+    padding: 10px 10px 0px 10px;
 }
 
 .grid-row {
@@ -179,6 +185,7 @@ export default {
     width: 80%;
     grid-template-columns: 3fr 2fr 1fr 3fr;
     grid-template-areas: "Name Rarity Cost Buttons";
+    text-align: center;
 }
 
 .grid-name {
@@ -192,7 +199,7 @@ export default {
 }
 
 .grid-rarity {
-    grid-area: "Rarity"
+    grid-area: "Rarity";
 }
 
 .grid-buttons {
@@ -227,8 +234,6 @@ export default {
 
 input.tab {
     display: none;
-
-
 
     &+label {
         display: flex;

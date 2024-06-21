@@ -15,6 +15,9 @@
         </span>
         </h1>
         </div>
+        <div id="unit-actions">
+            <UnitActions />
+        </div>
         <div id="title">
             <p class="basics-label">TITLE</p>
             <p class="basics">{{ $store.state.currentUnit.unitClass }}</p>
@@ -36,6 +39,7 @@
 
 <script>
 import UnitService from '../../services/UnitService.js';
+import UnitActions from './UnitActions.vue';
 
 export default {
     data() {
@@ -43,6 +47,9 @@ export default {
             showChangeNameForm:false,
             untName: '',
         }
+    },
+    components: {
+        UnitActions
     },
     methods: {
         toggleEditName(){
@@ -73,8 +80,9 @@ div#basic-information{
     display: grid;
     width: 100%;
     grid-template-areas:
-        "name   name name name" 
-        "title  rank type bs-cost";
+        "name    name    name    name" 
+        "actions actions actions actions"
+        "title   rank    type    bs-cost";
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
@@ -84,11 +92,16 @@ div#basic-information>div{
     border-radius: 7px;
     text-align: center;
 }
-
 div#basic-information>div#name{
     grid-area: name;
     border-style: none;
 }
+
+div#basic-information>div#unit-actions{
+    grid-area: actions;
+    border: none;
+}
+
 div#title{
     grid-area: title;
 }

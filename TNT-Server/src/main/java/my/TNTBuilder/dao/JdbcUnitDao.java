@@ -147,6 +147,32 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
+    public void  deleteUnit(Unit unit) throws DaoException{
+        String deleteSkillSql = "DELETE FROM unit_skill WHERE skill_id = ?";
+        String deleteSkillsetSql = "DELETE FROM unit_skillset WHERE skillset_id = ?";
+        String deleteUnitSql = "DELETE FROM unit WHERE unit_id = ?";
+
+        try {
+            for (Skill skill : unit.getSkills()){
+                jdbcTemplate.update(deleteSkillSql, skill.getId());
+            }
+            for (Skillset skillset : unit.getAvailableSkillsets()){
+                jdbcTemplate.update(deleteSkillsetSql, skillset.getId());
+            }
+
+
+            int rowsAffected = jdbcTemplate.update(deleteUnitSql, unit.getId());
+            if (rowsAffected != 1) {
+                throw new DaoException("Error: Incorrect number of rows deleted");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation, unable to delete unit.", e);
+        }
+    }
+
+    @Override
     public void updateUnit(Unit updatedUnit) throws DaoException{
         String sql = "UPDATE unit SET name = ?, rank = ?, wounds = ?, defense = ?, mettle = ?, move = ?, " +
                 "ranged = ?, melee = ?, strength = ?, empty_skills = ?, spent_exp = ?, unspent_exp = ?, " +

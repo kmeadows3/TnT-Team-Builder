@@ -177,5 +177,15 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Assert.assertTrue(testUnit.getSkills().contains(skill1));
     }
 
+    @Test
+    public void deleteUnit_deletes_unit(){
+        sut.deleteUnit(UNIT3);
+        List<Unit> testList = sut.getAllUnitsForTeam(1);
+        Assert.assertEquals(1, testList.size());
+        Assert.assertFalse(testList.contains(UNIT3));
+
+    }
+
+
 
 }

@@ -79,4 +79,6 @@ public interface UnitDao {
      * @param unitId the id of the unit who will have the skill
      */
     void addSkillToUnit(int skillId, int unitId) throws DaoException;
+
+    void deleteUnit(Unit unit) throws DaoException;
 }

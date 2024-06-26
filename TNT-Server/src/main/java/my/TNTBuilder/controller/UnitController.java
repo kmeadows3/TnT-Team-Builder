@@ -160,5 +160,20 @@ public class UnitController {
         return unit;
     }
 
+    /**
+     * deletes a unit
+     * @param unitId the unit id
+     * @param principal the logged-in user
+     */
+    @RequestMapping(path="/units/{unitId}", method = RequestMethod.DELETE)
+    public void deleteUnit(@PathVariable int unitId,  @RequestParam(defaultValue = "true") boolean deleteItems, Principal principal){
+        try {
+            unitService.deleteUnit(unitId, userDao.getUserIdByUsername(principal.getName()), deleteItems);
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No user with this username");
+        }
+    }
 
 }

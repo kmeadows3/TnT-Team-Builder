@@ -323,6 +323,37 @@ public class UnitServiceTests extends BaseDaoTests {
         Assert.fail();
     }
 
+    @Test
+    public void deleteUnit_deletes_unit_no_items() throws ServiceException{
+        sut.deleteUnit(3, 1, false);
+        Team testTeam = teamDao.getTeamById(1, 1);
+
+        Assert.assertEquals(1, testTeam.getUnitList().size());
+        Assert.assertFalse(testTeam.getUnitList().contains(UNIT3));
+    }
+
+    @Test
+    public void deleteUnit_deletes_unit_with_items_delete_mode() throws ServiceException{
+        sut.deleteUnit(1, 1, true);
+        Team testTeam = teamDao.getTeamById(1, 1);
+
+        Assert.assertEquals(1, testTeam.getUnitList().size());
+        Assert.assertFalse(testTeam.getUnitList().contains(UNIT1));
+        Assert.assertEquals(3, testTeam.getInventory().size());
+    }
+
+    @Test
+    public void deleteUnit_deletes_unit_with_items_transfer_mode() throws ServiceException{
+        sut.deleteUnit(1, 1, false);
+        Team testTeam = teamDao.getTeamById(1, 1);
+
+        Assert.assertEquals(1, testTeam.getUnitList().size());
+        Assert.assertFalse(testTeam.getUnitList().contains(UNIT1));
+        Assert.assertEquals(6, testTeam.getInventory().size());
+        Assert.assertTrue(testTeam.getInventory().contains(ARMOR));
+    }
+
+
 
     /*
     Private Helper Methods

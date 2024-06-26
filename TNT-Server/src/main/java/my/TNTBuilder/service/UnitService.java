@@ -3,6 +3,7 @@ package my.TNTBuilder.service;
 import my.TNTBuilder.dao.ItemDao;
 import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.Skill;
+import my.TNTBuilder.model.inventory.Item;
 import my.TNTBuilder.validator.UnitValidator;
 import my.TNTBuilder.dao.UnitDao;
 import my.TNTBuilder.exception.DaoException;
@@ -132,9 +133,6 @@ public class UnitService {
 
 
 
-    /*
-        PRIVATE METHODS
-     */
     public List<Unit> adjustUnitListForTeamStatus(Team team, List<Unit> units) {
         if ( unitValidator.teamMustBuyLeader(team) ) {
             units = units.stream()
@@ -158,6 +156,29 @@ public class UnitService {
         }
         return units;
     }
+    public void deleteUnit(int unitId, int userId, boolean deleteItems) throws ServiceException{
+
+        try {
+            Unit unitToDelete = unitDao.getUnitById(unitId, userId);
+            if (deleteItems) {
+                for (Item item : unitToDelete.getInventory()){
+                    itemDao.deleteItem(item.getId());
+                }
+            } else {
+                for (Item item : unitToDelete.getInventory()){
+                    itemDao.transferItem(item.getId(), unitId, teamService.getTeamByUnitId(unitId).getId(), false);
+                }
+            }
+            unitDao.deleteUnit(unitToDelete);
+        } catch (DaoException e){
+            throw new ServiceException(e.getMessage(), e);
+        }
+
+    }
+
+    /*
+        PRIVATE METHODS
+     */
 
     private List<Unit> filterOutRank(List<Unit> units, String filteredOutRank) {
         units = units.stream()
@@ -196,7 +217,6 @@ public class UnitService {
 
         throw new ServiceException("Error, unit cannot have this skill.");
     }
-
 
 
 

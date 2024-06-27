@@ -96,6 +96,29 @@ public class UnitService {
         }
     }
 
+    public void deleteUnit(int unitId, int userId, boolean deleteItems) throws ServiceException{
+
+        try {
+            Unit unitToDelete = unitDao.getUnitById(unitId, userId);
+            if (deleteItems) {
+                for (Item item : unitToDelete.getInventory()){
+                    itemDao.deleteItem(item.getId());
+                }
+            } else if (unitToDelete.getRank().equals("Freelancer")) {
+                for (Item item : unitToDelete.getInventory()){
+                    transferOnlyNonWeapons(unitId, item);
+                }
+            } else {
+                for (Item item : unitToDelete.getInventory()){
+                    itemDao.transferItem(item.getId(), unitId, teamService.getTeamByUnitId(unitId).getId(), false);
+                }
+            }
+            unitDao.deleteUnit(unitToDelete);
+        } catch (DaoException e){
+            throw new ServiceException(e.getMessage(), e);
+        }
+
+    }
 
     /*
     Methods that go to DAO with no changes
@@ -133,7 +156,18 @@ public class UnitService {
 
 
 
-    public List<Unit> adjustUnitListForTeamStatus(Team team, List<Unit> units) {
+    /*
+        PRIVATE METHODS
+     */
+
+    private void transferOnlyNonWeapons(int unitId, Item item) throws ServiceException {
+        if (item.getCategory().equals("Armor") || item.getCategory().equals("Equipment")){
+            itemDao.transferItem(item.getId(), unitId, teamService.getTeamByUnitId(unitId).getId(), false);
+        } else {
+            itemDao.deleteItem(item.getId());
+        }
+    }
+    private List<Unit> adjustUnitListForTeamStatus(Team team, List<Unit> units) {
         if ( unitValidator.teamMustBuyLeader(team) ) {
             units = units.stream()
                     .filter(unit -> "Leader".equalsIgnoreCase(unit.getRank()))
@@ -156,29 +190,6 @@ public class UnitService {
         }
         return units;
     }
-    public void deleteUnit(int unitId, int userId, boolean deleteItems) throws ServiceException{
-
-        try {
-            Unit unitToDelete = unitDao.getUnitById(unitId, userId);
-            if (deleteItems) {
-                for (Item item : unitToDelete.getInventory()){
-                    itemDao.deleteItem(item.getId());
-                }
-            } else {
-                for (Item item : unitToDelete.getInventory()){
-                    itemDao.transferItem(item.getId(), unitId, teamService.getTeamByUnitId(unitId).getId(), false);
-                }
-            }
-            unitDao.deleteUnit(unitToDelete);
-        } catch (DaoException e){
-            throw new ServiceException(e.getMessage(), e);
-        }
-
-    }
-
-    /*
-        PRIVATE METHODS
-     */
 
     private List<Unit> filterOutRank(List<Unit> units, String filteredOutRank) {
         units = units.stream()

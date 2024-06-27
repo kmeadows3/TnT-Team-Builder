@@ -212,6 +212,13 @@ public class ItemServiceTests extends BaseDaoTests {
     }
 
     @Test (expected = ValidationException.class)
+    public void addItemToUnit_throws_exception_if_freelancer_adds_relic() throws ServiceException{
+        sut.addItemToUnit(2, 10, 4, true);
+        Assert.fail();
+    }
+
+
+    @Test (expected = ValidationException.class)
     public void addItemToUnit_throws_exception_if_4th_relic_equipped_to_unit() throws ServiceException{
         try {
             sut.addItemToUnit(2, 6, 4, true);
@@ -340,7 +347,7 @@ public class ItemServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void transferItem_works_when_moving_item_from_team_to_item() throws ServiceException {
+    public void transferItem_works_when_moving_item_from_team_to_Unit() throws ServiceException {
         sut.transferItem(5, 1, 1);
         List<Item> teamTestList = itemDao.getAllItemsForTeam(1);
         List<Item> unitTestList = itemDao.getAllItemsForUnit(1);
@@ -386,6 +393,24 @@ public class ItemServiceTests extends BaseDaoTests {
         sut.transferItem(itemId, 9, 4);
         Assert.fail();
     }
+
+    @Test (expected = ValidationException.class)
+    public void transferItem_throws_exception_freelancer_not_allowed_to_transfer_weapon() throws ServiceException {
+        int itemId = sut.addItemToUnit(5, 10, 4, true);
+        sut.transferItem(itemId, 10, 4);
+        Assert.fail();
+    }
+
+    @Test
+    public void transferItem_works_when_freelancer_transfers_armor() throws ServiceException {
+        int itemId = sut.addItemToUnit(1, 10, 4, true);
+        ARMOR.setId(itemId);
+        sut.transferItem(itemId, 10, 4);
+        Team testTeam = teamDao.getTeamById(7, 4);
+
+        Assert.assertTrue(testTeam.getInventory().contains(ARMOR));
+    }
+
 
     @Test
     public void deleteItem_deletes_item() throws ServiceException{

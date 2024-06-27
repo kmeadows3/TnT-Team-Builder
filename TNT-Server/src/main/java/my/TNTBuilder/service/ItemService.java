@@ -90,10 +90,11 @@ public class ItemService {
         if (team.getUserId() == userId){
             try {
                 boolean teamToUnit = itemDao.isItemOwnedByTeam(itemId, team.getId(), unitId);
-
+                Unit unit = unitDao.getUnitById(unitId, userId);
                 if (teamToUnit){
-                    validateUnitCanHaveItem(itemDao.getItemById(itemId), unitDao.getUnitById(unitId, userId));
+                    validateUnitCanHaveItem(itemDao.getItemById(itemId), unit);
                 } else {
+                    validateUnitToTeamTransfer(itemId, unit);
                     unequipItem(itemId, unitId, userId);
                 }
 
@@ -176,6 +177,15 @@ public class ItemService {
     /*
     PRIVATE METHODS
      */
+
+    private void validateUnitToTeamTransfer(int itemId, Unit unit) throws ValidationException {
+        if (unit.getRank().equals("Freelancer")){
+            Item item = itemDao.getItemById(itemId);
+            if ( !item.getCategory().equals("Armor") && !item.getCategory().equals("Equipment")){
+                throw new ValidationException("Freelancers cannot transfer weapons.");
+            }
+        }
+    }
     private void validateUnitCanHaveItem(Item itemToAdd, Unit unit) throws ServiceException {
         if (itemToAdd.getCategory().equals("Support Weapon")){
             validateUnitCanEquipSupportWeapon(unit);
@@ -214,6 +224,8 @@ public class ItemService {
 
         if (unit.getRank().equals("Rank and File")){
             throw new ValidationException("Rank and File units cannot carry relics");
+        } else if (unit.getRank().equals("Freelancer")){
+            throw new ValidationException("Freelancers may not be given relics");
         } else if (unit.getInventory().stream().filter(Item::isRelic).count() >=2){
             throw new ValidationException("Unit cannot carry more than 2 relics");
         }

@@ -1,5 +1,6 @@
 package my.TNTBuilder.service;
 
+import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.validator.TeamValidator;
 import my.TNTBuilder.validator.UnitValidator;
@@ -8,6 +9,7 @@ import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Skillset;
 import my.TNTBuilder.model.Unit;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,14 +22,21 @@ import java.util.List;
 public class UnitServiceTests extends BaseDaoTests {
     private UnitService sut;
     private TeamDao teamDao;
+    private ItemDao itemDao;
 
     @Before
     public void setup(){
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         teamDao = new JdbcTeamDao(jdbcTemplate);
         UnitDao unitDao = new JdbcUnitDao(jdbcTemplate);
-        ItemDao itemDao = new JdbcItemDao(jdbcTemplate);
+        itemDao = new JdbcItemDao(jdbcTemplate);
         sut = new UnitService(unitDao, itemDao, new UnitValidator(unitDao), new TeamService(teamDao, new TeamValidator()));
+    }
+
+    @After
+    public void resetIds() {
+        ARMOR.setId(1);
+        WEAPON.setId(2);
     }
 
     @Test
@@ -109,7 +118,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit invalidUnit = new Unit();
         invalidUnit.setId(2);
         invalidUnit.setTeamId(7);
-        sut.createNewUnit(invalidUnit, 1);
+        sut.createNewUnit(invalidUnit, 4);
         Assert.fail();
     }
 
@@ -351,6 +360,23 @@ public class UnitServiceTests extends BaseDaoTests {
         Assert.assertFalse(testTeam.getUnitList().contains(UNIT1));
         Assert.assertEquals(6, testTeam.getInventory().size());
         Assert.assertTrue(testTeam.getInventory().contains(ARMOR));
+    }
+
+    @Test
+    public void deleteUnit_deletes_unit_without_transferring_weapon_if_freelancer() throws ServiceException {
+
+        int itemId = itemDao.addItemToUnit(5, 10);
+        WEAPON.setId(itemId);
+        itemId = itemDao.addItemToUnit(1, 10);
+        ARMOR.setId(itemId);
+
+        sut.deleteUnit(10,4, false);
+
+        Team testTeam = teamDao.getTeamById(7, 4);
+        Assert.assertEquals(5, testTeam.getUnitList().size());
+        Assert.assertTrue(testTeam.getInventory().contains(ARMOR));
+        Assert.assertFalse(testTeam.getInventory().contains(WEAPON));
+
     }
 
 

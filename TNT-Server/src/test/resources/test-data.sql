@@ -275,7 +275,11 @@ VALUES (1, 'UnitName1', 'Trade Master', 'Leader', 'Human', 50, 10, 5, 7, 6, 8, 6
     (7, 'UnitName6', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
     (7, 'UnitName7', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
     (5, 'UnitName8', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
-    (7, 'UnitName9', 'Class Name', 'Rank and File','Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100);
+    (7, 'UnitName9', 'Class Name', 'Rank and File','Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
+    (7, 'UnitName10', 'Class Name', 'Freelancer','Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
+    (7, 'UnitName11', 'Class Name', 'Leader','Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100);
+
+
 
 INSERT INTO unit_skillset (unit_id, skillset_id)
 VALUES (1, 3),

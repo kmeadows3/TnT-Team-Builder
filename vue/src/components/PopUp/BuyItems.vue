@@ -131,7 +131,6 @@ export default {
                         this.$store.dispatch('reloadCurrentTeam');
                     })
                     .catch(err => {
-                        console.log(err);
                         this.$store.dispatch('showError', err);
                     })
             }

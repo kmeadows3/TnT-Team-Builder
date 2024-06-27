@@ -8,6 +8,7 @@
             <SimpleForms v-if="showSimpleForm" />
             <AdvanceUnit v-if="$store.state.popupSubForm == 'AdvanceUnit'" />
             <GainUnitSkill v-if="$store.state.popupSubForm == 'GainUnitSkill'" />
+            <DeleteUnit v-if="$store.state.popupSubForm == 'DeleteUnit'" />
         </div>
     </div>
 </template>
@@ -20,6 +21,7 @@ import BuyItems from './BuyItems.vue';
 import SimpleForms from './SimpleForms.vue';
 import AdvanceUnit from './AdvanceUnit.vue';
 import GainUnitSkill from './GainUnitSkill.vue';
+import DeleteUnit from './DeleteUnit.vue';
 
 export default {
     methods: {
@@ -33,7 +35,8 @@ export default {
         BuyItems,
         SimpleForms,
         AdvanceUnit,
-        GainUnitSkill
+        GainUnitSkill,
+        DeleteUnit
     },
     computed: {
         showSimpleForm() {

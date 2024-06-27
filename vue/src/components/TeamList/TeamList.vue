@@ -22,7 +22,13 @@ export default {
             this.$store.commit('SET_TEAM_LIST', response.data);
           })
           .catch(err => {
-            this.$store.dispatch('showError', err);
+            if (err.response && err.response.status == 401){
+                this.$store.commit("LOGOUT");
+                this.$router.push("/login");
+            } else {
+                this.$store.dispatch('showError', err);
+            }
+            
           });
     },
     components: {

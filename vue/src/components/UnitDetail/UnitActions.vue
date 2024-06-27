@@ -4,6 +4,7 @@
             <button @click="toggleShowAdvance()" v-show="$store.state.currentUnit.unspentExperience >= $store.state.currentUnit.costToAdvance">Gain Advance</button>
             <button>Add Injury</button>
             <button v-show="$store.state.currentUnit.emptySkills > 0" @click="pickSkill()">Pick New Skill</button>
+            <button @click="removeUnit()">Remove Unit</button>
 
         </div>
 
@@ -31,6 +32,10 @@ export default {
         clearForm() {
             this.showAdvance = false;
         },
+        removeUnit() {
+            this.$store.commit('SET_POPUP_SUBFORM', 'DeleteUnit');
+            this.showPopUp();
+        }
     }
 
 }

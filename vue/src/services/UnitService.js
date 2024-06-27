@@ -22,6 +22,12 @@ export default {
   },
   getUnitsForTeam(team) {
     return axios.post(`factions/${team.factionId}`, team);
+  },
+  killUnit(unit) {
+    return axios.delete(`/units/${unit.id}`);
+  },
+  dismissUnit(unit){
+    return axios.delete(`/units/${unit.id}?deleteItems=false`);
   }
 
 }

@@ -24,8 +24,6 @@ export function createStore(currentToken, currentUser) {
       unitSkillsSorted:[],
       manageInventory: false,
       showPopup: false,
-      confirmUnitDelete: false,
-      confirmTeamDelete: false,
       showBuyItems: false,
       showGainMoneyForm: false,
       showLoseMoneyForm: false,
@@ -133,16 +131,8 @@ export function createStore(currentToken, currentUser) {
       TOGGLE_SHOW_POPUP (state){
         state.showPopup = !state.showPopup;
       },
-      TOGGLE_CONFIRM_UNIT_DELETE(state){
-        state.confirmUnitDelete = !state.confirmUnitDelete;
-      },
-      TOGGLE_CONFIRM_TEAM_DELETE(state){
-        state.confirmTeamDelete = !state.confirmTeamDelete;
-      },
       REMOVE_SHOW_POPUP(state){
         state.showPopup = false;
-        state.confirmTeamDelete = false;
-        state.confirmUnitDelete = false;
         state.showNewTeamForm = false;
         state.showNewUnitForm = false;
         state.showBuyItems = false;
@@ -194,10 +184,7 @@ export function createStore(currentToken, currentUser) {
           .catch(err => store.commit('SHOW_ERROR_ON', err.response.data.message));
       },
       showError(context, error) {
-        if (error.response &&error.response.status == 401){
-          store.commit('LOGOUT');
-          return;
-        } else if (error.response) {
+        if (error.response) {
           store.commit('SHOW_ERROR_ON', error.response.data.message);
         } else {
           store.commit('SHOW_ERROR_ON', error);

@@ -28,7 +28,8 @@ export function createStore(currentToken, currentUser) {
       showGainMoneyForm: false,
       showLoseMoneyForm: false,
       showGainExpForm: false,
-      popupSubForm: ''
+      popupSubForm: '',
+      currentPage: ''
     },
     mutations: {
       SET_AUTH_TOKEN(state, token) {
@@ -48,6 +49,9 @@ export function createStore(currentToken, currentUser) {
         state.teamList = [];
         state.currentTeam = {};
         state.currentUnit = {};
+        state.showUnitDetail=false;
+        state.showTeamDetail=false;
+        state.currentPage='login';
         axios.defaults.headers.common = {};
       },
       SET_TEAM_LIST(state, teamList) {
@@ -155,6 +159,9 @@ export function createStore(currentToken, currentUser) {
       },
       SET_POPUP_SUBFORM(state, value){
         state.popupSubForm = value;
+      },
+      SET_CURRENT_PAGE(state, value){
+        state.currentPage = value;
       }
 
     },

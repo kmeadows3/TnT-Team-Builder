@@ -59,6 +59,7 @@ export default {
             TeamsService.updateTeam(this.$store.state.currentTeam)
                 .then(response => {
                     this.$store.commit('SET_CURRENT_TEAM', response.data);
+                    this.$store.dispatch('loadTeams');
                 }).catch(error => this.$store.dispatch('showError', error));
             this.toggleEditName();
         },

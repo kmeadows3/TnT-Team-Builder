@@ -9,7 +9,8 @@
 export default {
   created() {
     this.$store.commit("LOGOUT");
-    this.$router.push("/login");
+    this.$router.push("/");
+    this.$store.commit('SET_CURRENT_PAGE', 'home')
   }
 };
 </script>

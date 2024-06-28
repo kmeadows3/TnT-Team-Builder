@@ -1,7 +1,7 @@
 <template>
   <section class="home main-display">
     <h1>Home</h1>
-    <p>You must be authenticated to see this</p>
+    <p>This the home page. Placeholder for information about using the app, I suppose.</p>
   </section>
 </template>
 

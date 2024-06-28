@@ -1,15 +1,30 @@
 <template>
   <nav>
-    <div id="navigation-links">
-      <router-link v-bind:to="{ name: 'home' }">Home</router-link>
-      <span v-if="$store.state.token != ''">&nbsp;|&nbsp;
-        <router-link v-bind:to="{ name: 'dashboard' }" @click="showTeamListOn()">Team List</router-link>&nbsp;|&nbsp;
-        <router-link v-bind:to="{ name: 'logout' }">Logout</router-link></span>
-    </div>
-    <div id="flexible-nav" v-if="$store.state.showUnitDetail || $store.state.showTeamDetail">
+    <section class="flex-nav">
+      <h1 class="section-title">Navigation</h1>
+      <div class="flex-nav-option team-list" :class="{ selected: $store.state.currentPage == 'home' }" @click="toHome()">
+        Home
+      </div>
+      <div class="flex-nav-option team-list" :class="{ selected: $store.state.showTeamList && $store.state.currentPage == 'dashboard' }"
+        @click="showTeamListOn()" v-show="$store.state.token">
+        Team List
+      </div>
+      <div class="flex-nav-option team-list" :class="{ selected: $store.state.currentPage == 'login' }" @click="toLogin()"
+        v-show="!$store.state.token">
+        Sign In
+      </div>
+
+
+
       <TeamSelect v-if="$store.state.showTeamDetail || $store.state.showUnitDetail" />
       <UnitSelect v-if="$store.state.showUnitDetail" />
-    </div>
+    </section>
+    <section class="flex-nav">
+
+      <div class="flex-nav-option logout-button" @click="logout()" v-show="$store.state.token">Logout</div>
+
+    </section>
+
   </nav>
 
 </template>
@@ -25,12 +40,31 @@ export default {
   },
   methods: {
     showTeamListOn() {
-      if (this.$store.state.showUnitDetail) {
-        this.$store.commit('CLEAR_CURRENT_UNIT');
+      if (this.$store.state.currentPage != 'dashboard') {
+        this.$router.push("dashboard");
+        this.$store.commit('SET_CURRENT_PAGE', 'dashboard')
+      } else {
+        if (this.$store.state.showUnitDetail) {
+          this.$store.commit('CLEAR_CURRENT_UNIT');
+        }
+        if (this.$store.state.showTeamDetail) {
+          this.$store.commit('CLEAR_CURRENT_TEAM');
+        }
       }
-      if (this.$store.state.showTeamDetail) {
-        this.$store.commit('CLEAR_CURRENT_TEAM');
-      }
+
+
+    },
+    logout() {
+      this.$router.push("logout");
+    },
+    toLogin() {
+      this.$router.push("login");
+      this.$store.commit('SET_CURRENT_PAGE', 'login');
+    },
+    toHome() {
+      this.showTeamListOn();
+      this.$router.push("/");
+      this.$store.commit('SET_CURRENT_PAGE', 'home');
     }
   }
 }
@@ -40,18 +74,12 @@ export default {
 nav {
   min-width: 200px;
   max-width: 200px;
-
   border: solid 3px black;
   border-radius: 7px;
-}
-
-nav>div {
-  border: solid 3px black;
-  border-radius: 7px;
-}
-
-nav>div#flexible-nav {
-  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 15px;
 }
 
 nav section.flex-nav {
@@ -59,6 +87,14 @@ nav section.flex-nav {
   flex-direction: column;
   align-items: center;
   gap: 2px;
+}
+
+nav section.flex-nav>h1.section-title {
+  font-size: 1.6rem;
+}
+
+nav section.flex-nav>h2.subsection-title {
+  font-size: 1.3rem;
 }
 
 nav div.flex-nav-option {
@@ -78,6 +114,15 @@ nav div.flex-nav-option.selected {
   border: solid 3px #666;
   background-color: lightyellow;
   margin-bottom: 10px;
+}
+
+
+nav div.flex-nav-option.logout-button {
+  margin-top: 3px;
+}
+
+nav div.flex-nav-option.team-list.selected {
+  margin-bottom: 0px;
 }
 
 nav div.flex-nav-option:hover {

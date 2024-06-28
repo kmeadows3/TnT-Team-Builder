@@ -45,6 +45,7 @@ export default {
         },
         clearForm() {
             this.newTeam = {};
+            this.$store.commit('REMOVE_SHOW_POPUP');
             this.$store.commit('TOGGLE_NEW_TEAM_FORM');
         },
         createTeam() {

@@ -122,7 +122,6 @@ export default {
                         this.$store.dispatch('reloadCurrentUnit');
                     })
                     .catch(err => {
-                        console.log(err);
                         this.$store.dispatch('showError', err);
                     })
             } else {

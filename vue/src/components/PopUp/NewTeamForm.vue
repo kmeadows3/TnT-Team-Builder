@@ -46,7 +46,6 @@ export default {
         clearForm() {
             this.newTeam = {};
             this.$store.commit('REMOVE_SHOW_POPUP');
-            this.$store.commit('TOGGLE_NEW_TEAM_FORM');
         },
         createTeam() {
             this.newTeam.userId = this.$store.state.user.id;
@@ -54,8 +53,11 @@ export default {
                 .then(response => {
                     this.$store.dispatch('loadTeams');
                     this.$store.commit('SET_CURRENT_TEAM', response.data);
-                }).catch(error => this.$store.dispatch('showError', error));
-            this.clearForm();
+                    this.clearForm();
+                }).catch(error => {
+                    this.$store.dispatch('showError', error);
+                    this.clearForm();
+                });
         }
     },
     created() {

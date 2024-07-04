@@ -80,4 +80,8 @@ export default {
 label {
   margin-right: 0.5rem;
 }
+section#register>form{
+  display: flex;
+  flex-direction: column;
+}
 </style>

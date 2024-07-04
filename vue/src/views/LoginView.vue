@@ -72,4 +72,9 @@ export default {
 label {
   margin-right: 0.5rem;
 }
+
+div#login>form{
+  display: flex;
+  flex-direction: column;
+}
 </style>

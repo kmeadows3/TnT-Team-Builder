@@ -21,7 +21,6 @@ public class UnitService {
     private final UnitDao unitDao;
     private final UnitValidator unitValidator;
     private final TeamService teamService;
-
     private final ItemDao itemDao;
 
     public UnitService(UnitDao unitDao, ItemDao itemDao, UnitValidator unitValidator, TeamService teamService) {

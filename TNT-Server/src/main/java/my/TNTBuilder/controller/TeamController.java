@@ -140,4 +140,13 @@ public class TeamController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
+
+    @RequestMapping(path="/teams/{id}", method = RequestMethod.DELETE)
+    public void deleteUnit(@PathVariable int id, Principal principal){
+        try {
+            teamService.deleteTeam(id, userDao.getUserIdByUsername(principal.getName()));
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 }

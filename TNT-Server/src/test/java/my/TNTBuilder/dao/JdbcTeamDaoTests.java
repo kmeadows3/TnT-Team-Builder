@@ -118,4 +118,15 @@ public class JdbcTeamDaoTests extends BaseDaoTests{
         Assert.assertEquals(TEAM_1, testTeam);
     }
 
+    @Test
+    public void deleteTeam_deletes_team(){
+        sut.deleteTeam(6);
+        List<Team> teamList = sut.getAllTeamsForUser(4);
+
+        Assert.assertEquals(3, teamList.size());
+        for (Team team : teamList){
+            Assert.assertNotEquals(6, team.getId());
+        }
+    }
+
 }

@@ -1,12 +1,15 @@
 package my.TNTBuilder.service;
 
+import my.TNTBuilder.dao.*;
 import my.TNTBuilder.model.FactionDTO;
 import my.TNTBuilder.model.Unit;
+import my.TNTBuilder.model.inventory.Item;
 import my.TNTBuilder.validator.TeamValidator;
-import my.TNTBuilder.dao.TeamDao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.Team;
+import my.TNTBuilder.validator.UnitValidator;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,9 +18,11 @@ import java.util.List;
 public class TeamService {
     private final TeamDao teamDao;
     private final TeamValidator teamValidator;
-    public TeamService (TeamDao teamDao, TeamValidator teamValidator){
+    private final JdbcTemplate jdbcTemplate;
+    public TeamService (TeamDao teamDao, TeamValidator teamValidator, JdbcTemplate jdbcTemplate){
         this.teamDao = teamDao;
         this.teamValidator = teamValidator;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     /*
@@ -139,6 +144,24 @@ public class TeamService {
         return team;
     }
 
+    public void deleteTeam(int teamId, int userId) throws ServiceException{
+        Team team = getTeamById(teamId, userId);
+        UnitDao unitDao = new JdbcUnitDao(jdbcTemplate);
+        ItemDao itemDao = new JdbcItemDao(jdbcTemplate);
+        UnitService unitService = new UnitService(unitDao, itemDao, new UnitValidator(unitDao), this);
+        try {
+            for(Unit unit : team.getUnitList()){
+                unitService.deleteUnit(unit.getId(), userId, true);
+            }
+            for (Item item : team.getInventory()){
+                itemDao.deleteItem(item.getId());
+            }
+
+            teamDao.deleteTeam(team.getId());
+        } catch (DaoException e){
+            throw new ServiceException(e.getMessage());
+        }
+    }
 
 
     /*

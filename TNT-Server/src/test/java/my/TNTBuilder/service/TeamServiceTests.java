@@ -24,7 +24,7 @@ public class TeamServiceTests extends BaseDaoTests {
     public void setup(){
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         TeamDao teamDao = new JdbcTeamDao(jdbcTemplate);
-        sut = new TeamService(teamDao, new TeamValidator());
+        sut = new TeamService(teamDao, new TeamValidator(), jdbcTemplate);
         TEAM_1.setMoney(500);
 
     }
@@ -204,4 +204,50 @@ public class TeamServiceTests extends BaseDaoTests {
         Assert.fail();
     }
 
+    @Test
+    public void deleteTeams_deletes_team_no_units_or_items() throws ServiceException {
+        sut.deleteTeam(6, 4);
+        List<Team> teamList = sut.getAllTeamsForUser(4);
+        Assert.assertEquals(3, teamList.size());
+        for (Team team : teamList){
+            Assert.assertNotEquals(6, team.getId());
+        }
+    }
+
+    @Test
+    public void deleteTeams_deletes_team_both_units_and_items() throws ServiceException {
+        sut.deleteTeam(1, 1);
+        List<Team> teamList = sut.getAllTeamsForUser(1);
+        Assert.assertEquals(1, teamList.size());
+        for (Team team : teamList){
+            Assert.assertNotEquals(1, team.getId());
+        }
+    }
+
+    @Test
+    public void deleteTeams_deletes_team_no_units_only_items() throws ServiceException {
+        sut.deleteTeam(2, 1);
+        List<Team> teamList = sut.getAllTeamsForUser(1);
+        Assert.assertEquals(1, teamList.size());
+        for (Team team : teamList){
+            Assert.assertNotEquals(2, team.getId());
+        }
+    }
+
+    @Test
+    public void deleteTeams_deletes_team_no_items_only_units() throws ServiceException {
+        sut.deleteTeam(7, 4);
+        List<Team> teamList = sut.getAllTeamsForUser(4);
+        Assert.assertEquals(3, teamList.size());
+        for (Team team : teamList){
+            Assert.assertNotEquals(7, team.getId());
+        }
+    }
+
+    @Test (expected = ServiceException.class)
+    public void deleteTeams_throws_exception_user_does_not_own_team() throws ServiceException {
+        sut.deleteTeam(1, 4);
+        Assert.fail();
+
+    }
 }

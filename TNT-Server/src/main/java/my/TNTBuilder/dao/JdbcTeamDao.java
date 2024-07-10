@@ -147,6 +147,21 @@ public class JdbcTeamDao implements TeamDao{
         return team;
     }
 
+    @Override
+    public void deleteTeam(int teamId) throws DaoException {
+        try {
+            String sql = "DELETE FROM team WHERE team_id = ?";
+            int rowsDeleted = jdbcTemplate.update(sql, teamId);
+            if (rowsDeleted != 1){
+                throw new DaoException("Incorrect number of teams deleted");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+    }
+
 
     /*
     PRIVATE METHODS

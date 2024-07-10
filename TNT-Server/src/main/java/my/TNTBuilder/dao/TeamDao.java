@@ -48,4 +48,11 @@ public interface TeamDao {
      * @return the team the unit belongs to
      */
     Team getTeamByUnitId(int unitId) throws DaoException;
+
+    /**
+     * Deletes team from database
+     * @param teamId
+     * @throws DaoException
+     */
+    void deleteTeam(int teamId) throws DaoException;
 }

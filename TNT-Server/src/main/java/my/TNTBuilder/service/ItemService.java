@@ -49,6 +49,10 @@ public class ItemService {
             throw new ServiceException(e.getMessage());
         }
 
+        if (referenceItem.isRelic()){
+            validateTeamCanHaveRelic(referenceItem, teamService.getTeamByUnitId(unit.getId()));
+        }
+
         validateUnitCanHaveItem(referenceItem, unit);
 
         int itemId = 0;
@@ -241,8 +245,6 @@ public class ItemService {
             throw new ValidationException("Team cannot take another relic into battle. Other relics must be sent to " +
                     "the team inventory before this item can be added to this unit.");
         }
-
-        validateTeamCanHaveRelic(itemToAddToInventory, team);
     }
 
     private void validateTeamCanHaveRelic(Item itemToAddToInventory, Team team) throws ValidationException {

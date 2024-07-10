@@ -82,7 +82,7 @@ public class Item {
         } else if (handsUsed >= 2 && canOnlyHoldOneItem) {
             throw new ValidationException("Unit can only equip a single 1-handed item.");
         } else if (handsUsed > 2){
-            throw new ValidationException("Unit's hands are full, cannot equip any more items.");
+            throw new ValidationException("Unit does not have enough hands to hold this item.");
         }
 
         return true;

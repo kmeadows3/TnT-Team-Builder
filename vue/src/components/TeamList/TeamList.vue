@@ -1,7 +1,7 @@
 <template>
     <section class="main-display">
         <h1 class ="page-title">Choose Your Team</h1>
-        <div class="controls">
+        <div class="button-container">
             <button @click="openForm()">Create New Team</button>
         </div>
         

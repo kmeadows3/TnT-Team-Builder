@@ -16,6 +16,9 @@ export default {
   },
   getTeamById(teamId){
     return axios.get(`/teams/${teamId}`);
+  },
+  deleteTeam(teamId){
+    return axios.delete(`/teams/${teamId}`);
   }
 
 }

@@ -18,6 +18,7 @@
             <button @click="toggleShowGainForm()">Gain Money</button>
             <button @click="toggleShowLossForm()">Lose Money</button>
             <button @click="payUpkeep()">Pay Upkeep</button>
+            <button @click="deleteTeam()">Delete Team</button>
         </div>
         <div class="team-box">
             <TeamSummary />
@@ -86,6 +87,10 @@ export default {
         },
         openNewUnitForm() {
             this.$store.commit('TOGGLE_NEW_UNIT_FORM');
+            this.$store.commit('TOGGLE_SHOW_POPUP');
+        },
+        deleteTeam(){
+            this.$store.commit('SET_POPUP_SUBFORM', 'DeleteTeam');
             this.$store.commit('TOGGLE_SHOW_POPUP');
         }
 

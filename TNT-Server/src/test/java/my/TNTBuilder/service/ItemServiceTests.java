@@ -360,6 +360,19 @@ public class ItemServiceTests extends BaseDaoTests {
     }
 
     @Test
+    public void transferItem_works_when_moving_relic_item_from_team_to_Unit() throws ServiceException {
+        sut.transferItem(9, 2, 2);
+        List<Item> teamTestList = itemDao.getAllItemsForTeam(3);
+        List<Item> unitTestList = itemDao.getAllItemsForUnit(2);
+
+        TEAM_RELIC_WEAPON.setId(9);
+        Assert.assertEquals(0, teamTestList.size());
+        Assert.assertFalse(teamTestList.contains(ARMOR));
+        Assert.assertEquals(2, unitTestList.size());
+        Assert.assertTrue(unitTestList.contains(TEAM_RELIC_WEAPON));
+    }
+
+    @Test
     public void transferItem_unequips_equipped_item() throws ServiceException {
         sut.toggleEquipItem(2, 1, 1);
         sut.transferItem(2, 1, 1);

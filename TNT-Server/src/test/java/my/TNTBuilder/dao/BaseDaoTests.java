@@ -54,6 +54,7 @@ public abstract class BaseDaoTests {
             6, 6, 2, "Melee Weapon", false);
 
 
+
     protected static final Unit UNIT1 = new Unit(1, 1, "UnitName1", "Trade Master", "Leader",
             "Human", 50,10,5,7,6,8,6,5,0,
             "Special rules description",100,0,0,0,
@@ -78,7 +79,9 @@ public abstract class BaseDaoTests {
     protected final Team TEAM_2 = new Team(2, 1, "Team 2", "Raiders", 3, 1500,
             new ArrayList<>(), List.of(TEAM_RELIC_WEAPON));
     protected final Team TEAM_3 = new Team(3, 2, "Team 3", "Mutants", 2, 1000,
-            Collections.singletonList(UNIT2), new ArrayList<>());
+            Collections.singletonList(UNIT2), Collections.singletonList(new Weapon(9, 6, "Relic Weapon", 6,
+            "Relic Weapon Desc", new ArrayList<>(), "Rare", true, 6, 0,
+            6, 6, 2, "Melee Weapon", false)));
     protected final FactionDTO faction1 = new FactionDTO(1, "Caravanners");
 
 

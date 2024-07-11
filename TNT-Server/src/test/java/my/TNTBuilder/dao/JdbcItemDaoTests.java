@@ -68,7 +68,7 @@ public class JdbcItemDaoTests extends BaseDaoTests{
 
     @Test
     public void getAllItemsForTeam_returns_empty_list_with_no_items() {
-        List<Item> testList = sut.getAllItemsForTeam(3);
+        List<Item> testList = sut.getAllItemsForTeam(4);
         Assert.assertTrue(testList.isEmpty());
     }
 
@@ -77,7 +77,7 @@ public class JdbcItemDaoTests extends BaseDaoTests{
         int newId = sut.addItemToTeam(1, 3);
         ARMOR.setId(newId);
         List<Item> testList = sut.getAllItemsForTeam(3);
-        Assert.assertEquals(1, testList.size());
+        Assert.assertEquals(2, testList.size());
         Assert.assertTrue(testList.contains(ARMOR));
         ARMOR.setId(1);
     }

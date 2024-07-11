@@ -298,11 +298,14 @@ VALUES (1, 1), -- ID 1
        (1, 3), -- ID 3
        (2, 6); -- ID 4
 
+
 INSERT INTO inventory (team_id, item_ref_id)
 VALUES (1, 1),  -- ID 5
        (1, 5),  -- ID 6
        (1, 3), -- ID 7
-       (2, 6); -- ID 8
+       (2, 6), -- ID 8
+       (3, 6); -- ID 9
+
 
 
 COMMIT;

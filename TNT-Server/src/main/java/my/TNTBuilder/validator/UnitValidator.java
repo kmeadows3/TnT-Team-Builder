@@ -41,6 +41,7 @@ public class UnitValidator {
 
         if (    !( onlyNameChanged(currentUnit, updatedUnit)
                 || onlyUnspentExpGained(currentUnit, updatedUnit)
+                || onlyTempInjuryChange(currentUnit, updatedUnit)
                 || ( validFivePointLevel(currentUnit, updatedUnit) && unitCanAffordAdvance(currentUnit) )
                 || ( validTenPointLevel(currentUnit, updatedUnit)  && unitCanAffordAdvance(currentUnit) )
                 )
@@ -96,6 +97,35 @@ public class UnitValidator {
     /*
     Private Methods
     */
+    private boolean onlyTempInjuryChange(Unit unit, Unit updatedUnit){
+        if ( unit.isLongRecovery() != updatedUnit.isLongRecovery() ^ unit.isBangedUp() != updatedUnit.isBangedUp()) {
+            return unit.getId() == updatedUnit.getId() && unit.getTeamId() == updatedUnit.getTeamId()
+                    && unit.getBaseCost() == updatedUnit.getBaseCost() && unit.getWounds() == updatedUnit.getWounds()
+                    && unit.getDefense() == updatedUnit.getDefense() && unit.getMettle() == updatedUnit.getMettle()
+                    && unit.getMove() == updatedUnit.getMove() && unit.getRanged() == updatedUnit.getRanged()
+                    && unit.getMelee() == updatedUnit.getMelee() && unit.getStrength() == updatedUnit.getStrength()
+                    && unit.getEmptySkills() == updatedUnit.getEmptySkills()
+                    && unit.getSpentExperience() == updatedUnit.getSpentExperience()
+                    && unit.getUnspentExperience() == updatedUnit.getUnspentExperience()
+                    && unit.getTotalAdvances() == updatedUnit.getTotalAdvances()
+                    && unit.getTenPointAdvances() == updatedUnit.getTenPointAdvances()
+                    && Objects.equals(unit.getName(), updatedUnit.getName())
+                    && Objects.equals(unit.getUnitClass(), updatedUnit.getUnitClass())
+                    && Objects.equals(unit.getRank(), updatedUnit.getRank())
+                    && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
+                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
+                    && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
+                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
+                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
+                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
+                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
+
+        }
+        return false;
+
+    }
+
+
     private void confirmNewUnitRankIsValidOption(Unit potentialUnit, Team team) throws ValidationException {
 
         if (potentialUnit.getRank().equalsIgnoreCase("Leader") && !teamMustBuyLeader(team)) {

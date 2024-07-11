@@ -22,6 +22,7 @@ export function createStore(currentToken, currentUser) {
       unitInventoryTraits: [],
       teamInventoryTraits: [],
       unitSkillsSorted:[],
+      unitInjuriesSorted:[],
       manageInventory: false,
       showPopup: false,
       showBuyItems: false,
@@ -78,6 +79,7 @@ export function createStore(currentToken, currentUser) {
         state.showTeamDetail = false;
         store.dispatch('updateUnitInventoryTraits');
         store.dispatch('sortUnitSkills');
+        store.dispatch('sortInjuries');
       },
       CLEAR_CURRENT_UNIT(state) {
         store.dispatch('reloadCurrentTeam');
@@ -131,6 +133,9 @@ export function createStore(currentToken, currentUser) {
       },
       SET_UNIT_SKILLS_SORTED(state, value){
         state.unitSkillsSorted = value;
+      },
+      SET_UNIT_INJURIES_SORTED(state, value){
+        state.unitInjuriesSorted = value;
       },
       TOGGLE_SHOW_POPUP (state){
         state.showPopup = !state.showPopup;
@@ -218,9 +223,20 @@ export function createStore(currentToken, currentUser) {
         store.commit('SET_UNIT_INVENTORY_TRAITS', unitTraits);
       },
       sortUnitSkills(context) {
-        let unitSkills = store.state.currentUnit.skills;
+        let unitSkills = store.state.currentUnit.skills.filter(skill => skill.skillsetId != 16);
         unitSkills = unitSkills.sort((a, b) => a.name.localeCompare(b.name))
         store.commit('SET_UNIT_SKILLS_SORTED', unitSkills);
+      },
+      sortInjuries(context){
+        let unitInjuries = store.state.currentUnit.skills.filter(skill => skill.skillsetId == 16);
+        if (store.state.currentUnit.longRecovery){
+          unitInjuries.push({name: 'Long Recovery', description: 'This unit misses the next campaign game.'})
+        }
+        if (store.state.currentUnit.bangedUp){
+          unitInjuries.push({name: 'Banged Up', description: 'This unit suffers -1 penalty to all rolls it makes in the next campaign game.'})
+        }
+        unitInjuries = unitInjuries.sort((a, b) => a.name.localeCompare(b.name))
+        store.commit('SET_UNIT_INJURIES_SORTED', unitInjuries);
       }
     }
   });

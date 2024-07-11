@@ -16,8 +16,8 @@
 
 
 
-      <TeamSelect v-if="$store.state.showTeamDetail || $store.state.showUnitDetail" />
-      <UnitSelect v-if="$store.state.showUnitDetail" />
+      <TeamSelect v-if="($store.state.showTeamDetail || $store.state.showUnitDetail) && $store.state.currentPage != 'login' && $store.state.currentPage !='home'" />
+      <UnitSelect v-if="$store.state.showUnitDetail && $store.state.currentPage != 'login' && $store.state.currentPage !='home'" />
     </section>
     <section class="flex-nav">
 

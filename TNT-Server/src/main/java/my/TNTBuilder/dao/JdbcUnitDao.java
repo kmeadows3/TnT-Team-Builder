@@ -439,6 +439,8 @@ public class JdbcUnitDao implements UnitDao{
         newUnit.setUnspentExperience(row.getInt("unspent_exp"));
         newUnit.setTotalAdvances(row.getInt("total_advances"));
         newUnit.setTenPointAdvances(row.getInt("ten_point_advances"));
+        newUnit.setBangedUp(row.getBoolean("is_banged_up"));
+        newUnit.setLongRecovery(row.getBoolean("is_long_recovery"));
 
         newUnit.setSkills(getUnitSkills(newUnit.getId()));
 

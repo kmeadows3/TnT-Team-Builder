@@ -2,8 +2,8 @@
     <section class="main-display">
         <UnitBasics />
         <UnitStats />
-        <UnitInventory />
         <UnitSkills />
+        <UnitInventory />
         <UnitExperience />
     </section>
 </template>

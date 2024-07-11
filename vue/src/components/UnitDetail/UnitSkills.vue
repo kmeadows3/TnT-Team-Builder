@@ -1,79 +1,43 @@
 <template>
-    <div>
+    <div class="ref-container">
         <div class="reference">
             <h1 class="section-title">Special Abilities</h1>
-            <div v-for="skill in $store.state.unitSkillsSorted" :key="skill.id">
+            <div v-for="skill in $store.state.unitSkillsSorted" :key="'skill-'+skill.id">
                 <h2 class="reference-label">{{ skill.name }}</h2>
                 <p class="reference-desc">{{ skill.description }}</p>
             </div>
-
-
         </div>
-
-
+        <div class="reference" v-show="this.$store.state.unitInjuriesSorted.length">
+            <h1 class="section-title">Injuries</h1>
+            <div v-for="injury in $store.state.unitInjuriesSorted" :key="'injury-'+ injury.id">
+                <h2 class="reference-label">{{ injury.name }}</h2>
+                <p class="reference-desc">{{ injury.description }}</p>
+            </div>
+        </div>
     </div>
 </template>
 
 
 <script>
-import UnitService from '../../services/UnitService';
-
 export default {
    
     created() {
         this.$store.dispatch('sortUnitSkills');
+        this.$store.dispatch('sortInjuries');
     },
 }
 </script>
 
 
 <style scoped>
-div.skillsets {
-    display: inline-block;
-    text-align: center;
-}
 
-div.skillFinder {
+div.ref-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-basis: auto;
-    width: 100%;
-    gap: 20px;
 }
 
-div.skillFinder>select {
+div.reference {
+    min-width: 50%;
     flex-grow: 1;
-    max-width: 150px;
 }
 
-div.skillFinder>p {
-    flex-grow: 3;
-    margin: 5px 0px;
-}
-
-div.skill-purchase-info {
-    width: 100%;
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-div.purchaseSkills {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 0px;
-}
-
-form {
-    width: 85%;
-}
-
-form button {
-    margin: auto;
-}
 </style>

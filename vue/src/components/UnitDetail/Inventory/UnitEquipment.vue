@@ -69,5 +69,9 @@ div.item-list>.equipment-large {
     min-width: 150px;
     flex-grow: 5;
     flex-basis: 50%;
+    border-top: none;
+    border-right: dotted 1px black;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 </style>

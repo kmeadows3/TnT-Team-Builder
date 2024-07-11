@@ -317,7 +317,7 @@ div.item-table {
 div.item-list {
     border-color: black;
     border-style: solid;
-    border-width: 0px 0px 1px 0px;
+    border-width: 0px 0px 2px 0px;
     border-radius: 2px;
     display: flex;
     min-width: 100%;
@@ -336,6 +336,11 @@ div.item-list>div {
     border-width: 0px 1px 0px 0px;
 }
 
+div.item-list>div.item-name{
+    border-style: solid;
+    font-weight: bold;
+}
+
 div.item-list>div:last-child {
     border-style: none;
 }
@@ -344,6 +349,16 @@ div.item-list>div.item-special-rules{
     display: block;
     text-align: start;
     padding-left: 3px;
+    border-top: dotted 1px black;
+    border-right: none;
+    font-size: .9em;
+    & em {
+        text-decoration: underline;
+        font-style: normal;
+    }
+    & span{
+        font-style: italic;
+    }
 }
 
 div>div.item-action {

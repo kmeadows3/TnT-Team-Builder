@@ -230,10 +230,10 @@ export function createStore(currentToken, currentUser) {
       sortInjuries(context){
         let unitInjuries = store.state.currentUnit.skills.filter(skill => skill.skillsetId == 16);
         if (store.state.currentUnit.longRecovery){
-          unitInjuries.push({name: 'Long Recovery', description: 'This unit misses the next campaign game.'})
+          unitInjuries.push({name: 'Long Recovery', description: 'This unit misses the next campaign game.', removeable: true})
         }
         if (store.state.currentUnit.bangedUp){
-          unitInjuries.push({name: 'Banged Up', description: 'This unit suffers -1 penalty to all rolls it makes in the next campaign game.'})
+          unitInjuries.push({name: 'Banged Up', description: 'This unit suffers -1 penalty to all rolls it makes in the next campaign game.', removeable: true})
         }
         unitInjuries = unitInjuries.sort((a, b) => a.name.localeCompare(b.name))
         store.commit('SET_UNIT_INJURIES_SORTED', unitInjuries);

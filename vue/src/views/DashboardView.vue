@@ -276,9 +276,10 @@ div.reference h2.reference-label {
 
 div.reference p.reference-desc {
     min-width: 100px;
+    width: 100%;
     margin: 5px;
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
 }
 

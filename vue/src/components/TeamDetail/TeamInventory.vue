@@ -109,4 +109,9 @@ div.item-list>.item-large {
 div.team-inventory {
     margin-top: 10px;
 }
+
+div.team-inventory div.item-special-rules {
+    border-top: none;
+    border-right: dotted 1px black;
+}
 </style>

@@ -379,6 +379,26 @@ public class UnitServiceTests extends BaseDaoTests {
 
     }
 
+    @Test
+    public void getPotentialInjuries_lists_all_injuries_for_uninjured_unit() throws ServiceException{
+        List<Skill> testList = sut.getPotentialInjuries(UNIT1.getId(), 1);
+        Assert.assertEquals(2, testList.size());
+        Assert.assertTrue(testList.contains(BANGED_HEAD));
+    }
+
+    @Test
+    public void getPotentialInjuries_does_not_list_already_existing_injury() throws ServiceException{
+        List<Skill> testList = sut.getPotentialInjuries(UNIT3.getId(), 1);
+        Assert.assertEquals(1, testList.size());
+        Assert.assertTrue(testList.contains(BANGED_HEAD));
+        Assert.assertFalse(testList.contains(GASHED_LEG));
+    }
+
+    @Test (expected = ServiceException.class)
+    public void getPotentialInjuries_throws_exception_user_does_not_own_unit() throws ServiceException{
+        List<Skill> testList = sut.getPotentialInjuries(UNIT1.getId(), 2);
+        Assert.fail();
+    }
 
 
     /*

@@ -25,6 +25,8 @@ public abstract class BaseDaoTests {
     protected static final User USER_1 = new User(1, "user1", "user1", "USER");
     protected static final User USER_2 = new User(2, "user2", "user2", "USER");
     protected static final User USER_3 = new User(3, "user3", "user3", "USER");
+    protected static final Skill BANGED_HEAD = new Skill(12, "Banged Head", "-1 penalty to Mettle", 16, "Injuries");
+    protected static final Skill GASHED_LEG = new Skill(11, "Gashed Leg", "-1 penalty to Move", 16, "Injuries");
 
     protected static final Armor ARMOR = new Armor(1, 1, "Armor 1", 1, "N/A",
             List.of(new ItemTrait(1, "Trait 1", "Trait 1 Desc")), "N/A", false, 1,
@@ -53,8 +55,6 @@ public abstract class BaseDaoTests {
             "Relic Weapon Desc", new ArrayList<>(), "Rare", true, 6, 0,
             6, 6, 2, "Melee Weapon", false);
 
-
-
     protected static final Unit UNIT1 = new Unit(1, 1, "UnitName1", "Trade Master", "Leader",
             "Human", 50,10,5,7,6,8,6,5,0,
             "Special rules description",100,0,0,0,
@@ -72,7 +72,7 @@ public abstract class BaseDaoTests {
             List.of(new Skillset(6, "Brawn", "Skill")),
             List.of(new Skill(7, "Bully", "All enemies defeated by this model in" +
                     " close combat are knocked prone in addition to any other combat result.", 6, "Brawn"),
-                    new Skill(9, "Up-Armed", "Can Equip Support Weapons", 15, "General Abilities")),
+                    new Skill(9, "Up-Armed", "Can Equip Support Weapons", 15, "General Abilities"), GASHED_LEG),
             new ArrayList<>());
     protected final Team TEAM_1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500,
             Arrays.asList(UNIT1, UNIT3), Arrays.asList(TEAM_ARMOR, TEAM_WEAPON, TEAM_ITEM));
@@ -83,6 +83,8 @@ public abstract class BaseDaoTests {
             "Relic Weapon Desc", new ArrayList<>(), "Rare", true, 6, 0,
             6, 6, 2, "Melee Weapon", false)));
     protected final FactionDTO faction1 = new FactionDTO(1, "Caravanners");
+
+
 
 
 

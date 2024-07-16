@@ -153,6 +153,20 @@ public class UnitService {
         return unit;
     }
 
+    public List<Skill> getPotentialInjuries(int unitId, int userId) throws ServiceException{
+        Unit unit = null;
+        List<Skill> injuries = null;
+        try {
+            unit = unitDao.getUnitById(unitId, userId);
+            injuries = unitDao.getPotentialInjuries(unit);
+            if (injuries == null){
+                throw new ServiceException("No injuries returned");
+            }
+        } catch (DaoException e){
+            throw new ServiceException(e.getMessage());
+        }
+        return injuries;
+    }
 
 
     /*

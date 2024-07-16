@@ -81,4 +81,6 @@ public interface UnitDao {
     void addSkillToUnit(int skillId, int unitId) throws DaoException;
 
     void deleteUnit(Unit unit) throws DaoException;
+
+    List<Skill> getPotentialInjuries(Unit unit) throws DaoException;
 }

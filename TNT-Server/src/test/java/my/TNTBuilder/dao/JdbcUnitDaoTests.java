@@ -186,6 +186,21 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
 
     }
 
+    @Test
+    public void getPotentialInjuries_lists_all_injuries_for_uninjured_unit(){
+        List<Skill> testList = sut.getPotentialInjuries(UNIT1);
+        Assert.assertEquals(2, testList.size());
+        Assert.assertTrue(testList.contains(BANGED_HEAD));
+    }
+
+    @Test
+    public void getPotentialInjuries_does_not_list_already_existing_injury(){
+        List<Skill> testList = sut.getPotentialInjuries(UNIT3);
+        Assert.assertEquals(1, testList.size());
+        Assert.assertTrue(testList.contains(BANGED_HEAD));
+        Assert.assertFalse(testList.contains(GASHED_LEG));
+    }
+
 
 
 }

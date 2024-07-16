@@ -14,11 +14,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Component
 public class JdbcUnitDao implements UnitDao{
     private final int FREELANCER_FACTION_ID = 7;
+    private final int INJURY_SKILLSET_ID = 16;
 
     private final JdbcTemplate jdbcTemplate;
     private final String SELECT_ALL_FROM_UNIT_REFERENCE = "SELECT unit_ref_id, faction_id, class, rank, species, base_cost, " +
@@ -275,6 +277,30 @@ public class JdbcUnitDao implements UnitDao{
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to database", e);
         }
+    }
+
+    @Override
+    public List<Skill> getPotentialInjuries(Unit unit) throws DaoException{
+        String sql = SELECT_ALL_FROM_SKILL_REFERENCE + "WHERE sr.skillset_id = " + INJURY_SKILLSET_ID;
+        List<Skill> potentialInjuries = new ArrayList<>();
+
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+            while(results.next()){
+                Skill skill = mapRowToSkill(results);
+                potentialInjuries.add(skill);
+            }
+
+            List<Skill> currentInjuries = unit.getSkills().stream().filter(skill -> skill.getSkillsetId()==16).collect(Collectors.toList());
+            for (Skill skill : currentInjuries){
+                potentialInjuries.remove(skill);
+            }
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        }
+        return potentialInjuries;
+
     }
 
     /*

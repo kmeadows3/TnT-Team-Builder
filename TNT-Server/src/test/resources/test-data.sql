@@ -215,12 +215,12 @@ INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(8, 'Motivator', 'All friendly models withing 6" of this model gain +1 to activation tests. Motivator may not stack with itself.'),
 	(4, 'Reconnoiter', 'At the start of the game after all models have deployed but before init is determined make a free move action.'),
 	(3, 'Trekker', 'When moving through Difficult Terrain attempt an Agility test (MET/TN 10) for free. On pass move through terrain without movement penalty.'),
-	(7, 'Brave', '+2 bonus when making Will tests.'),
+	(7, 'Brave', '+2 bonus when making Will tests.'), -- ID 5
 	(6, 'Brute', 'Gain +1 to Strength Stat when making Melee attacks. Ignore heavy weapons rule.'),
 	(6, 'Bully', 'All enemies defeated by this model in close combat are knocked prone in addition to any other combat result.'),
 	(15, 'Dumb', 'Takes a -2 penalty to intelligence tests'),
 	(15, 'Up-Armed', 'Can Equip Support Weapons'),
-	(15, 'RagTag', 'Cannot equip more than 15BS worth of gear'),
+	(15, 'RagTag', 'Cannot equip more than 15BS worth of gear'), -- ID 10
 	(16, 'Gashed Leg', '-1 penalty to Move'),
 	(16, 'Banged Head', '-1 penalty to Mettle');
 
@@ -290,6 +290,7 @@ VALUES (1, 3),
 INSERT INTO unit_skill (unit_id, skill_id)
 VALUES (3, 7),
     (3, 9),
+    (3, 11),
     (7, 10);
 
 INSERT INTO inventory (unit_id, item_ref_id)

@@ -176,4 +176,22 @@ public class UnitController {
         }
     }
 
+    /**
+     * Returns a list of injuries a unit can gain
+     * @param unitId the id of the unit
+     * @return the list of injuries the unit doesn't already have
+     */
+    @RequestMapping(path="/units/{unitId}/injuries", method = RequestMethod.GET)
+    public List<Skill> getNewInjuries(@PathVariable int unitId, Principal principal){
+        List<Skill> injuries = null;
+        try {
+            injuries = unitService.getPotentialInjuries(unitId, userDao.getUserIdByUsername(principal.getName()));
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+
+        return injuries;
+    }
+
+
 }

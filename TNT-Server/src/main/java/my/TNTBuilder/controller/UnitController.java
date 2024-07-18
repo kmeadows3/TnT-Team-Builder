@@ -128,7 +128,7 @@ public class UnitController {
     @RequestMapping(path="/units/{unitId}/skills", method = RequestMethod.POST)
     public void addSkillToUnit(@RequestBody Skill skill, @PathVariable int unitId, Principal principal){
         try {
-            unitService.addSkillToUnit(skill.getId(), unitId, userDao.getUserIdByUsername(principal.getName()));
+            unitService.addSkillToUnit(skill, unitId, userDao.getUserIdByUsername(principal.getName()));
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (DaoException e){

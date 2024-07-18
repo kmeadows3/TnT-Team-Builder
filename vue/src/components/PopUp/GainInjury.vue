@@ -51,8 +51,35 @@ export default {
                 }).catch(error => this.$store.dispatch('showError', error));
         },
         addInjury() {
-            //TODO
-            this.cancel();
+            if (this.newInjury.removeable){
+
+                if (this.newInjury.name == 'Long Recovery'){
+                    this.$store.state.currentUnit.longRecovery = true;
+                }
+
+                if (this.newInjury.name == 'Banged Up'){
+                    this.$store.state.currentUnit.bangedUp = true;
+                }
+
+                UnitService.updateUnit(this.$store.state.currentUnit)
+                .then(response => {
+                    this.$store.dispatch('reloadCurrentUnit');
+                    this.cancel();
+                })
+                .catch(error => this.$store.dispatch('showError', error));
+
+            } else {
+                UnitService.addSkill(this.$store.state.currentUnit.id, this.newInjury)
+                .then(response => {
+                    this.$store.dispatch('reloadCurrentUnit');
+                    this.cancel();
+                })
+                .catch(error => this.$store.dispatch('showError', error));
+            }
+            
+
+
+            
         },
         cancel() {
             this.potentialInjuries = [];

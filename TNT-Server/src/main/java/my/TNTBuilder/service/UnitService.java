@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @Component
 public class UnitService {
 
+    public static final int INJURY_SKILLSET_ID = 16;
     private final UnitDao unitDao;
     private final UnitValidator unitValidator;
     private final TeamService teamService;
@@ -82,10 +83,10 @@ public class UnitService {
         return currentUnit;
     }
 
-    public void addSkillToUnit(int skillId, int unitId, int userId) throws ServiceException{
+    public void addSkillToUnit(Skill skill, int unitId, int userId) throws ServiceException{
         try {
-            if (unitCanAddSkill(unitId, skillId, userId)){
-                unitDao.addSkillToUnit(skillId, unitId);
+            if (unitCanAddSkill(unitId, skill, userId)){
+                unitDao.addSkillToUnit(skill.getId(), unitId);
                 Unit unit = unitDao.getUnitById(unitId, userId);
                 unit.setEmptySkills(unit.getEmptySkills() - 1);
                 unitDao.updateUnit(unit);
@@ -217,24 +218,30 @@ public class UnitService {
         updatedUnit.setTotalAdvances(updatedUnit.getTotalAdvances() + 1);
     }
 
-    private boolean unitCanAddSkill(int unitId, int skillId, int userId) throws ServiceException, DaoException{
+    private boolean unitCanAddSkill(int unitId, Skill skill, int userId) throws ServiceException, DaoException {
 
         Unit unit = unitDao.getUnitById(unitId, userId);
-        if (unit == null){
+        int skillId = skill.getId();
+
+        if (unit == null) {
             throw new ServiceException("Error, invalid unit.");
+        } else {
+            for (Skill ownedSkills : unit.getSkills()) {
+                if (ownedSkills.getId() == skillId) {
+                    throw new ServiceException("Error, unit already cannot have two copies of a skill or injury.");
+                }
+            }
+        }
+
+        if (skill.getSkillsetId() == INJURY_SKILLSET_ID){
+            return true;
         } else if (unit.getEmptySkills() < 1){
             throw new ServiceException("Error, no open skills.");
         }
 
-        for (Skill skill : unit.getSkills()){
-            if (skill.getId() == skillId){
-                throw new ServiceException("Error, unit already has this skill");
-            }
-        }
-
         List<Skill> potentialSkills = unitDao.getPotentialSkills(unit.getId());
-        for (Skill skill: potentialSkills){
-            if(skill.getId() == skillId){
+        for (Skill potentialSkill: potentialSkills){
+            if(potentialSkill.getId() == skillId){
                 return true;
             }
         }

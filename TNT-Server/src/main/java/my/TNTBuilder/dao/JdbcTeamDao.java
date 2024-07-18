@@ -3,9 +3,6 @@ package my.TNTBuilder.dao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.model.FactionDTO;
 import my.TNTBuilder.model.Team;
-import my.TNTBuilder.service.UnitService;
-import my.TNTBuilder.validator.UnitValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -172,7 +169,7 @@ public class JdbcTeamDao implements TeamDao{
      * @param row the SqlRowSet from the database
      * @return The team extracted from the SqlRowSet
      */
-    private Team mapRowToTeam(SqlRowSet row) throws DaoException{
+    private Team mapRowToTeam(SqlRowSet row) throws DaoException {
         Team team = new Team();
         team.setId(row.getInt("team_id"));
         team.setFactionId(row.getInt("faction_id"));

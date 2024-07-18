@@ -225,24 +225,23 @@ public class UnitService {
 
         if (unit == null) {
             throw new ServiceException("Error, invalid unit.");
-        } else {
-            for (Skill ownedSkills : unit.getSkills()) {
-                if (ownedSkills.getId() == skillId) {
-                    throw new ServiceException("Error, unit already cannot have two copies of a skill or injury.");
-                }
-            }
-        }
-
-        if (skill.getSkillsetId() == INJURY_SKILLSET_ID){
+        } else if (skill.getSkillsetId() == INJURY_SKILLSET_ID){
             return true;
         } else if (unit.getEmptySkills() < 1){
             throw new ServiceException("Error, no open skills.");
-        }
+        } else {
 
-        List<Skill> potentialSkills = unitDao.getPotentialSkills(unit.getId());
-        for (Skill potentialSkill: potentialSkills){
-            if(potentialSkill.getId() == skillId){
-                return true;
+            for (Skill ownedSkills : unit.getSkills()) {
+                if (ownedSkills.getId() == skillId) {
+                    throw new ServiceException("Error, unit already cannot have two copies of a ability.");
+                }
+            }
+
+            List<Skill> potentialSkills = unitDao.getPotentialSkills(unit.getId());
+            for (Skill potentialSkill: potentialSkills){
+                if(potentialSkill.getId() == skillId){
+                    return true;
+                }
             }
         }
 

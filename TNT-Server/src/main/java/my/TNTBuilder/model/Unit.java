@@ -11,7 +11,6 @@ public class Unit {
     @Min(value = 1, message = "Unit ID must be provided")
     private int id;
     @Min(value = 0, message = "Team ID must be provided")
-
     private int teamId;
     private String name = "";
     private String unitClass;
@@ -33,6 +32,7 @@ public class Unit {
     private int tenPointAdvances = 0;
     private List<Skillset> availableSkillsets;
     private List<Skill> skills = new ArrayList<>();
+    private List<Injury> injuries = new ArrayList<>();
     private List<Item> inventory = new ArrayList<>();
     private boolean isBangedUp = false;
     private boolean isLongRecovery = false;
@@ -45,7 +45,7 @@ public class Unit {
     public Unit(int id, int teamId, String name, String unitClass, String rank, String species, int baseCost, int wounds, int defense,
                 int mettle, int move, int ranged, int melee, int strength, int emptySkills, String specialRules,
                 int spentExperience, int unspentExperience, int totalAdvances, int tenPointAdvances,
-                List<Skillset> availableSkillsets, List<Skill> skills, List<Item> inventory) {
+                List<Skillset> availableSkillsets, List<Skill> skills, List<Injury> injuries, List<Item> inventory) {
         this.id = id;
         this.teamId = teamId;
         this.name = name;
@@ -68,6 +68,7 @@ public class Unit {
         this.tenPointAdvances = tenPointAdvances;
         this.availableSkillsets = availableSkillsets;
         this.skills = skills;
+        this.injuries = injuries;
         this.inventory = inventory;
     }
     //Methods
@@ -321,6 +322,14 @@ public class Unit {
         isLongRecovery = longRecovery;
     }
 
+    public List<Injury> getInjuries() {
+        return injuries;
+    }
+
+    public void setInjuries(List<Injury> injuries) {
+        this.injuries = injuries;
+    }
+
     //Override Equals
 
     @Override
@@ -337,6 +346,7 @@ public class Unit {
                 Objects.equals(rank, unit.rank) && Objects.equals(species, unit.species) &&
                 Objects.equals(specialRules, unit.specialRules) &&
                 Objects.equals(availableSkillsets, unit.availableSkillsets) && Objects.equals(skills, unit.skills) &&
+                new HashSet<>(injuries).containsAll(unit.injuries) && new HashSet<>(unit.injuries).containsAll(injuries) &&
                 new HashSet<>(inventory).containsAll(unit.inventory) && new HashSet<>(unit.inventory).containsAll(inventory);
     }
 
@@ -344,6 +354,6 @@ public class Unit {
     public int hashCode() {
         return Objects.hash(id, teamId, name, unitClass, rank, species, baseCost, wounds, defense, mettle, move, ranged,
                 melee, strength, emptySkills, specialRules, spentExperience, unspentExperience, totalAdvances,
-                tenPointAdvances, availableSkillsets, skills, inventory);
+                tenPointAdvances, availableSkillsets, skills, injuries, inventory);
     }
 }

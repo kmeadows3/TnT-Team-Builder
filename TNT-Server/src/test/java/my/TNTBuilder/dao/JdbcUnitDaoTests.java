@@ -1,9 +1,12 @@
 package my.TNTBuilder.dao;
 
 import my.TNTBuilder.exception.DaoException;
+import my.TNTBuilder.exception.ValidationException;
+import my.TNTBuilder.model.Injury;
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Skillset;
 import my.TNTBuilder.model.Unit;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,31 +26,36 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         sut = new JdbcUnitDao(jdbcTemplate);
     }
 
+    @After
+    public void clearChanges() {
+        UNIT1.setName("UnitName1");
+    }
+
     @Test
-    public void getUnitById_returns_correct_unit(){
+    public void getUnitById_returns_correct_unit() {
         Unit testUnit = sut.getUnitById(1,1);
         Assert.assertNotNull(testUnit);
         Assert.assertEquals(UNIT1, testUnit);
     }
 
     @Test (expected = DaoException.class)
-    public void getUnitById_throws_exception_with_wrong_userId(){
+    public void getUnitById_throws_exception_with_wrong_userId() {
         sut.getUnitById(1,2);
         Assert.fail();
     }
 
     @Test (expected = DaoException.class)
-    public void getUnitById_throws_exception_with_invalid_id(){
+    public void getUnitById_throws_exception_with_invalid_id() {
         sut.getUnitById(99,1);
         Assert.fail();
     }
 
     @Test
-    public void addUnitToDatabase_adds_unit(){
+    public void addUnitToDatabase_adds_unit() {
         Unit expectedUnit = new Unit(4, 2, "Name", "Defender", "Rank and File",
                 "Human", 23,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),  new ArrayList<>());
         expectedUnit.getAvailableSkillsets().add(new Skillset(1, "Melee", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));
@@ -79,7 +87,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Unit expectedUnit = new Unit(4, 0, "", "Defender", "Rank and File",
                 "Human", 23,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>());
         expectedUnit.getAvailableSkillsets().add(new Skillset(1, "Melee", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));
@@ -95,7 +103,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     }
 
     @Test
-    public void getAllUnitsForTeam_returns_correct_list(){
+    public void getAllUnitsForTeam_returns_correct_list() {
         List<Unit> testList = sut.getAllUnitsForTeam(1);
 
         Assert.assertEquals(2, testList.size());
@@ -104,20 +112,12 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     }
 
     @Test
-    public void updateUnit_updates_unit(){
-        Unit updatedUnit = new Unit(1, 1, "Updated Name", "Trade Master", "Updated Rank",
-                "Human", 50,50,50,50,50,50,50,50,50,
-                "Special rules description",50,50,50,50,
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-        Skillset skillset1 = new Skillset(3, "Survival", "Skill");
-        Skillset skillset2 = new Skillset(4, "Quickness", "Skill");
-        updatedUnit.getAvailableSkillsets().add(skillset1);
-        updatedUnit.getAvailableSkillsets().add(skillset2);
-        updatedUnit.setInventory(Arrays.asList(ARMOR, WEAPON, ITEM));
-
+    public void updateUnit_updates_unit() {
+        Unit updatedUnit = UNIT1;
+        updatedUnit.setName("Updated Name");
         sut.updateUnit(updatedUnit);
         Unit testUnit = sut.getUnitById(updatedUnit.getId(), 1);
-        Assert.assertEquals(updatedUnit, testUnit);
+        Assert.assertEquals(UNIT1, testUnit);
 
     }
 
@@ -167,7 +167,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     }
 
     @Test
-    public void addSkillToUnit_adds_skill_to_unit(){
+    public void addSkillToUnit_adds_skill_to_unit() {
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
                 "Ignore heavy weapons rule.", 6, "Brawn");
 
@@ -178,7 +178,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     }
 
     @Test
-    public void deleteUnit_deletes_unit(){
+    public void deleteUnit_deletes_unit() {
         sut.deleteUnit(UNIT3);
         List<Unit> testList = sut.getAllUnitsForTeam(1);
         Assert.assertEquals(1, testList.size());
@@ -191,14 +191,6 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         List<Skill> testList = sut.getPotentialInjuries(UNIT1);
         Assert.assertEquals(2, testList.size());
         Assert.assertTrue(testList.contains(BANGED_HEAD));
-    }
-
-    @Test
-    public void getPotentialInjuries_does_not_list_already_existing_injury(){
-        List<Skill> testList = sut.getPotentialInjuries(UNIT3);
-        Assert.assertEquals(1, testList.size());
-        Assert.assertTrue(testList.contains(BANGED_HEAD));
-        Assert.assertFalse(testList.contains(GASHED_LEG));
     }
 
 

@@ -27,7 +27,7 @@ public class ItemTests {
             "Special rules description",100,0,0,0,
             new ArrayList<>(Arrays.asList(new Skillset(3, "Survival", "Skill"),
                     new Skillset(4, "Quickness", "Skill"))),
-            new ArrayList<>(), new ArrayList<>(Arrays.asList(ARMOR, WEAPON, ITEM)));
+            new ArrayList<>(),  new ArrayList<>(), new ArrayList<>(Arrays.asList(ARMOR, WEAPON, ITEM)));
 
     private Item sut;
 

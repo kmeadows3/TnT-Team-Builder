@@ -106,7 +106,7 @@ public class TeamServiceTests extends BaseDaoTests {
         Unit boughtUnit = new Unit(5, 1, "Name", "Defender", "Rank and File",
                 "Human", 50,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>());
 
         sut.updateTeamAfterNewUnitPurchase(1, boughtUnit);
         Team testTeam = sut.getTeamById(1, 1);
@@ -119,7 +119,7 @@ public class TeamServiceTests extends BaseDaoTests {
         Unit boughtUnit = new Unit(5, 1, "Name", "Defender", "Leader",
                 "Human", 50,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>());
 
         sut.updateTeamAfterNewUnitPurchase(1, boughtUnit);
         Team testTeam = sut.getTeamById(1, 1);
@@ -136,7 +136,7 @@ public class TeamServiceTests extends BaseDaoTests {
         Unit boughtUnit = new Unit(5, 1, "Name", "Defender", "Leader",
                 "Human", 50,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>());
 
 
         sut.updateTeamAfterNewUnitPurchase(1, boughtUnit);

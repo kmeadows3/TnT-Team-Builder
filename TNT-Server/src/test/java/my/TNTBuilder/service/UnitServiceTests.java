@@ -262,7 +262,7 @@ public class UnitServiceTests extends BaseDaoTests {
     public void addSkillToUnit_adds_skill_to_unit() throws ServiceException{
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
                 "Ignore heavy weapons rule.", 6, "Brawn");
-        sut.addSkillToUnit(6, 2, 2);
+        sut.addSkillToUnit(skill1, 2, 2);
         Unit testUnit = sut.getUnitById(2, 2);
         Assert.assertEquals(1, testUnit.getSkills().size());
         Assert.assertTrue(testUnit.getSkills().contains(skill1));
@@ -270,13 +270,17 @@ public class UnitServiceTests extends BaseDaoTests {
 
     @Test (expected = ServiceException.class)
     public void addSkillToUnit_throws_exception_if_user_does_not_own_unit() throws ServiceException{
-        sut.addSkillToUnit(6, 2, 1);
+        Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
+                "Ignore heavy weapons rule.", 6, "Brawn");
+        sut.addSkillToUnit(skill1, 2, 1);
         Assert.fail();
     }
 
     @Test (expected = ServiceException.class)
     public void addSkillToUnit_throws_exception_if_unit_cannot_have_skill() throws ServiceException{
-        sut.addSkillToUnit(3, 2, 2);
+        Skill skill1 = new Skill(1, "Illegal Skill", "Gain +1 to Strength Stat when making Melee attacks. " +
+                "Ignore heavy weapons rule.", 3, "Brawn");
+        sut.addSkillToUnit(skill1, 2, 2);
         Assert.fail();
     }
 
@@ -303,7 +307,7 @@ public class UnitServiceTests extends BaseDaoTests {
                         new Skillset(1, "Melee", "Skill"),
                         new Skillset(2, "Marksmanship", "Skill"),
                         new Skillset(3, "Survival", "Skill")),
-                new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(),  new ArrayList<>(), new ArrayList<>());
         Unit testUnit = sut.getReferenceUnitByClass("Raider");
         Assert.assertEquals(expectedUnit, testUnit);
     }
@@ -386,14 +390,6 @@ public class UnitServiceTests extends BaseDaoTests {
         Assert.assertTrue(testList.contains(BANGED_HEAD));
     }
 
-    @Test
-    public void getPotentialInjuries_does_not_list_already_existing_injury() throws ServiceException{
-        List<Skill> testList = sut.getPotentialInjuries(UNIT3.getId(), 1);
-        Assert.assertEquals(1, testList.size());
-        Assert.assertTrue(testList.contains(BANGED_HEAD));
-        Assert.assertFalse(testList.contains(GASHED_LEG));
-    }
-
     @Test (expected = ServiceException.class)
     public void getPotentialInjuries_throws_exception_user_does_not_own_unit() throws ServiceException{
         List<Skill> testList = sut.getPotentialInjuries(UNIT1.getId(), 2);
@@ -408,7 +404,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit expectedUnit = new Unit(4, 0, "", "Defender", "Rank and File",
                 "Human", 23,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>());
         expectedUnit.getAvailableSkillsets().add(new Skillset(1, "Melee", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));

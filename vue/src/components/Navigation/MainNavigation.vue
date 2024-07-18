@@ -42,7 +42,8 @@ export default {
     showTeamListOn() {
       if (this.$store.state.currentPage != 'dashboard') {
         this.$router.push("dashboard");
-        this.$store.commit('SET_CURRENT_PAGE', 'dashboard')
+        this.$store.commit('CLEAR_CURRENT_TEAM');
+        this.$store.commit('SET_CURRENT_PAGE', 'dashboard');
       } else {
         if (this.$store.state.showUnitDetail) {
           this.$store.commit('CLEAR_CURRENT_UNIT');

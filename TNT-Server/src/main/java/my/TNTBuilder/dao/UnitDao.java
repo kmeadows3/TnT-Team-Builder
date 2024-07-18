@@ -1,6 +1,7 @@
 package my.TNTBuilder.dao;
 
 import my.TNTBuilder.exception.DaoException;
+import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Unit;
 

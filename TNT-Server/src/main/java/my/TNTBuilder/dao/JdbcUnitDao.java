@@ -1,6 +1,8 @@
 package my.TNTBuilder.dao;
 
 import my.TNTBuilder.exception.DaoException;
+import my.TNTBuilder.exception.ValidationException;
+import my.TNTBuilder.model.Injury;
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Skillset;
 import my.TNTBuilder.model.Unit;
@@ -152,6 +154,7 @@ public class JdbcUnitDao implements UnitDao{
     public void  deleteUnit(Unit unit) throws DaoException{
         String deleteSkillSql = "DELETE FROM unit_skill WHERE skill_id = ?";
         String deleteSkillsetSql = "DELETE FROM unit_skillset WHERE skillset_id = ?";
+        String deleteInjurySql = "DELETE from unit_injury WHERE injury_id = ?";
         String deleteUnitSql = "DELETE FROM unit WHERE unit_id = ?";
 
         try {
@@ -160,6 +163,9 @@ public class JdbcUnitDao implements UnitDao{
             }
             for (Skillset skillset : unit.getAvailableSkillsets()){
                 jdbcTemplate.update(deleteSkillsetSql, skillset.getId());
+            }
+            for (Injury injury : unit.getInjuries()){
+                jdbcTemplate.update(deleteInjurySql, injury.getId());
             }
 
 
@@ -279,9 +285,13 @@ public class JdbcUnitDao implements UnitDao{
         }
     }
 
+
     @Override
     public List<Skill> getPotentialInjuries(Unit unit) throws DaoException{
-        String sql = SELECT_ALL_FROM_SKILL_REFERENCE + "WHERE sr.skillset_id = " + INJURY_SKILLSET_ID;
+        String sql = "SELECT ir.injury_id, name, description, is_stat_damage, stat_damaged, is_removeable, " +
+                "is_stackable, count FROM injury_reference ir" +
+                "JOIN unit_injury ui ON ui.injury_id = ir.injury_id"+
+                "WHERE unit_id = ?";
         List<Skill> potentialInjuries = new ArrayList<>();
 
         try {
@@ -291,11 +301,6 @@ public class JdbcUnitDao implements UnitDao{
                 potentialInjuries.add(skill);
             }
 
-            List<Skill> currentInjuries = unit.getSkills().stream().filter(skill -> skill.getSkillsetId()==16).collect(Collectors.toList());
-            for (Skill skill : currentInjuries){
-                potentialInjuries.remove(skill);
-            }
-
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to database", e);
         }
@@ -303,10 +308,10 @@ public class JdbcUnitDao implements UnitDao{
 
     }
 
+
     /*
     PRIVATE METHODS
      */
-
     private List<Skill> getUnitSkills(int unitId){
         List<Skill> skills = new ArrayList<>();
         String sql = SELECT_ALL_FROM_SKILL_REFERENCE + "JOIN unit_skill us ON us.skill_id = sr.skill_id " +
@@ -318,6 +323,7 @@ public class JdbcUnitDao implements UnitDao{
         }
         return skills;
     }
+
     private List<Skillset> getAvailableSkillsets(int unitId){
         List<Skillset> skillsets = new ArrayList<>();
         String sql = SELECT_ALL_FROM_SKILLSET_REFERENCE + "JOIN unit_skillset uss ON uss.skillset_id = ssr.skillset_id "
@@ -471,11 +477,34 @@ public class JdbcUnitDao implements UnitDao{
         newUnit.setSkills(getUnitSkills(newUnit.getId()));
 
         newUnit.setAvailableSkillsets(getAvailableSkillsets(newUnit.getId()));
+        newUnit.setInjuries(getAllInjuriesOnUnit(newUnit.getId()));
 
         ItemDao itemDao = new JdbcItemDao(jdbcTemplate);
         newUnit.setInventory(itemDao.getAllItemsForUnit(newUnit.getId()));
 
         return newUnit;
+    }
+    private List<Injury> getAllInjuriesOnUnit(int unitId) throws DaoException {
+        String sql = "SELECT ir.injury_id, name, description, is_stat_damage, stat_damaged, is_removeable, " +
+                "is_stackable, count FROM injury_reference ir " +
+                "JOIN unit_injury ui ON ui.injury_id = ir.injury_id "+
+                "WHERE unit_id = ?";
+        List<Injury> injuries = new ArrayList<>();
+
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, unitId);
+            while(results.next()){
+                Injury injury = mapRowToInjury(results);
+                injuries.add(injury);
+            }
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        } catch (ValidationException e){
+            throw new DaoException(e.getMessage());
+        }
+
+        return injuries;
     }
 
     private Skillset mapRowToSkillset(SqlRowSet row) {
@@ -494,6 +523,19 @@ public class JdbcUnitDao implements UnitDao{
         newSkill.setSkillsetName(row.getString("skillset_name"));
         newSkill.setDescription(row.getString("description"));
         return newSkill;
+    }
+
+    private Injury mapRowToInjury(SqlRowSet row) throws ValidationException{
+        Injury newInjury = new Injury();
+        newInjury.setId(row.getInt("injury_id"));
+        newInjury.setName(row.getString("name"));
+        newInjury.setDescription(row.getString("description"));
+        newInjury.setStatDamage(row.getBoolean("is_stat_damage"));
+        newInjury.setStatDamaged(row.getString("stat_damaged"));
+        newInjury.setRemoveable(row.getBoolean("is_removeable"));
+        newInjury.setStackable(row.getBoolean("is_stackable"));
+        newInjury.setCount(row.getInt("count"));
+        return newInjury;
     }
 
 

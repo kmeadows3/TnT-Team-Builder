@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS inventory, unit_skillset, unit_skill, unit, team, unit_reference, faction, tnt_user, skill_reference, skillset_reference, item_ref_item_trait, item_trait_reference, item_reference;
+DROP TABLE IF EXISTS inventory, unit_skillset, unit_skill, unit_injury, injury_reference, unit, team, unit_reference, faction, tnt_user, skill_reference, skillset_reference, item_ref_item_trait, item_trait_reference, item_reference;
 DROP SEQUENCE IF EXISTS seq_user_id;
 
 CREATE SEQUENCE seq_user_id;
@@ -154,6 +154,27 @@ CREATE TABLE unit_skill(
 	CONSTRAINT FK_unit_skill_join_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id)
 );
 
+CREATE TABLE injury_reference(
+	injury_id serial PRIMARY KEY NOT NULL,
+	name varchar(50) NOT NULL,
+	description text NOT NULL,
+	is_stat_damage boolean DEFAULT false,
+	stat_damaged varchar(10),
+	is_removeable boolean DEFAULT false,
+	is_stackable boolean DEFAULT true,
+	CONSTRAINT CHK_injury_stat_damaged_identifies_stat_damaged CHECK ( (is_stat_damage IS false AND stat_damaged IS NULL) OR (is_stat_damage IS true AND stat_damaged IS NOT NULL)),
+	CONSTRAINT CHK_stat_damaged_is_valid_stat CHECK (stat_damaged IN ('Mettle', 'Move', 'Ranged', 'Defense', 'Melee'))
+);
+
+
+CREATE TABLE unit_injury(
+	unit_id int NOT NULL,
+	injury_id int NOT NULL,
+	count int DEFAULT 1,
+	PRIMARY KEY (unit_id, injury_id),
+	CONSTRAINT FK_unit_injury_join_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id),
+	CONSTRAINT FK_unit_injury_join_injury_id FOREIGN KEY(injury_id) REFERENCES injury_reference(injury_id)
+);
 
 
 
@@ -205,7 +226,16 @@ INSERT INTO skillset_reference (skillset_name, category) VALUES
 	('Physical Detriments', 'Detriment'), -- ID 14
 	('General Abilities', 'General'), -- ID 15
 	('Injuries', 'Injury'); -- ID 16
-	
+
+INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, is_removeable, is_stackable) VALUES
+	('Gashed Leg', '-1 penalty to Move', true, 'Move', false, true),
+	('Banged Head', '-1 penalty to Mettle', true, 'Mettle', false, true),
+	('Brain Sprain', 'Model gains the Dumb general ability', false, null, false, false),
+	('Captured', 'Model is captured and your opponent determines what happens to them (See Rulebook).', false, null, true, false),
+	('Banged Up', 'Model has -1 to all rolls it makes during the next campaign game.', false, null, true, false),
+	('Long Recovery', 'Model misses the next campaign game.', false, null, true, false),
+	('Captured', 'Model is captured and your opponent determines what happens to them (See Rulebook).', false, null, true, false);
+
 INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(5, 'Scavenger', 'When taking a weapon with limited ammo roll 2d3 when determining ammo quantity and take the higher of the two. Upkeep does not need to be paid for this unit. May not be taken by Freelancers.'),
 	(8, 'Motivator', 'All friendly models within 6" of this model gain +1 to activation tests. Motivator may not stack with itself.'),

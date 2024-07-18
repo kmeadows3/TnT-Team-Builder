@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class JdbcUnitDaoTests extends BaseDaoTests{
@@ -27,7 +26,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     }
 
     @After
-    public void clearChanges() {
+    public void clearChanges() throws ValidationException {
         UNIT1.setName("UnitName1");
     }
 
@@ -187,10 +186,10 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     }
 
     @Test
-    public void getPotentialInjuries_lists_all_injuries_for_uninjured_unit(){
-        List<Skill> testList = sut.getPotentialInjuries(UNIT1);
-        Assert.assertEquals(2, testList.size());
-        Assert.assertTrue(testList.contains(BANGED_HEAD));
+    public void getPotentialInjuries_lists_all_injuries() throws ValidationException{
+        List<Injury> testList = sut.getAllPotentialInjuries(UNIT1);
+        Assert.assertEquals(6, testList.size());
+        Assert.assertTrue(testList.contains(GASHED_LEG));
     }
 
 

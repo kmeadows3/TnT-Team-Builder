@@ -34,6 +34,7 @@ public class Unit {
     private List<Skill> skills = new ArrayList<>();
     private List<Injury> injuries = new ArrayList<>();
     private List<Item> inventory = new ArrayList<>();
+    //TODO: Remove these variables
     private boolean isBangedUp = false;
     private boolean isLongRecovery = false;
 

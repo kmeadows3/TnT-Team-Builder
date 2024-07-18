@@ -12,7 +12,7 @@ public class Injury {
     private String statDamaged;
     private boolean isRemoveable;
     private boolean isStackable;
-    private int count;
+    private int count = 1;
 
     //CONSTRUCTOR
 

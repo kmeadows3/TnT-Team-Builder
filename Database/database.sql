@@ -233,8 +233,8 @@ INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, i
 	('Brain Sprain', 'Model gains the Dumb general ability', false, null, false, false),
 	('Captured', 'Model is captured and your opponent determines what happens to them (See Rulebook).', false, null, true, false),
 	('Banged Up', 'Model has -1 to all rolls it makes during the next campaign game.', false, null, true, false),
-	('Long Recovery', 'Model misses the next campaign game.', false, null, true, false),
-	('Captured', 'Model is captured and your opponent determines what happens to them (See Rulebook).', false, null, true, false);
+	('Long Recovery', 'Model misses the next campaign game.', false, null, true, false);
+
 
 INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(5, 'Scavenger', 'When taking a weapon with limited ammo roll 2d3 when determining ammo quantity and take the higher of the two. Upkeep does not need to be paid for this unit. May not be taken by Freelancers.'),

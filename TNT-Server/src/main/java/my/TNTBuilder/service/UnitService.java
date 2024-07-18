@@ -2,6 +2,7 @@ package my.TNTBuilder.service;
 
 import my.TNTBuilder.dao.ItemDao;
 import my.TNTBuilder.exception.ValidationException;
+import my.TNTBuilder.model.Injury;
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.inventory.Item;
 import my.TNTBuilder.validator.UnitValidator;
@@ -154,15 +155,21 @@ public class UnitService {
         return unit;
     }
 
-    public List<Skill> getPotentialInjuries(int unitId, int userId) throws ServiceException{
+    public List<Injury> getPotentialInjuries(int unitId, int userId) throws ServiceException{
         Unit unit = null;
-        List<Skill> injuries = null;
+        List<Injury> injuries = null;
         try {
             unit = unitDao.getUnitById(unitId, userId);
-            injuries = unitDao.getPotentialInjuries(unit);
+            injuries = unitDao.getAllPotentialInjuries(unit);
             if (injuries == null){
                 throw new ServiceException("No injuries returned");
             }
+            for (Injury injury : unit.getInjuries()){
+                if (!injury.isStackable()){
+                    injuries.remove(injury);
+                }
+            }
+
         } catch (DaoException e){
             throw new ServiceException(e.getMessage());
         }

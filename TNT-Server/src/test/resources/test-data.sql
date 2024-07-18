@@ -239,8 +239,7 @@ INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, i
 	('Brain Sprain', 'Model gains the Dumb general ability', false, null, false, false),
 	('Captured', 'Model is captured and your opponent determines what happens to them (See Rulebook).', false, null, true, false),
 	('Banged Up', 'Model has -1 to all rolls it makes during the next campaign game.', false, null, true, false),
-	('Long Recovery', 'Model misses the next campaign game.', false, null, true, false),
-	('Captured', 'Model is captured and your opponent determines what happens to them (See Rulebook).', false, null, true, false);
+	('Long Recovery', 'Model misses the next campaign game.', false, null, true, false);
 
 
 INSERT INTO skill_reference (skillset_id, name, description) VALUES
@@ -323,7 +322,6 @@ VALUES (1, 3),
 INSERT INTO unit_skill (unit_id, skill_id)
 VALUES (3, 7),
     (3, 9),
-    (3, 11),
     (7, 10);
 
 INSERT INTO inventory (unit_id, item_ref_id)
@@ -341,7 +339,8 @@ VALUES (1, 1),  -- ID 5
        (3, 6); -- ID 9
 
 INSERT INTO unit_injury (unit_id, injury_id, count)
-VALUES  (1,1,1), -- ID 1
-        (1,2,2); -- ID 2
+VALUES  (1,1,1),
+        (1,2,2),
+        (3,5,1);
 
 COMMIT;

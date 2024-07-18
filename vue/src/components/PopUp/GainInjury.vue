@@ -41,13 +41,7 @@ export default {
         getPotentialInjuries() {
             UnitService.getPotentialInjuries(this.$store.state.currentUnit.id)
                 .then(response => {
-                    this.potentialInjuries = response.data;
-                    if (!this.$store.state.currentUnit.bangedUp) {
-                        this.potentialInjuries.push({ name: 'Long Recovery', description: 'This unit misses the next campaign game.', removeable: true })
-                    }
-                    if (!this.$store.state.currentUnit.bangedUp) {
-                        this.potentialInjuries.push({ name: 'Banged Up', description: 'This unit suffers -1 penalty to all rolls it makes in the next campaign game.', removeable: true })
-                    }
+                    this.potentialInjuries = response.data.sort((a, b) => a.name.localeCompare(b.name));
                 }).catch(error => this.$store.dispatch('showError', error));
         },
         addInjury() {

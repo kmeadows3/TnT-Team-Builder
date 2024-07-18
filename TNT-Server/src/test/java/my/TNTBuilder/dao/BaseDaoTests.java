@@ -25,8 +25,12 @@ public abstract class BaseDaoTests {
     protected static final User USER_1 = new User(1, "user1", "user1", "USER");
     protected static final User USER_2 = new User(2, "user2", "user2", "USER");
     protected static final User USER_3 = new User(3, "user3", "user3", "USER");
-    protected static final Skill BANGED_HEAD = new Skill(12, "Banged Head", "-1 penalty to Mettle", 16, "Injuries");
-    protected static final Skill GASHED_LEG = new Skill(11, "Gashed Leg", "-1 penalty to Move", 16, "Injuries");
+    protected static final Injury BANGED_HEAD = new Injury(2, "Banged Head", "-1 penalty to Mettle",
+            true, "Mettle", false, true,2);
+    protected static final Injury GASHED_LEG = new Injury(1, "Gashed Leg", "-1 penalty to Move",
+            true, "Move", false, true, 1);
+    protected  static final Injury BANGED_UP = new Injury(5, "Banged Up", "Model has -1 to all rolls" +
+            " it makes during the next campaign game.", false, null, true, false, 1);
 
     protected static final Armor ARMOR = new Armor(1, 1, "Armor 1", 1, "N/A",
             List.of(new ItemTrait(1, "Trait 1", "Trait 1 Desc")), "N/A", false, 1,
@@ -60,12 +64,7 @@ public abstract class BaseDaoTests {
             "Special rules description",100,0,0,0,
             Arrays.asList(new Skillset(3, "Survival", "Skill"),
                     new Skillset(4, "Quickness", "Skill")),
-            new ArrayList<>(),  Arrays.asList(
-                    new Injury(1, "Gashed Leg", "-1 penalty to Move",true,
-                            "Move", false, true, 1),
-                    new Injury(2, "Banged Head", "-1 penalty to Mettle",true,
-                            "Mettle", false, true, 2)),
-            Arrays.asList(ARMOR, WEAPON, ITEM));
+            new ArrayList<>(),  Arrays.asList(GASHED_LEG, BANGED_HEAD), Arrays.asList(ARMOR, WEAPON, ITEM));
     protected static final Unit UNIT2 = new Unit(2, 3, "UnitName2", "Soldier", "Elite",
             "Mutant", 51,11,6,8,7,9,7,6,1,
             "Special rules description",50,0,0,0,
@@ -77,8 +76,8 @@ public abstract class BaseDaoTests {
             List.of(new Skillset(6, "Brawn", "Skill")),
             List.of(new Skill(7, "Bully", "All enemies defeated by this model in" +
                     " close combat are knocked prone in addition to any other combat result.", 6, "Brawn"),
-                    new Skill(9, "Up-Armed", "Can Equip Support Weapons", 15, "General Abilities"), GASHED_LEG),
-            new ArrayList<>(), new ArrayList<>());
+                    new Skill(9, "Up-Armed", "Can Equip Support Weapons", 15, "General Abilities")),
+            List.of(BANGED_UP), new ArrayList<>());
     protected final Team TEAM_1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500,
             Arrays.asList(UNIT1, UNIT3), Arrays.asList(TEAM_ARMOR, TEAM_WEAPON, TEAM_ITEM));
     protected final Team TEAM_2 = new Team(2, 1, "Team 2", "Raiders", 3, 1500,

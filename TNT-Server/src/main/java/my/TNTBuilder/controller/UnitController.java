@@ -3,6 +3,7 @@ package my.TNTBuilder.controller;
 import my.TNTBuilder.dao.UserDao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
+import my.TNTBuilder.model.Injury;
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Unit;
 import my.TNTBuilder.service.UnitService;
@@ -182,8 +183,8 @@ public class UnitController {
      * @return the list of injuries the unit doesn't already have
      */
     @RequestMapping(path="/units/{unitId}/injuries", method = RequestMethod.GET)
-    public List<Skill> getNewInjuries(@PathVariable int unitId, Principal principal){
-        List<Skill> injuries = null;
+    public List<Injury> getNewInjuries(@PathVariable int unitId, Principal principal){
+        List<Injury> injuries = null;
         try {
             injuries = unitService.getPotentialInjuries(unitId, userDao.getUserIdByUsername(principal.getName()));
         } catch (ServiceException e){

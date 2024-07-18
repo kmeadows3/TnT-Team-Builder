@@ -1,14 +1,11 @@
 package my.TNTBuilder.service;
 
 import my.TNTBuilder.exception.DaoException;
-import my.TNTBuilder.model.Team;
+import my.TNTBuilder.model.*;
 import my.TNTBuilder.validator.TeamValidator;
 import my.TNTBuilder.validator.UnitValidator;
 import my.TNTBuilder.dao.*;
 import my.TNTBuilder.exception.ServiceException;
-import my.TNTBuilder.model.Skill;
-import my.TNTBuilder.model.Skillset;
-import my.TNTBuilder.model.Unit;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -385,14 +382,29 @@ public class UnitServiceTests extends BaseDaoTests {
 
     @Test
     public void getPotentialInjuries_lists_all_injuries_for_uninjured_unit() throws ServiceException{
-        List<Skill> testList = sut.getPotentialInjuries(UNIT1.getId(), 1);
-        Assert.assertEquals(2, testList.size());
-        Assert.assertTrue(testList.contains(BANGED_HEAD));
+        List<Injury> testList = sut.getPotentialInjuries(UNIT2.getId(), 2);
+        Assert.assertEquals(6, testList.size());
+        Assert.assertTrue(testList.contains(GASHED_LEG));
+    }
+
+    @Test
+    public void getPotentialInjuries_lists_all_injuries_for_unit_with_stackable_injuries() throws ServiceException{
+        List<Injury> testList = sut.getPotentialInjuries(UNIT1.getId(), 1);
+        Assert.assertEquals(6, testList.size());
+        Assert.assertTrue(testList.contains(GASHED_LEG));
+    }
+
+    @Test
+    public void getPotentialInjuries_removes_injuries_that_cannot_stack_if_unit_has_injury() throws ServiceException{
+        List<Injury> testList = sut.getPotentialInjuries(UNIT3.getId(), 1);
+        Assert.assertEquals(5, testList.size());
+        Assert.assertTrue(testList.contains(GASHED_LEG));
+        Assert.assertFalse(testList.contains(BANGED_HEAD));
     }
 
     @Test (expected = ServiceException.class)
     public void getPotentialInjuries_throws_exception_user_does_not_own_unit() throws ServiceException{
-        List<Skill> testList = sut.getPotentialInjuries(UNIT1.getId(), 2);
+        List<Injury> testList = sut.getPotentialInjuries(UNIT1.getId(), 2);
         Assert.fail();
     }
 

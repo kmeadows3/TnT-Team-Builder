@@ -1,7 +1,7 @@
 package my.TNTBuilder.dao;
 
 import my.TNTBuilder.exception.DaoException;
-import my.TNTBuilder.exception.ValidationException;
+import my.TNTBuilder.model.Injury;
 import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Unit;
 
@@ -83,5 +83,5 @@ public interface UnitDao {
 
     void deleteUnit(Unit unit) throws DaoException;
 
-    List<Skill> getPotentialInjuries(Unit unit) throws DaoException;
+    List<Injury> getAllPotentialInjuries(Unit unit) throws DaoException;
 }

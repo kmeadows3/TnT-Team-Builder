@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Component
@@ -287,18 +286,16 @@ public class JdbcUnitDao implements UnitDao{
 
 
     @Override
-    public List<Skill> getPotentialInjuries(Unit unit) throws DaoException{
-        String sql = "SELECT ir.injury_id, name, description, is_stat_damage, stat_damaged, is_removeable, " +
-                "is_stackable, count FROM injury_reference ir" +
-                "JOIN unit_injury ui ON ui.injury_id = ir.injury_id"+
-                "WHERE unit_id = ?";
-        List<Skill> potentialInjuries = new ArrayList<>();
+    public List<Injury> getAllPotentialInjuries(Unit unit) throws DaoException{
+        String sql = "SELECT injury_id, name, description, is_stat_damage, stat_damaged, is_removeable, " +
+                "is_stackable FROM injury_reference";
+        List<Injury> potentialInjuries = new ArrayList<>();
 
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
             while(results.next()){
-                Skill skill = mapRowToSkill(results);
-                potentialInjuries.add(skill);
+                Injury injury = mapRowToInjury(results);
+                potentialInjuries.add(injury);
             }
 
         } catch (CannotGetJdbcConnectionException e) {
@@ -484,6 +481,7 @@ public class JdbcUnitDao implements UnitDao{
 
         return newUnit;
     }
+
     private List<Injury> getAllInjuriesOnUnit(int unitId) throws DaoException {
         String sql = "SELECT ir.injury_id, name, description, is_stat_damage, stat_damaged, is_removeable, " +
                 "is_stackable, count FROM injury_reference ir " +
@@ -495,6 +493,7 @@ public class JdbcUnitDao implements UnitDao{
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, unitId);
             while(results.next()){
                 Injury injury = mapRowToInjury(results);
+                injury.setCount(results.getInt("count"));
                 injuries.add(injury);
             }
 
@@ -525,7 +524,7 @@ public class JdbcUnitDao implements UnitDao{
         return newSkill;
     }
 
-    private Injury mapRowToInjury(SqlRowSet row) throws ValidationException{
+    private Injury mapRowToInjury(SqlRowSet row) {
         Injury newInjury = new Injury();
         newInjury.setId(row.getInt("injury_id"));
         newInjury.setName(row.getString("name"));
@@ -534,7 +533,6 @@ public class JdbcUnitDao implements UnitDao{
         newInjury.setStatDamaged(row.getString("stat_damaged"));
         newInjury.setRemoveable(row.getBoolean("is_removeable"));
         newInjury.setStackable(row.getBoolean("is_stackable"));
-        newInjury.setCount(row.getInt("count"));
         return newInjury;
     }
 

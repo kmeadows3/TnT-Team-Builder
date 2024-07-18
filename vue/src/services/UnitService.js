@@ -28,6 +28,9 @@ export default {
   },
   dismissUnit(unit){
     return axios.delete(`/units/${unit.id}?deleteItems=false`);
+  },
+  getPotentialInjuries(id){
+    return axios.get(`/units/${id}/injuries`);
   }
 
 }

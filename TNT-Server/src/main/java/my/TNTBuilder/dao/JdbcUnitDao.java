@@ -305,6 +305,52 @@ public class JdbcUnitDao implements UnitDao{
 
     }
 
+    @Override
+    public void addInjuryToUnit(int injuryId, int unitId) throws DaoException {
+        String sql = "INSERT INTO unit_injury (unit_id, injury_id) VALUES (?, ?)";
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, unitId, injuryId);
+            if (rowsAffected != 1){
+                throw new DaoException("Error, " + rowsAffected + " rows affected.");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Invalid data provided, cannot add injury", e);
+        }
+
+    }
+
+    @Override
+    public void deleteInjuryFromUnit(int injuryId, int unitId) throws DaoException {
+        String sql = "DELETE FROM unit_injury WHERE unit_id = ? AND injury_id = ?";
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, unitId, injuryId);
+            if (rowsAffected != 1){
+                throw new DaoException("Error, " + rowsAffected + " rows affected.");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Invalid data provided, cannot delete injury", e);
+        }
+    }
+
+    @Override
+    public void updateInjuryCount(int injuryId, int unitId, int count) throws DaoException {
+        String sql = "UPDATE unit_injury SET count = ? WHERE unit_id = ? AND injury_id = ?";
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, count, unitId, injuryId);
+            if (rowsAffected != 1){
+                throw new DaoException("Error, " + rowsAffected + " rows affected.");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Invalid data provided, cannot update injury", e);
+        }
+    }
+
 
     /*
     PRIVATE METHODS

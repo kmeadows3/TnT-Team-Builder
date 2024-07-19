@@ -84,4 +84,10 @@ public interface UnitDao {
     void deleteUnit(Unit unit) throws DaoException;
 
     List<Injury> getAllPotentialInjuries(Unit unit) throws DaoException;
+
+    void addInjuryToUnit (int injuryId, int unitId) throws DaoException;
+
+    void deleteInjuryFromUnit(int injuryId, int unitId) throws DaoException;
+
+    void updateInjuryCount (int injuryId, int unitId, int count) throws DaoException;
 }

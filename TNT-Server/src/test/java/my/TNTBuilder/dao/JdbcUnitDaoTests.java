@@ -186,12 +186,49 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     }
 
     @Test
-    public void getPotentialInjuries_lists_all_injuries() throws ValidationException{
+    public void getPotentialInjuries_lists_all_injuries() {
         List<Injury> testList = sut.getAllPotentialInjuries(UNIT1);
         Assert.assertEquals(6, testList.size());
         Assert.assertTrue(testList.contains(GASHED_LEG));
     }
 
+    @Test
+    public void addInjuryToUnit_add_injury_to_uninjured_unit() {
+        sut.addInjuryToUnit(GASHED_LEG.getId(), 2);
+        Unit testUnit = sut.getUnitById(2, 2);
 
+        Assert.assertEquals(1, testUnit.getInjuries().size());
+        Assert.assertTrue(testUnit.getInjuries().contains(GASHED_LEG));
+    }
+
+    @Test
+    public void addInjuryToUnit_add_injury_to_injured_unit() {
+        sut.addInjuryToUnit(GASHED_LEG.getId(), 3);
+        Unit testUnit = sut.getUnitById(3, 1);
+
+        Assert.assertEquals(2, testUnit.getInjuries().size());
+        Assert.assertTrue(testUnit.getInjuries().contains(GASHED_LEG));
+    }
+
+    @Test
+    public void deleteInjuryFromUnit_deletes_injury() {
+        sut.deleteInjuryFromUnit(1, 1);
+        Unit testUnit = sut.getUnitById(1, 1);
+
+        Assert.assertEquals(1, testUnit.getInjuries().size());
+        Assert.assertFalse(testUnit.getInjuries().contains(GASHED_LEG));
+    }
+
+    @Test
+    public void updateInjuryCount_updates_injury_count() throws ValidationException{
+        Injury gashedLegHigherCount = new Injury(1, "Gashed Leg", "-1 penalty to Move",
+                true, "Move", false, true, 5);
+
+        sut.updateInjuryCount(gashedLegHigherCount.getId(), 1, 5);
+        Unit testUnit = sut.getUnitById(1, 1);
+
+        Assert.assertEquals(2, testUnit.getInjuries().size());
+        Assert.assertTrue(testUnit.getInjuries().contains(gashedLegHigherCount));
+    }
 
 }

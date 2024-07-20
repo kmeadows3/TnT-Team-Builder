@@ -203,4 +203,13 @@ public class UnitController {
         }
     }
 
+    @RequestMapping(path="/units/{unitId}/injuries/{injuryId}", method = RequestMethod.POST)
+    public void addInjury(@PathVariable int unitId, @PathVariable int injuryId, Principal principal){
+        try {
+            unitService.addInjury(injuryId, unitId, userDao.getUserIdByUsername(principal.getName()));
+        }catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
 }

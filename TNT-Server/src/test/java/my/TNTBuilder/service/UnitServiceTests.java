@@ -31,9 +31,10 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @After
-    public void resetIds() {
+    public void reset() {
         ARMOR.setId(1);
         WEAPON.setId(2);
+        GASHED_LEG.setCount(1, true);
     }
 
     @Test
@@ -407,6 +408,61 @@ public class UnitServiceTests extends BaseDaoTests {
         List<Injury> testList = sut.getPotentialInjuries(UNIT1.getId(), 2);
         Assert.fail();
     }
+
+
+    @Test
+    public void deleteInjury_deletes_removable_injury() throws ServiceException{
+        sut.deleteInjury(5, 3, 1);
+
+        List<Injury> testList = sut.getUnitById(3, 1).getInjuries();
+        Assert.assertEquals(0, testList.size());
+    }
+
+    @Test (expected = ServiceException.class)
+    public void deleteInjury_throws_exception_if_injury_is_not_removable() throws ServiceException{
+        sut.deleteInjury(1, 1, 1);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void deleteInjury_throws_exception_if_injury_is_not_on_unit() throws ServiceException{
+        sut.deleteInjury(5, 1, 1);
+        Assert.fail();
+    }
+
+    @Test
+    public void addInjury_adds_new_injury_to_unit() throws ServiceException{
+        sut.addInjury(5,1,1);
+        List<Injury> testList = sut.getUnitById(1,1).getInjuries();
+
+        Assert.assertEquals(3, testList.size());
+        Assert.assertTrue(testList.contains(BANGED_UP));
+    }
+
+    @Test
+    public void addInjury_adds_to_count_if_unit_already_has_injury_and_is_stackable() throws ServiceException{
+        sut.addInjury(1, 1,1);
+        List<Injury> testList = sut.getUnitById(1,1).getInjuries();
+        GASHED_LEG.setCount(2);
+        Assert.assertEquals(2, testList.size());
+        Assert.assertTrue(testList.contains(GASHED_LEG));
+    }
+
+    @Test (expected = ServiceException.class)
+    public void addInjury_throws_exception_if_injury_exists_but_cannot_stack() throws ServiceException{
+        sut.addInjury(5, 3,1);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void addInjury_throws_exception_if_injury_does_not_exist() throws ServiceException{
+        sut.addInjury(99, 1,1);
+        Assert.fail();
+    }
+
+
+
+
 
 
     /*

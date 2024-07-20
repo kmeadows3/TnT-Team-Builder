@@ -7,6 +7,7 @@ import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Skillset;
 import my.TNTBuilder.model.Unit;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -21,7 +22,6 @@ import java.util.Map;
 @Component
 public class JdbcUnitDao implements UnitDao{
     private final int FREELANCER_FACTION_ID = 7;
-    private final int INJURY_SKILLSET_ID = 16;
 
     private final JdbcTemplate jdbcTemplate;
     private final String SELECT_ALL_FROM_UNIT_REFERENCE = "SELECT unit_ref_id, faction_id, class, rank, species, base_cost, " +
@@ -36,6 +36,8 @@ public class JdbcUnitDao implements UnitDao{
     private final String SELECT_ALL_FROM_SKILL_REFERENCE = "SELECT sr.skill_id AS skill_id, sr.skillset_id, name, description, " +
             "skillset_name FROM skill_reference sr " +
             "JOIN skillset_reference ssr ON ssr.skillset_id = sr.skillset_id ";
+    private final String SELECT_ALL_FROM_INJURY_REFERENCE = "SELECT injury_id, name, description, is_stat_damage, stat_damaged, " +
+            "is_removeable, is_stackable FROM injury_reference ";
 
     /*
     Constructor
@@ -287,8 +289,7 @@ public class JdbcUnitDao implements UnitDao{
 
     @Override
     public List<Injury> getAllPotentialInjuries(Unit unit) throws DaoException{
-        String sql = "SELECT injury_id, name, description, is_stat_damage, stat_damaged, is_removeable, " +
-                "is_stackable FROM injury_reference";
+        String sql = SELECT_ALL_FROM_INJURY_REFERENCE;
         List<Injury> potentialInjuries = new ArrayList<>();
 
         try {
@@ -351,6 +352,27 @@ public class JdbcUnitDao implements UnitDao{
         }
     }
 
+
+    @Override
+    public Injury selectInjuryById(int injuryId) throws DaoException{
+        String sql = SELECT_ALL_FROM_INJURY_REFERENCE + "WHERE injury_id = ?";
+        Injury injury = null;
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, injuryId);
+            while(results.next()){
+                injury = mapRowToInjury(results);
+            }
+
+            if (injury == null){
+                throw new DaoException("This injury does not exist.");
+            }
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        }
+
+        return injury;
+    }
 
     /*
     PRIVATE METHODS

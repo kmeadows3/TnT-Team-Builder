@@ -102,6 +102,12 @@ public class Injury {
         }
     }
 
+    public void setCount(int count, boolean skipVerificaiton){
+        if (skipVerificaiton){
+            this.count = count;
+        }
+    }
+
 
     @Override
     public boolean equals(Object o) {

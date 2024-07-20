@@ -11,6 +11,7 @@ import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -176,11 +177,53 @@ public class UnitService {
         return injuries;
     }
 
+    public void deleteInjury(int injuryId, int unitId, int userId) throws ServiceException{
+        Unit unit = getUnitById(unitId, userId);
+        Injury injuryToDelete = selectInjuryFromInjuryList(injuryId, unit);
+
+        if (injuryToDelete == null){
+            throw new ServiceException("This unit does not have that injury");
+        } else if (!injuryToDelete.isRemoveable()){
+            throw new ServiceException("This injury cannot be removed.");
+        }
+
+        try {
+            unitDao.deleteInjuryFromUnit(injuryId, unitId);
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage());
+        }
+
+    }
+
+    public void addInjury(int injuryId, int unitId, int userId) throws ServiceException {
+        Unit unit = getUnitById(unitId, userId);
+
+        Injury injury = selectInjuryFromInjuryList(injuryId, unit);
+
+        try {
+            if (injury == null){
+                injury = unitDao.selectInjuryById(injuryId);
+                //TODO: Validate unit can have injury
+                unitDao.addInjuryToUnit(injuryId, unitId);
+            } else if (injury.isStackable()){
+                //TODO: Validate unit can have injury
+                unitDao.updateInjuryCount(injuryId, unitId, injury.getCount() + 1);
+            } else {
+                throw new ServiceException("Unit already has this injury and cannot add another instance.");
+            }
+        } catch (DaoException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+
+    }
+
+
+
+
 
     /*
         PRIVATE METHODS
      */
-
     private void transferOnlyNonWeapons(int unitId, Item item) throws ServiceException {
         if (item.getCategory().equals("Armor") || item.getCategory().equals("Equipment")){
             itemDao.transferItem(item.getId(), unitId, teamService.getTeamByUnitId(unitId).getId(), false);
@@ -188,6 +231,7 @@ public class UnitService {
             itemDao.deleteItem(item.getId());
         }
     }
+
     private List<Unit> adjustUnitListForTeamStatus(Team team, List<Unit> units) {
         if ( unitValidator.teamMustBuyLeader(team) ) {
             units = units.stream()
@@ -211,7 +255,6 @@ public class UnitService {
         }
         return units;
     }
-
     private List<Unit> filterOutRank(List<Unit> units, String filteredOutRank) {
         units = units.stream()
                 .filter( unit -> !filteredOutRank.equalsIgnoreCase(unit.getRank() ) )
@@ -253,6 +296,15 @@ public class UnitService {
         }
 
         throw new ServiceException("Error, unit cannot have this skill.");
+    }
+
+    private Injury selectInjuryFromInjuryList(int injuryId, Unit unit) throws ServiceException {
+        for (Injury injury : unit.getInjuries()){
+            if (injury.getId() == injuryId){
+                return injury;
+            }
+        }
+        return null;
     }
 
 

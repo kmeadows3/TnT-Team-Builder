@@ -90,4 +90,6 @@ public interface UnitDao {
     void deleteInjuryFromUnit(int injuryId, int unitId) throws DaoException;
 
     void updateInjuryCount (int injuryId, int unitId, int count) throws DaoException;
+
+    Injury selectInjuryById(int injuryId) throws DaoException;
 }

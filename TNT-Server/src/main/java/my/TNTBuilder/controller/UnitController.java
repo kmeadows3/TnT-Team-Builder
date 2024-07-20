@@ -194,5 +194,13 @@ public class UnitController {
         return injuries;
     }
 
+    @RequestMapping(path="/units/{unitId}/injuries/{injuryId}", method = RequestMethod.DELETE)
+    public void deleteInjury(@PathVariable int unitId, @PathVariable int injuryId, Principal principal){
+        try {
+            unitService.deleteInjury(injuryId, unitId, userDao.getUserIdByUsername(principal.getName()));
+        }catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 
 }

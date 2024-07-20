@@ -219,6 +219,12 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Assert.assertFalse(testUnit.getInjuries().contains(GASHED_LEG));
     }
 
+    @Test (expected = DaoException.class)
+    public void deleteInjuryFromUnit_throws_exception_if_unit_does_not_have_injury() {
+        sut.deleteInjuryFromUnit(5, 1);
+        Assert.fail();
+    }
+
     @Test
     public void updateInjuryCount_updates_injury_count() throws ValidationException{
         Injury gashedLegHigherCount = new Injury(1, "Gashed Leg", "-1 penalty to Move",
@@ -231,4 +237,15 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Assert.assertTrue(testUnit.getInjuries().contains(gashedLegHigherCount));
     }
 
+    @Test
+    public void selectInjuryById_selects_injury() throws DaoException {
+        Injury testInjury = sut.selectInjuryById(1);
+        Assert.assertEquals(GASHED_LEG, testInjury);
+    }
+
+    @Test (expected = DaoException.class)
+    public void selectInjuryById_throws_exception_if_injury_id_not_valid() throws DaoException {
+        sut.selectInjuryById(99);
+        Assert.fail();
+    }
 }

@@ -106,6 +106,7 @@ nav div.flex-nav-option {
   border-radius: 7px;
   cursor: pointer;
   text-align: center;
+  word-wrap: break-word;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, .2),
     2px 2px 10px rgba(0, 0, 0, .2);
 

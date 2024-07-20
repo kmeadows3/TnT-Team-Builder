@@ -12,10 +12,8 @@
             <div v-for="injury in $store.state.unitInjuriesSorted" :key="'injury-'+ injury.id">
                 <h2 class="reference-label">{{ injury.name }}</h2>
                 <p class="reference-desc">{{ injury.description }}
-                    <span class="button" v-show="injury.removeable"><i class="bi bi-x-square"  @click="removeTempInjury(injury)" title="Remove"></i> Remove</span>
-                </p>
-                
-                
+                    <i class="bi bi-x-square button"  v-show="injury.removable" @click="removeTempInjury(injury)" title="Remove"></i>
+                </p>              
             </div>
         </div>
     </div>
@@ -33,16 +31,9 @@ export default {
     },
     methods: {
         removeTempInjury(injury){
-            if (injury.name=='Banged Up'){
-                this.$store.state.currentUnit.bangedUp = false;
-            }
-            if (injury.name=="Long Recovery"){
-                this.$store.state.currentUnit.longRecovery = false;
-            }
-
-            UnitService.updateUnit(this.$store.state.currentUnit)
+            UnitService.removeInjury(injury.id, this.$store.state.currentUnit.id)
                 .then(response => {
-                    this.$store.commit('SET_CURRENT_UNIT', response.data);
+                    this.$store.dispatch('reloadCurrentUnit');
                 }).catch(error => {
                     this.$store.dispatch('showError', error);
                 });
@@ -67,19 +58,5 @@ i.bi.bi-x-square {
     border: none;
 }
 
-p>span.button{
-    padding: 3px 2px 1px 3px;
-    border-radius: 3px;
-    justify-self: end;
-    border: 1px black solid;
-    cursor: pointer;
-    box-shadow: 2px 2px 3px rgba(0, 0, 0, .1),
-              2px 2px 5px rgba(0, 0, 0, .1);
-}
-
-p>span.button:hover{
-    transform: translateY(-1px);
-    background-color:#eee;
-}
 
 </style>

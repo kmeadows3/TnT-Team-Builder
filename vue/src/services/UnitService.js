@@ -31,6 +31,11 @@ export default {
   },
   getPotentialInjuries(id){
     return axios.get(`/units/${id}/injuries`);
+  },
+  addInjury(injuryId, unitId){
+    return axios.post(`/units/${unitId}/injuries/${injuryId}`);
+  },
+  removeInjury(injuryId, unitId){
+    return axios.delete(`/units/${unitId}/injuries/${injuryId}`);
   }
-
 }

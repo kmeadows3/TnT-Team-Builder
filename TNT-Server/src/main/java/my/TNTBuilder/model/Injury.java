@@ -10,19 +10,19 @@ public class Injury {
     private String description;
     private boolean isStatDamage;
     private String statDamaged;
-    private boolean isRemoveable;
+    private boolean isRemovable;
     private boolean isStackable;
     private int count = 1;
 
     //CONSTRUCTOR
 
-    public Injury(int id, String name, String description, boolean isStatDamage, String statDamaged, boolean isRemoveable, boolean isStackable, int count) {
+    public Injury(int id, String name, String description, boolean isStatDamage, String statDamaged, boolean isRemovable, boolean isStackable, int count) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.isStatDamage = isStatDamage;
         this.statDamaged = statDamaged;
-        this.isRemoveable = isRemoveable;
+        this.isRemovable = isRemovable;
         this.isStackable = isStackable;
         this.count = count;
     }
@@ -72,12 +72,12 @@ public class Injury {
         this.statDamaged = statDamaged;
     }
 
-    public boolean isRemoveable() {
-        return isRemoveable;
+    public boolean isRemovable() {
+        return isRemovable;
     }
 
-    public void setRemoveable(boolean removeable) {
-        isRemoveable = removeable;
+    public void setRemovable(boolean removable) {
+        isRemovable = removable;
     }
 
     public boolean isStackable() {
@@ -114,13 +114,13 @@ public class Injury {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Injury injury = (Injury) o;
-        return id == injury.id && isStatDamage == injury.isStatDamage && isRemoveable == injury.isRemoveable
+        return id == injury.id && isStatDamage == injury.isStatDamage && isRemovable == injury.isRemovable
                 && isStackable == injury.isStackable && count == injury.count && Objects.equals(name, injury.name)
                 && Objects.equals(description, injury.description) && Objects.equals(statDamaged, injury.statDamaged);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, isStatDamage, statDamaged, isRemoveable, isStackable, count);
+        return Objects.hash(id, name, description, isStatDamage, statDamaged, isRemovable, isStackable, count);
     }
 }

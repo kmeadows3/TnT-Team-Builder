@@ -11,7 +11,6 @@ import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -183,7 +182,7 @@ public class UnitService {
 
         if (injuryToDelete == null){
             throw new ServiceException("This unit does not have that injury");
-        } else if (!injuryToDelete.isRemoveable()){
+        } else if (!injuryToDelete.isRemovable()){
             throw new ServiceException("This injury cannot be removed.");
         }
 

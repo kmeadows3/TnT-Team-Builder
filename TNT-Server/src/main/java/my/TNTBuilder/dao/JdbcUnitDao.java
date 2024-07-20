@@ -7,7 +7,6 @@ import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Skillset;
 import my.TNTBuilder.model.Unit;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -599,7 +598,7 @@ public class JdbcUnitDao implements UnitDao{
         newInjury.setDescription(row.getString("description"));
         newInjury.setStatDamage(row.getBoolean("is_stat_damage"));
         newInjury.setStatDamaged(row.getString("stat_damaged"));
-        newInjury.setRemoveable(row.getBoolean("is_removeable"));
+        newInjury.setRemovable(row.getBoolean("is_removeable"));
         newInjury.setStackable(row.getBoolean("is_stackable"));
         return newInjury;
     }

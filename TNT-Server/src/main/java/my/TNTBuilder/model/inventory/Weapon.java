@@ -105,11 +105,12 @@ public class Weapon extends Item {
         if (!super.equals(o)) return false;
         Weapon weapon = (Weapon) o;
         return meleeRange == weapon.meleeRange && rangedRange == weapon.rangedRange && strength == weapon.strength
-                && reliability == weapon.reliability;
+                && reliability == weapon.reliability && isMasterwork == weapon.isMasterwork
+                && isLargeCaliber == weapon.isLargeCaliber && hasPrefallAmmo == weapon.hasPrefallAmmo;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), meleeRange, rangedRange, strength, reliability);
+        return Objects.hash(super.hashCode(), meleeRange, rangedRange, strength, reliability, isMasterwork, isLargeCaliber, hasPrefallAmmo);
     }
 }

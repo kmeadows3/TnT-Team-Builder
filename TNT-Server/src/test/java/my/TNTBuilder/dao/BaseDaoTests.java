@@ -66,7 +66,7 @@ public abstract class BaseDaoTests {
                     new Skillset(4, "Quickness", "Skill")),
             new ArrayList<>(),  Arrays.asList(GASHED_LEG, BANGED_HEAD), Arrays.asList(ARMOR, WEAPON, ITEM));
     protected static final Unit UNIT2 = new Unit(2, 3, "UnitName2", "Soldier", "Elite",
-            "Mutant", 51,11,6,8,7,9,7,6,1,
+            "Mutant", 51,11,6,1,7,9,7,6,1,
             "Special rules description",50,0,0,0,
             List.of(new Skillset(6, "Brawn", "Skill")), new ArrayList<>(),  new ArrayList<>(), List.of(RELIC_WEAPON));
 

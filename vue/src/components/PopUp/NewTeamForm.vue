@@ -51,8 +51,8 @@ export default {
             this.newTeam.userId = this.$store.state.user.id;
             TeamsService.createNewTeam(this.newTeam)
                 .then(response => {
-                    this.$store.dispatch('loadTeams');
                     this.$store.commit('SET_CURRENT_TEAM', response.data);
+                    this.$store.dispatch('loadTeams');
                     this.clearForm();
                 }).catch(error => {
                     this.$store.dispatch('showError', error);

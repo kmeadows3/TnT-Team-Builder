@@ -122,8 +122,6 @@ CREATE TABLE unit(
 	unspent_exp int DEFAULT 0,
 	total_advances int DEFAULT 0,
 	ten_point_advances int DEFAULT 0,
-	is_banged_up boolean DEFAULT false,
-	is_long_recovery boolean DEFAULT false,
 	CONSTRAINT FK_unit_team FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
 
@@ -230,8 +228,8 @@ INSERT INTO skillset_reference (skillset_name, category) VALUES
 	('Psychic Mutations', 'Mutation'), -- ID 12
 	('Hidden Detriments', 'Detriment'), -- ID 13
 	('Physical Detriments', 'Detriment'), -- ID 14
-	('General Abilities', 'General'), -- ID 15
-	('Injuries', 'Injury'); -- ID 16
+	('General Abilities', 'General'); -- ID 15
+
 
 INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, is_removeable, is_stackable) VALUES
 	('Gashed Leg', '-1 penalty to Move', true, 'Move', false, true),
@@ -252,9 +250,7 @@ INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(6, 'Bully', 'All enemies defeated by this model in close combat are knocked prone in addition to any other combat result.'),
 	(15, 'Dumb', 'Takes a -2 penalty to intelligence tests'),
 	(15, 'Up-Armed', 'Can Equip Support Weapons'),
-	(15, 'RagTag', 'Cannot equip more than 15BS worth of gear'), -- ID 10
-	(16, 'Gashed Leg', '-1 penalty to Move'),
-	(16, 'Banged Head', '-1 penalty to Mettle');
+	(15, 'RagTag', 'Cannot equip more than 15BS worth of gear'); -- ID 10
 
 INSERT INTO item_trait_reference (name, effect) VALUES
 	('Trait 1', 'Trait 1 Desc'),
@@ -300,7 +296,7 @@ INSERT INTO team(user_id, faction_id, team_name, money) VALUES (4, 1, 'Team With
 INSERT INTO unit (team_id, name, class, rank, species, base_cost, wounds, defense, mettle, move, ranged, melee,
     strength, empty_skills, special_rules, spent_exp)
 VALUES (1, 'UnitName1', 'Trade Master', 'Leader', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
-    (3, 'UnitName2', 'Soldier', 'Elite', 'Mutant', 51, 11, 6, 8, 7, 9, 7, 6, 1, 'Special rules description', 50),
+    (3, 'UnitName2', 'Soldier', 'Elite', 'Mutant', 51, 11, 6, 1, 7, 9, 7, 6, 1, 'Special rules description', 50),
     (1, 'UnitName3', 'Class Name', 'Specialist', 'Human', 40, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
     (4, 'UnitName4', 'High BS Unit', 'Leader', 'Human', 200, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
     (7, 'UnitName5', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),

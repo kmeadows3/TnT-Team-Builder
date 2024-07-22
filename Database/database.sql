@@ -120,8 +120,6 @@ CREATE TABLE unit(
 	unspent_exp int DEFAULT 0,
 	total_advances int DEFAULT 0,
 	ten_point_advances int DEFAULT 0,
-	is_banged_up boolean DEFAULT false,
-	is_long_recovery boolean DEFAULT false,
 	CONSTRAINT FK_unit_team FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
 
@@ -224,8 +222,8 @@ INSERT INTO skillset_reference (skillset_name, category) VALUES
 	('Psychic Mutations', 'Mutation'), -- ID 12
 	('Hidden Detriments', 'Detriment'), -- ID 13
 	('Physical Detriments', 'Detriment'), -- ID 14
-	('General Abilities', 'General'), -- ID 15
-	('Injuries', 'Injury'); -- ID 16
+	('General Abilities', 'General'); -- ID 15
+
 
 INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, is_removeable, is_stackable) VALUES
 	('Gashed Leg', '-1 penalty to Move', true, 'Move', false, true),
@@ -244,9 +242,7 @@ INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(7, 'Brave', '+2 bonus when making Will tests.'),
 	(6, 'Brute', 'Gain +1 to Strength Stat when making Melee attacks. Ignore heavy weapons rule.'),
 	(6, 'Bully', 'All enemies defeated by this model in close combat are knocked prone in addition to any other combat result.'),
-	(15, 'Dumb', 'Takes a -2 penalty to intelligence tests'),
-	(16, 'Gashed Leg', '-1 penalty to Move'),
-	(16, 'Banged Head', '-1 penalty to Mettle');
+	(15, 'Dumb', 'Takes a -2 penalty to intelligence tests');
 	
 INSERT INTO item_trait_reference (name, effect) VALUES
 	('Burst', 'Allow the shooter to fire twice in an activation. If all AP is used to shoot, gain 1 extra AP that must be used to fire a final time.'),

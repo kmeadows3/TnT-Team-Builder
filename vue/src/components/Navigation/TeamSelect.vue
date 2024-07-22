@@ -14,7 +14,9 @@ export default {
     computed: {
         filteredTeams() {
             let teams = this.$store.state.teamList;
-            teams = teams.filter((team) => team.id != this.$store.state.currentTeam.id);
+            if (teams.length){
+                teams = teams.filter((team) => team.id != this.$store.state.currentTeam.id);
+            }
             return teams;
         }
     },

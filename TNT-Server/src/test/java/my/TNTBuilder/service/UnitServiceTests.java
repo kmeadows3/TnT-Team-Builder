@@ -1,6 +1,7 @@
 package my.TNTBuilder.service;
 
 import my.TNTBuilder.exception.DaoException;
+import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.*;
 import my.TNTBuilder.validator.TeamValidator;
 import my.TNTBuilder.validator.UnitValidator;
@@ -431,21 +432,42 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void addInjury_adds_new_injury_to_unit() throws ServiceException{
+    public void addInjury_adds_new_injury_to_unit_no_stat_damage() throws ServiceException{
         sut.addInjury(5,1,1);
-        List<Injury> testList = sut.getUnitById(1,1).getInjuries();
+        Unit testUnit = sut.getUnitById(1,1);
+        List<Injury> testList = testUnit.getInjuries();
 
         Assert.assertEquals(3, testList.size());
         Assert.assertTrue(testList.contains(BANGED_UP));
     }
 
     @Test
+    public void addInjury_adds_new_injury_to_unit_with_stat_damage() throws ServiceException{
+        sut.addInjury(1,2,2);
+        Unit testUnit = sut.getUnitById(2,2);
+        List<Injury> testList = testUnit.getInjuries();
+
+        Assert.assertEquals(1, testList.size());
+        Assert.assertTrue(testList.contains(GASHED_LEG));
+        Assert.assertEquals("Value should be 6 if damage was applied to the stat.",6, testUnit.getMove());
+    }
+
+    @Test (expected = ServiceException.class)
+    public void addInjury_throws_exception_if_stat_damage_would_kill_unit () throws ServiceException{
+        sut.addInjury(2,2,2);
+        Assert.fail();
+    }
+
+    @Test
     public void addInjury_adds_to_count_if_unit_already_has_injury_and_is_stackable() throws ServiceException{
         sut.addInjury(1, 1,1);
-        List<Injury> testList = sut.getUnitById(1,1).getInjuries();
+        Unit testUnit = sut.getUnitById(1,1);
+        List<Injury> testList = testUnit.getInjuries();
         GASHED_LEG.setCount(2);
         Assert.assertEquals(2, testList.size());
         Assert.assertTrue(testList.contains(GASHED_LEG));
+        Assert.assertEquals(5, testUnit.getMove());
+
     }
 
     @Test (expected = ServiceException.class)

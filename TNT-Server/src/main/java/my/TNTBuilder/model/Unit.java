@@ -1,8 +1,8 @@
 package my.TNTBuilder.model;
 
+import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.inventory.Armor;
 import my.TNTBuilder.model.inventory.Item;
-
 import javax.validation.constraints.Min;
 import java.util.*;
 
@@ -34,10 +34,6 @@ public class Unit {
     private List<Skill> skills = new ArrayList<>();
     private List<Injury> injuries = new ArrayList<>();
     private List<Item> inventory = new ArrayList<>();
-    //TODO: Remove these variables
-    private boolean isBangedUp = false;
-    private boolean isLongRecovery = false;
-
 
     //constructors
 
@@ -192,7 +188,10 @@ public class Unit {
         return defense;
     }
 
-    public void setDefense(int defense) {
+    public void setDefense(int defense) throws ValidationException{
+        if (defense <= 0){
+            throw new ValidationException("Defense cannot fall below 1. If an injury causes this to occur, instead kill the unit.");
+        }
         this.defense = defense;
     }
 
@@ -200,7 +199,10 @@ public class Unit {
         return mettle;
     }
 
-    public void setMettle(int mettle) {
+    public void setMettle(int mettle) throws ValidationException{
+        if (mettle <= 0){
+            throw new ValidationException("Mettle cannot fall below 1. If an injury causes this to occur, instead kill the unit.");
+        }
         this.mettle = mettle;
     }
 
@@ -208,7 +210,10 @@ public class Unit {
         return move;
     }
 
-    public void setMove(int move) {
+    public void setMove(int move) throws ValidationException{
+        if (move <= 0){
+            throw new ValidationException("Move cannot fall below 1. If an injury causes this to occur, instead kill the unit.");
+        }
         this.move = move;
     }
 
@@ -305,22 +310,6 @@ public class Unit {
 
     public void setInventory(List<Item> inventory) {
         this.inventory = inventory;
-    }
-
-    public boolean isBangedUp() {
-        return isBangedUp;
-    }
-
-    public void setBangedUp(boolean bangedUp) {
-        isBangedUp = bangedUp;
-    }
-
-    public boolean isLongRecovery() {
-        return isLongRecovery;
-    }
-
-    public void setLongRecovery(boolean longRecovery) {
-        isLongRecovery = longRecovery;
     }
 
     public List<Injury> getInjuries() {

@@ -1,5 +1,6 @@
 package my.TNTBuilder.model;
 
+import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.inventory.Armor;
 import my.TNTBuilder.model.inventory.ItemTrait;
 import my.TNTBuilder.model.inventory.Weapon;
@@ -160,7 +161,23 @@ public class UnitTests {
         Assert.assertEquals(8, unit.getCostToAdvance());
     }
 
+    @Test (expected = ValidationException.class)
+    public void setMettle_throws_exception_if_value_is_zero() throws ValidationException{
+        unit.setMettle(0);
+        Assert.fail();
+    }
 
+    @Test (expected = ValidationException.class)
+    public void setMove_throws_exception_if_value_is_zero() throws ValidationException{
+        unit.setMove(0);
+        Assert.fail();
+    }
+
+    @Test (expected = ValidationException.class)
+    public void setDefense_throws_exception_if_value_is_zero() throws ValidationException{
+        unit.setDefense(0);
+        Assert.fail();
+    }
 
 
 

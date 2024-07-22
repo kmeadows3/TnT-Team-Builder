@@ -45,18 +45,12 @@ export default {
                 }).catch(error => this.$store.dispatch('showError', error));
         },
         addInjury() {
-            
-                UnitService.addInjury(this.newInjury.id, this.$store.state.currentUnit.id)
+            UnitService.addInjury(this.newInjury.id, this.$store.state.currentUnit.id)
                 .then(response => {
                     this.$store.dispatch('reloadCurrentUnit');
                     this.cancel();
                 })
                 .catch(error => this.$store.dispatch('showError', error));
-            
-            
-
-
-            
         },
         cancel() {
             this.potentialInjuries = [];

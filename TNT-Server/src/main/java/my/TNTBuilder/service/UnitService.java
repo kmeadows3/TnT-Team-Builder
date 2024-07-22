@@ -202,22 +202,47 @@ public class UnitService {
         try {
             if (injury == null){
                 injury = unitDao.selectInjuryById(injuryId);
-                //TODO: Validate unit can have injury
+                validateInjury(injury, unit);
                 unitDao.addInjuryToUnit(injuryId, unitId);
+                unitDao.updateUnit(unit);
+
             } else if (injury.isStackable()){
-                //TODO: Validate unit can have injury
+                validateInjury(injury, unit);
                 unitDao.updateInjuryCount(injuryId, unitId, injury.getCount() + 1);
+                unitDao.updateUnit(unit);
             } else {
                 throw new ServiceException("Unit already has this injury and cannot add another instance.");
             }
-        } catch (DaoException e) {
+
+        } catch (DaoException | ValidationException e) {
             throw new ServiceException(e.getMessage(), e);
         }
 
     }
 
-
-
+    private void validateInjury(Injury injury, Unit unit) throws ValidationException {
+        if (injury.isStatDamage()){
+            switch (injury.getStatDamaged()) {
+                case "Mettle":
+                    unit.setMettle(unit.getMettle() - 1);
+                    break;
+                case "Move":
+                    unit.setMove(unit.getMove() - 1);
+                    break;
+                case "Ranged":
+                    unit.setRanged(unit.getRanged() - 1);
+                    break;
+                case "Defense":
+                    unit.setDefense(unit.getDefense() - 1);
+                    break;
+                case "Melee":
+                    unit.setMelee(unit.getMelee() - 1);
+                    break;
+                default:
+                    throw new ValidationException("Error: improperly configured injury");
+            }
+        }
+    }
 
 
     /*

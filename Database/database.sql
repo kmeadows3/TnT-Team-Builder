@@ -128,7 +128,7 @@ CREATE TABLE inventory(
 	item_ref_id int NOT NULL,
 	unit_id int,
 	team_id int,
-	isEquipped boolean DEFAULT false,
+	is_equipped boolean DEFAULT false,
 	CONSTRAINT CHK_inventory_unit_id_or_team_id_null CHECK ( unit_id IS NULL OR team_id IS NULL),
 	CONSTRAINT CHK_inventory_not_both_null CHECK (NOT(unit_id IS NULL AND team_id IS NULL)),
 	CONSTRAINT FK_inventory_item_ref_id FOREIGN KEY(item_ref_id) REFERENCES item_reference(item_ref_id),

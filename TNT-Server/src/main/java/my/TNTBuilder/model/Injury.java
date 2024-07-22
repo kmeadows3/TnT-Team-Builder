@@ -14,9 +14,11 @@ public class Injury {
     private boolean isStackable;
     private int count = 1;
 
+    private int grants = 0;
+
     //CONSTRUCTOR
 
-    public Injury(int id, String name, String description, boolean isStatDamage, String statDamaged, boolean isRemovable, boolean isStackable, int count) {
+    public Injury(int id, String name, String description, boolean isStatDamage, String statDamaged, boolean isRemovable, boolean isStackable, int count, int grants) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -25,6 +27,7 @@ public class Injury {
         this.isRemovable = isRemovable;
         this.isStackable = isStackable;
         this.count = count;
+        this.grants = grants;
     }
 
     public Injury() {}
@@ -115,12 +118,13 @@ public class Injury {
         if (o == null || getClass() != o.getClass()) return false;
         Injury injury = (Injury) o;
         return id == injury.id && isStatDamage == injury.isStatDamage && isRemovable == injury.isRemovable
-                && isStackable == injury.isStackable && count == injury.count && Objects.equals(name, injury.name)
+                && isStackable == injury.isStackable && count == injury.count && grants == injury.grants
+                && Objects.equals(name, injury.name)
                 && Objects.equals(description, injury.description) && Objects.equals(statDamaged, injury.statDamaged);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, isStatDamage, statDamaged, isRemovable, isStackable, count);
+        return Objects.hash(id, name, description, isStatDamage, statDamaged, isRemovable, isStackable, count, grants);
     }
 }

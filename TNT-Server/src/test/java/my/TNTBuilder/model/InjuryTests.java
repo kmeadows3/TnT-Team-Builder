@@ -9,7 +9,7 @@ public class InjuryTests {
 
     @Before
     public void setSut(){
-        sut = new Injury(1, "Name", "Description", false, null, false, true, 1);
+        sut = new Injury(1, "Name", "Description", false, null, false, true, 1, 0);
     }
 
     @Test

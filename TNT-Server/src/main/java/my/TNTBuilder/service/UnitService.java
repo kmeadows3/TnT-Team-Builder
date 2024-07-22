@@ -202,17 +202,16 @@ public class UnitService {
         try {
             if (injury == null){
                 injury = unitDao.selectInjuryById(injuryId);
-                validateInjury(injury, unit);
+                applyInjuryEffects(injury, unit);
                 unitDao.addInjuryToUnit(injuryId, unitId);
-                unitDao.updateUnit(unit);
-
             } else if (injury.isStackable()){
-                validateInjury(injury, unit);
+                applyInjuryEffects(injury, unit);
                 unitDao.updateInjuryCount(injuryId, unitId, injury.getCount() + 1);
-                unitDao.updateUnit(unit);
             } else {
                 throw new ServiceException("Unit already has this injury and cannot add another instance.");
             }
+
+            unitDao.updateUnit(unit);
 
         } catch (DaoException | ValidationException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -220,7 +219,8 @@ public class UnitService {
 
     }
 
-    private void validateInjury(Injury injury, Unit unit) throws ValidationException {
+    private void applyInjuryEffects(Injury injury, Unit unit) throws ValidationException {
+        //TODO deal with granting skills
         if (injury.isStatDamage()){
             switch (injury.getStatDamaged()) {
                 case "Mettle":

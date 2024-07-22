@@ -15,8 +15,8 @@ public class Armor extends Item {
 
     public Armor(int id, int referenceId, String type, int cost, String specialRules, List<ItemTrait> itemTraits,
                  String rarity, boolean isRelic, int meleeDefenseBonus, int rangedDefenseBonus, boolean isShield,
-                 int cost2Wounds, int cost3Wounds, int handsRequired, String category, boolean isEquipped) {
-        super(id, referenceId, type, cost, specialRules, itemTraits, rarity, isRelic, handsRequired, category, isEquipped);
+                 int cost2Wounds, int cost3Wounds, int handsRequired, String category, boolean isEquipped, int grants) {
+        super(id, referenceId, type, cost, specialRules, itemTraits, rarity, isRelic, handsRequired, category, isEquipped, grants);
         this.meleeDefenseBonus = meleeDefenseBonus;
         this.rangedDefenseBonus = rangedDefenseBonus;
         this.isShield = isShield;

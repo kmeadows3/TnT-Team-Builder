@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 public class JdbcItemDao implements ItemDao {
 
-    private final String SELECT_ALL_FROM_ITEM = "SELECT item_id, i.item_ref_id, isEquipped, name, cost, special_rules, rarity, " +
+    private final String SELECT_ALL_FROM_ITEM = "SELECT item_id, i.item_ref_id, is_equipped, name, cost, special_rules, rarity, " +
             "is_relic, item_category, hands_required, melee_defense_bonus, ranged_defense_bonus, is_shield, " +
             "cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability " +
             "FROM inventory i " +
@@ -44,7 +44,7 @@ public class JdbcItemDao implements ItemDao {
 
     @Override
     public List<Item> getAllItemsForUnit(int unitId) throws DaoException {
-        String sql = SELECT_ALL_FROM_ITEM + "WHERE unit_id = ? ORDER BY isEquipped DESC, item_category, name, item_id";
+        String sql = SELECT_ALL_FROM_ITEM + "WHERE unit_id = ? ORDER BY is_equipped DESC, item_category, name, item_id";
 
         return getItemListFromRowSet(unitId,sql);
     }
@@ -220,7 +220,7 @@ public class JdbcItemDao implements ItemDao {
     @Override
     public void updateEquipped(Item item) throws DaoException {
 
-        String sql = "UPDATE inventory SET isEquipped = ? WHERE item_id = ?";
+        String sql = "UPDATE inventory SET is_equipped = ? WHERE item_id = ?";
 
         try {
             int rowsUpdated = jdbcTemplate.update(sql, item.isEquipped(), item.getId());
@@ -296,7 +296,7 @@ public class JdbcItemDao implements ItemDao {
     private Item mapRowToItem(SqlRowSet row) throws DaoException {
         Item newItem = mapItemReferenceValuesFromRow(row);
         newItem.setId(row.getInt("item_id"));
-        newItem.setEquipped(row.getBoolean("isEquipped"));
+        newItem.setEquipped(row.getBoolean("is_equipped"));
         return newItem;
     }
 

@@ -32,11 +32,12 @@ public class Item {
     private int handsRequired;
     private String category;
     private boolean isEquipped;
+    private int grants;
 
 
     //Constructor
     public Item(int id, int referenceId, String type, int cost, String specialRules, List<ItemTrait> itemTraits,
-                String rarity, boolean isRelic, int handsRequired, String category, boolean isEquipped) {
+                String rarity, boolean isRelic, int handsRequired, String category, boolean isEquipped, int grants) {
         this.id = id;
         this.referenceId = referenceId;
         this.name = type;
@@ -48,6 +49,7 @@ public class Item {
         this.handsRequired = handsRequired;
         this.category = category;
         this.isEquipped = isEquipped;
+        this.grants = grants;
     }
 
     public Item() {
@@ -203,13 +205,21 @@ public class Item {
 
     }
 
+    public int getGrants() {
+        return grants;
+    }
+
+    public void setGrants(int grants) {
+        this.grants = grants;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
         return id == item.id && referenceId == item.referenceId && cost == item.cost && isRelic == item.isRelic
-                && isEquipped == item.isEquipped && handsRequired == item.handsRequired
+                && isEquipped == item.isEquipped && handsRequired == item.handsRequired && grants == item.grants
                 && Objects.equals(name, item.name)
                 && Objects.equals(specialRules, item.specialRules) && Objects.equals(rarity, item.rarity)
                 && Objects.equals(category, item.category)
@@ -219,6 +229,6 @@ public class Item {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, referenceId, name, cost, specialRules, itemTraits, rarity, isRelic, handsRequired, category);
+        return Objects.hash(id, referenceId, name, cost, specialRules, itemTraits, rarity, isRelic, handsRequired, category, grants);
     }
 }

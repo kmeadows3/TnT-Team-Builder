@@ -223,7 +223,19 @@ export function createStore(currentToken, currentUser) {
         store.commit('SET_UNIT_INVENTORY_TRAITS', unitTraits);
       },
       sortUnitSkills(context) {
-        let unitSkills = store.state.currentUnit.skills.filter(skill => skill.skillsetId != 16);
+        let unitSkills = store.state.currentUnit.skills;
+
+        store.state.currentUnit.injuries.filter( injury => injury.grants).forEach(injury => {
+          injury.grants.addedString = "(" + injury.name + ")"
+          unitSkills.push(injury.grants);
+        });
+
+        store.state.currentUnit.inventory.filter( item => item.equipped).filter( item => item.grants)
+        .forEach( item => {
+          item.grants.addedString = "(" + item.name + ")"
+          unitSkills.push(item.grants);
+        });
+
         unitSkills = unitSkills.sort((a, b) => a.name.localeCompare(b.name))
         store.commit('SET_UNIT_SKILLS_SORTED', unitSkills);
       },

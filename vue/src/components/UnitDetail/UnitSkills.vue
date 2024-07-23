@@ -3,7 +3,10 @@
         <div class="reference">
             <h1 class="section-title">Special Abilities</h1>
             <div v-for="skill in $store.state.unitSkillsSorted" :key="'skill-'+skill.id">
-                <h2 class="reference-label">{{ skill.name }}</h2>
+                <h2 class="reference-label">
+                    {{ skill.name }}
+                    <span>{{ skill.addedString }}</span>
+                </h2>
                 <p class="reference-desc">{{ skill.description }}</p>
             </div>
         </div>
@@ -24,11 +27,6 @@
 import UnitService from '../../services/UnitService';
 
 export default {
-   
-    created() {
-        this.$store.dispatch('sortUnitSkills');
-        this.$store.dispatch('sortInjuries');
-    },
     methods: {
         removeTempInjury(injury){
             UnitService.removeInjury(injury.id, this.$store.state.currentUnit.id)
@@ -59,7 +57,12 @@ i.bi.bi-x-square {
 }
 
 div.reference h2.reference-label{
-    display: block;
+    flex-direction: column;
+}
+
+div.reference h2.reference-label span{
+    font-size: .8rem;
+    font-weight: normal;
 }
 
 

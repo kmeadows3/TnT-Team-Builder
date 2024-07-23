@@ -70,6 +70,9 @@ export function createStore(currentToken, currentUser) {
       },
       CLEAR_CURRENT_TEAM(state) {
         state.currentTeam = {};
+        state.currentUnit = {};
+        state.manageInventory = false;
+        state.showUnitDetail = false;
         state.showTeamDetail = false;
         state.showTeamList = true;
       },

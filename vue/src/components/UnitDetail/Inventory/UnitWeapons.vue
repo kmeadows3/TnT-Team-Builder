@@ -63,7 +63,7 @@ div.table-label.weapon-grid{
     display: grid;
     grid-template-areas:  "name  cost  range strength reliablity hands equipped action";
     grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
-
+    grid-auto-columns: min-content;
 }
 
 div.item-list.weapon-grid{
@@ -71,6 +71,7 @@ div.item-list.weapon-grid{
     grid-template-areas:  "name  cost  range strength reliablity hands equipped action"
                           "name  rules rules rules    rules      rules rules    rules";
     grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-auto-columns: min-content;
 }
 
 div.item-name{

@@ -87,12 +87,10 @@ public class Weapon extends Item {
     }
 
     public boolean isHasPrefallAmmo() {
-
         return hasPrefallAmmo;
     }
 
     public void setHasPrefallAmmo(boolean hasPrefallAmmo) throws ValidationException{
-
         if (hasPrefallAmmo && (!this.getCategory().equals("Ranged Weapon") || this.isRelic()) ){
             throw new ValidationException("Pre-fall Ammo can only be added to firearms that are not support weapons or relics.");
         }

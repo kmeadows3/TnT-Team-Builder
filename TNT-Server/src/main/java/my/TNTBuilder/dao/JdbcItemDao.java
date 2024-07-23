@@ -19,6 +19,7 @@ public class JdbcItemDao implements ItemDao {
     private final String SELECT_ALL_FROM_ITEM = "SELECT item_id, i.item_ref_id, is_equipped, ir.name, cost, special_rules, rarity, " +
             "is_relic, item_category, hands_required, melee_defense_bonus, ranged_defense_bonus, is_shield, " +
             "cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability, " +
+            "is_masterwork, is_large_caliber, has_prefall_ammo, " +
             "sr.skill_id AS skill_id, sr.skillset_id, sr.name AS skill_name, sr.description AS skill_description, skillset_name " +
             "FROM inventory i " +
             "JOIN item_reference ir ON ir.item_ref_id = i.item_ref_id " +
@@ -176,6 +177,8 @@ public class JdbcItemDao implements ItemDao {
             }
         } catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
+        } catch (ValidationException e){
+            throw new DaoException(e.getMessage(), e);
         }
 
         return item;
@@ -296,15 +299,22 @@ public class JdbcItemDao implements ItemDao {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {
             throw new DaoException("Data integrity violation", e);
+        } catch (ValidationException e){
+            throw new DaoException(e.getMessage(), e);
         }
 
         return itemList;
     }
 
-    private Item mapRowToItem(SqlRowSet row) throws DaoException {
+    private Item mapRowToItem(SqlRowSet row) throws DaoException, ValidationException {
         Item newItem = mapItemReferenceValuesFromRow(row);
         newItem.setId(row.getInt("item_id"));
         newItem.setEquipped(row.getBoolean("is_equipped"));
+        if (newItem.getClass() == Weapon.class){
+            ((Weapon) newItem).setMasterwork(row.getBoolean("is_masterwork"));
+            ((Weapon) newItem).setLargeCaliber(row.getBoolean("is_large_caliber"));
+            ((Weapon) newItem).setHasPrefallAmmo(row.getBoolean("has_prefall_ammo"));
+        }
         return newItem;
     }
 

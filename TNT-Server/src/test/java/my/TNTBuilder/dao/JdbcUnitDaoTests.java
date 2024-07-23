@@ -228,7 +228,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     @Test
     public void updateInjuryCount_updates_injury_count() throws ValidationException{
         Injury gashedLegHigherCount = new Injury(1, "Gashed Leg", "-1 penalty to Move",
-                true, "Move", false, true, 5, 0);
+                true, "Move", false, true, 5, null);
 
         sut.updateInjuryCount(gashedLegHigherCount.getId(), 1, 5);
         Unit testUnit = sut.getUnitById(1, 1);

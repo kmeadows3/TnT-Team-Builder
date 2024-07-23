@@ -15,12 +15,12 @@ import java.util.List;
 public class ItemTests {
     private static final Armor ARMOR = new Armor(1, 1, "Armor 1", 1, "N/A",
             List.of(new ItemTrait(1, "Trait 1", "Trait 1 Desc")), "N/A", false, 1,
-            1, false, 2, 3, 1, "Armor", false,0);
+            1, false, 2, 3, 1, "Armor", false,null);
     private static final Weapon WEAPON = new Weapon(2, 5, "Weapon 1", 5, "N/A",
             new ArrayList<>(), "N/A", false, 0, 5, 5, 5,
-            1, "Ranged Weapon", false,0);
+            1, "Ranged Weapon", false,null);
     private static final Item ITEM = new Item(3, 3, "Equipment 1", 3, "N/A",
-            new ArrayList<>(), "N/A", false, 0, "Equipment", false,0);
+            new ArrayList<>(), "N/A", false, 0, "Equipment", false,null);
 
     private static final Unit UNIT1 = new Unit(1, 1, "UnitName1", "Trade Master", "Leader",
             "Human", 50,10,5,7,6,8,6,5,0,

@@ -2,6 +2,7 @@ package my.TNTBuilder.dao;
 
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ValidationException;
+import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.inventory.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
@@ -15,16 +16,23 @@ import java.util.List;
 @Component
 public class JdbcItemDao implements ItemDao {
 
-    private final String SELECT_ALL_FROM_ITEM = "SELECT item_id, i.item_ref_id, is_equipped, name, cost, special_rules, rarity, " +
+    private final String SELECT_ALL_FROM_ITEM = "SELECT item_id, i.item_ref_id, is_equipped, ir.name, cost, special_rules, rarity, " +
             "is_relic, item_category, hands_required, melee_defense_bonus, ranged_defense_bonus, is_shield, " +
-            "cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability " +
+            "cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability, " +
+            "sr.skill_id AS skill_id, sr.skillset_id, sr.name AS skill_name, sr.description AS skill_description, skillset_name " +
             "FROM inventory i " +
-            "JOIN item_reference ir ON ir.item_ref_id = i.item_ref_id ";
+            "JOIN item_reference ir ON ir.item_ref_id = i.item_ref_id " +
+            "LEFT JOIN skill_reference sr ON grants = sr.skill_id " +
+            "LEFT JOIN skillset_reference ssr ON  ssr.skillset_id = sr.skillset_id ";
 
-    private final String SELECT_ALL_FROM_ITEM_REFERENCE = "SELECT item_ref_id, name, cost, special_rules, rarity, " +
+
+    private final String SELECT_ALL_FROM_ITEM_REFERENCE = "SELECT item_ref_id, ir.name, cost, special_rules, rarity, " +
             "is_relic, item_category, hands_required, melee_defense_bonus, ranged_defense_bonus, is_shield, " +
-            "cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability " +
-            "FROM item_reference ";
+            "cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability, " +
+            "sr.skill_id AS skill_id, sr.skillset_id, sr.name AS skill_name, sr.description AS skill_description, skillset_name " +
+            "FROM item_reference ir " +
+            "LEFT JOIN skill_reference sr ON grants = sr.skill_id " +
+            "LEFT JOIN skillset_reference ssr ON  ssr.skillset_id = sr.skillset_id ";
     private final String SELECT_ALL_FROM_ITEM_TRAIT = "SELECT itr.item_trait_id, name, effect " +
             "FROM item_trait_reference itr " +
             "JOIN item_ref_item_trait irit ON irit.item_trait_id = itr.item_trait_id ";
@@ -315,6 +323,19 @@ public class JdbcItemDao implements ItemDao {
         return newItem;
     }
 
+    private Skill mapRowToSkill(SqlRowSet row) {
+        if (row.getInt("skill_id") != 0){
+            Skill newSkill = new Skill();
+            newSkill.setId(row.getInt("skill_id"));
+            newSkill.setSkillsetId(row.getInt("skillset_id"));
+            newSkill.setName(row.getString("skill_name"));
+            newSkill.setSkillsetName(row.getString("skillset_name"));
+            newSkill.setDescription(row.getString("skill_description"));
+            return newSkill;
+        }
+        return null;
+    }
+
     private Item initializeArmor(SqlRowSet row) throws DaoException{
         Armor armor = new Armor();
         initializeItem(row, armor);
@@ -353,6 +374,7 @@ public class JdbcItemDao implements ItemDao {
         item.setRelic(row.getBoolean("is_relic"));
         item.setHandsRequired(row.getInt("hands_required"));
         item.setCategory(row.getString("item_category"));
+        item.setGrants(mapRowToSkill(row));
 
     }
 

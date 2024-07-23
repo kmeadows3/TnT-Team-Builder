@@ -51,7 +51,7 @@ public class ItemServiceTests extends BaseDaoTests {
         List<Item> testList = sut.getItemsForPurchase();
         ARMOR.setId(0);
         WEAPON.setId(0);
-        Assert.assertEquals(11, testList.size());
+        Assert.assertEquals(12, testList.size());
         Assert.assertTrue(testList.contains(ARMOR));
         Assert.assertTrue(testList.contains(WEAPON));
     }
@@ -180,7 +180,7 @@ public class ItemServiceTests extends BaseDaoTests {
     public void addItemToUnit_works_with_support_weapon_if_unit_has_Uparmed() throws ServiceException{
         Item targetItem = new Weapon(0, 7, "Support Weapon", 7, "N/A",
                 new ArrayList<>(), "N/A", false, 0, 0, 7, 7,
-                2, "Support Weapon", false,0);
+                2, "Support Weapon", false,null);
 
         targetItem.setId(sut.addItemToUnit(7, 3, 1, true));
         List<Item> testInventory = unitDao.getUnitById(3, 1).getInventory();

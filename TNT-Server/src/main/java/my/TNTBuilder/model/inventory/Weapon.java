@@ -1,6 +1,7 @@
 package my.TNTBuilder.model.inventory;
 
 import my.TNTBuilder.exception.ValidationException;
+import my.TNTBuilder.model.Skill;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +19,7 @@ public class Weapon extends Item {
 
 
     public Weapon(int id, int referenceId, String type, int cost, String specialRules, List<ItemTrait> itemTraits, String rarity, boolean isRelic,
-                  int meleeRange, int rangedRange, int strength, int reliability, int handsRequired, String category, boolean isEquipped, int grants) {
+                  int meleeRange, int rangedRange, int strength, int reliability, int handsRequired, String category, boolean isEquipped, Skill grants) {
         super(id, referenceId, type, cost, specialRules, itemTraits, rarity, isRelic, handsRequired, category, isEquipped, grants);
         this.meleeRange = meleeRange;
         this.rangedRange = rangedRange;

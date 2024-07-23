@@ -32,11 +32,14 @@ public class JdbcUnitDao implements UnitDao{
             "JOIN team t on t.team_id = u.team_id ";
     private final String SELECT_ALL_FROM_SKILLSET_REFERENCE = "SELECT ssr.skillset_id, skillset_name, category " +
             "FROM skillset_reference ssr ";
-    private final String SELECT_ALL_FROM_SKILL_REFERENCE = "SELECT sr.skill_id AS skill_id, sr.skillset_id, name, description, " +
-            "skillset_name FROM skill_reference sr " +
+    private final String SELECT_ALL_FROM_SKILL_REFERENCE = "SELECT sr.skill_id AS skill_id, sr.skillset_id, " +
+            "name AS skill_name, description AS skill_description, skillset_name FROM skill_reference sr " +
             "JOIN skillset_reference ssr ON ssr.skillset_id = sr.skillset_id ";
-    private final String SELECT_ALL_FROM_INJURY_REFERENCE = "SELECT injury_id, name, description, is_stat_damage, stat_damaged, " +
-            "is_removeable, is_stackable FROM injury_reference ";
+    private final String SELECT_ALL_FROM_INJURY_REFERENCE = "SELECT injury_id, ir.name, ir.description, is_stat_damage, " +
+            "stat_damaged, is_removeable, is_stackable, sr.skill_id AS skill_id, sr.skillset_id, sr.name AS skill_name, " +
+            "sr.description AS skill_description, skillset_name FROM injury_reference ir "+
+            "LEFT JOIN skill_reference sr ON grants = sr.skill_id " +
+            "LEFT JOIN skillset_reference ssr ON  ssr.skillset_id = sr.skillset_id ";
 
     /*
     Constructor
@@ -543,7 +546,6 @@ public class JdbcUnitDao implements UnitDao{
         newUnit.setTotalAdvances(row.getInt("total_advances"));
         newUnit.setTenPointAdvances(row.getInt("ten_point_advances"));
         newUnit.setSkills(getUnitSkills(newUnit.getId()));
-
         newUnit.setAvailableSkillsets(getAvailableSkillsets(newUnit.getId()));
         newUnit.setInjuries(getAllInjuriesOnUnit(newUnit.getId()));
 
@@ -554,9 +556,13 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     private List<Injury> getAllInjuriesOnUnit(int unitId) throws DaoException {
-        String sql = "SELECT ir.injury_id, name, description, is_stat_damage, stat_damaged, is_removeable, " +
-                "is_stackable, count FROM injury_reference ir " +
+        String sql = "SELECT ir.injury_id, ir.name, ir.description, is_stat_damage, stat_damaged, is_removeable, " +
+                "is_stackable, count, sr.skill_id AS skill_id, sr.skillset_id, sr.name AS skill_name, " +
+                "sr.description AS skill_description, skillset_name " +
+                "FROM injury_reference ir "+
                 "JOIN unit_injury ui ON ui.injury_id = ir.injury_id "+
+                "LEFT JOIN skill_reference sr ON grants = sr.skill_id " +
+                "LEFT JOIN skillset_reference ssr ON  ssr.skillset_id = sr.skillset_id " +
                 "WHERE unit_id = ?";
         List<Injury> injuries = new ArrayList<>();
 
@@ -586,13 +592,16 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     private Skill mapRowToSkill(SqlRowSet row) {
-        Skill newSkill = new Skill();
-        newSkill.setId(row.getInt("skill_id"));
-        newSkill.setSkillsetId(row.getInt("skillset_id"));
-        newSkill.setName(row.getString("name"));
-        newSkill.setSkillsetName(row.getString("skillset_name"));
-        newSkill.setDescription(row.getString("description"));
-        return newSkill;
+        if (row.getInt("skill_id") != 0){
+            Skill newSkill = new Skill();
+            newSkill.setId(row.getInt("skill_id"));
+            newSkill.setSkillsetId(row.getInt("skillset_id"));
+            newSkill.setName(row.getString("skill_name"));
+            newSkill.setSkillsetName(row.getString("skillset_name"));
+            newSkill.setDescription(row.getString("skill_description"));
+            return newSkill;
+        }
+        return null;
     }
 
     private Injury mapRowToInjury(SqlRowSet row) {
@@ -604,6 +613,7 @@ public class JdbcUnitDao implements UnitDao{
         newInjury.setStatDamaged(row.getString("stat_damaged"));
         newInjury.setRemovable(row.getBoolean("is_removeable"));
         newInjury.setStackable(row.getBoolean("is_stackable"));
+        newInjury.setGrants(mapRowToSkill(row));
         return newInjury;
     }
 

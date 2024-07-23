@@ -13,12 +13,11 @@ public class Injury {
     private boolean isRemovable;
     private boolean isStackable;
     private int count = 1;
-
-    private int grants = 0;
+    private Skill grants;
 
     //CONSTRUCTOR
 
-    public Injury(int id, String name, String description, boolean isStatDamage, String statDamaged, boolean isRemovable, boolean isStackable, int count, int grants) {
+    public Injury(int id, String name, String description, boolean isStatDamage, String statDamaged, boolean isRemovable, boolean isStackable, int count, Skill grants) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -111,6 +110,13 @@ public class Injury {
         }
     }
 
+    public Skill getGrants() {
+        return grants;
+    }
+
+    public void setGrants(Skill grants) {
+        this.grants = grants;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -118,8 +124,8 @@ public class Injury {
         if (o == null || getClass() != o.getClass()) return false;
         Injury injury = (Injury) o;
         return id == injury.id && isStatDamage == injury.isStatDamage && isRemovable == injury.isRemovable
-                && isStackable == injury.isStackable && count == injury.count && grants == injury.grants
-                && Objects.equals(name, injury.name)
+                && isStackable == injury.isStackable && count == injury.count
+                && Objects.equals(name, injury.name) && Objects.equals(grants, injury.grants)
                 && Objects.equals(description, injury.description) && Objects.equals(statDamaged, injury.statDamaged);
     }
 

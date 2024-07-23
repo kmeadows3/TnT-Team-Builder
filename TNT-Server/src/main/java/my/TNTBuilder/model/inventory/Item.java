@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import my.TNTBuilder.exception.ValidationException;
+import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Unit;
 
 import java.util.HashSet;
@@ -32,12 +33,12 @@ public class Item {
     private int handsRequired;
     private String category;
     private boolean isEquipped;
-    private int grants;
+    private Skill grants;
 
 
     //Constructor
     public Item(int id, int referenceId, String type, int cost, String specialRules, List<ItemTrait> itemTraits,
-                String rarity, boolean isRelic, int handsRequired, String category, boolean isEquipped, int grants) {
+                String rarity, boolean isRelic, int handsRequired, String category, boolean isEquipped, Skill grants) {
         this.id = id;
         this.referenceId = referenceId;
         this.name = type;
@@ -205,11 +206,11 @@ public class Item {
 
     }
 
-    public int getGrants() {
+    public Skill getGrants() {
         return grants;
     }
 
-    public void setGrants(int grants) {
+    public void setGrants(Skill grants) {
         this.grants = grants;
     }
 
@@ -219,8 +220,8 @@ public class Item {
         if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
         return id == item.id && referenceId == item.referenceId && cost == item.cost && isRelic == item.isRelic
-                && isEquipped == item.isEquipped && handsRequired == item.handsRequired && grants == item.grants
-                && Objects.equals(name, item.name)
+                && isEquipped == item.isEquipped && handsRequired == item.handsRequired
+                && Objects.equals(name, item.name) && Objects.equals(grants, item.grants)
                 && Objects.equals(specialRules, item.specialRules) && Objects.equals(rarity, item.rarity)
                 && Objects.equals(category, item.category)
                 && new HashSet<>(itemTraits).containsAll(item.itemTraits)

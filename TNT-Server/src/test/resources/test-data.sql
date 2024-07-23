@@ -90,7 +90,9 @@ CREATE TABLE item_reference(
 	ranged_range int,
 	weapon_strength int,
 	reliability int,
-	CONSTRAINT CHK_item_ref_valid_category CHECK( item_category IN ('Armor', 'Equipment', 'Melee Weapon', 'Ranged Weapon', 'Support Weapon', 'Grenade'))
+	grants int,
+	CONSTRAINT CHK_item_ref_valid_category CHECK( item_category IN ('Armor', 'Equipment', 'Melee Weapon', 'Ranged Weapon', 'Support Weapon', 'Grenade')),
+	CONSTRAINT FK_grants_item_ref_skill_id FOREIGN KEY(grants) REFERENCES skill_reference(skill_id)
 	);
 
 CREATE TABLE item_ref_item_trait(
@@ -131,6 +133,9 @@ CREATE TABLE inventory(
 	unit_id int,
 	team_id int,
 	is_equipped boolean DEFAULT false,
+	is_masterwork boolean DEFAULT false,
+	is_large_caliber boolean DEFAULT false,
+	has_prefall_ammo boolean DEFAULT false,
 	CONSTRAINT CHK_inventory_unit_id_or_team_id_null CHECK ( unit_id IS NULL OR team_id IS NULL),
 	CONSTRAINT CHK_inventory_not_both_null CHECK (NOT(unit_id IS NULL AND team_id IS NULL)),
 	CONSTRAINT FK_inventory_item_ref_id FOREIGN KEY(item_ref_id) REFERENCES item_reference(item_ref_id),
@@ -162,8 +167,10 @@ CREATE TABLE injury_reference(
 	stat_damaged varchar(10),
 	is_removeable boolean DEFAULT false,
 	is_stackable boolean DEFAULT true,
+	grants int,
 	CONSTRAINT CHK_injury_stat_damaged_identifies_stat_damaged CHECK ( (is_stat_damage IS false AND stat_damaged IS NULL) OR (is_stat_damage IS true AND stat_damaged IS NOT NULL)),
-	CONSTRAINT CHK_stat_damaged_is_valid_stat CHECK (stat_damaged IN ('Mettle', 'Move', 'Ranged', 'Defense', 'Melee'))
+	CONSTRAINT CHK_stat_damaged_is_valid_stat CHECK (stat_damaged IN ('Mettle', 'Move', 'Ranged', 'Defense', 'Melee')),
+	CONSTRAINT FK_grants_injury_skill_id FOREIGN KEY (grants) REFERENCES skill_reference(skill_id)
 );
 
 
@@ -230,16 +237,6 @@ INSERT INTO skillset_reference (skillset_name, category) VALUES
 	('Physical Detriments', 'Detriment'), -- ID 14
 	('General Abilities', 'General'); -- ID 15
 
-
-INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, is_removeable, is_stackable) VALUES
-	('Gashed Leg', '-1 penalty to Move', true, 'Move', false, true),
-	('Banged Head', '-1 penalty to Mettle', true, 'Mettle', false, true),
-	('Brain Sprain', 'Model gains the Dumb general ability', false, null, false, false),
-	('Captured', 'Model is captured and your opponent determines what happens to them (See Rulebook).', false, null, true, false),
-	('Banged Up', 'Model has -1 to all rolls it makes during the next campaign game.', false, null, true, false),
-	('Long Recovery', 'Model misses the next campaign game.', false, null, true, false);
-
-
 INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(5, 'Scavenger', 'When taking a weapon with limited ammo roll 2d3 when determining ammo quantity and take the higher of the two. Upkeep does not need to be paid for this unit. May not be taken by Freelancers.'),
 	(8, 'Motivator', 'All friendly models withing 6" of this model gain +1 to activation tests. Motivator may not stack with itself.'),
@@ -252,6 +249,18 @@ INSERT INTO skill_reference (skillset_id, name, description) VALUES
 	(15, 'Up-Armed', 'Can Equip Support Weapons'),
 	(15, 'RagTag', 'Cannot equip more than 15BS worth of gear'); -- ID 10
 
+
+INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, is_removeable, is_stackable, grants) VALUES
+	('Gashed Leg', '-1 penalty to Move', true, 'Move', false, true, null),
+	('Banged Head', '-1 penalty to Mettle', true, 'Mettle', false, true, null),
+	('Brain Sprain', 'Model gains the Dumb general ability', false, null, false, false, 8),
+	('Captured', 'Model is captured and your opponent determines what happens to them (See Rulebook).', false, null, true, false, null),
+	('Banged Up', 'Model has -1 to all rolls it makes during the next campaign game.', false, null, true, false, null),
+	('Long Recovery', 'Model misses the next campaign game.', false, null, true, false, null);
+
+
+
+
 INSERT INTO item_trait_reference (name, effect) VALUES
 	('Trait 1', 'Trait 1 Desc'),
 	('Trait 2', 'Trait 2 Desc'),
@@ -259,18 +268,19 @@ INSERT INTO item_trait_reference (name, effect) VALUES
 
 INSERT INTO item_reference (name, cost, special_rules, rarity, is_relic, melee_defense_bonus, ranged_defense_bonus, is_shield,
 							cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability,
-							hands_required, item_category) VALUES
-	('Armor 1', 1, 'N/A', 'N/A', FALSE, 1, 1, TRUE, 2, 3, null, null, null, null, 1, 'Armor'),
-	('Relic Armor', 2, 'Relic Armor Desc', 'Ultra Rare', TRUE, 2, 2, FALSE, 2, 2, null, null, null, null, 0, 'Armor'),
-	('Equipment 1', 3, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 0, 'Equipment'),
-	('Relic Equipment', 4, 'Relic Equipment Desc', 'Rare', TRUE, null, null, null, null, null, null, null, null, null, 0, 'Equipment'),
-	('Weapon 1', 5, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 5, 5, 5, 1, 'Ranged Weapon'),
-	('Relic Weapon', 6, 'Relic Weapon Desc', 'Rare', TRUE, null, null, null, null, null, 6, null, 6, 6, 2, 'Melee Weapon'),
-    ('Support Weapon', 7, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, 7, 7, 2, 'Support Weapon'),
-	('Relic Support Weapon', 8, 'Relic Support Desc', 'Ultra Rare', TRUE, null, null, null, null, null, null, 8, 8, 8, 2, 'Support Weapon'),
-    ('Grenade', 9, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Grenade'),
-	('Relic Grenade', 10, 'Relic Grenade Desc', 'Rare', TRUE, null, null, null, null, null, null, 10, 10, null, 1, 'Grenade'),
-	('Expensive Item', 20, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Grenade');
+							hands_required, item_category, grants) VALUES
+	('Armor 1', 1, 'N/A', 'N/A', FALSE, 1, 1, TRUE, 2, 3, null, null, null, null, 1, 'Armor', null),
+	('Relic Armor', 2, 'Relic Armor Desc', 'Ultra Rare', TRUE, 2, 2, FALSE, 2, 2, null, null, null, null, 0, 'Armor', null),
+	('Equipment 1', 3, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 0, 'Equipment', null),
+	('Relic Equipment', 4, 'Relic Equipment Desc', 'Rare', TRUE, null, null, null, null, null, null, null, null, null, 0, 'Equipment', null),
+	('Weapon 1', 5, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 5, 5, 5, 1, 'Ranged Weapon', null),
+	('Relic Weapon', 6, 'Relic Weapon Desc', 'Rare', TRUE, null, null, null, null, null, 6, null, 6, 6, 2, 'Melee Weapon', null),
+    ('Support Weapon', 7, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, 7, 7, 2, 'Support Weapon', null),
+	('Relic Support Weapon', 8, 'Relic Support Desc', 'Ultra Rare', TRUE, null, null, null, null, null, null, 8, 8, 8, 2, 'Support Weapon', null),
+    ('Grenade', 9, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Grenade', null),
+	('Relic Grenade', 10, 'Relic Grenade Desc', 'Rare', TRUE, null, null, null, null, null, null, 10, 10, null, 1, 'Grenade', null),
+	('Expensive Item', 20, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Grenade', null),
+	('Skill Grant Item', 5, 'Grants Brave', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Equipment', 5);
 
 INSERT INTO item_ref_item_trait (item_ref_id, item_trait_id) VALUES
 	(1, 1),

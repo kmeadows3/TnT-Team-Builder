@@ -1,11 +1,8 @@
 package my.TNTBuilder.service;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import my.TNTBuilder.dao.*;
-import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
 import my.TNTBuilder.exception.ValidationException;
-import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
 import my.TNTBuilder.model.inventory.Item;
@@ -37,11 +34,14 @@ public class ItemServiceTests extends BaseDaoTests {
     }
 
     @After
-    public void resetItemIds(){
+    public void resetItemIds() throws ValidationException{
         ARMOR.setId(1);
         WEAPON.setId(2);
         WEAPON.setCost(5);
         WEAPON.setEquipped(false);
+        WEAPON.setLargeCaliber(false);
+        WEAPON.setHasPrefallAmmo(false);
+        WEAPON.setMasterwork(false);
         ITEM.setId(3);
         TEAM_RELIC_WEAPON.setId(8);
     }
@@ -51,7 +51,7 @@ public class ItemServiceTests extends BaseDaoTests {
         List<Item> testList = sut.getItemsForPurchase();
         ARMOR.setId(0);
         WEAPON.setId(0);
-        Assert.assertEquals(12, testList.size());
+        Assert.assertEquals(14, testList.size());
         Assert.assertTrue(testList.contains(ARMOR));
         Assert.assertTrue(testList.contains(WEAPON));
     }
@@ -517,7 +517,28 @@ public class ItemServiceTests extends BaseDaoTests {
     }
 
     @Test
-    public void unequipItem_updates_equipped_to_false_when_equipped_starts_true() throws ServiceException {
+    public void toggleEquipItem_removes_prefall_ammo_from_weapon_if_prefall_ammo_unequipped() throws ServiceException{
+        int prefallAmmoId = 0;
+        try {
+            prefallAmmoId = sut.addItemToUnit(13, 1, 1, true);
+            sut.toggleEquipItem(prefallAmmoId, 1, 1);
+            WEAPON.setHasPrefallAmmo(true);
+            sut.updateWeaponUpgrade(WEAPON, 1);
+        }catch (ServiceException e){
+            Assert.fail("Service exception thrown during arrange step");
+        }
+
+        sut.toggleEquipItem(prefallAmmoId,1, 1);
+        Item testItem = itemDao.getItemById(WEAPON.getId());
+        Item preFallAmmo = itemDao.getItemById(prefallAmmoId);
+
+        Assert.assertFalse(preFallAmmo.isEquipped());
+        Assert.assertFalse(((Weapon)testItem).isHasPrefallAmmo());
+
+    }
+
+    @Test
+    public void unequipItemDuringTransfer_updates_equipped_to_false_when_equipped_starts_true() throws ServiceException {
 
         try {
             sut.toggleEquipItem(WEAPON.getId(), 1, 1);
@@ -525,21 +546,21 @@ public class ItemServiceTests extends BaseDaoTests {
             Assert.fail("Test failed during the arrange step.");
         }
 
-        sut.unequipItem(WEAPON.getId(), 1, 1);
+        sut.unequipItemDuringTransfer(WEAPON.getId(), 1, 1);
         Item testWeapon = itemDao.getItemById(WEAPON.getId());
         Assert.assertFalse(testWeapon.isEquipped());
     }
 
     @Test
-    public void unequipItem_does_nothing_if_equipped_starts_false() throws ServiceException {
+    public void unequipItemDuringTransfer_does_nothing_if_equipped_starts_false() throws ServiceException {
 
-        sut.unequipItem(WEAPON.getId(), 1, 1);
+        sut.unequipItemDuringTransfer(WEAPON.getId(), 1, 1);
         Item testWeapon = itemDao.getItemById(WEAPON.getId());
         Assert.assertFalse(testWeapon.isEquipped());
     }
 
     @Test (expected = ServiceException.class)
-    public void unequipItem_throws_exception_if_unit_not_owned_by_user() throws ServiceException {
+    public void unequipItemDuringTransfer_throws_exception_if_unit_not_owned_by_user() throws ServiceException {
 
         try {
             sut.toggleEquipItem(WEAPON.getId(), 1, 1);
@@ -547,12 +568,12 @@ public class ItemServiceTests extends BaseDaoTests {
             Assert.fail("Test failed during the arrange step.");
         }
 
-        sut.unequipItem(WEAPON.getId(), 1, 2);
+        sut.unequipItemDuringTransfer(WEAPON.getId(), 1, 2);
         Assert.fail();
     }
 
     @Test (expected = ServiceException.class)
-    public void unequipItem_throws_exception_if_item_does_not_belong_to_unit() throws ServiceException {
+    public void unequipItemDuringTransfer_throws_exception_if_item_does_not_belong_to_unit() throws ServiceException {
 
         try {
             sut.toggleEquipItem(WEAPON.getId(), 1, 1);
@@ -560,7 +581,113 @@ public class ItemServiceTests extends BaseDaoTests {
             Assert.fail("Test failed during the arrange step.");
         }
 
-        sut.unequipItem(WEAPON.getId(), 2, 2);
+        sut.unequipItemDuringTransfer(WEAPON.getId(), 2, 2);
+        Assert.fail();
+    }
+
+    @Test
+    public void unequipItemDuringTransfer_removes_prefall_ammo_from_weapon_if_weapon_with_prefall_ammo_unequipped() throws ServiceException{
+        int prefallAmmoId = 0;
+        try {
+            prefallAmmoId = sut.addItemToUnit(13, 1, 1, true);
+            sut.toggleEquipItem(prefallAmmoId, 1, 1);
+            sut.toggleEquipItem(WEAPON.getId(), 1, 1);
+            WEAPON.setHasPrefallAmmo(true);
+            sut.updateWeaponUpgrade(WEAPON, 1);
+        }catch (ServiceException e){
+            Assert.fail("Service exception thrown during arrange step");
+        }
+
+        sut.unequipItemDuringTransfer(WEAPON.getId(),1, 1);
+        Item testItem = itemDao.getItemById(WEAPON.getId());
+
+        Assert.assertFalse(((Weapon)testItem).isHasPrefallAmmo());
+    }
+
+    @Test
+    public void updateWeaponUpgrade_correctly_updates_ranged_weapon_with_large_caliber() throws ServiceException{
+        WEAPON.setLargeCaliber(true);
+        sut.updateWeaponUpgrade(WEAPON, 1);
+
+        Item testItem = itemDao.getItemById(WEAPON.getId());
+        Team testTeam = teamDao.getTeamById(1, 1);
+
+        Assert.assertTrue( ((Weapon)testItem).isLargeCaliber() );
+        Assert.assertEquals(495, testTeam.getMoney());
+    }
+
+    @Test (expected = ValidationException.class)
+    public void updateWeaponUpgrade_throws_exception_if_weapon_with_large_caliber_is_not_ranged()throws ServiceException {
+        int weaponId = itemDao.addItemToUnit(14, 1);
+        Weapon weapon = (Weapon) itemDao.getItemById(weaponId);
+        weapon.setLargeCaliber(true);
+
+        sut.updateWeaponUpgrade(weapon, 1);
+        Assert.fail();
+    }
+
+    @Test
+    public void updateWeaponUpgrade_correctly_updates_melee_weapon_with_masterwork() throws ServiceException{
+        int weaponId = itemDao.addItemToUnit(14, 1);
+        Weapon weapon = (Weapon) itemDao.getItemById(weaponId);
+        weapon.setMasterwork(true);
+        sut.updateWeaponUpgrade(weapon, 1);
+
+        Item testItem = itemDao.getItemById(weaponId);
+        Team testTeam = teamDao.getTeamById(1, 1);
+
+        Assert.assertTrue( ((Weapon)testItem).isMasterwork() );
+        Assert.assertEquals(486, testTeam.getMoney());
+    }
+
+    @Test (expected = ValidationException.class)
+    public void updateWeaponUpgrade_throws_exception_if_weapon_with_masterwork_not_melee()throws ServiceException {
+        WEAPON.setMasterwork(true);
+        sut.updateWeaponUpgrade(WEAPON, 1);
+        Assert.fail();
+    }
+
+    @Test
+    public void updateWeaponUpgrade_allows_prefall_ammo_if_unit_has_prefall_ammo_equipped() throws ServiceException{
+
+        try {
+            int itemId = sut.addItemToUnit(13, 1, 1, true);
+            sut.toggleEquipItem(itemId, 1, 1);
+            WEAPON.setHasPrefallAmmo(true);
+        }catch (ServiceException e){
+            Assert.fail("Service exception thrown during arrange step");
+        }
+
+        sut.updateWeaponUpgrade(WEAPON, 1);
+        Item testItem = itemDao.getItemById(WEAPON.getId());
+        Assert.assertTrue( ((Weapon)testItem).isHasPrefallAmmo() );
+    }
+
+    @Test (expected = ValidationException.class)
+    public void updateWeaponUpgrade_throws_exception_for_equipping_prefall_if_unit_does_not_have_prefall() throws ServiceException{
+        WEAPON.setHasPrefallAmmo(true);
+        sut.updateWeaponUpgrade(WEAPON, 1);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void updateWeaponUpgrade_throws_exception_if_prefall_ammo_exists_but_not_equipped() throws ServiceException{
+
+        try {
+            int itemId = sut.addItemToUnit(13, 1, 1, true);
+            WEAPON.setHasPrefallAmmo(true);
+        }catch (ServiceException e){
+            Assert.fail("Service exception thrown during arrange step");
+        }
+
+        sut.updateWeaponUpgrade(WEAPON, 1);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void updateWeaponUpgrade_throws_exception_if_user_does_not_own_item() throws ServiceException{
+        WEAPON.setHasPrefallAmmo(true);
+        sut.updateWeaponUpgrade(WEAPON, 99);
         Assert.fail();
     }
 

@@ -9,6 +9,7 @@ import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Team;
 import my.TNTBuilder.model.Unit;
 import my.TNTBuilder.model.inventory.Item;
+import my.TNTBuilder.model.inventory.Weapon;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -99,7 +100,7 @@ public class ItemService {
                     validateUnitCanHaveItem(itemDao.getItemById(itemId), unit);
                 } else {
                     validateUnitToTeamTransfer(itemId, unit);
-                    unequipItem(itemId, unitId, userId);
+                    unequipItemDuringTransfer(itemId, unitId, userId);
                 }
 
                 itemDao.transferItem(itemId, unitId, team.getId(), teamToUnit);
@@ -138,9 +139,13 @@ public class ItemService {
         try {
             unit = unitDao.getUnitById(unitId, userId);
             item = itemDao.getItemById(itemId);
+
             if (!unit.getInventory().contains(item)){
                 throw new ValidationException("This item is not equipped to the indicated unit.");
             }
+
+            ifPreFallAmmoRemovedUnequipFromWeapons(userId, item, unit);
+
             item.setEquippedValidated(!item.isEquipped(), unit);
             itemDao.updateEquipped(item);
         } catch (DaoException|ValidationException e) {
@@ -149,7 +154,7 @@ public class ItemService {
 
     }
 
-    public void unequipItem(int itemId, int unitId, int userId) throws ServiceException{
+    public void unequipItemDuringTransfer(int itemId, int unitId, int userId) throws ServiceException{
 
         Item item = null;
         Unit unit = null;
@@ -159,11 +164,7 @@ public class ItemService {
                 return;
             }
 
-            unit = unitDao.getUnitById(unitId, userId);
-
-            if (!unit.getInventory().contains(item)){
-                throw new ValidationException("This item is not equipped to the indicated unit.");
-            }
+            validateAndSetupUnequip(unitId, userId, item);
 
             item.setEquipped(false);
             itemDao.updateEquipped(item);
@@ -174,8 +175,17 @@ public class ItemService {
     }
 
 
+    public void updateWeaponUpgrade(Item item, int userId) throws ServiceException {
 
+        try {
+            validateWeaponUpgrade(item, userId);
+            spendMoneyForWeaponUpgrade(item, userId);
+            itemDao.updateWeaponBonuses((Weapon) item);
+        } catch (DaoException e){
+            throw new ServiceException(e.getMessage(), e);
+        }
 
+    }
 
 
     /*
@@ -263,7 +273,6 @@ public class ItemService {
             }
         }
     }
-
     private void updateTeamMoneyFromSellingItem(int itemId, int userId, Team team)  throws ServiceException, DaoException{
         Item item = itemDao.getItemById(itemId);
         if (item.getCost()/2 != 0){
@@ -281,7 +290,6 @@ public class ItemService {
         }
 
     }
-
     private int purchaseItem(Item referenceItem, Unit unit)  throws ServiceException {
         int itemId = 0;
         try {
@@ -326,5 +334,82 @@ public class ItemService {
         return itemId;
     }
 
+    private void validateWeaponUpgrade(Item item, int userId) throws ServiceException {
+        Team team = teamService.getTeamById(itemDao.getTeamIdByItemId(item.getId()), userId);
+
+        if (item.getClass() != Weapon.class) {
+            throw new ValidationException("This item cannot have weapon upgrades.");
+        }
+
+        Weapon weapon = (Weapon) item;
+
+        if (weapon.isMasterwork() && (!weapon.getCategory().equals("Melee Weapon") || weapon.isRelic())){
+            throw new ValidationException("Only melee weapons that are not relics may have Masterwork");
+        } else if (weapon.isLargeCaliber() && (!weapon.getCategory().equals("Ranged Weapon") || weapon.isRelic())){
+            throw new ValidationException("Only ranged weapons that are not relics may have large caliber");
+        } else if (weapon.isHasPrefallAmmo() && (!weapon.getCategory().equals("Ranged Weapon") || weapon.isRelic()))  {
+            throw new ValidationException("Only firearms that are not relics may be equipped with Pre-Fall Ammo.");
+        }
+
+        if (weapon.isHasPrefallAmmo()){
+            confirmUnitHasPrefallAmmoEquipped(weapon.getId(), userId);
+        }
+    }
+
+    private void validateAndSetupUnequip(int unitId, int userId, Item item) throws ServiceException {
+        Unit unit;
+        unit = unitDao.getUnitById(unitId, userId);
+        if (!unit.getInventory().contains(item)){
+            throw new ValidationException("This item is not equipped to the indicated unit.");
+        }
+
+        ifPreFallAmmoRemovedUnequipFromWeapons(userId, item, unit);
+
+        if (item.getClass() == Weapon.class && ((Weapon) item).isHasPrefallAmmo()) {
+            ((Weapon) item).setHasPrefallAmmo(false);
+            itemDao.updateWeaponBonuses((Weapon) item);
+        }
+    }
+
+    private void confirmUnitHasPrefallAmmoEquipped(int weaponId, int userId) throws ValidationException {
+        Unit unit = unitDao.getUnitById(itemDao.getUnitIdByItemId(weaponId), userId);
+        boolean unitHasPreFallAmmo = false;
+        for (Item inventoryItem : unit.getInventory()){
+            if (inventoryItem.getName().equals("Pre-Fall Ammo") && inventoryItem.isEquipped()){
+                unitHasPreFallAmmo = true;
+            }
+            if (inventoryItem.getClass() == Weapon.class && ((Weapon) inventoryItem).isHasPrefallAmmo()){
+                throw new ValidationException("Weapon in inventory already is equipped with the Pre-Fall Ammo.");
+            }
+        }
+        if (!unitHasPreFallAmmo){
+            throw new ValidationException("Unit must be carrying Pre-Fall Ammo to attach it to weapon.");
+        }
+    }
+
+
+    private void ifPreFallAmmoRemovedUnequipFromWeapons(int userId, Item item, Unit unit) throws ServiceException {
+        if (item.getName().equals("Pre-Fall Ammo") && item.isEquipped()) {
+            for (Item inventoryItem : unit.getInventory()) {
+                if (inventoryItem.getClass() == Weapon.class && ((Weapon) inventoryItem).isHasPrefallAmmo()) {
+                    ((Weapon) inventoryItem).setHasPrefallAmmo(false);
+                    updateWeaponUpgrade(inventoryItem, userId);
+                }
+            }
+        }
+    }
+
+    private void spendMoneyForWeaponUpgrade(Item item, int userId) throws ServiceException {
+        Weapon itemAsWeapon = (Weapon) item;
+        if (itemAsWeapon.isLargeCaliber() || itemAsWeapon.isMasterwork()){
+            Weapon originalItem = (Weapon)itemDao.getItemById(item.getId());
+
+            if (originalItem.isLargeCaliber() != itemAsWeapon.isLargeCaliber()
+                    || originalItem.isMasterwork() != itemAsWeapon.isMasterwork()) {
+                int teamId = itemDao.getTeamIdByItemId(item.getId());
+                teamService.spendMoney(item.getCost(), teamService.getTeamById(teamId, userId));
+            }
+        }
+    }
 
 }

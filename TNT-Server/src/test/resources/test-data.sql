@@ -273,14 +273,17 @@ INSERT INTO item_reference (name, cost, special_rules, rarity, is_relic, melee_d
 	('Relic Armor', 2, 'Relic Armor Desc', 'Ultra Rare', TRUE, 2, 2, FALSE, 2, 2, null, null, null, null, 0, 'Armor', null),
 	('Equipment 1', 3, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 0, 'Equipment', null),
 	('Relic Equipment', 4, 'Relic Equipment Desc', 'Rare', TRUE, null, null, null, null, null, null, null, null, null, 0, 'Equipment', null),
-	('Weapon 1', 5, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 5, 5, 5, 1, 'Ranged Weapon', null),
+	('Weapon 1', 5, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 5, 5, 5, 1, 'Ranged Weapon', null), --ID 5
 	('Relic Weapon', 6, 'Relic Weapon Desc', 'Rare', TRUE, null, null, null, null, null, 6, null, 6, 6, 2, 'Melee Weapon', null),
     ('Support Weapon', 7, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, 7, 7, 2, 'Support Weapon', null),
 	('Relic Support Weapon', 8, 'Relic Support Desc', 'Ultra Rare', TRUE, null, null, null, null, null, null, 8, 8, 8, 2, 'Support Weapon', null),
     ('Grenade', 9, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Grenade', null),
-	('Relic Grenade', 10, 'Relic Grenade Desc', 'Rare', TRUE, null, null, null, null, null, null, 10, 10, null, 1, 'Grenade', null),
+	('Relic Grenade', 10, 'Relic Grenade Desc', 'Rare', TRUE, null, null, null, null, null, null, 10, 10, null, 1, 'Grenade', null), --ID 10
 	('Expensive Item', 20, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Grenade', null),
-	('Skill Grant Item', 5, 'Grants Brave', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Equipment', 5);
+	('Skill Grant Item', 12, 'Grants Brave', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Equipment', 5),
+	('Pre-Fall Ammo', 13, 'Pre-Fall Ammo desc.', 'Sporadic', TRUE, null, null, null, null, null, null, null, null, null, 0, 'Equipment', null),
+	('Melee Weapon', 14, 'Melee Weapon desc', 'N/A', false, null, null, null, null, null, 14, 14, 14, 14, 1, 'Melee Weapon', null);
+
 
 INSERT INTO item_ref_item_trait (item_ref_id, item_trait_id) VALUES
 	(1, 1),

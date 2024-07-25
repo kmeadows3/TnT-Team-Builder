@@ -22,10 +22,13 @@ public class JdbcItemDaoTests extends BaseDaoTests{
     }
 
     @After
-    public void resetItemIds(){
+    public void resetItemIds() throws ValidationException{
         ARMOR.setId(1);
         WEAPON.setId(2);
         WEAPON.setEquipped(false);
+        WEAPON.setLargeCaliber(false);
+        WEAPON.setHasPrefallAmmo(false);
+        WEAPON.setCategory("Ranged Weapon");
     }
 
     @Test
@@ -196,7 +199,7 @@ public class JdbcItemDaoTests extends BaseDaoTests{
         List<Item> testList = sut.getListOfItemsForPurchase();
         ARMOR.setId(0);
         WEAPON.setId(0);
-        Assert.assertEquals(12, testList.size());
+        Assert.assertEquals(14, testList.size());
         Assert.assertTrue(testList.contains(ARMOR));
         Assert.assertTrue(testList.contains(WEAPON));
 
@@ -249,5 +252,36 @@ public class JdbcItemDaoTests extends BaseDaoTests{
         Assert.assertFalse(testWeapon.isEquipped());
     }
 
+    @Test
+    public void updateWeaponBonuses_updates_ranged_weapon() throws ValidationException{
+        WEAPON.setHasPrefallAmmo(true);
+        WEAPON.setLargeCaliber(true);
 
+        sut.updateWeaponBonuses(WEAPON);
+        Item testWeapon = sut.getItemById(WEAPON.getId());
+
+        Assert.assertEquals(WEAPON, testWeapon);
     }
+
+
+    @Test
+    public void getUnitIdByItemId_returns_unit_id_of_item_owner() {
+        int unitId = sut.getUnitIdByItemId(WEAPON.getId());
+        Assert.assertEquals(1, unitId);
+    }
+
+    @Test(expected = DaoException.class)
+    public void getUnitIdByItemId_throws_exception_if_item_not_owned_by_unit() {
+        sut.getUnitIdByItemId(TEAM_WEAPON.getId());
+        Assert.fail();
+    }
+
+    @Test(expected = DaoException.class)
+    public void getUnitIdByItemId_throws_exception_if_item_does_not_exist() {
+        sut.getUnitIdByItemId(99);
+        Assert.fail();
+    }
+
+
+
+}

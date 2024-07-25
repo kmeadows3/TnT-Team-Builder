@@ -248,6 +248,49 @@ public class JdbcItemDao implements ItemDao {
 
     }
 
+    @Override
+    public void updateWeaponBonuses(Weapon weapon) throws DaoException {
+
+        String sql = "UPDATE inventory SET is_masterwork = ?, is_large_caliber = ?, has_prefall_ammo = ? " +
+                "WHERE item_id = ?";
+
+        try {
+            int rowsUpdated = jdbcTemplate.update(sql, weapon.isMasterwork(), weapon.isLargeCaliber(),
+                    weapon.isHasPrefallAmmo(), weapon.getId());
+
+            if (rowsUpdated != 1) {
+                throw new DaoException("Incorrect number of rows updated");
+            }
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+
+    }
+
+
+    @Override
+    public int getUnitIdByItemId (int itemId){
+        String sql = "SELECT unit_id FROM inventory WHERE item_id = ?";
+        int unitId = 0;
+
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, itemId);
+            while (results.next()){
+                unitId = results.getInt("unit_id");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+
+        if (unitId == 0){
+            throw new DaoException("Item is not owned by a unit");
+        }
+
+        return unitId;
+    }
 
 
 

@@ -3,6 +3,7 @@ package my.TNTBuilder.dao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.inventory.Item;
+import my.TNTBuilder.model.inventory.Weapon;
 
 import java.util.List;
 
@@ -37,4 +38,7 @@ public interface ItemDao {
 
     boolean isItemOwnedByTeam(int itemId, int teamId, int unitId) throws ValidationException;
 
+    void updateWeaponBonuses(Weapon weapon) throws DaoException;
+
+    int getUnitIdByItemId(int itemId);
 }

@@ -1,11 +1,14 @@
 package my.TNTBuilder.controller;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import my.TNTBuilder.dao.UserDao;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ServiceException;
+import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.inventory.Item;
 import my.TNTBuilder.service.ItemService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -59,13 +62,14 @@ public class ItemController {
                               @RequestParam(defaultValue = "false") Boolean isFree, Principal principal){
         try {
             itemService.addItemToTeam(itemId[0], teamId, userDao.getUserIdByUsername(principal.getName()), isFree);
+        } catch (HttpMessageNotReadableException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getCause().getCause().getMessage());
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (DaoException e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
-
 
     /**
      * Returns list of all inventory that can be bought at this time.
@@ -97,6 +101,17 @@ public class ItemController {
             }
 
 
+        } catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (DaoException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No user with this username");
+        }
+    }
+
+    @RequestMapping(path="/inventory/{itemId}", method = RequestMethod.PUT)
+    public void upgradeItem(@RequestBody Item item, Principal principal) {
+        try {
+            itemService.updateWeaponUpgrade(item, userDao.getUserIdByUsername(principal.getName()));
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (DaoException e) {

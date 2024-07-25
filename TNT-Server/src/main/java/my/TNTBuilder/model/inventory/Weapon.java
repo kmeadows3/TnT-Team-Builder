@@ -68,10 +68,7 @@ public class Weapon extends Item {
         return isMasterwork;
     }
 
-    public void setMasterwork(boolean masterwork) throws ValidationException{
-        if (masterwork && !this.getCategory().equals("Melee Weapon")){
-            throw new ValidationException("Only melee weapons can have the Masterwork Upgrade");
-        }
+    public void setMasterwork(boolean masterwork) {
         isMasterwork = masterwork;
     }
 
@@ -79,10 +76,7 @@ public class Weapon extends Item {
         return isLargeCaliber;
     }
 
-    public void setLargeCaliber(boolean largeCaliber) throws ValidationException {
-        if (largeCaliber && !this.getCategory().equals("Ranged Weapon")){
-            throw new ValidationException("Only ranged weapons can have the Large Caliber Upgrade");
-        }
+    public void setLargeCaliber(boolean largeCaliber)  {
         isLargeCaliber = largeCaliber;
     }
 
@@ -90,10 +84,7 @@ public class Weapon extends Item {
         return hasPrefallAmmo;
     }
 
-    public void setHasPrefallAmmo(boolean hasPrefallAmmo) throws ValidationException{
-        if (hasPrefallAmmo && (!this.getCategory().equals("Ranged Weapon") || this.isRelic()) ){
-            throw new ValidationException("Pre-fall Ammo can only be added to firearms that are not support weapons or relics.");
-        }
+    public void setHasPrefallAmmo(boolean hasPrefallAmmo) {
         this.hasPrefallAmmo = hasPrefallAmmo;
     }
 

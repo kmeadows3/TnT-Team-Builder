@@ -62,8 +62,6 @@ public class ItemController {
                               @RequestParam(defaultValue = "false") Boolean isFree, Principal principal){
         try {
             itemService.addItemToTeam(itemId[0], teamId, userDao.getUserIdByUsername(principal.getName()), isFree);
-        } catch (HttpMessageNotReadableException e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getCause().getCause().getMessage());
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (DaoException e){

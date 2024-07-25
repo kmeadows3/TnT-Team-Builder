@@ -343,6 +343,13 @@ public class ItemService {
 
         Weapon weapon = (Weapon) item;
 
+        validateWeaponCanHaveUpgrade(weapon);
+        validateItemNotBeingDowngraded(userId, weapon);
+        confirmUnitHasPrefallAmmoEquipped(weapon, userId);
+
+    }
+
+    private void validateWeaponCanHaveUpgrade(Weapon weapon) throws ValidationException {
         if (weapon.isMasterwork() && (!weapon.getCategory().equals("Melee Weapon") || weapon.isRelic())){
             throw new ValidationException("Only melee weapons that are not relics may have Masterwork");
         } else if (weapon.isLargeCaliber() && (!weapon.getCategory().equals("Ranged Weapon") || weapon.isRelic())){
@@ -350,9 +357,15 @@ public class ItemService {
         } else if (weapon.isHasPrefallAmmo() && (!weapon.getCategory().equals("Ranged Weapon") || weapon.isRelic()))  {
             throw new ValidationException("Only firearms that are not relics may be equipped with Pre-Fall Ammo.");
         }
+    }
 
-        if (weapon.isHasPrefallAmmo()){
-            confirmUnitHasPrefallAmmoEquipped(weapon.getId(), userId);
+    private void validateItemNotBeingDowngraded(int userId, Weapon weapon) throws ServiceException {
+        Weapon originalItem = (Weapon)itemDao.getItemById(weapon.getId());
+        if ((   !weapon.isLargeCaliber() && originalItem.isLargeCaliber())
+                || (!weapon.isMasterwork() && originalItem.isMasterwork())
+        ) {
+            int teamId = itemDao.getTeamIdByItemId(weapon.getId());
+            teamService.spendMoney(weapon.getCost(), teamService.getTeamById(teamId, userId));
         }
     }
 
@@ -371,19 +384,22 @@ public class ItemService {
         }
     }
 
-    private void confirmUnitHasPrefallAmmoEquipped(int weaponId, int userId) throws ValidationException {
-        Unit unit = unitDao.getUnitById(itemDao.getUnitIdByItemId(weaponId), userId);
-        boolean unitHasPreFallAmmo = false;
-        for (Item inventoryItem : unit.getInventory()){
-            if (inventoryItem.getName().equals("Pre-Fall Ammo") && inventoryItem.isEquipped()){
-                unitHasPreFallAmmo = true;
+    private void confirmUnitHasPrefallAmmoEquipped(Weapon weapon, int userId) throws ValidationException {
+        if (weapon.isHasPrefallAmmo()) {
+
+            Unit unit = unitDao.getUnitById(itemDao.getUnitIdByItemId(weapon.getId()), userId);
+            boolean unitHasPreFallAmmo = false;
+            for (Item inventoryItem : unit.getInventory()) {
+                if (inventoryItem.getName().equals("Pre-Fall Ammo") && inventoryItem.isEquipped()) {
+                    unitHasPreFallAmmo = true;
+                }
+                if (inventoryItem.getClass() == Weapon.class && ((Weapon) inventoryItem).isHasPrefallAmmo()) {
+                    throw new ValidationException("Weapon in inventory already is equipped with the Pre-Fall Ammo.");
+                }
             }
-            if (inventoryItem.getClass() == Weapon.class && ((Weapon) inventoryItem).isHasPrefallAmmo()){
-                throw new ValidationException("Weapon in inventory already is equipped with the Pre-Fall Ammo.");
+            if (!unitHasPreFallAmmo) {
+                throw new ValidationException("Unit must be carrying Pre-Fall Ammo to attach it to weapon.");
             }
-        }
-        if (!unitHasPreFallAmmo){
-            throw new ValidationException("Unit must be carrying Pre-Fall Ammo to attach it to weapon.");
         }
     }
 

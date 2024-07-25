@@ -684,6 +684,25 @@ public class ItemServiceTests extends BaseDaoTests {
         Assert.fail();
     }
 
+    @Test (expected = ValidationException.class)
+    public void updateWeaponUpgrade_throws_exception_if_another_weapon_already_has_prefall() throws ServiceException{
+
+        try {
+            int itemId = sut.addItemToUnit(13, 1, 1, true);
+            sut.toggleEquipItem(itemId, 1, 1);
+            WEAPON.setHasPrefallAmmo(true);
+            sut.updateWeaponUpgrade(WEAPON, 1);
+        }catch (ValidationException e){
+            Assert.fail("Validation exception thrown during arrange step");
+        }
+
+        int itemId = itemDao.addItemToUnit(5, 1);
+        Weapon newWeapon = (Weapon)itemDao.getItemById(itemId);
+        newWeapon.setHasPrefallAmmo(true);
+        sut.updateWeaponUpgrade(newWeapon, 1);
+        Assert.fail();
+    }
+
     @Test (expected = ServiceException.class)
     public void updateWeaponUpgrade_throws_exception_if_user_does_not_own_item() throws ServiceException{
         WEAPON.setHasPrefallAmmo(true);

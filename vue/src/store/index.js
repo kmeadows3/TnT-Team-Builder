@@ -31,7 +31,8 @@ export function createStore(currentToken, currentUser) {
       showGainExpForm: false,
       popupSubForm: '',
       currentPage: '',
-      itemToModify:''
+      itemToModify:'',
+      viewNavigation: false
     },
     mutations: {
       SET_AUTH_TOKEN(state, token) {
@@ -174,6 +175,9 @@ export function createStore(currentToken, currentUser) {
       },
       SET_ITEM_TO_MODIFY(state, value){
         state.itemToModify = value;
+      },
+      TOGGLE_VIEW_NAVIGATION(state){
+        state.viewNavigation = !state.viewNavigation;
       }
 
     },

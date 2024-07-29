@@ -2,6 +2,9 @@
   <div id="capstone-app">
     <ErrorBanner />
     <PopUp />
+    <div id="absolute-button">
+       <button id="view-nav" @click="toggleNav()">{{this.$store.state.viewNavigation ? 'Close Nav' : 'Open Nav' }}</button>
+    </div>
     <h1 class="main-title">
       <span><em>"This is Not a Test"</em></span>
       <span>&nbsp;Team Builder</span>
@@ -24,6 +27,11 @@ export default {
     MainNavigation,
     ErrorBanner,
     PopUp
+  },
+  methods: {
+    toggleNav(){
+      this.$store.commit('TOGGLE_VIEW_NAVIGATION');
+    }
   }
 }
 </script>
@@ -36,6 +44,25 @@ export default {
     box-sizing: border-box;
 }
 
+div#absolute-button{
+  display: none;
+}
+
+@media only screen and (max-width: 992px) {
+  div#absolute-button{
+    display: block;
+    position: sticky;
+    top: 20px;
+  }
+
+  button#view-nav{
+    position: absolute;
+    left: 10px;
+    
+  }
+}
+
+
 section.entire-page {
   display: flex;
 }
@@ -46,7 +73,7 @@ h1.main-title {
   align-items: center;
   justify-content: center;
 
-  font-size: 4rem;
+  font-size: 4em;
   margin: 0px;
   margin-top: 10px;
   border: solid 3px black;
@@ -57,4 +84,13 @@ h1.main-title>span{
   word-wrap: unset;
   text-align: center;
 }
+
+@media only screen and (max-width: 768px) {
+
+h1.main-title {
+    font-size: 3em;
+}
+}
+
+
 </style>

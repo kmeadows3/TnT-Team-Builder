@@ -1,5 +1,5 @@
 <template>
-    <div class="ref-container">
+    <div class="ref-container" :class="this.$store.state.unitInjuriesSorted.length ? 'injuries' : ''">
         <div class="reference special">
             <h1 class="section-title">Special Rules Reference</h1>
             <div v-for="skill in $store.state.unitSkillsSorted" :key="'skill-'+skill.id">
@@ -43,19 +43,32 @@ export default {
 
 <style scoped>
 
+
+
+
+
 div.ref-container {
-    display: flex;
+    display: grid;
+    grid-template-areas: "skills";
+    grid-template-columns: 1fr;
+}
+
+div.ref-container.injuries {
+    display: grid;
+    grid-template-areas: "skills injuries";
+    gap: 0px 6px;
+    grid-template-columns: 3fr 2fr;
+    padding-right: 6px;
 }
 
 div.reference.special{
-    min-width: calc(50% - 10px);
-    flex-grow: 2;
+    grid-area: skills;
+    width: 100%;
 }
 
 div.reference.injuries{
-    max-width: calc(50% - 10px);
-    min-width: 33%;
-    flex-grow: 1;
+    grid-area: injuries;
+    width: 100%;
 }
 
 i.bi.bi-x-square {
@@ -71,5 +84,12 @@ div.reference h2.reference-label span{
     font-weight: normal;
 }
 
+@media only screen and (max-width: 768px) {
 
+div.ref-container.injuries {
+grid-template-areas: "skills" "injuries";
+grid-template-columns: 1fr;
+}
+
+}
 </style>

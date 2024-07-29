@@ -31,8 +31,27 @@ div.stat-container{
 
 div.stat-box {
     flex-grow: 1;
-    flex-basis: auto;
+    flex-basis: 25%;
     border-radius: 7px;
     margin: 7px;
+}
+
+div.stat-container p{
+    margin: 3px;
+}
+
+@media only screen and (max-width: 768px) {
+    div.stat-container {
+        font-size: .9em;
+    }
+
+    div.stat-container>div.stat-box{
+        margin: 3px;
+    }
+
+    div.stat-box>p{
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+    }
 }
 </style>

@@ -1,9 +1,12 @@
 <template>
+    <section class="main-display" :class="$store.state.viewNavigation?'view-nav':''">
+        <TeamList v-if="$store.state.showTeamList" />
+        <TeamDetail v-if="$store.state.showTeamDetail" />
+        <UnitDetail v-if="$store.state.showUnitDetail" />
+    </section>
 
-    <TeamList v-if="$store.state.showTeamList" />
-    <TeamDetail v-if="$store.state.showTeamDetail" />
-    <UnitDetail v-if="$store.state.showUnitDetail" />
-    
+
+
 </template>
 
 
@@ -27,7 +30,6 @@ export default {
 </script>
 
 <style>
-
 /* 
 GENERAL
 */
@@ -36,11 +38,12 @@ section.main-display {
     border: solid 3px black;
     border-radius: 7px;
     min-width: 200px;
-    flex-basis: 85;
-    flex-grow: 15;
+    width: 80%;
+    flex-grow: 1;
+
 }
 
-section.subsection{
+section.subsection {
     margin: 3px;
 }
 
@@ -48,11 +51,24 @@ section.subsection{
 input#changeName {
     margin: 3px;
     padding: 2px 20px;
-    font-size: 1.4rem;
+    font-size: .9em;
     font-style: italic;
     font-weight: 100;
     text-align: center;
     align-self: center;
+}
+
+@media only screen and (max-width: 992px) {
+
+    body {
+        font-size: .9em;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    section.main-display.view-nav{
+        display: none;
+    }
 }
 
 /*
@@ -61,7 +77,7 @@ TITLES
 
 h1.page-title {
     text-align: center;
-    font-size: 3rem;
+    font-size: 3em;
     margin: auto;
     width: 80%;
     border: solid 3px black;
@@ -70,7 +86,7 @@ h1.page-title {
 
 h1.section-title {
     text-align: center;
-    font-size: 2rem;
+    font-size: 2em;
     margin: auto;
     width: 98%;
     margin-top: 10px;
@@ -82,6 +98,20 @@ h2.subsection-title {
     padding: 10px;
 }
 
+@media only screen and (max-width: 992px) {
+
+    h1.page-title {
+        font-size: 3em;
+    }
+
+    h1.section-title {
+        font-size: 1.8em;
+    }
+
+    h2.subsection-title {
+        font-size: 1.4em;
+    }
+}
 
 /*
 Div Table
@@ -114,43 +144,45 @@ div.card {
 
     min-width: 200px;
     max-width: 33%;
-    
+    width: 30%;
+
     border-radius: 10px;
     padding: 10px;
     margin: 10px;
 
     text-align: center;
     cursor: pointer;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, .2);;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, .2);
+    ;
 
 }
 
-div.card:hover{
+div.card:hover {
     transform: translateY(-1px);
-    background-color:#eee;
+    background-color: #eee;
 }
 
-div.card.team{
+div.card.team {
     min-width: 300px;
 }
 
-div.card>{
+div.card> {
     overflow-wrap: break-word;
 }
 
 h1.card-title {
-    font-size: 1.8rem;
+    font-size: 1.8em;
     margin: 10px;
-    text-wrap: wrap;
+    word-wrap: break-word;
 }
 
 h2.card-subtitle {
-    font-size: 1.4rem;
+    font-size: 1.4em;
     margin: 10px;
 }
 
 h3.card-small {
-    font-size: 1.2rem;
+    font-size: 1.2em;
     margin: 10px;
 }
 
@@ -159,7 +191,7 @@ h3.card-small {
 /*
 BUTTONS
 */
-button:hover{
+button:hover {
     transform: translateY(-1px);
 }
 
@@ -186,13 +218,13 @@ i.bi {
 i.button {
     cursor: pointer;
     box-shadow: 2px 2px 3px rgba(0, 0, 0, .1),
-              2px 2px 5px rgba(0, 0, 0, .1);
+        2px 2px 5px rgba(0, 0, 0, .1);
 
 }
 
-i.button:hover{
+i.button:hover {
     transform: translateY(-1px);
-    background-color:#eee;
+    background-color: #eee;
 
 }
 
@@ -203,7 +235,7 @@ i.inventory-icon {
 }
 
 i.bi-pencil-square {
-    font-size: 1.2rem;
+    font-size: .4em;
     border-radius: 5px;
     padding: 3px 3px 0px 3px;
 }
@@ -219,19 +251,25 @@ div.item-table .bi-check-circle {
 div.item-table .bi-x-circle {
     color: red;
 }
+
 span.name-change-buttons {
     display: flex;
     flex-direction: column;
 }
 
 span.name-change-buttons i {
-    font-size: 1.1rem;
+    font-size: 0.4em;
     padding: 3px 3px 0px 3px;
     margin: 2px;
     border: solid 1px black;
     border-radius: 5px;
 }
 
+@media only screen and (max-width: 768px) {
+    i.inventory-icon {
+        font-size: .9rem;
+    }
+}
 
 
 /*
@@ -244,43 +282,50 @@ div.reference {
     margin: 3px;
 }
 
-div.reference>h1{
+div.reference>h1 {
     margin-bottom: 5px;
 }
 
 div.reference>div {
     display: flex;
     text-align: left;
-    gap: 20px;
     padding: 0px;
     border-bottom: dotted 1px black;
 }
 
-div.reference>div:last-child{
+div.reference>div:last-child {
     border-bottom: 0px;
 }
 
 div.reference h2.reference-label {
-    min-width: 120px;
-    max-width: 120px;
+    width: 20%;
     margin: 5px;
-    margin-left: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    text-wrap: wrap;
-    text-overflow: break-word;
-    font-size: 1.3rem;
+    word-wrap: normal;
+    font-size: 1.2em;
 }
 
 div.reference p.reference-desc {
-    min-width: 100px;
-    width: 100%;
+    width: 80%;
     margin: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+@media only screen and (max-width: 768px) {
+
+    div.reference h2.reference-label {
+        font-size: 1.1em;
+        margin: 3px;
+    }
+
+    div.reference p.reference-desc {
+        margin: 2px;
+    }
 }
 
 
@@ -305,7 +350,7 @@ div.item-container {
     padding: 0px 20px;
 }
 
-div.item-container>h3{
+div.item-container>h3 {
     padding: 10px;
     margin: 0px;
 }
@@ -337,7 +382,7 @@ div.item-list>div {
     border-width: 0px 1px 0px 0px;
 }
 
-div.item-list>div.item-name{
+div.item-list>div.item-name {
     border-style: solid;
     font-weight: bold;
 }
@@ -346,18 +391,20 @@ div.item-list>div:last-child {
     border-style: none;
 }
 
-div.item-list>div.item-special-rules{
+div.item-list>div.item-special-rules {
     display: block;
     text-align: start;
     padding-left: 3px;
     border-top: dotted 1px black;
     border-right: none;
     font-size: .9em;
+
     & em {
         text-decoration: underline;
         font-style: normal;
     }
-    & span{
+
+    & span {
         font-style: italic;
     }
 }
@@ -370,6 +417,17 @@ div>div.item-action {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+@media only screen and (max-width: 768px) {
+    div.item-container {
+        width: 100%;
+        padding: 0px 10px;
+    }
+
+    div.item-container div.item-table {
+        font-size: 1em;
+    }
 }
 
 /**
@@ -392,7 +450,7 @@ div.popup-form {
     gap: 25px;
 }
 
-div.popup-form form{
+div.popup-form form {
     flex-direction: column;
     width: 100%;
     flex-grow: 5;
@@ -400,7 +458,7 @@ div.popup-form form{
     gap: 20px;
 }
 
-div.popup-form span{
+div.popup-form span {
     display: flex;
     width: 80%;
     gap: 10px;
@@ -408,7 +466,7 @@ div.popup-form span{
     align-items: center;
 }
 
-div.popup-form label{
+div.popup-form label {
     font-size: 1.1em;
     min-width: 100px;
     max-width: 100px;
@@ -416,14 +474,13 @@ div.popup-form label{
     text-wrap: wrap;
 }
 
-div.popup-form select{
-    font-size: 1.0rem;
+div.popup-form select {
+    font-size: 1.0em;
     flex-grow: 5;
 }
 
-div.popup-form input{
-    font-size: 1.0rem;
+div.popup-form input {
+    font-size: 1.0em;
     flex-grow: 5;
 }
-
 </style>

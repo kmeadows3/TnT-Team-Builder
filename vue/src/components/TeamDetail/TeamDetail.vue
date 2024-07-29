@@ -1,5 +1,5 @@
 <template>
-    <section class="main-display">
+    <div>
         <h1 class="page-title name-display" v-show="!showChangeNameForm">
             <span>{{ this.$store.state.currentTeam.name }}</span>
             <i class="bi bi-pencil-square button" @click="toggleEditName()" title="Edit Name"></i>
@@ -26,7 +26,7 @@
                 </div>
 
             <TeamInventory />
-    </section>
+            </div>
 </template>
 
 <script>

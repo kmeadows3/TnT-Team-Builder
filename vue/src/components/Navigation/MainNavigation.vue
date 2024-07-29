@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav :class="$store.state.viewNavigation?'view-nav':''">
     <section class="flex-nav">
       <h1 class="section-title">Navigation</h1>
       <div class="flex-nav-option team-list" :class="{ selected: $store.state.currentPage == 'home' }" @click="toHome()">
@@ -73,8 +73,9 @@ export default {
 
 <style>
 nav {
-  min-width: 200px;
+  min-width: 150px;
   max-width: 200px;
+  width: 20%;
   border: solid 3px black;
   border-radius: 7px;
   display: flex;
@@ -130,5 +131,22 @@ nav div.flex-nav-option.team-list.selected {
 nav div.flex-nav-option:hover {
   transform: translateY(-1px);
   background-color: #eee;
+}
+
+nav h2 {
+  text-align: center;
+}
+
+
+@media only screen and (max-width: 992px) {
+  nav {
+    display: none;
+  }
+
+  nav.view-nav {
+    display:flex;
+    max-width: 100%;
+    flex-grow: 1;
+  }
 }
 </style>

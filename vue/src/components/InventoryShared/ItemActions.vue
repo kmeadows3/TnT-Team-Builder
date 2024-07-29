@@ -122,7 +122,7 @@ export default {
 
 <style>
 i {
-    margin: 2px;
+    margin: 1px;
     height: max-content;
 }
 </style>

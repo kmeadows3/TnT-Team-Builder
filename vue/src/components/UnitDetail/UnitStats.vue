@@ -170,7 +170,7 @@ div.stat-box {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    flex-basis: 20%;
+    width: 20%;
     border: solid 3px black;
     border-radius: 7px;
     margin: 3px;

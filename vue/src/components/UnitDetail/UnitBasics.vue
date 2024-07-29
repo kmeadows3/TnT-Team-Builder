@@ -2,7 +2,7 @@
     <div id="basic-information">
         <div id="name">
             <h1 class="page-title name-display" v-show="!showChangeNameForm">
-            <span>{{$store.state.currentUnit.name}}</span>
+            <span class="name-display">{{$store.state.currentUnit.name}}</span>
             <i class="bi bi-pencil-square button" @click="toggleEditName()" title="Edit Name"></i>
         </h1>
         <h1 class="page-title name-entry" v-show="showChangeNameForm">
@@ -119,10 +119,14 @@ h1.page-title {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 10px;
 }
 
-h1.page-title span{
-    padding-right: 20px;
+h1.page-title span.name-display{
+    display: inline-block;
+    max-width: 90%;
+    word-wrap: break-word;
+    padding-left: 10px;
 }
 
 p.basics-label {

@@ -49,11 +49,3 @@ export default {
 }
 
 </script>
-
-<style scoped>
-
-section.inventory-container>div {
-    min-width: 50%;
-    flex-grow: 1;
-}
-</style>

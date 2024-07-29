@@ -2,7 +2,8 @@
     <div class="item-container" v-show="equipments.length > 0">
         <h2 class="subsection-title">Equipment</h2>
         <div class="item-table">
-            <div class="table-label item-list equipment-grid" :class="$store.state.manageInventory ? 'action-mode' : ''">
+            <div class="table-label item-list equipment-grid"
+                :class="$store.state.manageInventory ? 'action-mode' : ''">
                 <div class="equipment-name">Type</div>
                 <div class="equipment-cost">Cost</div>
                 <div class="equipment-rules">Special Rules</div>
@@ -28,7 +29,7 @@
                     <i class="bi bi-check-circle" title="Currently Equipped" v-show="equipment.equipped"></i>
                     <i class="bi bi-x-circle" title="Currently Unequipped" v-show="!equipment.equipped"></i>
                 </div>
-                <ItemActions class ="item-action equipment-action" :item='equipment'/>
+                <ItemActions class="item-action equipment-action" :item='equipment' />
             </div>
         </div>
     </div>
@@ -50,17 +51,17 @@ export default {
 </script>
 
 <style scoped>
-
-div.item-list.equipment-grid{
+div.item-list.equipment-grid {
     display: grid;
-    grid-template-areas:  "name  cost  rules equipped";
+    grid-template-areas: "name  cost  rules equipped";
     grid-template-columns: 2fr 1fr 6fr 1fr;
 }
 
-div.item-list.equipment-grid.action-mode{
+
+div.item-list.equipment-grid.action-mode {
     display: grid;
-    grid-template-areas:  "name  cost  rules equipped action";
-    grid-template-columns: 2fr 1fr 6fr 1fr 2fr;
+    grid-template-areas: "name  cost  rules equipped action";
+    grid-template-columns: 2fr 1fr 8fr 2fr 3fr;
 }
 
 div.item-list>.equipment-name {
@@ -85,4 +86,28 @@ div.item-list>.item-action {
     grid-area: action;
 }
 
+
+@media only screen and (max-width: 992px) {
+    div.item-list.equipment-grid {
+        grid-template-columns: 3fr 1fr 6fr 2fr;
+    }
+
+    div.item-list.equipment-grid.action-mode {
+    grid-template-areas: "name  cost  rules equipped action";
+    grid-template-columns: 3fr 1fr 6fr 2fr 2fr;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    div.item-list.equipment-grid.action-mode {
+        grid-template-areas: "name  cost equipped action" 
+                                "name rules rules rules";
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    div.table-label>div.equipment-rules{
+        display: none;
+    }
+
+}
 </style>

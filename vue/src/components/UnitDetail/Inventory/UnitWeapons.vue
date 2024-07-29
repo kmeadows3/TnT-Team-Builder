@@ -13,11 +13,12 @@
                 <div class="item-action weapon-action" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
-            <div class="item-list weapon-grid" v-for="weapon in weapons" :key="'weapon' + weapon.id" :class="$store.state.manageInventory ? 'action-mode' : ''">
+            <div class="item-list weapon-grid not-label" v-for="weapon in weapons" :key="'weapon' + weapon.id" :class="$store.state.manageInventory ? 'action-mode' : ''">
+                
                 <div class="item-name">{{ weapon.masterwork ? 'Masterwork ' : weapon.largeCaliber ? 'Large Caliber ': ''}}{{ weapon.name }}</div>
                 <div class="weapon-cost">{{ weapon.masterwork || weapon.largeCaliber ? weapon.cost * 2 : weapon.cost }}</div>
-                <div class="weapon-range">{{ weapon.meleeRange }}"/ {{ weapon.rangedRange }}"</div>
-                <div class="weapon-strength">{{ weapon.largeCaliber ? weapon.strength + 1 : weapon.strength }}</div>
+                <div class="weapon-range">{{ weapon.rangedString }}</div>
+                <div class="weapon-strength">{{ weapon.strengthString }}</div>
                 <div class="weapon-reliablity">{{ weapon.reliability }}</div>
                 <div class="weapon-hands">{{ weapon.handsRequired }}</div>
                 <div class="item-special-rules weapon-rules">
@@ -52,7 +53,52 @@ export default {
     },
     computed: {
         weapons() {
-            return this.$store.state.currentUnit.inventory.filter(item => item.category != "Armor"  && item.category != "Equipment");
+            let weapons = this.$store.state.currentUnit.inventory.filter(item => item.category != "Armor"  && item.category != "Equipment");
+            weapons.forEach((item) => {
+                item.rangedString = this.rangedString(item);
+                item.strengthString = this.strengthString(item);
+            });
+
+            return weapons;
+        },
+    },
+    methods: {
+        rangedString(item){
+            let range = '';
+            if (item.meleeRange == 0) {
+                if (item.name == 'Small Blade') {
+                    range = 'Base" / ' + item.rangedRange + '"';
+                } else if (item.rangedRange != 0){
+                    range = item.rangedRange + '"';
+                } else if (item.category == 'Grenade') {
+                    range = this.$store.state.currentUnit.strength + '"';
+                } else {
+                    range = 'Base';
+                }
+            } else {
+                if (item.rangedRange != 0){
+                    range = item.meleeRange + '" / ' + item.rangedRange + '"';
+                } else {
+                    range = item.meleeRange + '"';
+                }
+
+            }
+
+            return range;
+        },
+        strengthString(item){
+            let str = '';
+            if (item.largeCaliber){
+                str = item.strength + 1;
+            } else {
+                str = item.strength;
+            }
+
+            if (item.category == 'Melee Weapon' || item.name == 'Bow' || item.name == 'Compound Bow' ){
+                str = 'STR +' + str;
+            }
+
+            return str;
         }
     }
 }
@@ -71,12 +117,81 @@ div.item-list.weapon-grid.action-mode{
     display: grid;
     grid-template-areas:  "name  cost  range strength reliablity hands equipped action"
                           "name  rules rules rules    rules      rules rules    rules";
-    grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
+    grid-template-columns: 4fr 2fr 2fr 2fr 2fr 2fr 2fr 3fr;
+}
+
+
+@media only screen and (max-width: 992px) {
+    div.item-list.weapon-grid.action-mode{
+    grid-template-areas:  "name  cost  range strength reliablity hands equipped"
+                          "name  rules rules rules    rules      action action";
+    grid-template-columns: 5fr 2fr 2fr 2fr 2fr 2fr 3fr;
+    }
+
+    div.table-label.action-mode>div.weapon-action {
+        display: none;
+    }
+
+    div.item-list>div.weapon-action{
+        border-top: dotted 1px black;
+    }
+
+    div.item-list.action-mode>div.weapon-equip{
+        border-right: none;
+    }
+
+    div.item-list.action-mode>div.weapon-rules{
+        border-right: dotted 1px black;
+    }
+
+}
+
+
+@media only screen and (max-width: 762px) {
+    div.item-list.weapon-grid.action-mode.table-label{
+        font-size: .6em;
+    }
+
+
+
+}
+
+@media only screen and (max-width: 600px) {
+    div.item-list.weapon-grid.action-mode.not-label{
+    grid-template-areas:  "name  cost   range strength reliablity hands equipped"
+                          "name   rules rules rules    rules      rules rules"
+                          "name action action action    action      action action";
+    grid-template-columns: 5fr 2fr 2fr 2fr 2fr 2fr 2fr;
+    }
+
+    div.item-list.weapon-grid.action-mode.table-label{
+    grid-template-areas:  "name  cost   range strength reliablity hands equipped";
+    grid-template-columns: 5fr 2fr 2fr 2fr 2fr 2fr 2fr;
+    }
+
+    div.table-label.action-mode>div.weapon-action {
+        display: none;
+    }
+
+    div.item-list>div.weapon-action{
+        border-top: dotted 1px black;
+        border-right: solid 1px black;
+    }
+
+    div.item-list.action-mode>div.weapon-equip{
+        border-right: none;
+    }
+
+    div.item-list.action-mode>div.weapon-rules{
+        border-right: none;
+    }
+
 }
 
 
 div.item-name{
     grid-area: name;
+    height: 100%;
 }
 
 div.weapon-cost{

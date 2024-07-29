@@ -1,11 +1,11 @@
 <template>
-    <section class="main-display">
+    <div>
         <UnitBasics />
         <UnitStats />
         <UnitSkills />
         <UnitInventory />
         <UnitExperience />
-    </section>
+    </div>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <section class="main-display">
+    <div>
         <h1 class ="page-title">Choose Your Team</h1>
         <div class="button-container">
             <button @click="openForm()">Create New Team</button>
@@ -8,7 +8,7 @@
         <div class="card-container">
             <TeamCard v-for ='team in $store.state.teamList' v-bind:key="team.id" v-bind:team='team'/>
         </div>
-    </section>
+    </div>
 </template>
 
 <script>

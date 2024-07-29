@@ -30,7 +30,8 @@ export function createStore(currentToken, currentUser) {
       showLoseMoneyForm: false,
       showGainExpForm: false,
       popupSubForm: '',
-      currentPage: ''
+      currentPage: '',
+      itemToModify:''
     },
     mutations: {
       SET_AUTH_TOKEN(state, token) {
@@ -170,6 +171,9 @@ export function createStore(currentToken, currentUser) {
       },
       SET_CURRENT_PAGE(state, value){
         state.currentPage = value;
+      },
+      SET_ITEM_TO_MODIFY(state, value){
+        state.itemToModify = value;
       }
 
     },

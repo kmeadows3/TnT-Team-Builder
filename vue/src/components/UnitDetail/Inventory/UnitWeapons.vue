@@ -2,7 +2,7 @@
     <div class="item-container" v-show="weapons.length > 0">
         <h2 class="subsection-title">Weapons</h2>
         <div class="item-table">
-            <div class="item-list table-label weapon-grid">
+            <div class="item-list table-label weapon-grid" :class="$store.state.manageInventory ? 'action-mode' : ''">
                 <div class="item-name">Type</div>
                 <div class="weapon-cost">Cost</div>
                 <div class="weapon-range">Range </div>
@@ -13,11 +13,11 @@
                 <div class="item-action weapon-action" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
-            <div class="item-list weapon-grid" v-for="weapon in weapons" :key="'weapon' + weapon.id">
-                <div class="item-name">{{ weapon.name }}</div>
-                <div class="weapon-cost">{{ weapon.cost }}</div>
+            <div class="item-list weapon-grid" v-for="weapon in weapons" :key="'weapon' + weapon.id" :class="$store.state.manageInventory ? 'action-mode' : ''">
+                <div class="item-name">{{ weapon.masterwork ? 'Masterwork ' : weapon.largeCaliber ? 'Large Caliber ': ''}}{{ weapon.name }}</div>
+                <div class="weapon-cost">{{ weapon.masterwork || weapon.largeCaliber ? weapon.cost * 2 : weapon.cost }}</div>
                 <div class="weapon-range">{{ weapon.meleeRange }}"/ {{ weapon.rangedRange }}"</div>
-                <div class="weapon-strength">{{ weapon.strength }}</div>
+                <div class="weapon-strength">{{ weapon.largeCaliber ? weapon.strength + 1 : weapon.strength }}</div>
                 <div class="weapon-reliablity">{{ weapon.reliability }}</div>
                 <div class="weapon-hands">{{ weapon.handsRequired }}</div>
                 <div class="item-special-rules weapon-rules">
@@ -30,6 +30,8 @@
                             <span v-show="index != 0">,</span>
                             {{ trait.name }}</span>
                     </span>
+                    <span v-show="weapon.hasPrefallAmmo">, equipped with Pre-Fall Ammo: +1 to ranged stat when fired</span>
+                    <span v-show="weapon.masterwork">, gains Balanced: +1 to melee stat when attacking</span>
                 </div>
                 <div class="item-check weapon-equip">
                     <i class="bi bi-check-circle" title="Currently Equipped" v-show="weapon.equipped"></i>
@@ -58,21 +60,20 @@ export default {
 
 <style scoped>
 
-
-div.table-label.weapon-grid{
+div.item-list.weapon-grid{
     display: grid;
-    grid-template-areas:  "name  cost  range strength reliablity hands equipped action";
+    grid-template-areas:  "name  cost  range strength reliablity hands equipped"
+                          "name  rules rules rules    rules      rules rules   ";
     grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-auto-columns: min-content;
 }
 
-div.item-list.weapon-grid{
+div.item-list.weapon-grid.action-mode{
     display: grid;
     grid-template-areas:  "name  cost  range strength reliablity hands equipped action"
                           "name  rules rules rules    rules      rules rules    rules";
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-auto-columns: min-content;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr 1fr 2fr;
 }
+
 
 div.item-name{
     grid-area: name;

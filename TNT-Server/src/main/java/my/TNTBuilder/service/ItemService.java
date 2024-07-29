@@ -275,8 +275,15 @@ public class ItemService {
     }
     private void updateTeamMoneyFromSellingItem(int itemId, int userId, Team team)  throws ServiceException, DaoException{
         Item item = itemDao.getItemById(itemId);
-        if (item.getCost()/2 != 0){
-            team.setMoney(team.getMoney() + (item.getCost()/2) );
+        int sellPrice = item.getCost() / 2;
+
+        //TODO - test this
+        if (item.getClass() == Weapon.class && ( ((Weapon)item).isMasterwork() || ((Weapon)item).isLargeCaliber() ) ){
+            sellPrice = item.getCost();
+        }
+
+        if (sellPrice != 0){
+            team.setMoney(team.getMoney() + (sellPrice) );
             teamService.updateTeam(team, userId);
         }
     }
@@ -359,13 +366,16 @@ public class ItemService {
         }
     }
 
+    //TODO test these cases
     private void validateItemNotBeingDowngraded(int userId, Weapon weapon) throws ServiceException {
         Weapon originalItem = (Weapon)itemDao.getItemById(weapon.getId());
-        if ((   !weapon.isLargeCaliber() && originalItem.isLargeCaliber())
-                || (!weapon.isMasterwork() && originalItem.isMasterwork())
-        ) {
-            int teamId = itemDao.getTeamIdByItemId(weapon.getId());
-            teamService.spendMoney(weapon.getCost(), teamService.getTeamById(teamId, userId));
+
+        if ( !weapon.isLargeCaliber() && originalItem.isLargeCaliber() ) {
+            throw new ValidationException("Weapon cannot be downgraded after being upgraded to Large Caliber.");
+        } else if (!weapon.isMasterwork() && originalItem.isMasterwork()) {
+            throw new ValidationException("Weapon cannot be downgraded after being upgraded to Masterwork.");
+        } else if (weapon.equals(originalItem)) {
+            throw new ValidationException("Error: Weapon already has this upgrade.");
         }
     }
 

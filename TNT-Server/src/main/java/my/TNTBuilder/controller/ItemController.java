@@ -50,7 +50,7 @@ public class ItemController {
     }
 
     /**
-     * Adds a new item to the unit inventory
+     * Adds a new item to the team inventory
      * @param itemId the skill to be added
      * @param teamId the id of the unit
      * @param isFree whether the item will be free or cost money
@@ -71,7 +71,7 @@ public class ItemController {
 
     /**
      * Returns list of all inventory that can be bought at this time.
-     * @return
+     *
      */
     @RequestMapping(path="/inventory", method = RequestMethod.GET)
     public List<Item> getItemsForPurchase(){

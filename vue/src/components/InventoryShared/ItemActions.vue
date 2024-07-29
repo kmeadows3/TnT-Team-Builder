@@ -2,6 +2,9 @@
     <div v-if="$store.state.manageInventory">
         <i class="bi inventory-icon bi-explicit-fill button" v-show="$store.state.showUnitDetail" 
             title="Equip" @click="equipItem()"></i>
+        <i class="bi inventory-icon bi-capslock-fill" @click="upgrade()"
+        v-show="$store.state.showUnitDetail && canUpgrade"></i>
+
         <i class="bi inventory-icon bi-currency-dollar button" title="Sell" @click="sellItem()"></i>
         <i class="bi inventory-icon bi-trash button" title="Delete" @click="deleteItem()"></i>
         <i class="bi inventory-icon bi-arrow-left-right button" title="Transfer to/from Team Inventory" 
@@ -26,6 +29,37 @@ export default {
     data() {
         return {
             transferTarget: -1
+        }
+    },
+    computed: {
+        canUpgrade() {
+            let canUpgrade = false;
+            if (! this.item.relic && 
+                (   (this.item.category == 'Melee Weapon' && !this.item.masterwork)
+                    || (this.item.category == 'Ranged Weapon' && !this.item.largeCaliber)
+                    || (this.item.category == 'Ranged Weapon' && this.canHaveAmmo))
+                ){
+                    canUpgrade = true;
+                }
+                
+            
+
+            return canUpgrade;
+        },
+        canHaveAmmo() {
+            let inventory = this.$store.state.currentUnit.inventory;
+            let inventoryHasPrefall = false;
+            let preFallEquipped = false;
+            inventory.forEach( inventoryItem => {
+                if (inventoryItem.hasPrefallAmmo && inventoryItem.id != this.item.id){
+                    preFallEquipped = true;
+                } else if (inventoryItem.name == 'Pre-Fall Ammo'){
+                    inventoryHasPrefall = true;
+                }
+            });
+
+            preFallEquipped ? inventoryHasPrefall = false :  inventoryHasPrefall;
+            return inventoryHasPrefall;
         }
     },
     methods: {
@@ -74,6 +108,11 @@ export default {
             ItemService.toggleEquip(this.item.id, this.$store.state.currentUnit.id)
                 .then(() => this.$store.dispatch('reloadCurrentUnit'))
                 .catch(error => this.$store.dispatch('showError', error));
+        },
+        upgrade() {
+            this.$store.commit('SET_ITEM_TO_MODIFY', this.item);
+            this.$store.commit('SET_POPUP_SUBFORM', 'UpgradeWeapon');
+            this.$store.commit('TOGGLE_SHOW_POPUP');
         }
     }
 }

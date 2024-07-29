@@ -2,18 +2,19 @@
     <div class="item-container" v-show="equipments.length > 0">
         <h2 class="subsection-title">Equipment</h2>
         <div class="item-table">
-            <div class="table-label item-list">
-                <div class="equipment-med">Type</div>
-                <div class="equipment-small">Cost</div>
-                <div class="equipment-large">Special Rules</div>
-                <div class="equipment-small">Equipped</div>
+            <div class="table-label item-list equipment-grid" :class="$store.state.manageInventory ? 'action-mode' : ''">
+                <div class="equipment-name">Type</div>
+                <div class="equipment-cost">Cost</div>
+                <div class="equipment-rules">Special Rules</div>
+                <div class="equipment-equipped">Equipped</div>
                 <div class="item-action" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
-            <div class="item-list" v-for="equipment in equipments" :key="'equipment' + equipment.id">
-                <div class="equipment-med">{{ equipment.name }}</div>
-                <div class="equipment-small">{{ equipment.cost }}</div>
-                <div class="equipment-large item-special-rules">
+            <div class="item-list equipment-grid" v-for="equipment in equipments" :key="'equipment' + equipment.id"
+                :class="$store.state.manageInventory ? 'action-mode' : ''">
+                <div class="equipment-name">{{ equipment.name }}</div>
+                <div class="equipment-cost">{{ equipment.cost }}</div>
+                <div class="equipment-rules item-special-rules">
                     <span v-show="equipment.itemTraits.length == 0 || equipment.specialRules != 'N/A'">
                         {{ equipment.specialRules }}<span v-show="equipment.itemTraits.length > 0">, </span>
                     </span>
@@ -23,11 +24,11 @@
                             {{ trait.name }}</span>
                     </span>
                 </div>
-                <div class="equipment-small item-check">
+                <div class="equipment-equipped item-check">
                     <i class="bi bi-check-circle" title="Currently Equipped" v-show="equipment.equipped"></i>
                     <i class="bi bi-x-circle" title="Currently Unequipped" v-show="!equipment.equipped"></i>
                 </div>
-                <ItemActions class ="item-action" :item='equipment'/>
+                <ItemActions class ="item-action equipment-action" :item='equipment'/>
             </div>
         </div>
     </div>
@@ -50,28 +51,38 @@ export default {
 
 <style scoped>
 
-div.item-list>.equipment-small {
-    min-width: 75px;
-    flex-grow: 1;
-    flex-basis: 5%;
-    display: flex;
-    justify-content: center;
-    align-content: baseline;
+div.item-list.equipment-grid{
+    display: grid;
+    grid-template-areas:  "name  cost  rules equipped";
+    grid-template-columns: 2fr 1fr 6fr 1fr;
 }
 
-div.item-list>.equipment-med {
-    min-width: 75px;
-    flex-grow: 2;
-    flex-basis: 15%;
+div.item-list.equipment-grid.action-mode{
+    display: grid;
+    grid-template-areas:  "name  cost  rules equipped action";
+    grid-template-columns: 2fr 1fr 6fr 1fr 2fr;
 }
 
-div.item-list>.equipment-large {
-    min-width: 150px;
-    flex-grow: 5;
-    flex-basis: 50%;
+div.item-list>.equipment-name {
+    grid-area: name;
+    font-weight: bold;
+}
+
+
+div.item-list>.equipment-cost {
+    grid-area: cost;
+}
+
+div.item-list>.equipment-rules {
+    grid-area: rules;
     border-top: none;
     border-right: dotted 1px black;
-    padding-left: 3px;
     padding-right: 3px;
+
 }
+
+div.item-list>.item-action {
+    grid-area: action;
+}
+
 </style>

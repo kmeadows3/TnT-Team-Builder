@@ -11,6 +11,7 @@
             <DeleteUnit v-if="$store.state.popupSubForm == 'DeleteUnit'" />
             <DeleteTeam v-if="$store.state.popupSubForm == 'DeleteTeam'" />
             <GainInjury v-if="$store.state.popupSubForm == 'GainInjury'" />
+            <UpgradeWeapon v-if="$store.state.popupSubForm == 'UpgradeWeapon'" />
         </div>
     </div>
 </template>
@@ -26,6 +27,7 @@ import GainUnitSkill from './GainUnitSkill.vue';
 import DeleteUnit from './DeleteUnit.vue';
 import DeleteTeam from './DeleteTeam.vue';
 import GainInjury from './GainInjury.vue';
+import UpgradeWeapon from './UpgradeWeapon.vue';
 
 export default {
     methods: {
@@ -42,7 +44,8 @@ export default {
         GainUnitSkill,
         DeleteUnit,
         DeleteTeam,
-        GainInjury
+        GainInjury,
+        UpgradeWeapon
     },
     computed: {
         showSimpleForm() {
@@ -76,7 +79,7 @@ div.popup {
     border: solid 3px black;
     border-radius: 10px;
     min-width: 33%;
-    max-width: 100%;
+    max-width: 80%;
     max-height: 50%;
     box-shadow: 2px 2px 6px rgba(0, 0, 0, .2);
     padding: 5px 0px;

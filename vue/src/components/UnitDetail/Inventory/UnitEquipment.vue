@@ -44,7 +44,12 @@ export default {
     },
     computed: {
         equipments() {
-            return this.$store.state.currentUnit.inventory.filter(item => item.category == "Equipment");
+            let equipment =  this.$store.state.currentUnit.inventory.filter(item => item.category == "Equipment");
+            equipment.sort((a, b) => {
+                const order = {true: 1, false: 2};
+                return order[a.equipped] - order[b.equipped] || a.name.localeCompare(b.name)
+            });
+            return equipment;
         }
     }
 }

@@ -15,7 +15,7 @@
             </div>
             <div class="item-list weapon-grid not-label" v-for="weapon in weapons" :key="'weapon' + weapon.id" :class="$store.state.manageInventory ? 'action-mode' : ''">
                 
-                <div class="item-name">{{ weapon.masterwork ? 'Masterwork ' : weapon.largeCaliber ? 'Large Caliber ': ''}}{{ weapon.name }}</div>
+                <div class="item-name">{{ weapon.name }}</div>
                 <div class="weapon-cost">{{ weapon.masterwork || weapon.largeCaliber ? weapon.cost * 2 : weapon.cost }}</div>
                 <div class="weapon-range">{{ weapon.rangedString }}</div>
                 <div class="weapon-strength">{{ weapon.strengthString }}</div>
@@ -57,7 +57,24 @@ export default {
             weapons.forEach((item) => {
                 item.rangedString = this.rangedString(item);
                 item.strengthString = this.strengthString(item);
+                if(item.masterwork && !item.name.includes("Masterwork ")){
+                    item.name = "Masterwork " + item.name;
+                } else if (item.largeCaliber && !item.name.includes("Large Caliber ")){
+                    item.name = "Large Caliber " + item.name;
+                }
             });
+
+            // weapons.sort((a, b) => a.name.localeCompare(b.name));
+
+            // weapons.sort((a, b) => {
+            //     const order = {true: 1, false: 2};
+            //     return order[a.equipped] - order[b.equipped];
+            // });
+
+            weapons.sort((a, b) => {
+                const order = {true: 1, false: 2};
+                return order[a.equipped] - order[b.equipped] || a.name.localeCompare(b.name)
+            })
 
             return weapons;
         },

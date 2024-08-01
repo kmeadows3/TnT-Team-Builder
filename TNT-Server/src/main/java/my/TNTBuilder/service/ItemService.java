@@ -277,7 +277,6 @@ public class ItemService {
         Item item = itemDao.getItemById(itemId);
         int sellPrice = item.getCost() / 2;
 
-        //TODO - test this
         if (item.getClass() == Weapon.class && ( ((Weapon)item).isMasterwork() || ((Weapon)item).isLargeCaliber() ) ){
             sellPrice = item.getCost();
         }
@@ -366,7 +365,6 @@ public class ItemService {
         }
     }
 
-    //TODO test these cases
     private void validateItemNotBeingDowngraded(int userId, Weapon weapon) throws ServiceException {
         Weapon originalItem = (Weapon)itemDao.getItemById(weapon.getId());
 

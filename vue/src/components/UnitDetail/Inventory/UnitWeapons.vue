@@ -63,13 +63,8 @@ export default {
                     item.name = "Large Caliber " + item.name;
                 }
             });
+            console.log('Sorted Weapons');
 
-            // weapons.sort((a, b) => a.name.localeCompare(b.name));
-
-            // weapons.sort((a, b) => {
-            //     const order = {true: 1, false: 2};
-            //     return order[a.equipped] - order[b.equipped];
-            // });
 
             weapons.sort((a, b) => {
                 const order = {true: 1, false: 2};

@@ -236,12 +236,13 @@ export function createStore(currentToken, currentUser) {
       sortUnitSkills(context) {
         let unitSkills = store.state.currentUnit.skills;
 
-        store.state.currentUnit.injuries.filter( injury => injury.grants).forEach(injury => {
+        console.log('Sorted Unit Skills');
+        store.state.currentUnit.injuries.filter( injury => injury.grants && !unitSkills.includes(injury.grants) ).forEach(injury => {
           injury.grants.addedString = "(" + injury.name + ")"
           unitSkills.push(injury.grants);
         });
 
-        store.state.currentUnit.inventory.filter( item => item.equipped).filter( item => item.grants)
+        store.state.currentUnit.inventory.filter( item => item.equipped && !unitSkills.includes(item.grants)).filter( item => item.grants)
         .forEach( item => {
           item.grants.addedString = "(" + item.name + ")"
           unitSkills.push(item.grants);

@@ -37,7 +37,7 @@ public class UnitService {
 
 
         try {
-            unitValidator.validateNewClientUnit(clientUnit, teamService.getTeamById(clientUnit.getTeamId(), userId) );
+            unitValidator.validateNewUnit(clientUnit, teamService.getTeamById(clientUnit.getTeamId(), userId) );
             newUnit = unitDao.createUnit(clientUnit);
             teamService.updateTeamAfterNewUnitPurchase(userId, newUnit);
 
@@ -220,7 +220,6 @@ public class UnitService {
     }
 
     private void applyInjuryEffects(Injury injury, Unit unit) throws ValidationException {
-        //TODO deal with granting skills
         if (injury.isStatDamage()){
             switch (injury.getStatDamaged()) {
                 case "Mettle":

@@ -18,7 +18,6 @@ public class UnitValidator {
         this.unitDao = unitDao;
     }
 
-    //TODO test everything
     public boolean validFivePointLevel(Unit unit, Unit updatedUnit){
         return validMeleeChange(unit, updatedUnit) || validStrengthChange(unit, updatedUnit)
             || validMoveChange(unit, updatedUnit) || validRangedChange(unit, updatedUnit)
@@ -50,7 +49,7 @@ public class UnitValidator {
 
     }
 
-    public void validateNewClientUnit(Unit unit, Team team) throws ValidationException, DaoException {
+    public void validateNewUnit(Unit unit, Team team) throws ValidationException, DaoException {
 
         if (team == null) {
             throw new ValidationException("Invalid Unit. Logged in user does not own team.");

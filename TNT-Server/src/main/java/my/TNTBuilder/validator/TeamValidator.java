@@ -8,8 +8,6 @@ import java.util.Objects;
 
 @Component
 public class TeamValidator {
-
-    //TODO TEST ALL
     public boolean validNameChange (Team team, Team updatedTeam){
         if (!(team.getName().equals(updatedTeam.getName()))){
             return updatedTeam.getId() == team.getId() && updatedTeam.getUserId() == team.getUserId()

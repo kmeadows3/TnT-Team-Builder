@@ -468,6 +468,20 @@ public class ItemServiceTests extends BaseDaoTests {
         Assert.assertEquals(500, testTeam.getMoney());
     }
 
+    @Test
+    public void sellItem_gives_double_for_upgraded_items() throws ServiceException{
+        WEAPON.setLargeCaliber(true);
+        sut.updateWeaponUpgrade(WEAPON, 1); //costs 5 money
+        sut.sellItem(2, 1); //should regain 5 money
+
+        List<Item> testList = itemDao.getAllItemsForUnit(1);
+        Team testTeam = teamDao.getTeamById(1,1);
+
+        Assert.assertEquals(2, testList.size());
+        Assert.assertFalse(testList.contains(WEAPON));
+        Assert.assertEquals(500, testTeam.getMoney());
+    }
+
     @Test (expected = ServiceException.class)
     public void sellItem_throws_exception_user_does_not_own_item() throws ServiceException{
         sut.sellItem(1, 2);
@@ -705,8 +719,22 @@ public class ItemServiceTests extends BaseDaoTests {
 
     @Test (expected = ServiceException.class)
     public void updateWeaponUpgrade_throws_exception_if_user_does_not_own_item() throws ServiceException{
-        WEAPON.setHasPrefallAmmo(true);
+        WEAPON.setLargeCaliber(true);
         sut.updateWeaponUpgrade(WEAPON, 99);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void updateWeaponUpgrade_throws_exception_if_weapon_already_upgraded() throws ServiceException{
+        try {
+            WEAPON.setLargeCaliber(true);
+            sut.updateWeaponUpgrade(WEAPON, 1);}
+        catch (ServiceException e) {
+            Assert.fail("Service Exception thrown during arrange phase.");
+        }
+        WEAPON.setLargeCaliber(false);
+        sut.updateWeaponUpgrade(WEAPON, 1);
+
         Assert.fail();
     }
 

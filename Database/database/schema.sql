@@ -59,10 +59,10 @@ CREATE TABLE skillset_reference(
 CREATE TABLE skill_reference(
 	skill_id serial PRIMARY KEY NOT NULL,
 	skillset_id int NOT NULL,
-	name varchar(25) NOT NULL,
+	name varchar(30) NOT NULL,
 	description text NOT NULL,
 	phase varchar(25) DEFAULT 'Game',
-	cost int DEFAULT 0,
+	skill_cost int DEFAULT 0,
 	CONSTRAINT fk_skill_skillset FOREIGN KEY(skillset_id) REFERENCES skillset_reference(skillset_id)
 );
 

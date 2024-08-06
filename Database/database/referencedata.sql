@@ -158,29 +158,37 @@ INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, i
 
 	
 INSERT INTO item_trait_reference (name, effect) VALUES
-	('Burst', 'Allow the shooter to fire twice in an activation. If all AP is used to shoot, gain 1 extra AP that must be used to fire a final time.'),
-	('Pistol', 'When used in close combat, resolve any attacks with the user''s Melee stat instead of ranged but use Strength of pistol instead of Strength when rolling to Wound. May not benefit from Brawn skills. Weapon abilities may still apply unless they specify they affect Ranged Attacks. Fumbles still result in Jams.'),
-	('Flammable', 'Units hit by weapon must pass an Agility check during Cleanup Phase or suffer a d6 Strength hit. If test passed, flames are put out and no additional damage taken. Units hit by weapon must make a Morale Test (MET/TN 10) instead of a Grazed Test, but fumbles only count as failures.'),
-	('Limited Ammo', 'At start of game, roll d3+2 to determine the number of times this weapon may be used.'),
-	('Move or Fire', 'Weapon may not be fired if the attacker moved or intends to move during the same activation.'), --ID 5
-	('Large Blast', 'When fired, designate single model as target. Place 5" template on that model. All models at least partially under template are affected by attack. Template may be shifted as long as original target is fully covered.'),
-	('Stun', 'Instead of rolling to Wound target must pass Survival test (MET/TN 10) or lose all AP during its next activation.'),
-	('Small Blast', 'When fired, designate single model as target. Place 3" template on that model. All models at least partially under template are affected by attack. Template may be shifted as long as original target is fully covered.'),
-	('Gas', 'Ranged attacks with weapon ignore Armor Bonus'),
-	('Knock Out', 'Model hit by weapon must past Survival Test (MET/TN 10) or immediately go unconscious. While unconscious, unit is prone and cannot take actions. At beginning of its activations, it must pass a free Survival test (MET/TN10) to recover and act as normal.'), --ID 10
-	('Shield', 'Gain +1 to Melee stat when defending in melee. If also equipped with armor, gain +1 to the armor''s Melee Armor Bonus. Counts as 1-handed weapon for carrying capacity, but model using it may not gain bonus for having two one-handed melee weapons. May be used as Light Improvised Weapon.'),
-	('Reduces Movement', 'Model equipped with item loses 1 to Move'),
-	('Grants Ungainly', 'Model equipped with item gains the Ungainly trait'),
-	('Single Use', 'May only be used once a battle'),
-	('Grants Bold', 'Model equipped with item gains the Bold trait'), --ID 15
-	('Malfunction Prone', 'When model rolls fumble when using relic, item breaks and gains 1 malfunction token (unless weapon which gains 1 token per Reliablity). To remove a token, model must spend 1 AP to pass an Intelligence Test (MET/TN 10). Passive items malfunction on fumble during Activation Test. In case of multiple passive relics, opponent gets to choose which relic malfunctions. '),
-	('Plasma', 'Gain the Anti-Armor trait. When model crits, gain +2 Strength bonus when attempting to wound'),
-	('Thermocycling', 'May not use Burst on consecutive turns'),
-	('Hail of Lead', 'Weapon may shoot twice per AP spent. -1 modifier to hit if activated. Stacks with Burst.'),
-	('Armored Plating', 'When making defense rolls, roll 1d10 and 1d6 and take either result.'), --ID 20
-	('Distracting', 'Models hit by weapon must pass a Surival test (MET/TN 10) or suffer a -2 penality to all Stat tests and Opposed tests on their next activation.'),
-	('Anti-Armor', 'When used against something with Armored Plating, target may not roll the extra dice.'),
-	('Laser', 'Roll 2d10 and pick highest result when making a Ranged attack. Malfunctions on 1s or any double result.');
+('Balanced', 'Models making an attack with a Balanced weapon gain +1 to their melee stat.'), --ID 1
+('Heavy', 'Models making an attack with a Heavy weapon suffer a -1 penalty to their Melee stat.'), --ID 2
+('Anti-Armor', 'When used against a model with the Armored Plating special rule, the target may not roll the extra dice to defend.'), --ID 3
+('Burst', 'Weapon is no longer limited to one shot per turn. If all available AP is used to shoot, model gains an extra 1 AP to fire the weapon a final time. Multiple shot rules apply.'), --ID 4
+('Close Range', 'When this weapon is used at a range of 9” or less, the attacker adds +1 to the weapon’s strength.'), --ID 5
+('Distracting', 'Models hit by weapon must pass a Survival test (MET/TN 10) or suffer a -2 penalty to all Stat tests and Opposed tests on their next activation, including all Melee and Ranged tests.'), --ID 6
+('Flammable', 'Units hit by a Flammable weapon must make a Morale Test (MET/TN 10) instead of a Grazed Test, but fumbles only count as normal failures. In addition, regardless of if they suffered damage from the hit, they must roll an Agility test (MET/TN 10) during the cleanup phase. If they fail, they suffer a 1d6 Strength hit.'), --ID 7
+('Flamer Template', 'Weapon uses the flamer template. Template must be placed with its small end touching the user’s base. All models fully covered by the template (or Large/Huge models with at least half their bases covered) are automatically hit by the attack. Any models partially covered who do not suffer an automatic hit may make an Agility test (MET/TN 10) to avoid the attack. On success, move the model outside the template area by the shortest possible means.'), --ID 8
+('Hail of Lead', 'Weapon may shoot twice per AP spent, but suffer -1 to all shots if they do. Multiple shots rules apply, may be stacked with Burst.'), --ID 9
+('Gas', 'Ranged attacks with this weapon ignore all Armor Bonuses.'), --ID 10
+('Knock Out', 'Model hit by weapon must past Survival Test (MET/TN 10) or immediately go unconscious. No roll to-wound is made. While unconscious, unit is prone and cannot take actions until it recovers. At beginning of its activations, it must pass a free Survival test (MET/TN10) to recover.'), --ID 11
+('Limited Ammo', 'At start of game, roll d3+2 to determine the number of times this weapon may be used.'), --ID 12
+('Large Blast', 'When fired, designate single model as target. Place 5” template on that model. All models at least partially under template are affected by the weapon. Template may be shifted around as long as the original target is fully covered.'), --ID 13
+('Move or Fire', 'Weapon may not be fired if the attacker moved or intends to move during the same activation.'), --ID 14
+('Pistol', 'When used in close combat, resolve any attacks with the user’s Melee stat instead of Ranged but use the Weapon’s strength instead of the model’s Strength when rolling to Wound. May not benefit from Brawn skills. Weapon abilities may still apply unless they specify they affect Ranged Attacks. Fumbles still result in Jams.'), --ID 15
+('Poison', 'Any model hit but not wounded by a Poison weapon must pass a survival test (MET/TN 10) during the cleanup phase or suffer a D6 Strength hit.'), --ID 16
+('Small Blast', 'When fired, designate single model as target. Place 3” template on that model. All models at least partially under template are affected by attack. Template may be shifted as long as the original target is fully covered.'), --ID 17
+('Stun', 'Instead of rolling to Wound, target must pass Survival test (MET/TN 10) or lose all AP during its next activation. Target must still test for Activation to determine turnover.'), --ID 18
+('Grenade', 'Grenades have a range equal to the thrower’s Strength. Thrower may target any spot in range, this need not be a single model or even in Line of Sight (within reason). If the model fails its Ranged test, the grenade’s path will deviate. Center the template over the target and roll for scatter and a D6. Template moves that many inches in the direction of the scatter. Fumbles do not cause malfunctions, but instead causes the grenade to be a dud and not go off.'), --ID 19
+('Armored Plating', 'When making defense rolls, model may roll 1d10 and 1d6 and take either result.'), --ID 20
+('Shield', 'Gain +1 to Melee stat when defending in melee. If also equipped with armor, gain +1 to the armor’s Melee Armor Bonus. Counts as 1-handed weapon for carrying capacity, but model using it may not gain bonus for having two one-handed melee weapons. May be used as Light Improvised Weapon.'), --ID 21
+('Ignore Armor', 'Enemies defend attacks as if their bonus to Defense from Armor is lowered by the amount indicated.'), --ID 22
+('Laser', 'When making a Ranged attack, roll 2d10 and pick the highest result when making a Ranged attack. However, weapon malfunctions any any double result, not just 1s.'), --ID 23
+('Plasma', 'Models with the Armored Plating special rule may not roll extra dice to defend against this weapon. When this weapon scores a critical hit, it gains +2 Strength bonus when attempting to wound.'), --ID 24
+('Thermocycling', 'This weapon may not use the Burst rule on consecutive turns.'), --ID 25
+('Malfunction Prone', 'When model rolls a fumble when using a relic, it breaks and gains 1 malfunction token (unless the relics is a weapon, in which case it gains 1 token per Reliability). To remove a token, model must spend 1 AP to pass an Intelligence Test (MET/TN 10). Passive items malfunction on fumble during Activation Test. In case of multiple passive relics, opponent gets to choose which relic malfunctions. '), --ID 26
+('Reduces Movement', 'Model equipped with item loses 1 to Move'), --ID 27
+('Single Use', 'May only be used once a game.'), --ID 28
+('Biohazard Suit', 'When hit by weapons or hazards with the Gas special rule, this model is only wounded or affected if it fails its Defense or Survival test on a Fumble.'); --ID 29
+
+
 
 INSERT INTO item_reference (name, cost, special_rules, rarity, is_relic, melee_defense_bonus, ranged_defense_bonus, is_shield,
 							cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability, 

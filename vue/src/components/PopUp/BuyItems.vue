@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="buybox">
         <h1 class="section-title">Purchase Items</h1>
         <div class="radio-tab-wrapper">
             <input type="radio" class="tab" name="filterTab" value="Armor" id="armorTab" checked
@@ -172,6 +172,14 @@ export default {
 
 
 <style scoped>
+
+div.buybox {
+    display: flex;
+    flex-direction: column;
+    max-height: 50%;
+    overflow: auto;
+}
+
 .item-purchase-list {
     padding: 10px 10px 0px 10px;
 }

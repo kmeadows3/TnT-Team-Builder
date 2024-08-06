@@ -80,9 +80,10 @@ div.popup {
     border-radius: 10px;
     min-width: 33%;
     max-width: 80%;
-    max-height: 50%;
+    max-height: 80vh;
     box-shadow: 2px 2px 6px rgba(0, 0, 0, .2);
     padding: 5px 0px;
+    overflow-y: auto;
 }
 
 i.bi-x-square {

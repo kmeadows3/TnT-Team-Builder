@@ -193,35 +193,91 @@ INSERT INTO item_trait_reference (name, effect) VALUES
 INSERT INTO item_reference (name, cost, special_rules, rarity, is_relic, melee_defense_bonus, ranged_defense_bonus, is_shield,
 							cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability, 
 							hands_required, item_category, grants) VALUES
-	('Ballistic Shield', 8, 'N/A', 'N/A', FALSE, 1, 1, TRUE, 10, 12, null, null, null, null, 1, 'Armor', null),
-	('Combat Armor', 15, 'N/A', 'N/A', FALSE, 1, 2, FALSE, 20, 25, null, null, null, null, 0, 'Armor', null),
-	('Biohazard Suit', 5, 'Benefits against Gas attacks, but grants Ungainly', 'N/A', FALSE, 1, 0, FALSE, 7, 9, null, null, null, null, 0, 'Armor', 12),
-	('Combat Shield', 6, 'N/A', 'N/A', FALSE, 2, 0, TRUE, 8, 10, null, null, null, null, 1, 'Armor', null),
-	('Power Armor', 50, '+2 to bearer Strength, counts as Biohazard suit.', 'Ultra Rare', TRUE, 4, 4, FALSE, 75, 100, null, null, null, null, 0, 'Armor', null), --ID 5
-	('Shock Shield', 10, 'Counts as having a normal Combat Shield. 1/Turn, make an attack as an improvised light weapon with strength STR + 2', 'Scarce', TRUE, 2, 0, TRUE, 15, 20, null, null, null, null, 1, 'Armor', null),
-	('Berserker Brew', 3, 'When consumed before battle, gain +1 to Move and Melee but gain Frenzied', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 0, 'Equipment', 11),
-	('Climbing Gear', 7, 'When testing for climbing, roll 2d10 and take highest result', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 0, 'Equipment', null),
-	('Net', 4, 'Thrown item with range = STR, ignores all combat modifiers but Concentrate. On hit, target cannot take actions until it spends 1 AP and successfully passes an attempt to free itself (STR/TN 10) during its activation. Psychic powers may be used while in the net. ', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 0, 'Equipment', null),
-	('War Banner', 8, 'Model may not use 2-handed items, but gains Bold. One per warband.', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Equipment', 10), --ID 10
-	('Auto-Injector', 15, 'When model is about to go out of action due to wound loss, roll a survival test (MET/TN 10). On pass, model comes back into play with 1 wound remaining. Starts prone but otherwise acts normally.', 'Rare', TRUE, null, null, null, null, null, null, null, null, null, 0, 'Equipment', null),
-	('Grappler', 10, 'May ascend or descend vertical surfaces using normal movement rate. Only fail climbing tests on Fumbles.', 'Scarce', TRUE, null, null, null, null, null, null, null, null, null, 0, 'Equipment', null),
-	('Pre-Fall Ammo', 10, 'Model must nominate a particular firearm. Firearm gains +1 bonus to Ranged when used. If Firearm fumbles during use, lose bonus.', 'Sporadic', TRUE, null, null, null, null, null, null, null, null, null, 0, 'Equipment', null),
-	('Bayonet', 4, 'Doesn''t count against carry capacity; add unit Strength to weapon Strength during melee attack', 'N/A', FALSE, null, null, null, null, null, 0, null, 1, null, 0, 'Melee Weapon', null),
-	('Fist', 0, 'Free; add unit Strength to weapon Strength during melee attack', 'N/A', FALSE, null, null, null, null, null, 0, null, -1, null, 0, 'Melee Weapon', null), --ID 15
-	('Spear', 5, 'Add unit Strength to weapon Strength during melee attack', 'N/A', FALSE, null, null, null, null, null, 1, 6, 1, null, 2, 'Melee Weapon', null),
-	('Assault Rifle', 15, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 24, 7, 2, 2, 'Ranged Weapon', null),
-	('Pistol', 12, 'N/A', 'N/A', FALSE, null, null, null, null, null, 0, 12, 6, 1, 1, 'Ranged Weapon', null),
-	('Rifle', 10, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 30, 7, 1, 2, 'Ranged Weapon', null),
-	('Flamethrower', 15, 'Uses Flame Template for Range', 'N/A', FALSE, null, null, null, null, null, null, null, 6, 2, 2, 'Support Weapon', null), --ID 20
-	('Light Machine Gun', 25, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 36, 8, 2, 2, 'Support Weapon', null),
-	('Grenade Launcher', 20, 'Deviate Small Blast; may use any grenade the user purchases seperately', 'N/A', FALSE, null, null, null, null, null, null, 24, 7, 2, 2, 'Support Weapon', null),
-	('Flash Bang', 8, 'Deviate Large Blast; uses STR for range', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Grenade', null),
-	('Fragmentation Grenade', 7, 'Deviate Large Blast; uses STR for range', 'N/A', FALSE, null, null, null, null, null, null, null, 7, null, 1, 'Grenade', null),
-	('Sleep Grenade', 7, 'Deviate Large Blast; uses STR for range', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Grenade', null), --ID 25
-	('Actuated Gauntlet', 25, 'Add unit Strength to weapon Strength during melee attack', 'Rare', TRUE, null, null, null, null, null, 0, null, 3, 2, 1, 'Melee Weapon', null),
-	('Plasma Rifle', 35, 'N/A', 'Rare', TRUE, null, null, null, null, null, null, 24, 9, 2, 2, 'Ranged Weapon', null),
-	('Gatling Laser', 55, 'N/A', 'Ultra Rare', TRUE, null, null, null, null, null, null, 24, 6, 3, 2, 'Support Weapon', null),
-	('Plasma Grenade', 17, 'Deviate Small Blast; uses unit strength for range, maximum 6"', 'Rare', TRUE, null, null, null, null, null, null, 6, 8, null, 1, 'Grenade', null);
+	('Bayonet', 4, 'Doesn’t count against carry capacity, but must be attached to a rifle, musket, shotgun, or assault rifle', 'N/A', FALSE, null, null, null, null, null, 0, null, 1, null, null, 'Melee Weapon', null), --ID 1
+('Fist', 0, 'N/A', 'N/A', FALSE, null, null, null, null, null, 0, null, -1, null, null, 'Melee Weapon', null), --ID 2
+('Heavy Improvised Weapon', 0, 'Model may spend 1 AP to pick this up', 'N/A', FALSE, null, null, null, null, null, 0, null, 1, null, 2, 'Melee Weapon', null), --ID 3
+('Heavy Weapon', 5, 'N/A', 'N/A', FALSE, null, null, null, null, null, 0, null, 2, null, 2, 'Melee Weapon', null), --ID 4
+('Light Improvised Weapon', 0, 'Model may spend 1 AP to pick this up, weapon does not grant bonus for using two one-handed weapons, weapon may be thrown once per game', 'N/A', FALSE, null, null, null, null, null, 0, 3, 0, null, 1, 'Melee Weapon', null), --ID 5
+('Ranged Weapon Butt', 0, 'The butt of a 2-handed ranged weapon used as a improvised melee weapon', 'N/A', FALSE, null, null, null, null, null, 0, null, 0, null, null, 'Melee Weapon', null), --ID 6
+('Light Weapon', 3, 'N/A', 'N/A', FALSE, null, null, null, null, null, 0, null, 1, null, 1, 'Melee Weapon', null), --ID 7
+('Natural Weapons', 0, 'Always assumed to be equipped, cannot be disarmed, do not count as one-handed weapons, and do not count against carrying capacity', 'N/A', FALSE, null, null, null, null, null, 0, null, 1, null, null, 'Melee Weapon', null), --ID 8
+('Spear', 5, 'May be thrown once per game', 'N/A', FALSE, null, null, null, null, null, 1, 3, 1, null, 2, 'Melee Weapon', null), --ID 9
+('Small Blade', 4, 'May be thrown once per game', 'N/A', FALSE, null, null, null, null, null, 0, 6, 1, null, 1, 'Melee Weapon', null), --ID 10
+('Aerosol Gun', 10, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, 5, 1, 2, 'Ranged Weapon', null), --ID 11
+('Bow', 5, 'Add model’s Strength to damage, max allowable Strength is 7 (this cannot be improved)', 'N/A', FALSE, null, null, null, null, null, null, 20, 0, 1, 2, 'Ranged Weapon', null), --ID 12
+('Black Powder Pistol', 3, 'N/A', 'N/A', FALSE, null, null, null, null, null, 0, 8, 6, 2, 1, 'Ranged Weapon', null), --ID 13
+('Blunderbuss', 5, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 6, 5, 1, 2, 'Ranged Weapon', null), --ID 14
+('Crossbow', 6, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 24, 6, 1, 2, 'Ranged Weapon', null), --ID 15
+('Crossbow Pistol', 3, 'N/A', 'N/A', FALSE, null, null, null, null, null, 0, 8, 5, 1, 1, 'Ranged Weapon', null), --ID 16
+('Musket', 3, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 18, 7, 1, 2, 'Ranged Weapon', null), --ID 17
+('Spear Gun', 7, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 18, 7, 1, 2, 'Ranged Weapon', null), --ID 18
+('Assault Rifle', 15, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 24, 7, 2, 2, 'Ranged Weapon', null), --ID 19
+('Compound Bow', 7, 'Add model’s Strength to weapon’s Strength, max allowable Strength is 8 (this cannot be improved)', 'N/A', FALSE, null, null, null, null, null, null, 24, 1, 1, 2, 'Ranged Weapon', null), --ID 20
+('Machine Pistol', 7, 'N/A', 'N/A', FALSE, null, null, null, null, null, 0, 12, 6, 2, 1, 'Ranged Weapon', null), --ID 21
+('Pistol', 5, 'N/A', 'N/A', FALSE, null, null, null, null, null, 0, 12, 6, 1, 1, 'Ranged Weapon', null), --ID 22
+('Rifle', 10, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 30, 7, 1, 2, 'Ranged Weapon', null), --ID 23
+('Shotgun', 10, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 18, 7, 1, 2, 'Ranged Weapon', null), --ID 24
+('Sniper Rifle', 20, '+1 to hit at 18” or more', 'N/A', FALSE, null, null, null, null, null, null, 36, 7, 1, 2, 'Ranged Weapon', null), --ID 25
+('Submachine Gun', 10, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 16, 6, 2, 2, 'Ranged Weapon', null), --ID 26
+('Flamethrower', 15, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, 6, 2, 2, 'Support Weapon', null), --ID 27
+('Grenade Launcher', 20, 'Weapon follows rules for Grenades, but the max range is 24”, it is capable of jamming, and it may not fire at targets that are out of Line of Sight if they are beyond 6” away. If another grenade type is purchased separately, it can be fired from the Grenade launcher in place of its normal ammo', 'N/A', FALSE, null, null, null, null, null, null, 24, 7, 2, 2, 'Support Weapon', null), --ID 28
+('Light Machine Gun', 25, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 36, 8, 2, 2, 'Support Weapon', null), --ID 29
+('Minigun', 25, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, 36, 6, 3, 2, 'Support Weapon', null), --ID 30
+('Missile Launcher', 30, 'For each shot, weapon benefits from only ONE of Anti-Armor or Small Blast', 'N/A', FALSE, null, null, null, null, null, null, 36, 9, 2, 2, 'Support Weapon', null), --ID 31
+('Flash Bang', 8, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Grenade', null), --ID 32
+('Fragmentation Grenade', 7, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, 7, null, null, 'Grenade', null), --ID 33
+('Molotov Cocktail', 5, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, 5, null, null, 'Grenade', null), --ID 34
+('Sleep Grenade', 7, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Grenade', null), --ID 35
+('Tear Gas', 6, 'N/A', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Grenade', null), --ID 36
+('Ballistic Shield', 8, 'N/A', 'N/A', FALSE, 1, 1, TRUE, 10, 12, null, null, null, null, 1, 'Armor', null), --ID 37
+('Biohazard Suit', 5, 'Benefits against Gas attacks, grants Ungainly', 'N/A', FALSE, 1, 0, FALSE, 7, 9, null, null, null, null, null, 'Armor', 107), --ID 38
+('Combat Armor', 15, 'N/A', 'N/A', FALSE, 1, 2, FALSE, 20, 25, null, null, null, null, null, 'Armor', null), --ID 39
+('Combat Shield', 6, 'N/A', 'N/A', FALSE, 2, 0, TRUE, 8, 10, null, null, null, null, 1, 'Armor', null), --ID 40
+('Heavy Metal Armor', 5, 'Grants Ungainly', 'N/A', FALSE, 2, 0, FALSE, 7, 10, null, null, null, null, null, 'Armor', 107), --ID 41
+('Mesh Armor', 6, 'N/A', 'N/A', FALSE, 0, 1, FALSE, 7, 8, null, null, null, null, null, 'Armor', null), --ID 42
+('Primitive Shield', 3, 'N/A', 'N/A', FALSE, 1, 0, TRUE, 4, 5, null, null, null, null, 1, 'Armor', null), --ID 43
+('Riot Armor', 10, 'N/A', 'N/A', FALSE, 1, 1, FALSE, 15, 20, null, null, null, null, null, 'Armor', null), --ID 44
+('Scrap Armor', 3, 'N/A', 'N/A', FALSE, 1, 0, FALSE, 4, 5, null, null, null, null, null, 'Armor', null), --ID 45
+('Berserker Brew', 3, '(1d6 uses per purchase) When consumed before game, unit gains +1 to Move and Melee, but becomes Frenzied. No affect on unit that already has the Frenzied special rule', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 46
+('Climbing Gear', 7, 'When testing for climbing, model may roll 2d10 and pick the highest result', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 47
+('Electric Torch', 3, 'Model suffers no combat disadvantages when in darkness, but models targeting them suffer no disadvantages either', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 48
+('Fischer Glow-B-Gone', 7, '(1d6 uses per purchase) If taken prior to start of game, gain a +2 bonus to all Survival tests (MET/TN 10) related to resisting the effects of radiation. 1 AP can be spent to take during the middle of a game, in which case model recovers up to two points of Defense they have lost due to radiation', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 49
+('Gas Mask', 3, 'Model gains +1 to Defense/Survival tests against weapons and hazards with the Gas special rule', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 50
+('Geiger Counter', 5, 'Model can automatically determine the AoE and Intensity of any radiation spot if they are within 12” of it', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 51
+('Liquid Bravery', 3, '(1d6 uses per purchase) If used before battle, model may reroll all failed Morale and Grazed tests', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 52
+('Net', 4, 'Net is a thrown item with a range equal to the user’s Strength. It ignores all ranged combat modifiers except for Concentrate. On hit, the target cannot take any actions until it passes a Strength test (STR/TN 10) during its activation. This test requires 1 AP. Psychic powers can be used in the net', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 53
+('Poison Vial', 5, '(1d6 uses per purchase) Can be applied to a Crossbow Pistol, Bow, Crossbow, Spear Gun, Small Blade, Light Weapon or Spear, granting it the Poison ability. Any model hit but not wounded by a Poison weapon must pass a survival test (MET/TN 10) during the cleanup phase or suffer a D6 Strength hit', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 54
+('Shiny Object', 5, 'Model may reroll a single non-combat related stat test', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 55
+('War Banner', 8, 'Model may not use two-handed items, grants Bold, only 1 per warband', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, 1, 'Equipment', 46), --ID 56
+('War Totem', 4, 'All enemies in close combat with model suffer -1 to all Morale tests (MET/TN 10)', 'N/A', FALSE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 57
+('Actuated Gauntlet', 25, 'Ignore Armor (1)', 'Rare', TRUE, null, null, null, null, null, 0, null, 3, 2, 1, 'Melee Weapon', null), --ID 58
+('Blast Hammer', 30, 'Ignore Armor (1)', 'Ultra Rare', TRUE, null, null, null, null, null, 0, null, 3, 2, 2, 'Melee Weapon', null), --ID 59
+('Chainblade', 15, 'N/A', 'Sporadic', TRUE, null, null, null, null, null, 0, null, 2, 1, 1, 'Melee Weapon', null), --ID 60
+('Force Blade', 20, 'Ignore Armor (2)', 'Rare', TRUE, null, null, null, null, null, 0, null, 2, 2, 1, 'Melee Weapon', null), --ID 61
+('Monofilament Whip', 20, 'Ignore Armor (2)', 'Scarce', TRUE, null, null, null, null, null, 2, null, 1, 1, 1, 'Melee Weapon', null), --ID 62
+('Needler', 18, 'The target Number for the Poisoned rule is 12 instead of 10 due to the power of the weapon', 'Scarce', TRUE, null, null, null, null, null, null, 18, 6, 2, 1, 'Ranged Weapon', null), --ID 63
+('Laser Carbine', 33, 'N/A', 'Scarce', TRUE, null, null, null, null, null, null, 24, 7, 2, 2, 'Ranged Weapon', null), --ID 64
+('Laser Pistol', 15, 'N/A', 'Sporadic', TRUE, null, null, null, null, null, 0, 12, 6, 2, 1, 'Ranged Weapon', null), --ID 65
+('Plasma Pistol', 25, 'N/A', 'Scarce', TRUE, null, null, null, null, null, 0, 12, 8, 2, 1, 'Ranged Weapon', null), --ID 66
+('Plasma Rifle', 35, 'N/A', 'Rare', TRUE, null, null, null, null, null, null, 24, 9, 2, 2, 'Ranged Weapon', null), --ID 67
+('Thunder Gun', 30, 'When determining hits, roll a D6 only once and apply that Strength when hitting all possible targets. All targets hit by the thunder gun are knocked prone', 'Rare', TRUE, null, null, null, null, null, null, null, null, 2, 2, 'Ranged Weapon', null), --ID 68
+('Web Gun', 25, 'On hit, do not roll to wound. Instead target is webbed and cannot take any action that requires movement (shooting, melee attacks, most non-passive abilities, NOT psychic powers) until it breaks free by passing a Strength (STR/TN 10) test at the beginning of its turn. This test costs 1 AP', 'Sporadic', TRUE, null, null, null, null, null, null, 24, null, 2, 2, 'Ranged Weapon', null), --ID 69
+('ZINGer', 18, 'In addition to potentially being wounded, when a model is hit by a ZINGer they must roll a d10. If the target rolls a 5 or below, their opponent may choose one relic (or the model themselves if they are a robot) to count as malfunctioning per the Malfunction Prone rule. Does not affect relics that are single use or cannot be restarted', 'Scarce', TRUE, null, null, null, null, null, null, 24, 7, 2, 2, 'Ranged Weapon', null), --ID 70
+('Gatling Laser', 55, 'N/A', 'Ultra Rare', TRUE, null, null, null, null, null, null, 24, 6, 3, 2, 'Support Weapon', null), --ID 71
+('Plasma Caster', 65, 'N/A', 'Ultra Rare', TRUE, null, null, null, null, null, null, 24, 9, 2, 2, 'Support Weapon', null), --ID 72
+('Plasma Grenade', 17, 'N/A', 'Rare', TRUE, null, null, null, null, null, null, 6, 8, null, null, 'Grenade', null), --ID 73
+('Shrieker', 15, 'The target Number for the Knock Out rule is 12 instead of 10 due to the power of the weapon', 'Scarce', TRUE, null, null, null, null, null, null, 6, null, null, null, 'Grenade', null), --ID 74
+('Power Armor', 50, '+2 to bearer’s Strength stat', 'Ultra Rare', TRUE, 4, 4, FALSE, 75, 100, null, null, null, null, null, 'Armor', null), --ID 75
+('Shock Shield', 10, 'Model counts as if it was equipped with a normal Combat Shield. Once per turn, may make a melee attack with the shield. Shield counts as an improvised light weapon that grants +2 to the bearer’s Strength and has the Distracting weapon ability', 'Scarce', TRUE, 2, 0, TRUE, 15, 20, null, null, null, null, 1, 'Armor', null), --ID 76
+('Stealth Armor', 20, 'Model counts as being equipped with Combat Armor. Any model that is 12” or farther away from this model must pass an Intelligence Test (MET/TN 1) to attack the model with a ranged attack. On fail, attacker cannot target model but can do any other action', 'Rare', TRUE, 1, 2, FALSE, 25, 30, null, null, null, null, null, 'Armor', null), --ID 77
+('Auto-Injector', 15, 'Whenever a model with the auto-injector goes out-of-action due to wound loss, place the model prone and roll a Survival test (MET/TN 10). On pass, model comes back into play with one wound', 'Rare', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 78
+('Battle Force Field', 25, 'Model equipped with this gains +2 to Defense from any ranged attack originating 12” or farther away from itself. Does not stack with Power Armor, bonus does not count as an Armor Bonus', 'Rare', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 79
+('Grappler', 10, 'Model may ascend and descend vertical surfaces using its normal movement rate and will only fail Climbing tests on a Fumble', 'Scarce', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 80
+('Personal Targeting Array', 10, 'Model may reroll one Fumble per turn when making a Ranged attack', 'Scarce', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 81
+('Pre-Fall Ammo', 10, 'Model must nominate a particular firearm. Firearm gains +1 bonus to Ranged when used. If Firearm fumbles during use, lose the ranged bonus for the rest of the game', 'Sporadic', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 82
+('SPAMsuit', 20, 'Any model that strikes the equipped model or moves into base contact must pass an Agility test (MET/TN 10) or suffer an automatic Strength 5 hit. Suit stops working if model goes out of action or unconscious', 'Scarce', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null); --ID 83
+
+
 
 INSERT INTO item_ref_item_trait (item_ref_id, item_trait_id) VALUES
 	(1, 11),

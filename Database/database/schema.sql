@@ -32,7 +32,7 @@ CREATE TABLE team (
 CREATE TABLE unit_reference (
 	unit_ref_id serial PRIMARY KEY NOT NULL,
 	faction_id int NOT NULL,
-	class varchar(20) NOT NULL,
+	class varchar(30) NOT NULL,
 	rank varchar(20) NOT NULL,
 	species varchar(20) NOT NULL,
 	base_cost int NOT NULL,

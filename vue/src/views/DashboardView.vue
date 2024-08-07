@@ -458,7 +458,7 @@ div.popup-form form {
     gap: 20px;
 }
 
-div.popup-form span {
+div.popup-form>span {
     display: flex;
     width: 80%;
     gap: 10px;

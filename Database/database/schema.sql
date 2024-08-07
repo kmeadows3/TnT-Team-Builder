@@ -107,7 +107,7 @@ CREATE TABLE unit(
 	unit_id serial PRIMARY KEY NOT NULL,
 	team_id int NOT NULL,
 	name varchar(100) NOT NULL,
-	class varchar(20) NOT NULL,
+	class varchar(30) NOT NULL,
 	rank varchar(20) NOT NULL,
 	species varchar(20) NOT NULL,
 	base_cost int NOT NULL,

@@ -35,7 +35,7 @@ public class UnitServiceTests extends BaseDaoTests {
     public void reset() {
         ARMOR.setId(1);
         WEAPON.setId(2);
-        GASHED_LEG.setCount(1, true);
+        GASHED_LEG.setCount(1);
     }
 
     @Test

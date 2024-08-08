@@ -63,8 +63,6 @@ export default {
                     item.name = "Large Caliber " + item.name;
                 }
             });
-            console.log('Sorted Weapons');
-
 
             weapons.sort((a, b) => {
                 const order = {true: 1, false: 2};

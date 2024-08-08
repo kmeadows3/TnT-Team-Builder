@@ -8,14 +8,14 @@
             </span>
             <span>
                 <label for="unitSelect">Unit Type: </label>
-                <select id="unitSelect" v-model="newUnit">
+                <select id="unitSelect" v-model="previewUnit">
                     <option></option>
                     <option v-for="unit in possibleUnits" :key="'new-unit-select-' + unit.id" :value="unit">{{
                         unit.unitClass }} ({{ unit.rank }}) - {{
                             unit.baseCost }} BS</option>
                 </select>
             </span>
-            <div class="unit-preview-box" v-show="newUnit.id">
+            <div class="unit-preview-box" v-show="previewUnit.id">
                 <div class="basic-box">
                     <div class="class">Title</div>
                     <div>Type</div>
@@ -23,10 +23,10 @@
                     <div>Wounds</div>
                 </div>
                 <div class="basic-box">
-                    <div class="class">{{ newUnit.unitClass }}</div>
-                    <div>{{ newUnit.species }}</div>
-                    <div>{{ newUnit.defense }}</div>
-                    <div>{{ newUnit.wounds }}</div>
+                    <div class="class">{{ previewUnit.unitClass }}</div>
+                    <div>{{ previewUnit.species }}</div>
+                    <div>{{ previewUnit.defense }}</div>
+                    <div>{{ previewUnit.wounds }}</div>
                 </div>
                 <div class="basic-box">
                     <div>Move</div>
@@ -36,32 +36,32 @@
                     <div>Mettle</div>
                 </div>
                 <div class="basic-box">
-                    <div>{{ newUnit.move }}</div>
-                    <div>{{ newUnit.melee }}</div>
-                    <div>{{ newUnit.ranged }}</div>
-                    <div>{{ newUnit.strength }}</div>
-                    <div>{{ newUnit.mettle }}</div>
+                    <div>{{ previewUnit.move }}</div>
+                    <div>{{ previewUnit.melee }}</div>
+                    <div>{{ previewUnit.ranged }}</div>
+                    <div>{{ previewUnit.strength }}</div>
+                    <div>{{ previewUnit.mettle }}</div>
                 </div>
                 <div class="bigger-box">
                     <div class="title">Skillsets</div>
                     <div class="content">
-                        <span v-for="(skillset, index) in newUnit.availableSkillsets" :key="'skillset-id-'+skillset.id">
-                            {{skillset.name}}{{index == newUnit.availableSkillsets.length - 1 ? '' : ',&nbsp;' }}
+                        <span v-for="(skillset, index) in previewUnit.availableSkillsets" :key="'skillset-id-'+skillset.id">
+                            {{skillset.name}}{{index == previewUnit.availableSkillsets.length - 1 ? '' : ',&nbsp;' }}
                         </span>
                     </div>
                 </div>
                 <div class="bigger-box">
                     <div class="title">Special Ablities</div>
                     <div class="content">
-                        <template v-for="(skill, index) in newUnit.skills" :key="'skill-id-'+skill.id">
-                            {{skill.skillsetId !=16 ? skill.name : skill.description }}{{index == newUnit.skills.length - 1 ? '' : ',&nbsp;' }}
+                        <template v-for="(skill, index) in previewUnit.skills" :key="'skill-id-'+skill.id">
+                            {{skill.skillsetId !=16 ? skill.name : skill.description }}{{index == previewUnit.skills.length - 1 ? '' : ',&nbsp;' }}
                         </template>
                     </div>
                 </div>
                 <div class="bigger-box">
                     <div class="title">Starting Skills</div>
                     <div class="content">
-                        {{ newUnit.emptySkills }}
+                        {{ previewUnit.emptySkills }}
                     </div>
                 </div>
             </div>
@@ -82,6 +82,7 @@ export default {
         return {
             possibleUnits: [],
             newUnit: {},
+            previewUnit: {},
         }
     },
     methods: {
@@ -97,9 +98,10 @@ export default {
         },
         buyUnit() {
             this.newUnit.teamId = this.$store.state.currentTeam.id;
+            this.newUnit.id = this.previewUnit.id;
             UnitService.buyUnit(this.newUnit)
                 .then(response => {
-                    this.$store.dispatch('loadTeams');
+                    this.$store.dispatch('reloadCurrentTeam');
                     this.$store.commit('SET_CURRENT_UNIT', response.data);
                 }).catch(error => this.$store.dispatch('showError', error));
             this.clearForm();

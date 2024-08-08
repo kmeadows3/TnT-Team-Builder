@@ -94,18 +94,17 @@ public class Injury {
         return count;
     }
 
-    public void setCount(int count) throws ValidationException{
+    public void setCount(int count) {
+        this.count = count;
+
+    }
+
+    public void setCount(int count, boolean verify) throws ValidationException{
         if (count < this.count){
             throw new ValidationException("This injury cannot be healed, it can only grow worse");
         } else if (count > 1 && !this.isStackable){
             throw new ValidationException("Injury cannot be gained more than once");
         } else {
-            this.count = count;
-        }
-    }
-
-    public void setCount(int count, boolean skipVerificaiton){
-        if (skipVerificaiton){
             this.count = count;
         }
     }

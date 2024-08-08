@@ -570,7 +570,7 @@ public class JdbcUnitDao implements UnitDao{
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, unitId);
             while(results.next()){
                 Injury injury = mapRowToInjury(results);
-                injury.setCount(results.getInt("count"));
+                injury.setCount(results.getInt("count"), true);
                 injuries.add(injury);
             }
 

@@ -235,8 +235,6 @@ export function createStore(currentToken, currentUser) {
       },
       sortUnitSkills(context) {
         let unitSkills = store.state.currentUnit.skills;
-
-        console.log('Sorted Unit Skills');
         store.state.currentUnit.injuries.filter( injury => injury.grants && !unitSkills.includes(injury.grants) ).forEach(injury => {
           injury.grants.addedString = "(" + injury.name + ")"
           unitSkills.push(injury.grants);

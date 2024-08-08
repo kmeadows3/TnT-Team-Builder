@@ -244,13 +244,25 @@ INSERT INTO skill_reference (skillset_id, name, description, phase, skill_cost) 
 	(16, 'Wasteland Hunter', 'Once per campaign, player may choose not to roll on Wasteland Encounter table and instead have the Creatures of the Wastes result be automatically applied.', 'Deployment', 0); --ID 124
 
 INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, is_removeable, is_stackable, grants) VALUES
-	('Gashed Leg', '-1 penalty to Move', true, 'Move', false, true, null),
-	('Banged Head', '-1 penalty to Mettle', true, 'Mettle', false, true, null),
-	('Brain Sprain', 'Model gains the Dumb general ability', false, null, false, false, 9),
-	('Captured', 'Model is captured and your opponent determines what happens to them (See Rulebook).', false, null, true, false, null),
-	('Banged Up', 'Model has -1 to all rolls it makes during the next campaign game.', false, null, true, false, null),
-	('Long Recovery', 'Model misses the next campaign game.', false, null, true, false, null),
-	('Horrible Scarring', 'Model gains Fearful Reputation for free.', false, null, false, false, 6);
+	('Banged Head', 'Model receives a -1 penalty to its Mettle Stat', TRUE, 'Mettle', FALSE, TRUE, null), --ID 1
+	('Gashed Leg', 'Model receives a -1 penalty to its Move Stat', TRUE, 'Move', FALSE, TRUE, null), --ID 2
+	('Brain Strain', 'Model gains the Dumb ability', FALSE, null, FALSE, FALSE, 15), --ID 3
+	('Captured', 'Model is captured and your opponent determines what happens to them (See Rulebook)', FALSE, null, TRUE, FALSE, null), --ID 4
+	('Hand Injury', 'Model receives a -1 penalty to its Ranged Stat', TRUE, 'Ranged', FALSE, TRUE, null), --ID 5
+	('Horrible Scarring', 'Model gains Fearful Reputation for Free', FALSE, null, FALSE, FALSE, 40), --ID 6
+	('Insensible', 'Model gains the Soft-Bellied general ability', FALSE, null, FALSE, FALSE, 96), --ID 7
+	('Long Recovery', 'Model misses the next campaign game', FALSE, null, TRUE, FALSE, null), --ID 8
+	('Shaky Nerves', 'Model gains the Coward general ability', FALSE, null, FALSE, FALSE, 97), --ID 9
+	('Bum Leg', 'Model may only move once per turn, regardless of available AP', FALSE, null, FALSE, FALSE, null), --ID 10
+	('Reckless', 'Model gains the Frenzied general ability', FALSE, null, FALSE, FALSE, 99), --ID 11
+	('Flashbacks', 'Model must make a Will test (MET/TN 10) at the beginning of each game. If failed, model may not be used in that game', FALSE, null, FALSE, FALSE, null), --ID 12
+	('Hardened', 'Model gains the Brave skill for free', FALSE, null, FALSE, FALSE, 38), --ID 13
+	('Gaping Wound', 'Model receives a -1 penalty to its Defense Stat', TRUE, 'Defense', FALSE, TRUE, null), --ID 14
+	('Weak Hands', 'Model receives a -1 penalty to its Melee and Ranged stats when using any two-handed weapon', FALSE, null, FALSE, TRUE, null), --ID 15
+	('Bent Elbow', 'Model receives a -1 penalty to its Melee Stat', TRUE, 'Melee', FALSE, TRUE, null), --ID 16
+	('Nervous Tic', 'Model receives a -1 penalty to all its Activation tests (MET/TN 10)', FALSE, null, FALSE, TRUE, null), --ID 17
+	('Vengeance', 'Model gains the Hatred special rule, applied to all members of the warband that caused the injury', FALSE, null, FALSE, TRUE, 100), --ID 18
+	('Banged Up', 'Model suffers a -1 penalty to all rolls made during the next campaign game', FALSE, null, TRUE, FALSE, null); --ID 19
 
 	
 INSERT INTO item_trait_reference (name, effect) VALUES

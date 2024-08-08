@@ -16,7 +16,7 @@
                 </select>
             </span>
             <div class="unit-preview-box" v-show="previewUnit.id">
-                <div class="basic-box">
+                <div class="basic-box title">
                     <div class="class">Title</div>
                     <div>Type</div>
                     <div>Defense</div>
@@ -28,7 +28,7 @@
                     <div>{{ previewUnit.defense }}</div>
                     <div>{{ previewUnit.wounds }}</div>
                 </div>
-                <div class="basic-box">
+                <div class="basic-box title">
                     <div>Move</div>
                     <div>Melee</div>
                     <div>Ranged</div>
@@ -62,6 +62,12 @@
                     <div class="title">Starting Skills</div>
                     <div class="content">
                         {{ previewUnit.emptySkills }}
+                    </div>
+                </div>
+                <div class="bigger-box" v-show="previewUnit.specialRules != ''">
+                    <div class="title">Purchase Note</div>
+                    <div class="content">
+                        {{ previewUnit.specialRules }}
                     </div>
                 </div>
             </div>

@@ -34,6 +34,7 @@ public class Unit {
     private List<Skill> skills = new ArrayList<>();
     private List<Injury> injuries = new ArrayList<>();
     private List<Item> inventory = new ArrayList<>();
+    private boolean isNewPurchase = true;
 
     //constructors
 
@@ -42,7 +43,7 @@ public class Unit {
     public Unit(int id, int teamId, String name, String unitClass, String rank, String species, int baseCost, int wounds, int defense,
                 int mettle, int move, int ranged, int melee, int strength, int emptySkills, String specialRules,
                 int spentExperience, int unspentExperience, int totalAdvances, int tenPointAdvances,
-                List<Skillset> availableSkillsets, List<Skill> skills, List<Injury> injuries, List<Item> inventory) {
+                List<Skillset> availableSkillsets, List<Skill> skills, List<Injury> injuries, List<Item> inventory, boolean isNewPurchase) {
         this.id = id;
         this.teamId = teamId;
         this.name = name;
@@ -67,6 +68,7 @@ public class Unit {
         this.skills = skills;
         this.injuries = injuries;
         this.inventory = inventory;
+        this.isNewPurchase = isNewPurchase;
     }
     //Methods
 
@@ -319,6 +321,15 @@ public class Unit {
     public void setInjuries(List<Injury> injuries) {
         this.injuries = injuries;
     }
+
+    public boolean isNewPurchase() {
+        return isNewPurchase;
+    }
+
+    public void setNewPurchase(boolean newPurchase) {
+        isNewPurchase = newPurchase;
+    }
+
 
     //Override Equals
 

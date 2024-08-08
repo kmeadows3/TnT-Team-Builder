@@ -124,6 +124,7 @@ CREATE TABLE unit(
 	unspent_exp int DEFAULT 0,
 	total_advances int DEFAULT 0,
 	ten_point_advances int DEFAULT 0,
+	new_purchase boolean DEFAULT true,
 	CONSTRAINT FK_unit_team FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
 

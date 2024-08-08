@@ -28,7 +28,7 @@ public class JdbcUnitDao implements UnitDao{
             "special_rules FROM unit_reference ";
     private final String SELECT_ALL_FROM_UNIT = "SELECT u.team_id, unit_id, name, class, rank, species, base_cost, wounds, " +
             "defense, mettle, move, ranged, melee, strength, empty_skills, special_rules, spent_exp, unspent_exp, " +
-            "total_advances, ten_point_advances, u.team_id FROM unit u " +
+            "total_advances, ten_point_advances, u.team_id, new_purchase FROM unit u " +
             "JOIN team t on t.team_id = u.team_id ";
     private final String SELECT_ALL_FROM_SKILLSET_REFERENCE = "SELECT ssr.skillset_id, skillset_name, category " +
             "FROM skillset_reference ssr ";
@@ -191,14 +191,14 @@ public class JdbcUnitDao implements UnitDao{
     public void updateUnit(Unit updatedUnit) throws DaoException{
         String sql = "UPDATE unit SET name = ?, rank = ?, wounds = ?, defense = ?, mettle = ?, move = ?, " +
                 "ranged = ?, melee = ?, strength = ?, empty_skills = ?, spent_exp = ?, unspent_exp = ?, " +
-                "total_advances = ?, ten_point_advances = ? " +
+                "total_advances = ?, ten_point_advances = ?, new_purchase = ? " +
                 "WHERE unit_id = ?";
         try{
             int rowsAffected = jdbcTemplate.update(sql, updatedUnit.getName(), updatedUnit.getRank(), updatedUnit.getWounds(),
                     updatedUnit.getDefense(), updatedUnit.getMettle(), updatedUnit.getMove(), updatedUnit.getRanged(),
                     updatedUnit.getMelee(), updatedUnit.getStrength(), updatedUnit.getEmptySkills(),
                     updatedUnit.getSpentExperience(), updatedUnit.getUnspentExperience(), updatedUnit.getTotalAdvances(),
-                    updatedUnit.getTenPointAdvances(), updatedUnit.getId());
+                    updatedUnit.getTenPointAdvances(), false, updatedUnit.getId());
             if (rowsAffected != 1){
                 throw new DaoException("Incorrect number of rows affected");
             }
@@ -545,6 +545,7 @@ public class JdbcUnitDao implements UnitDao{
         newUnit.setUnspentExperience(row.getInt("unspent_exp"));
         newUnit.setTotalAdvances(row.getInt("total_advances"));
         newUnit.setTenPointAdvances(row.getInt("ten_point_advances"));
+        newUnit.setNewPurchase(row.getBoolean("new_purchase"));
         newUnit.setSkills(getUnitSkills(newUnit.getId()));
         newUnit.setAvailableSkillsets(getAvailableSkillsets(newUnit.getId()));
         newUnit.setInjuries(getAllInjuriesOnUnit(newUnit.getId()));

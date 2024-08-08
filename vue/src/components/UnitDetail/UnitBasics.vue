@@ -15,6 +15,7 @@
         </span>
         </h1>
         </div>
+        <div id="new-purchase" v-show="$store.state.currentUnit.newPurchase">{{ $store.state.currentUnit.specialRules }}</div>
         <div id="unit-actions">
             <UnitActions />
         </div>
@@ -80,8 +81,9 @@ div#basic-information{
     display: grid;
     width: 100%;
     grid-template-areas:
-        "name    name    name    name" 
+        "name    name    name    name"
         "actions actions actions actions"
+        "new       new     new     new" 
         "title   rank    type    bs-cost";
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
@@ -100,6 +102,11 @@ div#basic-information>div#name{
 div#basic-information>div#unit-actions{
     grid-area: actions;
     border: none;
+}
+
+div#basic-information>div#new-purchase{
+    grid-area: new;
+    background-color: lightpink;
 }
 
 div#title{

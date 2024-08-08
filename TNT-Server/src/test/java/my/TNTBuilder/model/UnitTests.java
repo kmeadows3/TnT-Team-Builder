@@ -35,7 +35,7 @@ public class UnitTests {
                 "Special rules description",100,0,0,0,
                 Arrays.asList(new Skillset(3, "Survival", "Skill"),
                         new Skillset(4, "Quickness", "Skill")),
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), true);
     }
 
     @Test

@@ -64,11 +64,11 @@ public abstract class BaseDaoTests {
             "Special rules description",100,0,0,0,
             Arrays.asList(new Skillset(3, "Survival", "Skill"),
                     new Skillset(4, "Quickness", "Skill")),
-            new ArrayList<>(),  Arrays.asList(GASHED_LEG, BANGED_HEAD), Arrays.asList(ARMOR, WEAPON, ITEM));
+            new ArrayList<>(),  Arrays.asList(GASHED_LEG, BANGED_HEAD), Arrays.asList(ARMOR, WEAPON, ITEM), true);
     protected static final Unit UNIT2 = new Unit(2, 3, "UnitName2", "Soldier", "Elite",
             "Mutant", 51,11,6,1,7,9,7,6,1,
             "Special rules description",50,0,0,0,
-            List.of(new Skillset(6, "Brawn", "Skill")), new ArrayList<>(),  new ArrayList<>(), List.of(RELIC_WEAPON));
+            List.of(new Skillset(6, "Brawn", "Skill")), new ArrayList<>(),  new ArrayList<>(), List.of(RELIC_WEAPON), true);
 
     protected static final Unit UNIT3 = new Unit(3, 1, "UnitName3", "Class Name", "Specialist",
             "Human", 40,10,5,7,6,8,6,5,0,
@@ -77,7 +77,7 @@ public abstract class BaseDaoTests {
             List.of(new Skill(7, "Bully", "All enemies defeated by this model in" +
                     " close combat are knocked prone in addition to any other combat result.", 6, "Brawn"),
                     new Skill(9, "Up-Armed", "Can Equip Support Weapons", 15, "General Abilities")),
-            List.of(BANGED_UP), new ArrayList<>());
+            List.of(BANGED_UP), new ArrayList<>(), true);
     protected final Team TEAM_1 = new Team(1, 1, "Team 1", "Caravanners", 1, 500,
             Arrays.asList(UNIT1, UNIT3), Arrays.asList(TEAM_ARMOR, TEAM_WEAPON, TEAM_ITEM));
     protected final Team TEAM_2 = new Team(2, 1, "Team 2", "Raiders", 3, 1500,

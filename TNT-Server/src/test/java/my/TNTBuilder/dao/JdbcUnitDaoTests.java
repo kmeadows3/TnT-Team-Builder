@@ -54,7 +54,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Unit expectedUnit = new Unit(4, 2, "Name", "Defender", "Rank and File",
                 "Human", 23,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),  new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), true);
         expectedUnit.getAvailableSkillsets().add(new Skillset(1, "Melee", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));
@@ -86,7 +86,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Unit expectedUnit = new Unit(4, 0, "", "Defender", "Rank and File",
                 "Human", 23,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>(), true);
         expectedUnit.getAvailableSkillsets().add(new Skillset(1, "Melee", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));

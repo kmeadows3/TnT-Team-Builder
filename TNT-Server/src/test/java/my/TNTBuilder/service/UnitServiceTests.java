@@ -306,7 +306,7 @@ public class UnitServiceTests extends BaseDaoTests {
                         new Skillset(1, "Melee", "Skill"),
                         new Skillset(2, "Marksmanship", "Skill"),
                         new Skillset(3, "Survival", "Skill")),
-                new ArrayList<>(),  new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(),  new ArrayList<>(), new ArrayList<>(), true);
         Unit testUnit = sut.getReferenceUnitByClass("Raider");
         Assert.assertEquals(expectedUnit, testUnit);
     }
@@ -494,7 +494,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit expectedUnit = new Unit(4, 0, "", "Defender", "Rank and File",
                 "Human", 23,1,6,5,5,4,4,5,0,
                 "N/A",0,0,0,0,
-                new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>(), true);
         expectedUnit.getAvailableSkillsets().add(new Skillset(1, "Melee", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));

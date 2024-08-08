@@ -27,11 +27,11 @@ public class TeamTests {
     private static final Unit UNIT1 = new Unit(1, 1, "UnitName1", "Trade Master", "Leader",
             "Human", 50,10,5,7,6,8,6,5,0,
             "Special rules description",100,0,0,0,
-            new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>());
+            new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>(), true);
     private static final Unit UNIT2 = new Unit(2, 3, "UnitName2", "Soldier", "Elite",
             "Mutant", 51,11,6,8,7,9,7,6,1,
             "Special rules description",50,0,0,0,
-            new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>());
+            new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>(), true);
     private Team team;
 
     @Before

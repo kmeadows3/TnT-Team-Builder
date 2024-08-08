@@ -82,6 +82,8 @@ export function createStore(currentToken, currentUser) {
         state.currentUnit = unit;
         state.showUnitDetail = true;
         state.showTeamDetail = false;
+        let unitIndex = state.currentTeam.unitList.findIndex( listUnit => listUnit.id == unit.id);
+        state.currentTeam.unitList[unitIndex] = unit;
         store.dispatch('updateUnitInventoryTraits');
         store.dispatch('sortUnitSkills');
         store.dispatch('sortInjuries');

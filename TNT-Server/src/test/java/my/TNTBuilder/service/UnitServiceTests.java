@@ -1,5 +1,6 @@
 package my.TNTBuilder.service;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import my.TNTBuilder.exception.DaoException;
 import my.TNTBuilder.exception.ValidationException;
 import my.TNTBuilder.model.*;
@@ -214,9 +215,9 @@ public class UnitServiceTests extends BaseDaoTests {
     @Test
     public void getPotentialSkills_returns_correct_list_one_skillset() throws ServiceException{
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
-                "Ignore heavy weapons rule.", 6, "Brawn");
+                "Ignore heavy weapons rule.", 6, "Brawn","Game",0);
         Skill skill2 = new Skill(7, "Bully", "All enemies defeated by this model in close combat are knocked prone " +
-                "in addition to any other combat result.", 6, "Brawn");
+                "in addition to any other combat result.", 6, "Brawn","Game",0);
 
         List<Skill> skillList = sut.getPotentialSkills(2);
 
@@ -229,10 +230,10 @@ public class UnitServiceTests extends BaseDaoTests {
     @Test
     public void getPotentialSkills_returns_correct_list_multiple_skillsets() throws ServiceException{
         Skill skill1 = new Skill(3, "Reconnoiter", "At the start of the game after all models have " +
-                "deployed but before init is determined make a free move action.", 4, "Quickness");
+                "deployed but before init is determined make a free move action.", 4, "Quickness","Game",0);
         Skill skill2 = new Skill(4, "Trekker", "When moving through Difficult Terrain attempt an " +
                 "Agility test (MET/TN 10) for free. On pass move through terrain without movement penalty.",
-                3, "Survival");
+                3, "Survival","Game",0);
 
         List<Skill> skillList = sut.getPotentialSkills(1);
 
@@ -245,9 +246,9 @@ public class UnitServiceTests extends BaseDaoTests {
     @Test
     public void getPotentialSkills_does_not_return_existing_skills() throws ServiceException{
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
-                "Ignore heavy weapons rule.", 6, "Brawn");
+                "Ignore heavy weapons rule.", 6, "Brawn","Game",0);
         Skill skill2 = new Skill(7, "Bully", "All enemies defeated by this model in close combat are knocked prone " +
-                "in addition to any other combat result.", 6, "Brawn");
+                "in addition to any other combat result.", 6, "Brawn","Game",0);
 
         List<Skill> skillList = sut.getPotentialSkills(3);
 
@@ -260,7 +261,7 @@ public class UnitServiceTests extends BaseDaoTests {
     @Test
     public void addSkillToUnit_adds_skill_to_unit() throws ServiceException{
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
-                "Ignore heavy weapons rule.", 6, "Brawn");
+                "Ignore heavy weapons rule.", 6, "Brawn","Game",0);
         sut.addSkillToUnit(skill1, 2, 2);
         Unit testUnit = sut.getUnitById(2, 2);
         Assert.assertEquals(1, testUnit.getSkills().size());
@@ -270,7 +271,7 @@ public class UnitServiceTests extends BaseDaoTests {
     @Test (expected = ServiceException.class)
     public void addSkillToUnit_throws_exception_if_user_does_not_own_unit() throws ServiceException{
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
-                "Ignore heavy weapons rule.", 6, "Brawn");
+                "Ignore heavy weapons rule.", 6, "Brawn","Game",0);
         sut.addSkillToUnit(skill1, 2, 1);
         Assert.fail();
     }
@@ -278,15 +279,52 @@ public class UnitServiceTests extends BaseDaoTests {
     @Test (expected = ServiceException.class)
     public void addSkillToUnit_throws_exception_if_unit_cannot_have_skill() throws ServiceException{
         Skill skill1 = new Skill(1, "Illegal Skill", "Gain +1 to Strength Stat when making Melee attacks. " +
-                "Ignore heavy weapons rule.", 3, "Brawn");
+                "Ignore heavy weapons rule.", 3, "Brawn","Game",0);
         sut.addSkillToUnit(skill1, 2, 2);
+        Assert.fail();
+    }
+
+    @Test
+    public void addSkillToUnit_works_for_mutations() throws ServiceException{
+        Skill mutation = new Skill(11, "Mutation", "Mutation Description", 11, "Physical Mutations","Game",5);
+        sut.addSkillToUnit(mutation, 4, 4);
+        Unit testUnit = sut.getUnitById(4,4);
+        Team testTeam = teamDao.getTeamById(4,4);
+        Assert.assertEquals(1, testUnit.getSkills().size());
+        Assert.assertEquals(0, testUnit.getEmptySkills());
+        Assert.assertTrue(testUnit.getSkills().contains(mutation));
+        Assert.assertEquals(995, testTeam.getMoney());
+    }
+
+    @Test
+    public void addSkillToUnit_works_for_detriments() throws ServiceException{
+        Skill detriment = new Skill(12, "Detriment", "Detriment Description", 14, "Physical Detriments","Game",-5);
+        sut.addSkillToUnit(detriment, 4, 4);
+        Unit testUnit = sut.getUnitById(4,4);
+        Team testTeam = teamDao.getTeamById(4,4);
+        Assert.assertEquals(1, testUnit.getSkills().size());
+        Assert.assertEquals(1, testUnit.getEmptySkills());
+        Assert.assertTrue(testUnit.getSkills().contains(detriment));
+        Assert.assertEquals(1005, testTeam.getMoney());
+    }
+
+    @Test (expected = ServiceException.class)
+    public void addSkillToUnit_throws_exception_for_non_mutant_gaining_mutation() throws ServiceException{
+        Skill mutation = new Skill(11, "Mutation", "Mutation Description", 11, "Physical Mutations","Game",5);
+        sut.addSkillToUnit(mutation, 2, 1);
+        Assert.fail();
+    }
+
+    @Test (expected = ServiceException.class)
+    public void addSkillToUnit_throws_exception_if_team_cannot_afford_mutation() throws ServiceException{
+        Skill mutation = new Skill(11, "Mutation", "Mutation Description", 11, "Physical Mutations","Game",5);
+        sut.addSkillToUnit(mutation, 8, 4);
         Assert.fail();
     }
 
     @Test
     public void getUnitById_returns_correct_unit() throws ServiceException{
         Unit testUnit = sut.getUnitById(1,1);
-        Unit expected = UNIT1;
         Assert.assertNotNull(testUnit);
         Assert.assertEquals(UNIT1, testUnit);
     }
@@ -499,7 +537,7 @@ public class UnitServiceTests extends BaseDaoTests {
         expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));
         expectedUnit.getSkills().add(new Skill(5, "Brave", "+2 bonus when making Will tests.",
-                7, "Tenacity"));
+                7, "Tenacity","Game",0));
 
         return expectedUnit;
     }

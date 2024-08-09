@@ -33,11 +33,12 @@ public class JdbcUnitDao implements UnitDao{
     private final String SELECT_ALL_FROM_SKILLSET_REFERENCE = "SELECT ssr.skillset_id, skillset_name, category " +
             "FROM skillset_reference ssr ";
     private final String SELECT_ALL_FROM_SKILL_REFERENCE = "SELECT sr.skill_id AS skill_id, sr.skillset_id, " +
-            "name AS skill_name, description AS skill_description, skillset_name FROM skill_reference sr " +
+            "name AS skill_name, description AS skill_description, skillset_name, skill_cost, phase " +
+            "FROM skill_reference sr " +
             "JOIN skillset_reference ssr ON ssr.skillset_id = sr.skillset_id ";
     private final String SELECT_ALL_FROM_INJURY_REFERENCE = "SELECT injury_id, ir.name, ir.description, is_stat_damage, " +
             "stat_damaged, is_removeable, is_stackable, sr.skill_id AS skill_id, sr.skillset_id, sr.name AS skill_name, " +
-            "sr.description AS skill_description, skillset_name FROM injury_reference ir "+
+            "sr.description AS skill_description, skillset_name, phase, skill_cost FROM injury_reference ir "+
             "LEFT JOIN skill_reference sr ON grants = sr.skill_id " +
             "LEFT JOIN skillset_reference ssr ON  ssr.skillset_id = sr.skillset_id ";
 
@@ -600,6 +601,8 @@ public class JdbcUnitDao implements UnitDao{
             newSkill.setName(row.getString("skill_name"));
             newSkill.setSkillsetName(row.getString("skillset_name"));
             newSkill.setDescription(row.getString("skill_description"));
+            newSkill.setPhase(row.getString("phase"));
+            newSkill.setCost(row.getInt("skill_cost"));
             return newSkill;
         }
         return null;

@@ -10,15 +10,28 @@ public class Skill {
     private int skillsetId;
     private String skillsetName;
 
-    public Skill(int id, String name, String description, int skillsetId, String skillsetName){
+    private String phase;
+    private int cost;
+
+    public Skill(int id, String name, String description, int skillsetId, String skillsetName, String phase, int cost){
         this.id = id;
         this.name = name;
         this.description = description;
         this.skillsetId = skillsetId;
         this.skillsetName = skillsetName;
+        this.phase = phase;
+        this.cost = cost;
     }
 
     public Skill() {
+    }
+
+    public boolean isMutation() {
+        return this.skillsetId > 8 && this.skillsetId <=14;
+    }
+
+    public boolean isDetriment() {
+        return this.skillsetId == 13 || this.skillsetId ==14;
     }
 
     //Getters and Setters
@@ -58,15 +71,32 @@ public class Skill {
         this.description = description;
     }
 
+    public String getPhase() {
+        return phase;
+    }
+
+    public void setPhase(String phase) {
+        this.phase = phase;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Skill skill = (Skill) o;
-        return id == skill.id && name.equals(skill.name) && description.equals(skill.description);
+        return id == skill.id && cost == skill.cost && name.equals(skill.name)
+                && description.equals(skill.description) && phase.equals(skill.phase);
     }
 
     public int hashCode() {
-        return Objects.hash(name, description, id);
+        return Objects.hash(name, description, id, phase, cost);
     }
 
 

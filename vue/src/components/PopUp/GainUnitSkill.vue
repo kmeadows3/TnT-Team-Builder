@@ -4,7 +4,8 @@
         <div class="gain-skill-container">
             <div class="skill-purchase-info">
                 <div class="skillsets"><strong>Available Skillsets: </strong>
-                    <span v-for="(skillset, index) in $store.state.currentUnit.availableSkillsets" :key="skillset.id">
+                    <span v-for="(skillset, index) in $store.state.currentUnit.availableSkillsets"
+                        :key="'skillset-list-span-' + skillset.id">
                         {{ index == 0 ? '' : ', ' }}
                         {{ skillset.name }}
                     </span>
@@ -14,14 +15,30 @@
                     <strong>Remaining Skills to Purchase: </strong>{{ $store.state.currentUnit.emptySkills }}
                 </div>
 
+                <div v-show="$store.state.currentUnit.newPurchase">
+                    <strong>Note for New Units: </strong>{{ $store.state.currentUnit.specialRules }}
+                </div>
+
                 <form>
                     <div class="skill-selection">
-                        <strong>Lookup Ability: </strong>
+                        <div class="finder-label">
+                            <h2 class="subsection-title">Lookup Ability: </h2>
+                            <span>
+                                <label>Filter: </label>
+                                <select v-model="filter">
+                                    <option selected :value="''">None</option>
+                                    <option v-for="skillset in $store.state.currentUnit.availableSkillsets"
+                                        :key="'skillset-filter-option-' + skillset.id" :value="skillset.name">
+                                        {{ skillset.name }} </option>
 
+                                </select>
+                            </span>
+
+                        </div>
                         <div class="skill-finder">
                             <select class="skill-name" v-model="newSkill">
                                 <option selected disabled :value="{}">Choose Ability</option>
-                                <option v-for="potentialSkill in potentialSkills" :key="potentialSkill.id"
+                                <option v-for="potentialSkill in filteredSkills" :key="potentialSkill.id"
                                     :value="potentialSkill">
                                     {{ potentialSkill.name }} </option>
                             </select>
@@ -52,7 +69,18 @@ export default {
     data() {
         return {
             potentialSkills: [],
-            newSkill: {}
+            newSkill: {},
+            filter: '',
+        }
+    },
+    computed: {
+        filteredSkills() {
+            if (!this.filter) {
+                return this.potentialSkills;
+            } else {
+                return this.potentialSkills.filter(skill => skill.skillsetName == this.filter);
+            }
+
         }
     },
     methods: {
@@ -120,7 +148,7 @@ div.skill-selection {
 div.skill-finder {
     display: flex;
     justify-content: start;
-    align-items: center;
+    align-items: stretch;
     padding-top: 6px;
 }
 
@@ -131,12 +159,23 @@ div.skill-finder p {
     margin: 0px;
 }
 
-.skill-name{
+.skill-name {
     width: 150px;
 }
 
 select.skill-name {
     font-size: 1em;
     text-align: center;
+}
+
+form {
+    width: 100%;
+}
+
+div.finder-label {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 </style>

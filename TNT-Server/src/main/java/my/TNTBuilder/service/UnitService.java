@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Component
 public class UnitService {
 
-    public static final int INJURY_SKILLSET_ID = 16;
     private final UnitDao unitDao;
     private final UnitValidator unitValidator;
     private final TeamService teamService;
@@ -87,9 +86,16 @@ public class UnitService {
     public void addSkillToUnit(Skill skill, int unitId, int userId) throws ServiceException{
         try {
             if (unitCanAddSkill(unitId, skill, userId)){
+
+                if (skill.isMutation() && skill.getCost() != 0){
+                    teamService.spendMoney(skill.getCost(), teamService.getTeamByUnitId(unitId));
+                }
+
                 unitDao.addSkillToUnit(skill.getId(), unitId);
                 Unit unit = unitDao.getUnitById(unitId, userId);
-                unit.setEmptySkills(unit.getEmptySkills() - 1);
+                if (!skill.isDetriment()){
+                    unit.setEmptySkills(unit.getEmptySkills() - 1);
+                }
                 unitDao.updateUnit(unit);
             }
         } catch (DaoException e){
@@ -298,10 +304,8 @@ public class UnitService {
 
         if (unit == null) {
             throw new ServiceException("Error, invalid unit.");
-        } else if (skill.getSkillsetId() == INJURY_SKILLSET_ID){
-            return true;
         } else if (unit.getEmptySkills() < 1){
-            throw new ServiceException("Error, no open skills.");
+            throw new ServiceException("Error, unit does not have any unpurchased skills.");
         } else {
 
             for (Skill ownedSkills : unit.getSkills()) {
@@ -310,12 +314,17 @@ public class UnitService {
                 }
             }
 
-            List<Skill> potentialSkills = unitDao.getPotentialSkills(unit.getId());
-            for (Skill potentialSkill: potentialSkills){
-                if(potentialSkill.getId() == skillId){
-                    return true;
+            if (!skill.isMutation()){
+                List<Skill> potentialSkills = unitDao.getPotentialSkills(unit.getId());
+                for (Skill potentialSkill: potentialSkills){
+                    if(potentialSkill.getId() == skillId){
+                        return true;
+                    }
                 }
+            } else if (skill.isMutation() && unit.getSpecies().equals("Mutant")){
+                return true;
             }
+
         }
 
         throw new ServiceException("Error, unit cannot have this skill.");

@@ -59,7 +59,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));
         expectedUnit.getSkills().add(new Skill(5, "Brave", "+2 bonus when making Will tests.",
-                7, "Tenacity"));
+                7, "Tenacity","Game",0));
 
         Unit newUnit = sut.createUnit(expectedUnit);
         expectedUnit.setId(newUnit.getId());
@@ -91,7 +91,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         expectedUnit.getAvailableSkillsets().add(new Skillset(2, "Marksmanship", "Skill"));
         expectedUnit.getAvailableSkillsets().add(new Skillset(3, "Survival", "Skill"));
         expectedUnit.getSkills().add(new Skill(5, "Brave", "+2 bonus when making Will tests.",
-                7, "Tenacity"));
+                7, "Tenacity","Game",0));
 
 
         List<Unit> testList = sut.getListOfUnitsByFactionId(1);
@@ -123,9 +123,9 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     @Test
     public void getPotentialSkills_returns_correct_list_one_skillset(){
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
-                "Ignore heavy weapons rule.", 6, "Brawn");
+                "Ignore heavy weapons rule.", 6, "Brawn","Game",0);
         Skill skill2 = new Skill(7, "Bully", "All enemies defeated by this model in close combat are knocked prone " +
-                "in addition to any other combat result.", 6, "Brawn");
+                "in addition to any other combat result.", 6, "Brawn","Game",0);
 
         List<Skill> skillList = sut.getPotentialSkills(2);
 
@@ -138,10 +138,10 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     @Test
     public void getPotentialSkills_returns_correct_list_multiple_skillsets(){
         Skill skill1 = new Skill(3, "Reconnoiter", "At the start of the game after all models have " +
-                "deployed but before init is determined make a free move action.", 4, "Quickness");
+                "deployed but before init is determined make a free move action.", 4, "Quickness","Game",0);
         Skill skill2 = new Skill(4, "Trekker", "When moving through Difficult Terrain attempt an " +
                 "Agility test (MET/TN 10) for free. On pass move through terrain without movement penalty.",
-                3, "Survival");
+                3, "Survival","Game",0);
 
         List<Skill> skillList = sut.getPotentialSkills(1);
 
@@ -154,9 +154,9 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     @Test
     public void getPotentialSkills_does_not_return_existing_skills(){
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
-                "Ignore heavy weapons rule.", 6, "Brawn");
+                "Ignore heavy weapons rule.", 6, "Brawn","Game",0);
         Skill skill2 = new Skill(7, "Bully", "All enemies defeated by this model in close combat are knocked prone " +
-                "in addition to any other combat result.", 6, "Brawn");
+                "in addition to any other combat result.", 6, "Brawn","Game",0);
 
         List<Skill> skillList = sut.getPotentialSkills(3);
 
@@ -168,7 +168,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
     @Test
     public void addSkillToUnit_adds_skill_to_unit() {
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
-                "Ignore heavy weapons rule.", 6, "Brawn");
+                "Ignore heavy weapons rule.", 6, "Brawn","Game",0);
 
         sut.addSkillToUnit(6, 2);
         Unit testUnit = sut.getUnitById(2, 2);

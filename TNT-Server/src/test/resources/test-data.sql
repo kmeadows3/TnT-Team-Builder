@@ -63,6 +63,8 @@ CREATE TABLE skill_reference(
 	skillset_id int NOT NULL,
 	name varchar(25) NOT NULL,
 	description text NOT NULL,
+	phase varchar(25) DEFAULT 'Game',
+	skill_cost int DEFAULT 0,
 	CONSTRAINT fk_skill_skillset FOREIGN KEY(skillset_id) REFERENCES skillset_reference(skillset_id)
 );
 
@@ -238,17 +240,19 @@ INSERT INTO skillset_reference (skillset_name, category) VALUES
 	('Physical Detriments', 'Detriment'), -- ID 14
 	('General Abilities', 'General'); -- ID 15
 
-INSERT INTO skill_reference (skillset_id, name, description) VALUES
-	(5, 'Scavenger', 'When taking a weapon with limited ammo roll 2d3 when determining ammo quantity and take the higher of the two. Upkeep does not need to be paid for this unit. May not be taken by Freelancers.'),
-	(8, 'Motivator', 'All friendly models withing 6" of this model gain +1 to activation tests. Motivator may not stack with itself.'),
-	(4, 'Reconnoiter', 'At the start of the game after all models have deployed but before init is determined make a free move action.'),
-	(3, 'Trekker', 'When moving through Difficult Terrain attempt an Agility test (MET/TN 10) for free. On pass move through terrain without movement penalty.'),
-	(7, 'Brave', '+2 bonus when making Will tests.'), -- ID 5
-	(6, 'Brute', 'Gain +1 to Strength Stat when making Melee attacks. Ignore heavy weapons rule.'),
-	(6, 'Bully', 'All enemies defeated by this model in close combat are knocked prone in addition to any other combat result.'),
-	(15, 'Dumb', 'Takes a -2 penalty to intelligence tests'),
-	(15, 'Up-Armed', 'Can Equip Support Weapons'),
-	(15, 'RagTag', 'Cannot equip more than 15BS worth of gear'); -- ID 10
+INSERT INTO skill_reference (skillset_id, name, description, phase, skill_cost) VALUES
+	(5, 'Scavenger', 'When taking a weapon with limited ammo roll 2d3 when determining ammo quantity and take the higher of the two. Upkeep does not need to be paid for this unit. May not be taken by Freelancers.', 'Game', 0),
+	(8, 'Motivator', 'All friendly models withing 6" of this model gain +1 to activation tests. Motivator may not stack with itself.','Game', 0),
+	(4, 'Reconnoiter', 'At the start of the game after all models have deployed but before init is determined make a free move action.','Game', 0),
+	(3, 'Trekker', 'When moving through Difficult Terrain attempt an Agility test (MET/TN 10) for free. On pass move through terrain without movement penalty.','Game', 0),
+	(7, 'Brave', '+2 bonus when making Will tests.','Game', 0), -- ID 5
+	(6, 'Brute', 'Gain +1 to Strength Stat when making Melee attacks. Ignore heavy weapons rule.','Game', 0),
+	(6, 'Bully', 'All enemies defeated by this model in close combat are knocked prone in addition to any other combat result.','Game', 0),
+	(15, 'Dumb', 'Takes a -2 penalty to intelligence tests','Game', 0),
+	(15, 'Up-Armed', 'Can Equip Support Weapons','Game', 0),
+	(15, 'RagTag', 'Cannot equip more than 15BS worth of gear','Game', 0), -- ID 10
+	(11, 'Mutation', 'Mutation Description','Game', 5),
+	(14, 'Detriment', 'Detriment Description','Game', -5);
 
 
 INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, is_removeable, is_stackable, grants) VALUES
@@ -310,13 +314,13 @@ INSERT INTO team(user_id, faction_id, team_name, money) VALUES (4, 1, 'Team With
 INSERT INTO unit (team_id, name, class, rank, species, base_cost, wounds, defense, mettle, move, ranged, melee,
     strength, empty_skills, special_rules, spent_exp)
 VALUES (1, 'UnitName1', 'Trade Master', 'Leader', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
-    (3, 'UnitName2', 'Soldier', 'Elite', 'Mutant', 51, 11, 6, 1, 7, 9, 7, 6, 1, 'Special rules description', 50),
+    (3, 'UnitName2', 'Soldier', 'Elite', 'Human', 51, 11, 6, 1, 7, 9, 7, 6, 1, 'Special rules description', 50),
     (1, 'UnitName3', 'Class Name', 'Specialist', 'Human', 40, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
-    (4, 'UnitName4', 'High BS Unit', 'Leader', 'Human', 200, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
+    (4, 'UnitName4', 'High BS Unit', 'Leader', 'Mutant', 200, 10, 5, 7, 6, 8, 6, 5, 1, 'Special rules description', 100),
     (7, 'UnitName5', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
     (7, 'UnitName6', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
     (7, 'UnitName7', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
-    (5, 'UnitName8', 'Class Name', 'Elite', 'Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
+    (5, 'UnitName8', 'Class Name', 'Elite', 'Mutant', 50, 10, 5, 7, 6, 8, 6, 5, 1, 'Special rules description', 100),
     (7, 'UnitName9', 'Class Name', 'Rank and File','Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
     (7, 'UnitName10', 'Class Name', 'Freelancer','Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100),
     (7, 'UnitName11', 'Class Name', 'Leader','Human', 50, 10, 5, 7, 6, 8, 6, 5, 0, 'Special rules description', 100);

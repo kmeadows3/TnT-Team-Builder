@@ -27,8 +27,8 @@ INSERT INTO unit_reference (faction_id, class, rank, species, base_cost, wounds,
 	(2, 'Omega Mutant', 'Leader', 'Mutant', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '', 3, 'Must have at least one mutation'), -- ID 14
 	(2, 'Psychic Lord', 'Leader', 'Mutant', 85, 2, 6, 7, 5, 6, 5, 6, '[1|2|3|4|5|7|8]', '[54|82]', 3, 'Two of the starting skills must be random psychic mutations. Both are free skills granted by Psychic and Psychic Battery.'), -- ID 15
 	(2, 'Alpha Mutant', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[1|2|3|8]', '', 2, 'May start with one detriment, must have at least one mutation'), -- ID 16
-	(2, 'Mutant Emissary', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|5|8]', '', 2, 'Available only to Downwinder warbands, must have at least one mutation'), -- ID 17
-	(2, 'Mutant Emissary (Medic)', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|5|8]', '[104]', 1, 'Available only to Downwinder warbands'), -- ID 18
+	(2, 'Mutant Emissary', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|5|8]', '', 2, 'Available only to Downwinder warbands, must have at least one mutation. May start withe one detriment'), -- ID 17
+	(2, 'Mutant Emissary (Medic)', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|5|8]', '[104]', 1, 'Available only to Downwinder warbands. May start withe one detriment'), -- ID 18
 	(2, 'Abomination', 'Elite', 'Mutant', 45, 1, 7, 6, 5, 3, 6, 6, '[1|6|7]', '[41|67]', 2, 'Available only to Outcast warbands. Starting skills must be mutations. May start with two detriments'), -- ID 19
 	(2, 'Mutant', 'Rank and File', 'Mutant', 27, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 1, 'Starting skill must be a mutation. May start with one detriment'), -- ID 20
 	(2, 'Feral Mutant', 'Rank and File', 'Mutant', 25, 1, 6, 5, 5, 3, 6, 5, '[1|3|6]', '[105]', 1, 'Starting skill must be a mutation. May start with one detriment'), -- ID 21
@@ -107,20 +107,20 @@ INSERT INTO skillset_reference (skillset_name, category) VALUES
 	('Brawn', 'Skill'), -- ID 6
 	('Tenacity', 'Skill'), -- ID 7
 	('Leadership', 'Skill'), -- ID 8
-	('Hidden Defensive Mutations', 'Mutation'), -- ID 9
-	('Hidden Offensive Mutations', 'Mutation'), -- ID 10
-	('Physical Mutations', 'Mutation'), -- ID 11
-	('Psychic Mutations', 'Mutation'), -- ID 12
-	('Hidden Detriments', 'Detriment'), -- ID 13
-	('Physical Detriments', 'Detriment'), -- ID 14
-	('General Abilities', 'General'), -- ID 15
-	('Unit Skills', 'General'); -- ID 16
+	('Hidden Defensive Mutation', 'Mutation'), -- ID 9
+	('Hidden Offensive Mutation', 'Mutation'), -- ID 10
+	('Physical Mutation', 'Mutation'), -- ID 11
+	('Psychic Mutation', 'Mutation'), -- ID 12
+	('Hidden Detriment', 'Detriment'), -- ID 13
+	('Physical Detriment', 'Detriment'), -- ID 14
+	('General Ability', 'General'), -- ID 15
+	('Unit Skill', 'General'); -- ID 16
 
 
 INSERT INTO skill_reference (skillset_id, name, description, phase, skill_cost) VALUES
 	(1, 'Against All Odds', 'When this model is outnumbered in close combat, it gains +1 to its melee stat and enemies in base contact with this model do not gain bonuses for outnumbering it.', 'Game', 0), --ID 1
 	(1, 'Careful Blow', 'All melee attacks by this model have the Ignore Armor (1) Ability, meaning enemies defend attacks as if their bonus to defense from Armor is one lower (minimum 0).', 'Game', 0), --ID 2
-	(1, 'Defender', 'When attacked in melle, this model gains +1 to it’s melee and defense stats.', 'Game', 0), --ID 3
+	(1, 'Defender', 'When attacked in melee, this model gains +1 to it’s melee and defense stats.', 'Game', 0), --ID 3
 	(1, 'Flurry of Blows', 'On any turn this model makes a melee attack, it gains an additional free AP that may only be used to make another melee attack. The second attack suffers a -1 Melee stat penalty.', 'Game', 0), --ID 4
 	(1, 'Opportunist', 'During the to-hit phase of melee combat, this model treats ties as wins instead.', 'Game', 0), --ID 5
 	(1, 'Quick Charge', 'On any turn this model fails an activation test, it may make  a second move action for free - but only to complete a charge move into contact with an enemy.', 'Game', 0), --ID 6
@@ -179,7 +179,7 @@ INSERT INTO skill_reference (skillset_id, name, description, phase, skill_cost) 
 	(10, 'Webs', 'Model against a ranged attack with a range of 12” and the Burst rule. Instead of rolling to wound, the target hit counts as webbed. A webbed model cannot take any actions that require movement (shooting, melee, most non-passive special abilities, but not psychic powers) until it breaks free by passing a Strength test (STR/TN 10) at the beginning of its next turn. The Strength test costs 1 AP.', 'Game', 0), --ID 59
 	(10, 'Radioactive', 'Model may spend 1 AP to  place a Large Blast template over itself and irradiate all models, friend and foe, in range. Affected models must pass two survival tests (MET/TN 10) as if they were in an irradiated area with an intensity of 2. Each failure results in a -1 to the victim’s defense for the rest of the game. Model must pass a Strength test (STR/TN 10) at the beginning of its activation to reuse this action. Test does not cost AP. In addition, model is immune to the effects of radiation.', 'Game', 0), --ID 60
 	(11, 'Spikes', 'Any model that makes a melee attack against this model must pass an Agility test (MET/TN 10) or suffer a Strength 6 hit. Models armed with a weapon with a melee range of 1” or greater may ignore this rule.', 'Game', 0), --ID 61
-	(11, 'Big', 'Model receives +1 to Strength and counts as having the Large general ability.', 'Game', 15), --ID 62
+	(11, 'Big', 'Model receives +1 to Strength (already taken into account) and counts as having the Large general ability.', 'Game', 15), --ID 62
 	(11, 'Blob Form', 'Model gains +2 to defense against all ranged attacks from firearms, excluding any weapons with the Flammable, Laser, or Plasma abilities. All of its close combat attacks have a melee range of 1”, regardless of the weapon used. However, when affected by a weapon with the Flammable ability, it must roll two dice for the Agility test and choose the lower result.', 'Game', 5), --ID 63
 	(11, 'Burrow', 'Model may spend 1 AP to go underground. While underground, it can move ignoring terrain and cannot be targeted by ranged weapons, special abilities, or melee attacks. Model must spend 1 AP to reemerge. Model may not begin to burrow or reemerge in solid rock, concrete, asphalt, water, or other similar circumstances. However, while underground, unit can bypass those obstructions. Unit cannot use this to enter enclosed spaces like vaults or bunkers. Unit cannot claim or carry scenario objectives while burrowed. Should any scenario conditions require a warband to specifically attack or engage this model and the game ends with the model underground, the enemy warband gains full Victory Points as if this model was taken down.', 'Game', 10), --ID 64
 	(11, 'Carapace', 'Model gains a +2 Armor Bonus.', 'Game', 10), --ID 65

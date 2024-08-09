@@ -1,21 +1,37 @@
 <template>
     <div>
-        <h1 class="section-title">Select New Skill</h1>
+        <h1 class="section-title">
+            {{ onlyDetriments ? 'Pick Detriments' : (isMutant ? 'Pick Skill or Mutation' : 'Pick Skill') }}
+        </h1>
+        <div class="radio-tab-wrapper" v-show="isMutant && !onlyDetriments">
+            <input type="radio" class="tab" name="filterTab" value="Skill" id="skillTab" checked
+                v-model="filter.skillsetCategory" @change="resetPotentialSkill()"/>
+            <label for="skillTab">Skills</label>
+            <input type="radio" class="tab" name="filterTab" value="Mutation" id="mutatationTab"
+                v-model="filter.skillsetCategory" @change="resetPotentialSkill()"/>
+            <label for="mutatationTab">Mutations</label>
+            <input type="radio" class="tab" name="filterTab" value="Detriment" id="deterimentTab"
+                v-model="filter.skillsetCategory" @change="resetPotentialSkill()"/>
+            <label for="deterimentTab">Detriments</label>
+        </div>
+
         <div class="gain-skill-container">
             <div class="skill-purchase-info">
-                <div class="skillsets"><strong>Available Skillsets: </strong>
-                    <span v-for="(skillset, index) in $store.state.currentUnit.availableSkillsets"
+                <div class="skillsets" v-show="filter.skillsetCategory=='Skill'"><strong>Available Skillsets: </strong>
+                    <span v-for="(skillset, index) in filteredSkillsets"
                         :key="'skillset-list-span-' + skillset.id">
                         {{ index == 0 ? '' : ', ' }}
                         {{ skillset.name }}
                     </span>
                 </div>
 
-                <div>
-                    <strong>Remaining Skills to Purchase: </strong>{{ $store.state.currentUnit.emptySkills }}
+                <div v-show="filter.skillsetCategory != 'Detriment'">
+                    <strong>Remaining Skills
+                        <span v-show="isMutant">or Mutations</span>
+                        to Purchase: </strong>{{ $store.state.currentUnit.emptySkills }}
                 </div>
 
-                <div v-show="$store.state.currentUnit.newPurchase">
+                <div v-show="$store.state.currentUnit.newPurchase && $store.state.currentUnit.specialRules">
                     <strong>Note for New Units: </strong>{{ $store.state.currentUnit.specialRules }}
                 </div>
 
@@ -23,22 +39,23 @@
                     <div class="skill-selection">
                         <div class="finder-label">
                             <h2 class="subsection-title">Lookup Ability: </h2>
-                            <span>
+                            <span  @change="resetPotentialSkill()">
                                 <label>Filter: </label>
-                                <select v-model="filter">
-                                    <option selected :value="''">None</option>
-                                    <option v-for="skillset in $store.state.currentUnit.availableSkillsets"
-                                        :key="'skillset-filter-option-' + skillset.id" :value="skillset.name">
+                                <select v-model.number="filter.skillsetId">
+                                    <option selected :value="0">None</option>
+                                    <option v-for="skillset in filteredSkillsets"
+                                        :key="'skillset-filter-option-' + skillset.id" :value="skillset.id">
                                         {{ skillset.name }} </option>
-
                                 </select>
                             </span>
 
                         </div>
                         <div class="skill-finder">
                             <select class="skill-name" v-model="newSkill">
-                                <option selected disabled :value="{}">Choose Ability</option>
-                                <option v-for="potentialSkill in filteredSkills" :key="potentialSkill.id"
+                                <option selected disabled :value="{}">
+                                    Choose {{filter.skillsetCategory}}
+                                </option>
+                                <option v-for="potentialSkill in filteredSkills" :key="'potential-skill-'+ potentialSkill.id"
                                     :value="potentialSkill">
                                     {{ potentialSkill.name }} </option>
                             </select>
@@ -70,17 +87,27 @@ export default {
         return {
             potentialSkills: [],
             newSkill: {},
-            filter: '',
+            filter: {
+                skillsetCategory: ''
+            },
         }
     },
     computed: {
         filteredSkills() {
-            if (!this.filter) {
-                return this.potentialSkills;
+            if (!this.filter.skillsetId) {
+                return this.potentialSkills.filter(skill => this.skillInCategory(skill));
             } else {
-                return this.potentialSkills.filter(skill => skill.skillsetName == this.filter);
+                return this.potentialSkills.filter(skill => skill.skillsetId == this.filter.skillsetId);
             }
-
+        },
+        filteredSkillsets() {
+            return this.$store.state.currentUnit.availableSkillsets.filter( skillset => skillset.category===this.filter.skillsetCategory);
+        },
+        isMutant(){
+            return this.$store.state.currentUnit.species === "Mutant";
+        },
+        onlyDetriments(){
+            return this.isMutant && this.$store.state.currentUnit.emptySkills <= 0;
         }
     },
     methods: {
@@ -97,14 +124,24 @@ export default {
                 })
                 .catch(error => this.$store.dispatch('showError', error));
         },
+        skillInCategory(skill) {
+            return this.filteredSkillsets.filter( skillset => skillset.id == skill.skillsetId).length;
+        },
         cancel() {
             this.potentialSkills = [];
             this.newSkill = {};
             this.$store.commit('REMOVE_SHOW_POPUP');
+        },
+        setDefaultSkillsetCategory(){
+            return this.$store.state.currentUnit.emptySkills > 0 ? this.filter.skillsetCategory = 'Skill' : this.filter.skillsetCategory = 'Detriment';
+        },
+        resetPotentialSkill(){
+            this.newSkill = {};
         }
     },
     created() {
         this.getPotentialSkills();
+        this.setDefaultSkillsetCategory();
     }
 }
 </script>
@@ -164,7 +201,7 @@ div.skill-finder p {
 }
 
 select.skill-name {
-    font-size: 1em;
+    font-size: .8em;
     text-align: center;
 }
 
@@ -178,4 +215,53 @@ div.finder-label {
     justify-content: space-between;
     align-items: center;
 }
+
+.radio-tab-wrapper {
+    margin-top: 5px;
+    display: flex;
+    border-bottom: 1px solid #428bca;
+    padding: 0 10px;
+    position: relative;
+}
+
+.radio-tab-wrapper>div {
+    display: inline-block;
+    margin: auto;
+    padding-left: 5px;
+
+}
+
+input.tab {
+    display: none;
+
+    &+label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        float: left;
+        border: 1px solid #aaa;
+        border-bottom: 0;
+        background-color: #fff;
+        margin-right: -1px;
+        padding: .5em 1em;
+        position: relative;
+        vertical-align: middle;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+
+
+        &:hover {
+            background-color: #eee;
+        }
+    }
+
+    &:checked+label {
+        box-shadow: 0 3px 0 -1px #fff,
+            inset 0 5px 0 -1px #13CD4A;
+        background-color: #fff;
+        border-color: #428bca;
+        z-index: 1;
+    }
+}
+
 </style>

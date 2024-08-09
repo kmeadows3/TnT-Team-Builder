@@ -15,7 +15,7 @@
         </span>
         </h1>
         </div>
-        <div id="new-purchase" v-show="$store.state.currentUnit.newPurchase">{{ $store.state.currentUnit.specialRules }}</div>
+        <div id="new-purchase" v-show="$store.state.currentUnit.newPurchase && $store.state.currentUnit.specialRules">{{ $store.state.currentUnit.specialRules }}</div>
         <div id="unit-actions">
             <UnitActions />
         </div>

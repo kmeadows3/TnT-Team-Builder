@@ -75,6 +75,7 @@ public class UnitService {
                 clientUnit.setTenPointAdvances(clientUnit.getTenPointAdvances() + 1);
             }
 
+            clientUnit.setNewPurchase(false);
             unitDao.updateUnit(clientUnit);
             currentUnit = unitDao.getUnitById(clientUnit.getId(), userId);
         } catch (DaoException e){
@@ -93,9 +94,16 @@ public class UnitService {
 
                 unitDao.addSkillToUnit(skill.getId(), unitId);
                 Unit unit = unitDao.getUnitById(unitId, userId);
+
+
                 if (!skill.isDetriment()){
                     unit.setEmptySkills(unit.getEmptySkills() - 1);
+
+                    if (unit.getEmptySkills()==0){
+                        unit.setNewPurchase(false);
+                    }
                 }
+
                 unitDao.updateUnit(unit);
             }
         } catch (DaoException e){
@@ -304,7 +312,7 @@ public class UnitService {
 
         if (unit == null) {
             throw new ServiceException("Error, invalid unit.");
-        } else if (unit.getEmptySkills() < 1){
+        } else if (unit.getEmptySkills() < 1 && !skill.isDetriment()){
             throw new ServiceException("Error, unit does not have any unpurchased skills.");
         } else {
 

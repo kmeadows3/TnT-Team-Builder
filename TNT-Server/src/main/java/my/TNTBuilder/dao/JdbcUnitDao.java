@@ -12,15 +12,20 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Component
 public class JdbcUnitDao implements UnitDao{
+    public final List<Integer> MUTATION_SKILLSET_IDS = List.of(9, 10, 11, 13, 14);
+    public final int PSYCHIC_SKILLSET_ID = 12;
     private final int FREELANCER_FACTION_ID = 7;
+    private final Skill PSYCHIC_SKILL = new Skill(54, "Psychic",
+            "Model may spend 1 AP and take a Will test to use a psychic ability. On fumble, model takes a " +
+                    "1d6 Strength hit. If the power used is an attack, it automatically hits after the Will test, but " +
+                    "any ranged modifiers counta s a penalty to the test. Psychics do not need line of sight if the " +
+                    "target is 16” or closer. When first gaining Psychic, user also gains a free Psychic Mutation.",
+            9, "Hidden Defensive Mutation", "Game", 0);
 
     private final JdbcTemplate jdbcTemplate;
     private final String SELECT_ALL_FROM_UNIT_REFERENCE = "SELECT unit_ref_id, faction_id, class, rank, species, base_cost, " +
@@ -160,9 +165,9 @@ public class JdbcUnitDao implements UnitDao{
 
     @Override
     public void  deleteUnit(Unit unit) throws DaoException{
-        String deleteSkillSql = "DELETE FROM unit_skill WHERE skill_id = ?";
-        String deleteSkillsetSql = "DELETE FROM unit_skillset WHERE skillset_id = ?";
-        String deleteInjurySql = "DELETE from unit_injury WHERE injury_id = ?";
+        String deleteSkillSql = "DELETE FROM unit_skill WHERE unit_id = ?";
+        String deleteSkillsetSql = "DELETE FROM unit_skillset WHERE unit_id = ?";
+        String deleteInjurySql = "DELETE from unit_injury WHERE unit_id = ?";
         String deleteUnitSql = "DELETE FROM unit WHERE unit_id = ?";
 
         try {
@@ -199,7 +204,7 @@ public class JdbcUnitDao implements UnitDao{
                     updatedUnit.getDefense(), updatedUnit.getMettle(), updatedUnit.getMove(), updatedUnit.getRanged(),
                     updatedUnit.getMelee(), updatedUnit.getStrength(), updatedUnit.getEmptySkills(),
                     updatedUnit.getSpentExperience(), updatedUnit.getUnspentExperience(), updatedUnit.getTotalAdvances(),
-                    updatedUnit.getTenPointAdvances(), false, updatedUnit.getId());
+                    updatedUnit.getTenPointAdvances(), updatedUnit.isNewPurchase(), updatedUnit.getId());
             if (rowsAffected != 1){
                 throw new DaoException("Incorrect number of rows affected");
             }
@@ -387,6 +392,11 @@ public class JdbcUnitDao implements UnitDao{
     /*
     PRIVATE METHODS
      */
+
+    private boolean unitIsMutant(int unitId) {
+        String species = jdbcTemplate.queryForObject("SELECT species FROM unit WHERE unit_id= ?", String.class, unitId);
+        return species.equals("Mutant");
+    }
     private List<Skill> getUnitSkills(int unitId){
         List<Skill> skills = new ArrayList<>();
         String sql = SELECT_ALL_FROM_SKILL_REFERENCE + "JOIN unit_skill us ON us.skill_id = sr.skill_id " +
@@ -452,8 +462,8 @@ public class JdbcUnitDao implements UnitDao{
         newUnit.setEmptySkills(row.getInt("starting_free_skills"));
         newUnit.setSpecialRules(row.getString("special_rules"));
         newUnit.setSpentExperience(convertStartingExp(newUnit.getRank()));
-        newUnit.setAvailableSkillsets(convertAvailableSkillsets(row.getString("skillsets")));
         newUnit.setSkills(convertStartingSkills(row.getString("starting_skills")));
+        newUnit.setAvailableSkillsets(convertAvailableSkillsets(row.getString("skillsets"), newUnit.getSpecies(), newUnit.getSkills()));
         return newUnit;
     }
     private int convertStartingExp(String rank){
@@ -467,35 +477,46 @@ public class JdbcUnitDao implements UnitDao{
             return 75;
         }
     }
-    private List<Skillset> convertAvailableSkillsets(String skillsetsAsString) throws DaoException{
-        int[] skillsetsAsArray = referenceArraySplitter(skillsetsAsString);
+    private List<Skillset> convertAvailableSkillsets(String skillsetsAsString, String species, List<Skill> startingSkills) throws DaoException{
+
+        List<Integer> skillsetIdList = referenceArraySplitter(skillsetsAsString);
+        if (species.equals("Mutant")){
+            skillsetIdList.addAll(MUTATION_SKILLSET_IDS);
+        }
+        if (startingSkills.contains(PSYCHIC_SKILL)){
+            skillsetIdList.add(PSYCHIC_SKILLSET_ID);
+        }
+
         List<Skillset> availableSkillsets = new ArrayList<>();
         Map<Integer, Skillset> skillsetMap = generateSkillSetMap();
-        for (int skillset : skillsetsAsArray){
+
+        for (int skillset : skillsetIdList){
             availableSkillsets.add(skillsetMap.get(skillset));
         }
+
         return availableSkillsets;
     }
     private List<Skill> convertStartingSkills(String skillsAsString) throws DaoException{
         List<Skill> startingSkills = new ArrayList<>();
-        int[] skillArray = referenceArraySplitter(skillsAsString);
+        List<Integer> skillIdList = referenceArraySplitter(skillsAsString);
         Map<Integer, Skill> skillMap = generateSkillMap();
-        for (int skill : skillArray){
+        for (int skill : skillIdList){
             startingSkills.add(skillMap.get(skill));
         }
         return  startingSkills;
     }
-    private int[] referenceArraySplitter (String arrayAsString){
+    private List<Integer> referenceArraySplitter (String arrayAsString){
         if ( arrayAsString == null || arrayAsString.isEmpty()){
-            return new int[0];
+            return new ArrayList<>();
         } else {
             arrayAsString = arrayAsString.substring(1,arrayAsString.length()-1);
-            String[] skillsetArray = arrayAsString.split("\\|");
-            int[] convertedArray = new int[skillsetArray.length];
-            for (int i = 0; i < convertedArray.length; i++){
-                convertedArray[i] = Integer.parseInt(skillsetArray[i]);
+            String[] referenceArray = arrayAsString.split("\\|");
+
+            List<Integer> convertedList = new ArrayList<>();
+            for (String number : referenceArray){
+                convertedList.add(Integer.parseInt(number));
             }
-            return convertedArray;
+            return convertedList;
         }
     }
     private Map<Integer, Skillset> generateSkillSetMap() throws DaoException{

@@ -1,8 +1,12 @@
 <template>
         <div class="button-container">
             <button @click="toggleShowExp()">Gain Experience</button>
-            <button @click="toggleShowAdvance()" v-show="$store.state.currentUnit.unspentExperience >= $store.state.currentUnit.costToAdvance">Gain Advance</button>
-            <button v-show="$store.state.currentUnit.emptySkills > 0" @click="pickSkill()">Pick New Skill</button>
+            <button @click="toggleShowAdvance()" v-show="$store.state.currentUnit.unspentExperience >= $store.state.currentUnit.costToAdvance">
+                Gain Advance
+            </button>
+            <button v-show="showGainSkill" @click="pickSkill()">
+                {{$store.state.currentUnit.emptySkills > 0 ? ($store.state.currentUnit.species === 'Mutant' ? 'Pick Skill or Mutation' : 'Pick Skill') : 'Pick Detriment'}}
+            </button>
             <button @click="addInjury()">Add Injury</button>
             <button @click="removeUnit()">Remove Unit</button>
 
@@ -39,6 +43,11 @@ export default {
         addInjury() {
             this.$store.commit('SET_POPUP_SUBFORM', 'GainInjury');
             this.showPopUp();
+        }
+    },
+    computed: {
+        showGainSkill(){
+            return this.$store.state.currentUnit.emptySkills > 0 || (this.$store.state.currentUnit.specialRules.toUpperCase().includes('DETRIMENT') && this.$store.state.currentUnit.newPurchase);
         }
     }
 

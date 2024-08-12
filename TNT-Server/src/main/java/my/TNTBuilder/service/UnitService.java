@@ -133,7 +133,7 @@ public class UnitService {
     Methods that go to DAO with no changes
      */
 
-    public List<Skill> getPotentialSkills(int unitId) throws ServiceException{
+    public List<Skill> getPotentialSkills(int unitId, int userId) throws ServiceException{
         List<Skill> skillList = null;
         try {
             skillList = unitDao.getPotentialSkills(unitId);
@@ -142,7 +142,7 @@ public class UnitService {
             throw new ServiceException(e.getMessage(), e);
         }
 
-        removeUnpurchasableSkills(skillList);
+        removeUnpurchasableSkills(skillList, unitId, userId);
 
         return skillList;
     }
@@ -255,13 +255,32 @@ public class UnitService {
         }
     }
 
-    private void removeUnpurchasableSkills(List<Skill> skillList) {
+    private void removeUnpurchasableSkills(List<Skill> skillList, int unitId, int userId) {
+        Unit unit = unitDao.getUnitById(unitId, userId);
+        boolean hasFearfulRep = false;
+        boolean hasMedic = false;
+
+        for (Skill skill : unit.getSkills()){
+            if (skill.getName().equals("Fearful Reputation")) {
+                hasFearfulRep = true;
+            }
+            if (skill.getName().equals("Medic")||skill.getName().equals("Healing Touch")){
+                hasMedic= true;
+            }
+        }
+
         for (int i = 0; i < skillList.size(); i++){
             Skill skill = skillList.get(i);
-
             if (skill.getName().equals("Psychic Battery")){
                 skillList.remove(i);
             }
+            if (hasFearfulRep && skill.getName().equals("Fearful Reputation")){
+                skillList.remove(i);
+            }
+            if (hasMedic && skill.getName().equals("Medic") || skill.getName().equals("Healing Touch")){
+                skillList.remove(i);
+            }
+
         }
     }
 

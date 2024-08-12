@@ -105,10 +105,10 @@ public class UnitController {
      * @return the list of skills available to the unit
      */
     @RequestMapping(path="/units/{unitId}/skills", method = RequestMethod.GET)
-    public List<Skill> getSkillsForPurchase(@PathVariable int unitId){
+    public List<Skill> getSkillsForPurchase(@PathVariable int unitId, Principal principal){
         List<Skill> skills = null;
         try {
-            skills = unitService.getPotentialSkills(unitId);
+            skills = unitService.getPotentialSkills(unitId, userDao.getUserIdByUsername(principal.getName()));
             if (skills == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No valid skills returned.");
             }

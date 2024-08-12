@@ -82,6 +82,8 @@ export default {
                     range = item.rangedRange + '"';
                 } else if (item.category == 'Grenade') {
                     range = this.$store.state.currentUnit.strength + '"';
+                } else if (this.hasFlamer(item)) {
+                    range = "Flamer"
                 } else {
                     range = 'Base';
                 }
@@ -104,11 +106,15 @@ export default {
                 str = item.strength;
             }
 
-            if (item.category == 'Melee Weapon' || item.name == 'Bow' || item.name == 'Compound Bow' ){
+            if (item.category == 'Melee Weapon' || item.name == 'Bow' || item.name == 'Compound Bow' || item.name == 'Scorpion Tail' || item.name == 'Crushing Claws'){
                 str = 'STR +' + str;
             }
 
             return str;
+        },
+        hasFlamer(item){
+            let flamerList = item.itemTraits.filter( trait => trait.name.toUpperCase() == "FLAMER TEMPLATE")
+            return flamerList.length == 1 ? true : false;
         }
     }
 }

@@ -53,6 +53,8 @@ public interface UnitDao {
      */
     void updateUnit(Unit updatedUnit) throws DaoException;
 
+    void addPsychicToSkillsets(int unitId) throws DaoException;
+
     /**
      * Initializes a new unit with the data from the matching reference unit, based on ID
      * @param referenceUnitId the id of the reference unit

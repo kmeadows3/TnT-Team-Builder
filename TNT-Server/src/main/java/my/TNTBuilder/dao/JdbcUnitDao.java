@@ -171,16 +171,9 @@ public class JdbcUnitDao implements UnitDao{
         String deleteUnitSql = "DELETE FROM unit WHERE unit_id = ?";
 
         try {
-            for (Skill skill : unit.getSkills()){
-                jdbcTemplate.update(deleteSkillSql, skill.getId());
-            }
-            for (Skillset skillset : unit.getAvailableSkillsets()){
-                jdbcTemplate.update(deleteSkillsetSql, skillset.getId());
-            }
-            for (Injury injury : unit.getInjuries()){
-                jdbcTemplate.update(deleteInjurySql, injury.getId());
-            }
-
+                jdbcTemplate.update(deleteSkillSql, unit.getId());
+                jdbcTemplate.update(deleteSkillsetSql, unit.getId());
+                jdbcTemplate.update(deleteInjurySql, unit.getId());
 
             int rowsAffected = jdbcTemplate.update(deleteUnitSql, unit.getId());
             if (rowsAffected != 1) {
@@ -213,6 +206,15 @@ public class JdbcUnitDao implements UnitDao{
         } catch (DataIntegrityViolationException e) {
             throw new DaoException("Invalid data provided, cannot update unit", e);
         }
+    }
+
+    @Override
+    public void addPsychicToSkillsets(int unitId) throws DaoException {
+        List<Skillset> skillsetList = new ArrayList<>();
+        Skillset psychicMutation = new Skillset(12, "Psychic Mutation", "Mutation");
+        skillsetList.add(psychicMutation);
+
+        addSkillsetsToUnitSkillsetJoinTable(unitId, skillsetList);
     }
 
     @Override
@@ -393,10 +395,7 @@ public class JdbcUnitDao implements UnitDao{
     PRIVATE METHODS
      */
 
-    private boolean unitIsMutant(int unitId) {
-        String species = jdbcTemplate.queryForObject("SELECT species FROM unit WHERE unit_id= ?", String.class, unitId);
-        return species.equals("Mutant");
-    }
+
     private List<Skill> getUnitSkills(int unitId){
         List<Skill> skills = new ArrayList<>();
         String sql = SELECT_ALL_FROM_SKILL_REFERENCE + "JOIN unit_skill us ON us.skill_id = sr.skill_id " +
@@ -428,6 +427,7 @@ public class JdbcUnitDao implements UnitDao{
         }
         jdbcTemplate.batchUpdate(sql, batch);
     }
+
     private void addSkillsetsToUnitSkillsetJoinTable(int unitId, List<Skillset> skillsets){
         String sql = "INSERT INTO unit_skillset (unit_id, skillset_id) VALUES (?, ?)";
         List<Object[]> batch = new ArrayList<>();
@@ -437,6 +437,8 @@ public class JdbcUnitDao implements UnitDao{
         }
         jdbcTemplate.batchUpdate(sql, batch);
     }
+
+
     private Unit initializeNewUnit(Unit providedUnit)  throws DaoException{
         Unit newUnit = convertReferenceUnitToUnit(providedUnit.getId());
         if (newUnit == null){

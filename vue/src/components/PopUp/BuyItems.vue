@@ -20,6 +20,9 @@
             <input type="radio" class="tab" name="filterTab" value="Grenade" id="grenadeTab"
                 v-model="filter.itemCategory" />
             <label for="grenadeTab">Grenades</label>
+            <input type="radio" class="tab" name="filterTab" value="Other" id="otherTab"
+                v-model="filter.itemCategory" v-if="$store.state.currentUnit.species == 'Mutant'"/>
+            <label for="otherTab" v-if="$store.state.currentUnit.species == 'Mutant'">Mutation Attacks</label>
             <div v-if="$store.state.currentUnit.rank != 'Rank and File'">
                 <label for="filterRarity">Max Relic Rarity: </label>
                 <select id="filterRarity" v-model.number="filter.maxRarity">
@@ -32,7 +35,8 @@
             </div>
         </div>
         <div class='item-purchase-list'>
-            <span>Current Barter Scrip: {{ $store.state.currentTeam.money }}</span>
+            <p v-show="filter.itemCategory == 'Other'">Must have appropriate mutation to use.</p>
+            <p>Current Barter Scrip: {{ $store.state.currentTeam.money }}</p>
             <div class="grid-row table-label">
                 <div class="grid-name">Name</div>
                 <div class="grid-rarity">Rarity</div>
@@ -180,6 +184,11 @@ div.buybox {
     overflow: auto;
 }
 
+div.buybox p{
+    margin: 0px;
+    margin-bottom: 3px;
+}
+
 .item-purchase-list {
     padding: 10px 10px 0px 10px;
 }
@@ -220,14 +229,11 @@ div.buybox {
     background-color: rgb(236, 173, 173);
 }
 
-
-
-
 .radio-tab-wrapper {
     margin-top: 5px;
     display: flex;
     border-bottom: 1px solid #428bca;
-    padding: 0 10px;
+    padding: 0 5px;
     position: relative;
 }
 
@@ -235,7 +241,6 @@ div.buybox {
     display: inline-block;
     margin: auto;
     padding-left: 5px;
-
 }
 
 input.tab {
@@ -244,13 +249,14 @@ input.tab {
     &+label {
         display: flex;
         align-items: center;
+        text-align: center;
         cursor: pointer;
         float: left;
         border: 1px solid #aaa;
         border-bottom: 0;
         background-color: #fff;
         margin-right: -1px;
-        padding: .5em 1em;
+        padding: 6px 3px 3px 3px;
         position: relative;
         vertical-align: middle;
         border-top-left-radius: 5px;

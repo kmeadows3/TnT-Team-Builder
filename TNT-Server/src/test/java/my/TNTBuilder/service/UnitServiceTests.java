@@ -308,6 +308,23 @@ public class UnitServiceTests extends BaseDaoTests {
         Assert.assertEquals(1005, testTeam.getMoney());
     }
 
+    @Test
+    public void addSkillToUnit_adds_psychic_skillset_if_psychic_skill_gained() throws ServiceException{
+        Skill psychic = new Skill(13, "Psychic", "Psychic Description", 9, "Hidden Defensive Mutation","Game",0);
+        Skillset psychicSkillset = new Skillset(12, "Psychic Mutation", "Mutation");
+
+        sut.addSkillToUnit(psychic, 4, 4);
+
+        Unit testUnit = sut.getUnitById(4,4);
+
+
+        Assert.assertTrue(testUnit.getSkills().contains(psychic));
+        Assert.assertTrue(testUnit.getAvailableSkillsets().contains(psychicSkillset));
+        Assert.assertEquals(1, testUnit.getSkills().size());
+        Assert.assertEquals(1, testUnit.getEmptySkills());
+
+    }
+
     @Test (expected = ServiceException.class)
     public void addSkillToUnit_throws_exception_for_non_mutant_gaining_mutation() throws ServiceException{
         Skill mutation = new Skill(11, "Mutation", "Mutation Description", 11, "Physical Mutations","Game",5);

@@ -91,20 +91,14 @@ public class UnitService {
                 if (skill.isMutation() && skill.getCost() != 0){
                     teamService.spendMoney(skill.getCost(), teamService.getTeamByUnitId(unitId));
                 }
-
-                unitDao.addSkillToUnit(skill.getId(), unitId);
-                Unit unit = unitDao.getUnitById(unitId, userId);
-
-
-                if (!skill.isDetriment()){
-                    unit.setEmptySkills(unit.getEmptySkills() - 1);
-
-                    if (unit.getEmptySkills()==0){
-                        unit.setNewPurchase(false);
-                    }
+                if (skill.getName().equals("Psychic")) {
+                    unitDao.addPsychicToSkillsets(unitId);
                 }
 
-                unitDao.updateUnit(unit);
+                unitDao.addSkillToUnit(skill.getId(), unitId);
+
+                updateUnitAfterSkillPurchase(skill, unitId, userId);
+
             }
         } catch (DaoException e){
             throw new ServiceException(e.getMessage(), e);
@@ -138,13 +132,17 @@ public class UnitService {
     /*
     Methods that go to DAO with no changes
      */
+
     public List<Skill> getPotentialSkills(int unitId) throws ServiceException{
         List<Skill> skillList = null;
         try {
             skillList = unitDao.getPotentialSkills(unitId);
+
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage(), e);
         }
+
+        removeUnpurchasableSkills(skillList);
 
         return skillList;
     }
@@ -257,10 +255,35 @@ public class UnitService {
         }
     }
 
+    private void removeUnpurchasableSkills(List<Skill> skillList) {
+        for (int i = 0; i < skillList.size(); i++){
+            Skill skill = skillList.get(i);
+
+            if (skill.getName().equals("Psychic Battery")){
+                skillList.remove(i);
+            }
+        }
+    }
+
 
     /*
         PRIVATE METHODS
      */
+
+    private void updateUnitAfterSkillPurchase(Skill skill, int unitId, int userId) {
+        if (!skill.isDetriment() && !(skill.getName().equals("Psychic") || skill.getName().equals("Psychic Battery"))){
+            Unit unit = unitDao.getUnitById(unitId, userId);
+
+            unit.setEmptySkills(unit.getEmptySkills() - 1);
+
+            if (unit.getEmptySkills()==0){
+                unit.setNewPurchase(false);
+            }
+
+            unitDao.updateUnit(unit);
+
+        }
+    }
     private void transferOnlyNonWeapons(int unitId, Item item) throws ServiceException {
         if (item.getCategory().equals("Armor") || item.getCategory().equals("Equipment")){
             itemDao.transferItem(item.getId(), unitId, teamService.getTeamByUnitId(unitId).getId(), false);

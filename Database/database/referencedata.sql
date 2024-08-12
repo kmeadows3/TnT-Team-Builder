@@ -383,7 +383,16 @@ INSERT INTO item_reference (name, cost, special_rules, rarity, is_relic, melee_d
 	('Grappler', 10, 'Model may ascend and descend vertical surfaces using its normal movement rate and will only fail Climbing tests on a Fumble', 'Scarce', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 80
 	('Personal Targeting Array', 10, 'Model may reroll one Fumble per turn when making a Ranged attack', 'Scarce', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 81
 	('Pre-Fall Ammo', 10, 'Model must nominate a particular firearm. Firearm gains +1 bonus to Ranged when used. If Firearm fumbles during use, lose the ranged bonus for the rest of the game', 'Sporadic', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 82
-	('SPAMsuit', 20, 'Any model that strikes the equipped model or moves into base contact must pass an Agility test (MET/TN 10) or suffer an automatic Strength 5 hit. Suit stops working if model goes out of action or unconscious', 'Scarce', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null); --ID 83
+	('SPAMsuit', 20, 'Any model that strikes the equipped model or moves into base contact must pass an Agility test (MET/TN 10) or suffer an automatic Strength 5 hit. Suit stops working if model goes out of action or unconscious', 'Scarce', TRUE, null, null, null, null, null, null, null, null, null, null, 'Equipment', null), --ID 83
+	('Acid Spit', 0, 'Requires Acid Spit mutation, Ignore Armor (1)', 'N/A', FALSE, null, null, null, null, null, null, 16, 7, null, null, 'Other', null), --ID 84
+	('Flame Breath', 0, 'Requires Flame Breath mutation, cannot be reused until model passes a free Strength test at the beginning of its activation', 'N/A', FALSE, null, null, null, null, null, null, null, 4, null, null, 'Other', null), --ID 85
+	('Poisonous Belch', 0, 'Requires Poisonous Belch mutation', 'N/A', FALSE, null, null, null, null, null, null, 12, 6, null, null, 'Other', null), --ID 86
+	('Webs', 0, 'Requires Web mutation. On hit, do not roll to wound. Instead target is webbed and cannot take any action that requires movement (shooting, melee attacks, most non-passive abilities, NOT psychic powers) until it breaks free by passing a Strength (STR/TN 10) test at the beginning of its turn. This test costs 1 AP', 'N/A', FALSE, null, null, null, null, null, null, 12, null, null, null, 'Other', null), --ID 87
+	('Crushing Claws', 0, 'Requires Crushing Claws mutation. Always assumed to be equipped, cannot be disarmed, do not count as one-handed weapons, and do not count against carrying capacity', 'N/A', FALSE, null, null, null, null, null, 0, null, 3, null, 2, 'Other', null), --ID 88
+	('Scorpion Tail', 0, 'Requires Scorpion Tail mutation. May be used for free on any turn the model makes a melee attack.', 'N/A', FALSE, null, null, null, null, null, 0, null, 0, null, null, 'Other', null), --ID 89
+	('Demoralize', 0, 'Requires Demoralize mutation. All enemy models within 3" of target must pass a Morale test (MET/TN 10)', 'N/A', FALSE, null, null, null, null, null, null, 24, 0, null, null, 'Other', null), --ID 90
+	('Psychic Bolt', 0, 'Requires Pyschic Bolt mutation', 'N/A', FALSE, null, null, null, null, null, null, 24, 7, null, null, 'Other', null); --ID 91
+
 
 
 
@@ -507,7 +516,15 @@ INSERT INTO item_ref_item_trait (item_ref_id, item_trait_id) VALUES
 	(79, 26),
 	(80, 26),
 	(81, 26),
-	(83, 26);
+	(83, 26),
+	(84, 22),
+	(85, 7),
+	(85, 8),
+	(86, 10),
+	(86, 16),
+	(86, 17),
+	(89, 16),
+	(91, 17);
 
 COMMIT TRANSACTION;
 

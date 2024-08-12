@@ -232,13 +232,13 @@ INSERT INTO skillset_reference (skillset_name, category) VALUES
 	('Brawn', 'Skill'), -- ID 6
 	('Tenacity', 'Skill'), -- ID 7
 	('Leadership', 'Skill'), -- ID 8
-	('Hidden Defensive Mutations', 'Mutation'), -- ID 9
-	('Hidden Offensive Mutations', 'Mutation'), -- ID 10
-	('Physical Mutations', 'Mutation'), -- ID 11
-	('Psychic Mutations', 'Mutation'), -- ID 12
-	('Hidden Detriments', 'Detriment'), -- ID 13
-	('Physical Detriments', 'Detriment'), -- ID 14
-	('General Abilities', 'General'); -- ID 15
+	('Hidden Defensive Mutation', 'Mutation'), -- ID 9
+	('Hidden Offensive Mutation', 'Mutation'), -- ID 10
+	('Physical Mutation', 'Mutation'), -- ID 11
+	('Psychic Mutation', 'Mutation'), -- ID 12
+	('Hidden Detriment', 'Detriment'), -- ID 13
+	('Physical Detriment', 'Detriment'), -- ID 14
+	('General Ability', 'General'); -- ID 15
 
 INSERT INTO skill_reference (skillset_id, name, description, phase, skill_cost) VALUES
 	(5, 'Scavenger', 'When taking a weapon with limited ammo roll 2d3 when determining ammo quantity and take the higher of the two. Upkeep does not need to be paid for this unit. May not be taken by Freelancers.', 'Game', 0),
@@ -252,7 +252,8 @@ INSERT INTO skill_reference (skillset_id, name, description, phase, skill_cost) 
 	(15, 'Up-Armed', 'Can Equip Support Weapons','Game', 0),
 	(15, 'RagTag', 'Cannot equip more than 15BS worth of gear','Game', 0), -- ID 10
 	(11, 'Mutation', 'Mutation Description','Game', 5),
-	(14, 'Detriment', 'Detriment Description','Game', -5);
+	(14, 'Detriment', 'Detriment Description','Game', -5),
+	(9, 'Psychic', 'Psychic Description', 'Game', 0);
 
 
 INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, is_removeable, is_stackable, grants) VALUES

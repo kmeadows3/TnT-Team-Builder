@@ -248,4 +248,15 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         sut.selectInjuryById(99);
         Assert.fail();
     }
+
+    @Test
+    public void addPsychicToSkillsets_adds_psychic_skillset() throws  DaoException {
+        sut.addPsychicToSkillsets(UNIT1.getId());
+        Unit testUnit = sut.getUnitById(1, 1);
+
+        Skillset psychicSkillset = new Skillset(12, "Psychic Mutation", "Mutation");
+
+        Assert.assertEquals(3, testUnit.getAvailableSkillsets().size());
+        Assert.assertTrue(testUnit.getAvailableSkillsets().contains(psychicSkillset));
+    }
 }

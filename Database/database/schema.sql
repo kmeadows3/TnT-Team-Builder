@@ -91,7 +91,7 @@ CREATE TABLE item_reference(
 	weapon_strength int,
 	reliability int,
 	grants int,
-	CONSTRAINT CHK_item_ref_valid_category CHECK( item_category IN ('Armor', 'Equipment', 'Melee Weapon', 'Ranged Weapon', 'Support Weapon', 'Grenade')),
+	CONSTRAINT CHK_item_ref_valid_category CHECK( item_category IN ('Armor', 'Equipment', 'Melee Weapon', 'Ranged Weapon', 'Support Weapon', 'Grenade', 'Other')),
 	CONSTRAINT FK_grants_item_ref_skill_id FOREIGN KEY(grants) REFERENCES skill_reference(skill_id)
 	);
 

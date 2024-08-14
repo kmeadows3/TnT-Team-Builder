@@ -213,13 +213,42 @@ public class UnitServiceTests extends BaseDaoTests {
     }
 
     @Test
+    public void getUnitsForFaction_returns_list_without_specific_unit_class_when_invalid() throws ServiceException{
+        Team team = teamDao.getTeamById(2, 1);
+
+        Unit leader = new Unit();
+        leader.setId(5);
+        leader.setName("Leader");
+        leader.setUnitClass("Bandit King");
+        leader.setRank("Leader");
+        leader.setTeamId(2);
+
+        Unit brute = new Unit();
+        brute.setId(6);
+        brute.setUnitClass("Brute");
+        brute.setRank("Elite");
+        brute.setTeamId(2);
+
+        team.getUnitList().add(leader);
+        team.getUnitList().add(brute);
+
+        List<Unit> testList = sut.getUnitsForFaction(3, team);
+
+        Assert.assertNotNull(testList);
+        Assert.assertEquals(2, testList.size());
+        for (Unit unit : testList){
+            Assert.assertFalse("Brute".equalsIgnoreCase(unit.getRank()));
+        }
+    }
+
+    @Test
     public void getPotentialSkills_returns_correct_list_one_skillset() throws ServiceException{
         Skill skill1 = new Skill(6, "Brute", "Gain +1 to Strength Stat when making Melee attacks. " +
                 "Ignore heavy weapons rule.", 6, "Brawn","Game",0);
         Skill skill2 = new Skill(7, "Bully", "All enemies defeated by this model in close combat are knocked prone " +
                 "in addition to any other combat result.", 6, "Brawn","Game",0);
 
-        List<Skill> skillList = sut.getPotentialSkills(2);
+        List<Skill> skillList = sut.getPotentialSkills(2, 2);
 
         Assert.assertEquals(2, skillList.size());
         Assert.assertTrue(skillList.contains(skill1));
@@ -235,7 +264,7 @@ public class UnitServiceTests extends BaseDaoTests {
                 "Agility test (MET/TN 10) for free. On pass move through terrain without movement penalty.",
                 3, "Survival","Game",0);
 
-        List<Skill> skillList = sut.getPotentialSkills(1);
+        List<Skill> skillList = sut.getPotentialSkills(1, 1);
 
         Assert.assertEquals(2, skillList.size());
         Assert.assertTrue(skillList.contains(skill1));
@@ -250,7 +279,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Skill skill2 = new Skill(7, "Bully", "All enemies defeated by this model in close combat are knocked prone " +
                 "in addition to any other combat result.", 6, "Brawn","Game",0);
 
-        List<Skill> skillList = sut.getPotentialSkills(3);
+        List<Skill> skillList = sut.getPotentialSkills(3, 1);
 
         Assert.assertEquals(1, skillList.size());
         Assert.assertTrue(skillList.contains(skill1));

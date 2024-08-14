@@ -1,6 +1,7 @@
 package my.TNTBuilder.model.inventory;
 
 import my.TNTBuilder.exception.ValidationException;
+import my.TNTBuilder.model.Skill;
 import my.TNTBuilder.model.Skillset;
 import my.TNTBuilder.model.Unit;
 import org.junit.After;
@@ -29,6 +30,12 @@ public class ItemTests {
                     new Skillset(4, "Quickness", "Skill"))),
             new ArrayList<>(),  new ArrayList<>(), new ArrayList<>(Arrays.asList(ARMOR, WEAPON, ITEM)), true);
 
+    private static final Skill CRUSHING_CLAWS = new Skill(1, "Crushing Claws", "Desc", 1,
+            "Name", "Phase",0);
+    private static final Skill WEAPON_GROWTHS = new Skill(1, "Weapon Growths", "Desc", 1,
+            "Name", "Phase",0);
+
+
     private Item sut;
 
 
@@ -42,11 +49,12 @@ public class ItemTests {
     @After
     public void cleanUp() throws ValidationException{
         UNIT1.setInventory(new ArrayList<>(Arrays.asList(ARMOR, WEAPON, ITEM)));
+        UNIT1.setSpecies("Human");
         WEAPON.setEquipped(false);
         WEAPON.setHandsRequired(1);
         ARMOR.setEquipped(false);
         ARMOR.setShield(false);
-
+        UNIT1.setSkills(new ArrayList<>());
     }
 
 
@@ -100,6 +108,26 @@ public class ItemTests {
         sut.setEquippedValidated(true, UNIT1);
         Assert.fail();
     }
+
+    @Test (expected = ValidationException.class)
+    public void setEquippedValidated_throws_exception_when_unit_tries_to_equip_items_while_having_crushing_claws() throws ValidationException{
+        UNIT1.setSpecies("Mutant");
+        UNIT1.getSkills().add(CRUSHING_CLAWS);
+        sut.setHandsRequired(1);
+        sut.setEquippedValidated(true, UNIT1);
+        Assert.fail();
+    }
+
+    @Test (expected = ValidationException.class)
+    public void setEquippedValidated_throws_exception_when_unit_tries_to_equip_items_while_having_weapon_growths() throws ValidationException{
+        UNIT1.setSpecies("Mutant");
+        UNIT1.getSkills().add(WEAPON_GROWTHS);
+        sut.setHandsRequired(2);
+        sut.setEquippedValidated(true, UNIT1);
+        Assert.fail();
+    }
+
+
 
     @Test
     public void setEquippedValidated_allows_equipping_armor_if_unit_has_shield_equipped() throws ValidationException{

@@ -91,8 +91,11 @@ public class UnitService {
                 if (skill.isMutation() && skill.getCost() != 0){
                     teamService.spendMoney(skill.getCost(), teamService.getTeamByUnitId(unitId));
                 }
+
                 if (skill.getName().equals("Psychic")) {
                     unitDao.addPsychicToSkillsets(unitId);
+                } else if (skill.getName().equals("Weapon Growths (x2)")){
+                    unitDao.deleteWeaponsGrowthsFromUnit(unitId);
                 }
 
                 unitDao.addSkillToUnit(skill.getId(), unitId);
@@ -265,6 +268,8 @@ public class UnitService {
 
         if (unit.getUnitClass().contains("Mondo") && skill.getName().equals("Psychic")){
             return true;
+        } else if (skill.getName().equals("Weapon Growths (x2)")) {
+            return unit.getSkills().stream().noneMatch(unitSkill -> unitSkill.getName().equals("Weapon Growths"));
         }
 
         return false;
@@ -339,7 +344,6 @@ public class UnitService {
             }
         }
 
-        //TODO test me
         units = units.stream().filter(unit -> unitValidator.teamCanHaveUnitClass(unit, team))
                 .collect(Collectors.toList());
 
@@ -369,7 +373,6 @@ public class UnitService {
         } else if (unit.getEmptySkills() < 1 && !skill.isDetriment()){
             throw new ServiceException("Error, unit does not have any unpurchased skills.");
         } else if (skillIsIllegal(skill, unit)){
-            //TODO test me
             throw new ServiceException("This unit type is unable to purchase " + skill.getName());
         }else {
 

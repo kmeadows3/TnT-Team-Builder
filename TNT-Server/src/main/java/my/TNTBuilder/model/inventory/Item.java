@@ -76,13 +76,19 @@ public class Item {
 
         validateUnitNotWearing2SetsOfArmor(unit);
 
-        //TODO: Add logic here once mutations are added
-        boolean cannotHoldItems = false; //Weapons Growth (2 natural weapons), Crushing Claws
-        boolean canOnlyHoldOneItem = false; //No Arms, Weapons Growth (one natural weapon)
+        boolean unitCannotHoldItems = false;
+        boolean unitCanOnlyHoldOneItem = false;
 
-        if (cannotHoldItems){
+        if (unit.getSpecies().equals("Mutant")){
+            unitCannotHoldItems = unit.getSkills().stream()
+                    .anyMatch(skill -> skill.getName().equals("Crushing Claws") || skill.getName().equals("Weapon Growths (x2)"));
+            unitCanOnlyHoldOneItem = unit.getSkills().stream()
+                    .anyMatch(skill -> skill.getName().equals("No Arms") || skill.getName().equals("Weapon Growths"));
+        }
+
+        if (unitCannotHoldItems){
             throw new ValidationException("Unit is incapable of holding items.");
-        } else if (handsUsed >= 2 && canOnlyHoldOneItem) {
+        } else if (handsUsed >= 2 && unitCanOnlyHoldOneItem) {
             throw new ValidationException("Unit can only equip a single 1-handed item.");
         } else if (handsUsed > 2){
             throw new ValidationException("Unit does not have enough hands to hold this item.");

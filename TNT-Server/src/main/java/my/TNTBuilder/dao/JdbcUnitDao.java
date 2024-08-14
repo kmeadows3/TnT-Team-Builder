@@ -391,6 +391,21 @@ public class JdbcUnitDao implements UnitDao{
         return injury;
     }
 
+    @Override
+    public void deleteWeaponsGrowthsFromUnit(int unitId) throws DaoException {
+        String sql = "DELETE FROM unit_skill WHERE unit_id = ? AND skill_id = 75";
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, unitId);
+            if (rowsAffected != 1){
+                throw new DaoException("Error, " + rowsAffected + " rows affected.");
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Invalid data provided, cannot delete injury", e);
+        }
+    }
+
     /*
     PRIVATE METHODS
      */

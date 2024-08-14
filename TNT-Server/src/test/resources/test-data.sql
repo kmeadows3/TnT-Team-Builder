@@ -223,6 +223,7 @@ INSERT INTO unit_reference (faction_id, class, rank, species, base_cost, wounds,
 
 
 
+
 INSERT INTO skillset_reference (skillset_name, category) VALUES
 	('Melee', 'Skill'), -- ID 1
 	('Marksmanship', 'Skill'), -- ID 2

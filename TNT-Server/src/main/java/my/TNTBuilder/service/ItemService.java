@@ -201,12 +201,18 @@ public class ItemService {
         }
     }
     private void validateUnitCanHaveItem(Item itemToAdd, Unit unit) throws ServiceException {
-        if (itemToAdd.getCategory().equals("Support Weapon")){
+        if (itemToAdd.getCategory().equals("Support Weapon")
+                ^ (unit.getUnitClass().equals("Broiler") && itemToAdd.getName().equals("Flamethrower"))){
+
             validateUnitCanEquipSupportWeapon(unit);
         }
 
         if (itemToAdd.isRelic()){
             validateUnitCanHaveRelic(unit, itemToAdd);
+        }
+
+        if (unit.getUnitClass().equals("Berserker") && itemToAdd.getCategory().equals("Armor")){
+            throw new ValidationException("Berserkers cannot wear armor");
         }
 
         for (Skill skill : unit.getSkills()){
@@ -223,6 +229,7 @@ public class ItemService {
     }
 
     private void validateUnitCanEquipSupportWeapon(Unit unit) throws ValidationException {
+
         boolean hasUpArmed = false;
         for (Skill skill : unit.getSkills()){
             if (skill.getName().equals("Up-Armed")) {

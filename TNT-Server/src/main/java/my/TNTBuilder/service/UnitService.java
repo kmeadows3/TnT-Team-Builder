@@ -231,6 +231,46 @@ public class UnitService {
 
     }
 
+    /*
+        PRIVATE METHODS
+     */
+    private void removeUnpurchasableSkills(List<Skill> skillList, int unitId, int userId) {
+        Unit unit = unitDao.getUnitById(unitId, userId);
+        boolean hasFearfulRep = false;
+        boolean hasMedic = false;
+
+        for (Skill skill : unit.getSkills()){
+            if (skill.getName().equals("Fearful Reputation")) {
+                hasFearfulRep = true;
+            }
+            if (skill.getName().equals("Medic")||skill.getName().equals("Healing Touch")){
+                hasMedic= true;
+            }
+        }
+
+        for (int i = 0; i < skillList.size(); i++){
+            Skill skill = skillList.get(i);
+            if      (skill.getName().equals("Psychic Battery")
+                    ||  (hasFearfulRep && skill.getName().equals("Fearful Reputation"))
+                    ||  (hasMedic && ( skill.getName().equals("Medic") || skill.getName().equals("Healing Touch")) )
+                    ||  skillIsIllegal(skill, unit)
+            ){
+                skillList.remove(i);
+            }
+
+        }
+    }
+
+    private boolean skillIsIllegal(Skill skill, Unit unit) {
+
+        if (unit.getUnitClass().contains("Mondo") && skill.getName().equals("Psychic")){
+            return true;
+        }
+
+        return false;
+
+    }
+
     private void applyInjuryEffects(Injury injury, Unit unit) throws ValidationException {
         if (injury.isStatDamage()){
             switch (injury.getStatDamaged()) {
@@ -254,40 +294,6 @@ public class UnitService {
             }
         }
     }
-
-    private void removeUnpurchasableSkills(List<Skill> skillList, int unitId, int userId) {
-        Unit unit = unitDao.getUnitById(unitId, userId);
-        boolean hasFearfulRep = false;
-        boolean hasMedic = false;
-
-        for (Skill skill : unit.getSkills()){
-            if (skill.getName().equals("Fearful Reputation")) {
-                hasFearfulRep = true;
-            }
-            if (skill.getName().equals("Medic")||skill.getName().equals("Healing Touch")){
-                hasMedic= true;
-            }
-        }
-
-        for (int i = 0; i < skillList.size(); i++){
-            Skill skill = skillList.get(i);
-            if (skill.getName().equals("Psychic Battery")){
-                skillList.remove(i);
-            }
-            if (hasFearfulRep && skill.getName().equals("Fearful Reputation")){
-                skillList.remove(i);
-            }
-            if (hasMedic && skill.getName().equals("Medic") || skill.getName().equals("Healing Touch")){
-                skillList.remove(i);
-            }
-
-        }
-    }
-
-
-    /*
-        PRIVATE METHODS
-     */
 
     private void updateUnitAfterSkillPurchase(Skill skill, int unitId, int userId) {
         if (!skill.isDetriment() && !(skill.getName().equals("Psychic") || skill.getName().equals("Psychic Battery"))){
@@ -332,6 +338,12 @@ public class UnitService {
                 units = filterOutRank(units, "Freelancer");
             }
         }
+
+        //TODO test me
+        units = units.stream().filter(unit -> unitValidator.teamCanHaveUnitClass(unit, team))
+                .collect(Collectors.toList());
+
+
         return units;
     }
     private List<Unit> filterOutRank(List<Unit> units, String filteredOutRank) {
@@ -356,7 +368,10 @@ public class UnitService {
             throw new ServiceException("Error, invalid unit.");
         } else if (unit.getEmptySkills() < 1 && !skill.isDetriment()){
             throw new ServiceException("Error, unit does not have any unpurchased skills.");
-        } else {
+        } else if (skillIsIllegal(skill, unit)){
+            //TODO test me
+            throw new ServiceException("This unit type is unable to purchase " + skill.getName());
+        }else {
 
             for (Skill ownedSkills : unit.getSkills()) {
                 if (ownedSkills.getId() == skillId) {

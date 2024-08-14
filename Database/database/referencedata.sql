@@ -11,90 +11,89 @@ INSERT INTO faction (faction_name) VALUES
 	
 INSERT INTO unit_reference (faction_id, class, rank, species, base_cost, wounds, defense, mettle, move, ranged, melee, 
 							strength, skillsets, starting_skills, starting_free_skills, special_rules) VALUES
-	(1, 'Trade Master', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '[30]', 2, ''), -- ID 1
-	(1, 'Caravanner Lieutenant', 'Elite', 'Human', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|7|8]', '[47]', 1, ''), -- ID 2
-	(1, 'Emissary Alpha Mutant', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[1|2|3|8]', '', 2, 'May start with one detriment, must have one mutation'), -- ID 3
-	(1, 'Emissary Raider Champion', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[1|6|7|8]', '', 2, ''), -- ID 4
-	(1, 'Emissary Tribal Representative', 'Elite', 'Human', 40, 1, 6, 6, 5, 5, 4, 5, '[3|5|7|8]', '', 2, ''), -- ID 5
-	(1, 'Emissary Warden', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 6, '[1|2|7|8]', '[46]', 1, ''), -- ID 6
-	(1, 'Tracker', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[2|3|4]', '[18|23]', 0, ''), -- ID 7
-	(1, 'Caravanner', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, ''), -- ID 8
-	(1, 'Defender', 'Rank and File', 'Human', 23, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '[38]', 0, ''), -- ID 9
-	(1, 'Lugger', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 3, 6, 5, '[1|3|6]', '[98]', 0, ''), -- ID 10
-	(1, 'Caravan Guard', 'Specialist', 'Human', 25, 1, 6, 5, 5, 5, 4, 5, '[1|2|4]', '', 0, ''), -- ID 11
-	(1, 'Upgraded Caravan Guard', 'Specialist', 'Human', 30, 1, 6, 5, 5, 5, 4, 5, '[1|2|4]', '[106]', 0, ''), -- ID 12
-	(1, 'Caravan Runner', 'Specialist', 'Human', 30, 1, 6, 5, 6, 4, 4, 5, '[2|3|4]', '[19|20]', 0, ''), -- ID 13
-	(2, 'Omega Mutant', 'Leader', 'Mutant', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '', 3, 'Must have at least one mutation'), -- ID 14
-	(2, 'Psychic Lord', 'Leader', 'Mutant', 85, 2, 6, 7, 5, 6, 5, 6, '[1|2|3|4|5|7|8]', '[54|82]', 3, 'Two of the starting skills must be random psychic mutations. Both are free skills granted by Psychic and Psychic Battery.'), -- ID 15
-	(2, 'Alpha Mutant', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[1|2|3|8]', '', 2, 'May start with one detriment, must have at least one mutation'), -- ID 16
-	(2, 'Mutant Emissary', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|5|8]', '', 2, 'Available only to Downwinder warbands, must have at least one mutation. May start withe one detriment'), -- ID 17
-	(2, 'Mutant Emissary (Medic)', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|5|8]', '[104]', 1, 'Available only to Downwinder warbands. May start withe one detriment'), -- ID 18
-	(2, 'Abomination', 'Elite', 'Mutant', 45, 1, 7, 6, 5, 3, 6, 6, '[1|6|7]', '[41|67]', 2, 'Available only to Outcast warbands. Starting skills must be mutations. May start with two detriments'), -- ID 19
-	(2, 'Mutant', 'Rank and File', 'Mutant', 27, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 1, 'Starting skill must be a mutation. May start with one detriment'), -- ID 20
-	(2, 'Feral Mutant', 'Rank and File', 'Mutant', 25, 1, 6, 5, 5, 3, 6, 5, '[1|3|6]', '[105]', 1, 'Starting skill must be a mutation. May start with one detriment'), -- ID 21
-	(2, 'Feral Mutant (Upgraded)', 'Rank and File', 'Mutant', 28, 1, 6, 5, 5, 3, 6, 5, '[1|3|6]', '[105|109]', 1, 'Starting skill must be a mutation. May start with one Detriment'), -- ID 22
-	(2, 'Mondo', 'Specialist', 'Mutant', 50, 2, 7, 5, 5, 3, 6, 6, '[1|3|6]', '[98|103|110]', 0, 'May start with one detriment.'), -- ID 23
-	(2, 'Huge Mondo', 'Specialist', 'Mutant', 75, 2, 7, 5, 5, 3, 6, 6, '[1|3|6]', '[98|101|110]', 0, 'May start with one detriment.'), -- ID 24
-	(2, 'Psychic Mutant', 'Specialist', 'Mutant', 27, 1, 6, 5, 5, 4, 4, 5, '[2|5|7]', '[54]', 1, 'Starting skill must be a random psychic mutation.'), -- ID 25
-	(2, 'Mutant Gunner', 'Specialist', 'Mutant', 35, 1, 6, 5, 5, 4, 4, 5, '[2|3|5]', '[106]', 1, 'Starting skill must be a mutation. May start with one detriment.'), -- ID 26
-	(3, 'Warlord', 'Leader', 'Human', 80, 2, 6, 7, 6, 5, 7, 6, '[1|2|3|4|6|7|8]', '', 3, ''), -- ID 27
-	(3, 'Bandit King', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '', 3, ''), -- ID 28
-	(3, 'Brute', 'Elite', 'Human', 50, 1, 6, 6, 6, 4, 7, 6, '[1|6|7]', '[31|33|98]', 0, 'Warbands led by a Bandit King can only have one brute'), -- ID 29
-	(3, 'Raider Champion', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[1|6|7|8]', '', 2, ''), -- ID 30
-	(3, 'Raider', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, ''), -- ID 31
-	(3, 'Wrecker', 'Rank and File', 'Human', 20, 1, 6, 5, 6, 3, 6, 5, '[1|3|6]', '', 0, ''), -- ID 32
-	(3, 'Mongrel', 'Rank and File', 'Animal', 18, 1, 6, 5, 7, 0, 6, 6, '[1|4|6]', '[41|109]', 0, ''), -- ID 33
-	(3, 'Maniac', 'Specialist', 'Human', 27, 1, 7, 5, 6, 2, 6, 5, '[1|6|7]', '[41]', 0, ''), -- ID 34
-	(3, 'Mutant Raider', 'Specialist', 'Mutant', 27, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 1, 'Starting skill must be a mutation. May start with one detriment'), -- ID 35
-	(3, 'Broiler', 'Specialist', 'Human', 40, 1, 6, 5, 5, 4, 4, 5, '[1|3|4]', '[38]', 0, 'Comes equipped with a free Flamer'), -- ID 36
-	(3, 'Scrap-Taker', 'Specialist', 'Human', 30, 2, 6, 5, 5, 4, 4, 5, '[2|3|5]', '[106]', 0, ''), -- ID 37
-	(4, 'Lorekeeper', 'Leader', 'Human', 75, 2, 6, 7, 5, 6, 5, 6, '[1|2|3|4|5|7|8]', '[112]', 3, ''), -- ID 38
-	(4, 'Lord Reclaimer', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '[112]', 3, ''), -- ID 39
-	(4, 'Reclaimer', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[1|2|3]', '[9|113]', 0, ''), -- ID 40
-	(4, 'Savant', 'Elite', 'Human', 45, 1, 6, 6, 5, 5, 4, 5, '[2|4|5|8]', '[25]', 1, ''), -- ID 41
-	(4, 'Wreck-It-Bot', 'Elite', 'Robot', 80, 2, 7, 6, 5, 3, 7, 6, '[1|6]', '[31|103|107|114|115]', 0, 'Cannot be purchased unless band contains a Savant. Maximum of one Wreck-It-Bot allowed.'), -- ID 42
-	(4, 'Seeker', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|7]', '', 0, ''), -- ID 43
-	(4, 'Excavator', 'Rank and File', 'Human', 15, 1, 6, 5, 5, 3, 6, 5, '[1|3|6]', '[105]', 0, ''), -- ID 44
-	(4, 'Arbitrator', 'Specialist', 'Human', 30, 1, 6, 5, 5, 4, 4, 5, '[2|4|5]', '[26|106]', 0, ''), -- ID 45
-	(4, 'Tech-Bearer', 'Specialist', 'Human', 25, 1, 6, 5, 5, 4, 4, 5, '[1|2|5]', '[25|116]', 0, ''), -- ID 46
-	(4, 'Heal-o-Matic', 'Specialist', 'Robot', 37, 2, 6, 5, 5, 3, 4, 5, '[1|4|5]', '[25|104|102|117|115]', 0, 'Max of one if warband is led by a Lord Reclaimer.'), -- ID 47
-	(5, 'War Leader', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|6|7|8]', '', 3, ''), -- ID 48
-	(5, 'Great Shaman', 'Leader', 'Mutant', 85, 2, 6, 7, 5, 6, 5, 6, '[1|2|3|4|5|7|8]', '[54|82]', 3, 'Two of the starting skills must be random psychic mutations. Both are free skills granted by Psychic and Psychic Battery.'), -- ID 49
-	(5, 'Tribal Champion', 'Elite', 'Human', 45, 1, 6, 6, 5, 5, 5, 5, '[1|3|7|8]', '', 2, ''), -- ID 50
-	(5, 'Tribal Representative', 'Elite', 'Human', 40, 1, 6, 6, 5, 5, 4, 5, '[3|5|7|8]', '', 2, ''), -- ID 51
-	(5, 'Lesser Shaman', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 4, 5, '[1|3|5]', '[54]', 2, 'One starting skill must be a random psychic mutation, gained for free from the Psychic mutation.'), -- ID 52
-	(5, 'Tribal', 'Rank and File', 'Human', 18, 1, 6, 5, 5, 4, 4, 5, '[2|3|4]', '[105]', 0, ''), -- ID 53
-	(5, 'Tribal Warrior', 'Rank and File', 'Human', 18, 1, 6, 5, 5, 3, 6, 5, '[1|6|7]', '[105]', 0, ''), -- ID 54
-	(5, 'Warbeast', 'Rank and File', 'Animal', 20, 1, 6, 5, 7, 0, 6, 6, '[1|4|6]', '[20|109]', 0, 'May only have one warbeast for every two non-warbeast Rank and File models.'), -- ID 55
-	(5, 'Berserker', 'Specialist', 'Human', 32, 1, 7, 5, 6, 3, 6, 5, '[1|6|7]', '[39|118]', 0, ''), -- ID 56
-	(5, 'Tribal Scout', 'Specialist', 'Human', 40, 1, 6, 5, 6, 4, 4, 5, '[2|3|4]', '[15|18|119]', 0, ''), -- ID 57
-	(5, 'Warbringer', 'Specialist', 'Human', 35, 1, 6, 5, 5, 4, 4, 5, '[2|4|5]', '[28|106]', 0, ''), -- ID 58
-	(6, 'Road Marshal', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '', 3, ''), -- ID 59
-	(6, 'Hanging Judge', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|6|7|8]', '[40]', 2, ''), -- ID 60
-	(6, 'Warden', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[1|2|7|8]', '[46]', 1, ''), -- ID 61
-	(6, 'Outrider', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[2|3|4]', '[10|15]', 0, ''), -- ID 62
-	(6, 'Quartermaster', 'Elite', 'Human', 45, 1, 6, 6, 5, 5, 4, 5, '[2|5]', '[26|30]', 0, ''), -- ID 63
-	(6, 'Officer', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, ''), -- ID 64
-	(6, 'Deputized Settler', 'Rank and File', 'Human', 15, 1, 6, 5, 5, 4, 3, 5, '[1|2|4]', '[97]', 0, 'A warband may not have more deputized settlers than officers'), -- ID 65
-	(6, 'K-9', 'Rank and File', 'Animal', 20, 1, 6, 5, 7, 0, 6, 6, '[1|4|6]', '[32|109]', 0, ''), -- ID 66
-	(6, 'Sacrificial Lamb', 'Rank and File', 'Human', 18, 1, 6, 5, 6, 4, 4, 5, '[]', '[39|120]', 0, 'Only available if a warband is led by a Hanging Judge, starts with a free light weapon.'), -- ID 67
-	(6, 'Upgraded Sacrificial Lamb', 'Rank and File', 'Human', 20, 1, 6, 5, 6, 4, 4, 5, '[]', '[39|120]', 0, 'Only available if a warband is led by a Hanging Judge, starts with a free heavy weapon.'), -- ID 68
-	(6, 'K-9 Handler', 'Specialist', 'Human', 25, 1, 6, 5, 6, 4, 4, 5, '[2|4|7]', '[108]', 0, 'Maximum of 1 if the warband is led by a Hanging Judge'), -- ID 69
-	(6, 'Line Breaker - Brute', 'Specialist', 'Human', 30, 1, 6, 5, 6, 4, 6, 5, '[1|3|6]', '[31]', 0, ''), -- ID 70
-	(6, 'Line Breaker - Strong Point', 'Specialist', 'Human', 30, 1, 6, 5, 6, 4, 6, 5, '[1|3|6]', '[36]', 0, ''), -- ID 71
-	(6, 'Tactical', 'Specialist', 'Human', 30, 1, 6, 5, 5, 4, 4, 5, '[2|4|5]', '[12|106]', 0, ''), -- ID 72
-	(6, 'Cyber-Dog', 'Specialist', 'Animal', 35, 1, 6, 5, 6, 0, 6, 7, '[1|4|6]', '[32|109|117]', 0, 'Only Available if a warband is led by a Road Marshal'), -- ID 73
-	(7, 'Bounty Hunter', 'Freelancer', 'Human', 55, 1, 6, 6, 5, 5, 5, 5, '[2|3|4]', '[43|121]', 1, 'Starting skill must be from Marksmanship list'), -- ID 74
-	(7, 'Deadman', 'Freelancer', 'Human', 50, 1, 8, 6, 6, 3, 7, 5, '[1|3|7]', '[41|42|122]', 0, ''), -- ID 75
-	(7, 'Depend-o-Bot', 'Freelancer', 'Robot', 50, 1, 6, 5, 5, 5, 5, 5, '[1|2|3]', '[114|115]', 2, 'Starting skills may not be from same skillsets'), -- ID 76
-	(7, 'Mercenary Gunsmith', 'Freelancer', 'Human', 50, 1, 6, 6, 5, 5, 4, 5, '[2|3|5]', '[9|26]', 0, ''), -- ID 77
-	(7, 'Upgraded Mercenary Gunsmith', 'Freelancer', 'Human', 57, 1, 6, 6, 5, 5, 4, 5, '[2|3|5]', '[9|26|106]', 0, ''), -- ID 78
-	(7, 'Merchant', 'Freelancer', 'Human', 55, 1, 6, 6, 5, 4, 4, 5, '[3|4|5]', '[29|123]', 0, ''), -- ID 79
-	(7, 'Rogue Psychic', 'Freelancer', 'Mutant', 45, 1, 6, 6, 5, 5, 4, 5, '[1|2|5]', '[54]', 2, 'May start with one detriment. One starting skill must be a random psychic mutation.'), -- ID 80
-	(7, 'Sawbones', 'Freelancer', 'Human', 50, 1, 6, 6, 5, 4, 4, 5, '[3|4|5]', '[17|104]', 0, ''), -- ID 81
-	(7, 'Veteran Scout', 'Freelancer', 'Human', 45, 1, 6, 6, 6, 5, 4, 5, '[2|3|4]', '[15|18|119]', 0, ''), -- ID 82
-	(7, 'Wandering Mutant', 'Freelancer', 'Mutant', 45, 1, 6, 6, 5, 4, 5, 5, '[1|2|3]', '', 2, 'Starting skills must be random hidden mutations. may start with one detriment.'), -- ID 83
-	(7, 'Wasteland Hunter', 'Freelancer', 'Human', 50, 1, 6, 6, 5, 5, 4, 5, '[2|3|4]', '[7|12|124]', 0, ''); -- ID 84
+(1, 'Trade Master', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '[30]', 2, ''), -- ID 1
+(1, 'Caravanner Lieutenant', 'Elite', 'Human', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|7|8]', '[47]', 1, ''), -- ID 2
+(1, 'Emissary Alpha Mutant', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[1|2|3|8]', '', 2, 'May start with one detriment, must have one mutation'), -- ID 3
+(1, 'Emissary Raider Champion', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[1|6|7|8]', '', 2, ''), -- ID 4
+(1, 'Emissary Tribal Representative', 'Elite', 'Human', 40, 1, 6, 6, 5, 5, 4, 5, '[3|5|7|8]', '', 2, ''), -- ID 5
+(1, 'Emissary Warden', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 6, '[1|2|7|8]', '[46]', 1, ''), -- ID 6
+(1, 'Tracker', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[2|3|4]', '[18|23]', 0, ''), -- ID 7
+(1, 'Caravanner', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, ''), -- ID 8
+(1, 'Defender', 'Rank and File', 'Human', 23, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '[38]', 0, ''), -- ID 9
+(1, 'Lugger', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 3, 6, 5, '[1|3|6]', '[98]', 0, ''), -- ID 10
+(1, 'Caravan Guard', 'Specialist', 'Human', 25, 1, 6, 5, 5, 5, 4, 5, '[1|2|4]', '', 0, ''), -- ID 11
+(1, 'Upgraded Caravan Guard', 'Specialist', 'Human', 30, 1, 6, 5, 5, 5, 4, 5, '[1|2|4]', '[106]', 0, ''), -- ID 12
+(1, 'Caravan Runner', 'Specialist', 'Human', 30, 1, 6, 5, 6, 4, 4, 5, '[2|3|4]', '[19|20]', 0, ''), -- ID 13
+(2, 'Omega Mutant', 'Leader', 'Mutant', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '', 3, 'Must have at least one mutation'), -- ID 14
+(2, 'Psychic Lord', 'Leader', 'Mutant', 85, 2, 6, 7, 5, 6, 5, 6, '[1|2|3|4|5|7|8]', '[54|82]', 3, 'Two of the starting skills must be random psychic mutations. Both are free skills granted by Psychic and Psychic Battery.'), -- ID 15
+(2, 'Alpha Mutant', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[1|2|3|8]', '', 2, 'May start with one detriment, must have at least one mutation'), -- ID 16
+(2, 'Mutant Emissary', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|5|8]', '', 2, 'Available only to Downwinder warbands, must have at least one mutation'), -- ID 17
+(2, 'Mutant Emissary (Medic)', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 5, 5, '[2|3|5|8]', '[104]', 1, 'Available only to Downwinder warbands'), -- ID 18
+(2, 'Abomination', 'Elite', 'Mutant', 45, 1, 7, 6, 5, 3, 6, 6, '[1|6|7]', '[41|67]', 2, 'Available only to Outcast warbands. Starting skills must be mutations. May start with two detriments'), -- ID 19
+(2, 'Mutant', 'Rank and File', 'Mutant', 27, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 1, 'Starting skill must be a mutation. May start with one detriment'), -- ID 20
+(2, 'Feral Mutant', 'Rank and File', 'Mutant', 25, 1, 6, 5, 5, 3, 6, 5, '[1|3|6]', '[105]', 1, 'Starting skill must be a mutation. May start with one detriment'), -- ID 21
+(2, 'Feral Mutant (Upgraded)', 'Rank and File', 'Mutant', 28, 1, 6, 5, 5, 3, 6, 5, '[1|3|6]', '[105|109]', 1, 'Starting skill must be a mutation. May start with one Detriment'), -- ID 22
+(2, 'Mondo', 'Specialist', 'Mutant', 50, 2, 7, 5, 5, 3, 6, 6, '[1|3|6]', '[98|103|110]', 0, 'May start with one detriment.'), -- ID 23
+(2, 'Huge Mondo', 'Specialist', 'Mutant', 75, 2, 7, 5, 5, 3, 6, 6, '[1|3|6]', '[98|101|110]', 0, 'May start with one detriment.'), -- ID 24
+(2, 'Psychic Mutant', 'Specialist', 'Mutant', 27, 1, 6, 5, 5, 4, 4, 5, '[2|5|7]', '[54]', 1, 'Starting skill must be a random psychic mutation.'), -- ID 25
+(2, 'Mutant Gunner', 'Specialist', 'Mutant', 35, 1, 6, 5, 5, 4, 4, 5, '[2|3|5]', '[106]', 1, 'Starting skill must be a mutation. May start with one detriment.'), -- ID 26
+(3, 'Warlord', 'Leader', 'Human', 80, 2, 6, 7, 6, 5, 7, 6, '[1|2|3|4|6|7|8]', '', 3, ''), -- ID 27
+(3, 'Bandit King', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '', 3, ''), -- ID 28
+(3, 'Brute', 'Elite', 'Human', 50, 1, 6, 6, 6, 4, 7, 6, '[1|6|7]', '[31|33|98]', 0, 'Warbands led by a Bandit King can only have one brute'), -- ID 29
+(3, 'Raider Champion', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[1|6|7|8]', '', 2, ''), -- ID 30
+(3, 'Raider', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, ''), -- ID 31
+(3, 'Wrecker', 'Rank and File', 'Human', 20, 1, 6, 5, 6, 3, 6, 5, '[1|3|6]', '', 0, ''), -- ID 32
+(3, 'Mongrel', 'Rank and File', 'Animal', 18, 1, 6, 5, 7, 0, 6, 6, '[1|4|6]', '[41|109]', 0, ''), -- ID 33
+(3, 'Maniac', 'Specialist', 'Human', 27, 1, 7, 5, 6, 2, 6, 5, '[1|6|7]', '[41]', 0, ''), -- ID 34
+(3, 'Mutant Raider', 'Specialist', 'Mutant', 27, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 1, 'Starting skill must be a mutation. May start with one detriment'), -- ID 35
+(3, 'Broiler', 'Specialist', 'Human', 40, 1, 6, 5, 5, 4, 4, 5, '[1|3|4]', '[38]', 0, 'Comes equipped with a free Flamer'), -- ID 36
+(3, 'Scrap-Taker', 'Specialist', 'Human', 30, 2, 6, 5, 5, 4, 4, 5, '[2|3|5]', '[106]', 0, ''), -- ID 37
+(4, 'Lorekeeper', 'Leader', 'Human', 75, 2, 6, 7, 5, 6, 5, 6, '[1|2|3|4|5|7|8]', '[112]', 3, ''), -- ID 38
+(4, 'Lord Reclaimer', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '[112]', 3, ''), -- ID 39
+(4, 'Reclaimer', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[1|2|3]', '[9|113]', 0, ''), -- ID 40
+(4, 'Savant', 'Elite', 'Human', 45, 1, 6, 6, 5, 5, 4, 5, '[2|4|5|8]', '[25]', 1, ''), -- ID 41
+(4, 'Wreck-It-Bot', 'Elite', 'Robot', 80, 2, 7, 6, 5, 3, 7, 6, '[1|6]', '[31|103|107|114|115]', 0, 'Cannot be purchased unless band contains a Savant. Maximum of one Wreck-It-Bot allowed.'), -- ID 42
+(4, 'Seeker', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|7]', '', 0, ''), -- ID 43
+(4, 'Excavator', 'Rank and File', 'Human', 15, 1, 6, 5, 5, 3, 6, 5, '[1|3|6]', '[105]', 0, ''), -- ID 44
+(4, 'Arbitrator', 'Specialist', 'Human', 30, 1, 6, 5, 5, 4, 4, 5, '[2|4|5]', '[26|106]', 0, ''), -- ID 45
+(4, 'Tech-Bearer', 'Specialist', 'Human', 25, 1, 6, 5, 5, 4, 4, 5, '[1|2|5]', '[25|116]', 0, ''), -- ID 46
+(4, 'Heal-o-Matic', 'Specialist', 'Robot', 37, 2, 6, 5, 5, 3, 4, 5, '[1|4|5]', '[25|104|102|117|115]', 0, 'Max of one if warband is led by a Lord Reclaimer.'), -- ID 47
+(5, 'War Leader', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|6|7|8]', '', 3, ''), -- ID 48
+(5, 'Great Shaman', 'Leader', 'Mutant', 85, 2, 6, 7, 5, 6, 5, 6, '[1|2|3|4|5|7|8]', '[54|82]', 3, 'Two of the starting skills must be random psychic mutations. Both are free skills granted by Psychic and Psychic Battery.'), -- ID 49
+(5, 'Tribal Champion', 'Elite', 'Human', 45, 1, 6, 6, 5, 5, 5, 5, '[1|3|7|8]', '', 2, ''), -- ID 50
+(5, 'Tribal Representative', 'Elite', 'Human', 40, 1, 6, 6, 5, 5, 4, 5, '[3|5|7|8]', '', 2, ''), -- ID 51
+(5, 'Lesser Shaman', 'Elite', 'Mutant', 45, 1, 6, 6, 5, 5, 4, 5, '[1|3|5]', '[54]', 2, 'One starting skill must be a random psychic mutation, gained for free from the Psychic mutation.'), -- ID 52
+(5, 'Tribal', 'Rank and File', 'Human', 18, 1, 6, 5, 5, 4, 4, 5, '[2|3|4]', '[105]', 0, ''), -- ID 53
+(5, 'Tribal Warrior', 'Rank and File', 'Human', 18, 1, 6, 5, 5, 3, 6, 5, '[1|6|7]', '[105]', 0, ''), -- ID 54
+(5, 'Warbeast', 'Rank and File', 'Animal', 20, 1, 6, 5, 7, 0, 6, 6, '[1|4|6]', '[20|109]', 0, 'May only have one warbeast for every two non-warbeast Rank and File models.'), -- ID 55
+(5, 'Berserker', 'Specialist', 'Human', 32, 1, 7, 5, 6, 3, 6, 5, '[1|6|7]', '[39|118]', 0, ''), -- ID 56
+(5, 'Tribal Scout', 'Specialist', 'Human', 40, 1, 6, 5, 6, 4, 4, 5, '[2|3|4]', '[15|18|119]', 0, ''), -- ID 57
+(5, 'Warbringer', 'Specialist', 'Human', 35, 1, 6, 5, 5, 4, 4, 5, '[2|4|5]', '[28|106]', 0, ''), -- ID 58
+(6, 'Road Marshal', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|5|6|7|8]', '', 3, ''), -- ID 59
+(6, 'Hanging Judge', 'Leader', 'Human', 80, 2, 6, 7, 5, 6, 6, 6, '[1|2|3|4|6|7|8]', '[40]', 2, ''), -- ID 60
+(6, 'Warden', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[1|2|7|8]', '[46]', 1, ''), -- ID 61
+(6, 'Outrider', 'Elite', 'Human', 50, 1, 6, 6, 5, 5, 5, 5, '[2|3|4]', '[10|15]', 0, ''), -- ID 62
+(6, 'Quartermaster', 'Elite', 'Human', 45, 1, 6, 6, 5, 5, 4, 5, '[2|5]', '[26|30]', 0, ''), -- ID 63
+(6, 'Officer', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, ''), -- ID 64
+(6, 'Deputized Settler', 'Rank and File', 'Human', 15, 1, 6, 5, 5, 4, 3, 5, '[1|2|4]', '[97]', 0, 'A warband may not have more deputized settlers than officers'), -- ID 65
+(6, 'K-9', 'Rank and File', 'Animal', 20, 1, 6, 5, 7, 0, 6, 6, '[1|4|6]', '[32|109]', 0, ''), -- ID 66
+(6, 'Sacrificial Lamb', 'Rank and File', 'Human', 18, 1, 6, 5, 6, 4, 4, 5, '[]', '[39|120]', 0, 'Only available if a warband is led by a Hanging Judge, starts with a free light weapon.'), -- ID 67
+(6, 'Sacrificial Lamb (Heavy)', 'Rank and File', 'Human', 20, 1, 6, 5, 6, 4, 4, 5, '[]', '[39|120]', 0, 'Only available if a warband is led by a Hanging Judge, starts with a free heavy weapon.'), -- ID 68
+(6, 'K-9 Handler', 'Specialist', 'Human', 25, 1, 6, 5, 6, 4, 4, 5, '[2|4|7]', '[108]', 0, 'Maximum of 1 if the warband is led by a Hanging Judge'), -- ID 69
+(6, 'Line Breaker', 'Specialist', 'Human', 30, 1, 6, 5, 6, 4, 6, 5, '[1|3|6]', '[]', 1, 'Starting skill must be either Brute or Strong Point'), -- ID 70
+(6, 'Tactical', 'Specialist', 'Human', 30, 1, 6, 5, 5, 4, 4, 5, '[2|4|5]', '[12|106]', 0, ''), -- ID 71
+(6, 'Cyber-Dog', 'Specialist', 'Animal', 35, 1, 6, 5, 6, 0, 6, 7, '[1|4|6]', '[32|109|117]', 0, 'Only Available if a warband is led by a Road Marshal'), -- ID 72
+(7, 'Bounty Hunter', 'Freelancer', 'Human', 55, 1, 6, 6, 5, 5, 5, 5, '[2|3|4]', '[43|121]', 1, 'Starting skill must be from Marksmanship list'), -- ID 73
+(7, 'Deadman', 'Freelancer', 'Human', 50, 1, 8, 6, 6, 3, 7, 5, '[1|3|7]', '[41|42|122]', 0, ''), -- ID 74
+(7, 'Depend-o-Bot', 'Freelancer', 'Robot', 50, 1, 6, 5, 5, 5, 5, 5, '[1|2|3]', '[114|115]', 2, 'Starting skills may not be from same skillsets'), -- ID 75
+(7, 'Mercenary Gunsmith', 'Freelancer', 'Human', 50, 1, 6, 6, 5, 5, 4, 5, '[2|3|5]', '[9|26]', 0, ''), -- ID 76
+(7, 'Up-Armed Mercenary Gunsmith', 'Freelancer', 'Human', 57, 1, 6, 6, 5, 5, 4, 5, '[2|3|5]', '[9|26|106]', 0, ''), -- ID 77
+(7, 'Merchant', 'Freelancer', 'Human', 55, 1, 6, 6, 5, 4, 4, 5, '[3|4|5]', '[29|123]', 0, ''), -- ID 78
+(7, 'Rogue Psychic', 'Freelancer', 'Mutant', 45, 1, 6, 6, 5, 5, 4, 5, '[1|2|5]', '[54]', 2, 'May start with one detriment. One starting skill must be a random psychic mutation.'), -- ID 79
+(7, 'Sawbones', 'Freelancer', 'Human', 50, 1, 6, 6, 5, 4, 4, 5, '[3|4|5]', '[17|104]', 0, ''), -- ID 80
+(7, 'Veteran Scout', 'Freelancer', 'Human', 45, 1, 6, 6, 6, 5, 4, 5, '[2|3|4]', '[15|18|119]', 0, ''), -- ID 81
+(7, 'Wandering Mutant', 'Freelancer', 'Mutant', 45, 1, 6, 6, 5, 4, 5, 5, '[1|2|3]', '', 2, 'Starting skills must be random hidden mutations. may start with one detriment.'), -- ID 82
+(7, 'Wasteland Hunter', 'Freelancer', 'Human', 50, 1, 6, 6, 5, 5, 4, 5, '[2|3|4]', '[7|12|124]', 0, ''); -- ID 83
 
 
 
@@ -229,7 +228,7 @@ INSERT INTO skill_reference (skillset_id, name, description, phase, skill_cost) 
 	(16, 'Free Natural Weapons', 'Unit gains Natural Weapons for free.', 'Deployment', 0), --ID 109
 	(16, 'No Psychic', 'Unit may not gain the Psychic Mutation', 'Postgame', 0), --ID 110
 	(16, 'Mongrel', 'If this model fumbles its activation and it can reach a raider model during its turn, this model will attack that model until one of them is taken out-of-action. Afterwards, it returns to normal. If it cannot reach a raider model, it acts as normal.', 'Game', 0), --ID 111
-	(16, 'Relic Bearer', 'Model may start with one non-weapon relic. This relic does not count against the warband limit on relics carried.', 'Deployment', 0), --ID 112
+	(16, 'Relic Bearer', 'Model may start with one relic. This relic does not count against the warband limit on relics carried.', 'Deployment', 0), --ID 112
 	(16, 'Power Armor Bearer', 'Each Reclaimer may wear Power Armor, ignoring the rule about repeat relics in a single warband.', 'Deployment', 0), --ID 113
 	(16, 'Thick Metal Plating', 'Robot cannot wear armor, but has an innate +2 armor bonus.', 'Game', 0), --ID 114
 	(16, 'Potential Integrated Weapon', 'Robot may have a melee or ranged weapon permanently attacked to one of its arms. Weapon may not be disarmed or lost by the model unless they are killed. This integral weapon may be two-handed, in which case model may use a two-handed and one-handed weapon at the same time. Robot may change out the integral weapon between games. The robot may only have two integral weapons. Having an integral weapon inhibits the robot’s ability to function in an environment, so plays should agree that it suffers a penalty if it attempts an action that needs good function (such as climbing).', 'Game', 0), --ID 115
@@ -237,7 +236,7 @@ INSERT INTO skill_reference (skillset_id, name, description, phase, skill_cost) 
 	(16, 'Metal Plating', 'Model cannot wear armor, but has an innate +1 armor bonus.', 'Game', 0), --ID 117
 	(16, 'Berserker', 'Model is constantly equipped with free Berserker Brew, which must be used at the start of each game. In addition, it cannot equip armor or shields.', 'Deployment', 0), --ID 118
 	(16, 'Scout', 'At then end of each game, player may redraw a single card from the Wasteland deck during the income phase of the game. This redraw can only happen once, even with multiple scouts', 'End of Game', 0), --ID 119
-	(16, 'Sacrificial Lamb', 'If this model ever fails a Morale test, it explodes as if it was a fragmentation grenade centered on the model. This permanently kills the model, but it is replaced for free at the start of the next game with its free starting weapon. Any other items are considered lost.Owner may detonate at any time they have the initiative.', 'Game', 0), --ID 120
+	(16, 'Sacrificial Lamb', 'If this model ever fails a Morale test, it explodes as if it was a fragmentation grenade centered on the model. This permanently kills the model, but it is replaced for free at the start of the next game with its free starting weapon. Any other items are considered lost. Owner may detonate at any time they have the initiative.', 'Game', 0), --ID 120
 	(16, 'Bounty Hunter', 'Any one enemy model who is killed in a campaign via the survival table may count as Captured instead. If multiple enemies are killed, player may choose which is captured.', 'End of Game', 0), --ID 121
 	(16, 'Deadman', 'Gain a +1 bonus to all rolls on the Survival table, but may not wear armor of any type.', 'End of Game', 0), --ID 122
 	(16, 'Improved Haggler', 'Once after each game, when buying items, model may roll a 2d10 and pick the higher result. This reduces the cost of a single piece of equipment by the die result (min: 1). The item affected must be declared before the roll is made, but the player is not required to buy the reduced-price item. ', 'End of Game', 0), --ID 123

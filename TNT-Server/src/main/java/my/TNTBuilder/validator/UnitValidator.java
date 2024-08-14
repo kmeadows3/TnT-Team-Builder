@@ -7,6 +7,7 @@ import my.TNTBuilder.model.Unit;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class UnitValidator {
@@ -66,6 +67,9 @@ public class UnitValidator {
         }
 
         confirmNewUnitRankIsValidOption(potentialUnit, team);
+        if (! teamCanHaveUnitClass(potentialUnit, team)){
+            throw new ValidationException("This unit is unable to be purchased due to the members of your warband.");
+        }
 
     }
 
@@ -90,6 +94,50 @@ public class UnitValidator {
         return !(team.getBSCost()/200 >= freelancerCount + 1);
     }
 
+
+    public boolean teamCanHaveUnitClass(Unit potentialUnit, Team team){
+        Unit leader = null;
+
+        if (!teamMustBuyLeader(team)) {
+            leader = team.getUnitList().stream().filter( unit -> unit.getRank().equals("Leader"))
+                    .collect(Collectors.toList()).get(0);
+        } else {
+            return true;
+        }
+
+        if (potentialUnit.getUnitClass().equals("Brute") && !leader.getUnitClass().equals("Warlord")){
+            return countUnitClassOnTeam("Brute", team) == 0;
+        } else if (potentialUnit.getUnitClass().contains("Mutant Emissary")){
+            return countUnitClassOnTeam("Abomination", team) == 0;
+        } else if (potentialUnit.getUnitClass().equals("Abomination")){
+            return countUnitClassOnTeam("Mutant Emissary", team) == 0;
+        } else if (potentialUnit.getUnitClass().equals("Wreck-It-Bot")) {
+            return countUnitClassOnTeam("Savant", team) > 0;
+        } else if (potentialUnit.getUnitClass().equalsIgnoreCase("Heal-O-Matic") && leader.getUnitClass().equals("Lord Reclaimer")) {
+            return countUnitClassOnTeam("Heal-O-Matic", team) == 0;
+        } else if (potentialUnit.getUnitClass().equals("Warbeast")) {
+            int warbeastCount = countUnitClassOnTeam("Warbeast", team);
+            int otherCount = team.getUnitList().size() - warbeastCount;
+            return warbeastCount + 1 <= otherCount / 2;
+        } else if (potentialUnit.getUnitClass().equals("Deputized Settler")) {
+            int settlerCount = countUnitClassOnTeam("Deputized Settler", team);
+            int officerCount = countUnitClassOnTeam("Officer", team);
+            return officerCount > settlerCount;
+        } else if (potentialUnit.getUnitClass().contains("Sacrificial Lamb") && !leader.getUnitClass().equals("Hanging Judge")) {
+            return false;
+        } else if (potentialUnit.getUnitClass().equals("K-9 Handler") && leader.getUnitClass().equals("Hanging Judge")){
+            return countUnitClassOnTeam("K-9 Handler", team) == 0;
+        } else if (potentialUnit.getUnitClass().contains("Cyber-Dog") && !leader.getUnitClass().equals("Road Marshal")) {
+            return false;
+        }
+
+
+        return true;
+    }
+
+    private int countUnitClassOnTeam(String className, Team team) {
+        return (int) team.getUnitList().stream().filter(unit -> unit.getUnitClass().equalsIgnoreCase(className)).count();
+    }
 
 
     /*

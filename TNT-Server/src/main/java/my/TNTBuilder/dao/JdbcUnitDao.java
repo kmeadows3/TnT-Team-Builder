@@ -508,7 +508,7 @@ public class JdbcUnitDao implements UnitDao{
         return  startingSkills;
     }
     private List<Integer> referenceArraySplitter (String arrayAsString){
-        if ( arrayAsString == null || arrayAsString.isEmpty()){
+        if ( arrayAsString == null || arrayAsString.isEmpty() || arrayAsString.length() == 2){
             return new ArrayList<>();
         } else {
             arrayAsString = arrayAsString.substring(1,arrayAsString.length()-1);

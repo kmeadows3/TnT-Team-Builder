@@ -4,7 +4,7 @@
         <div class="radio-tab-wrapper">
             <input type="radio" class="tab" name="filterTab" value="Armor" id="armorTab" checked
                 v-model="filter.itemCategory" />
-            <label for="armorTab">Armors</label>
+            <label for="armorTab" v-show="$store.state.currentUnit.unitClass != 'Berserker'">Armors</label>
             <input type="radio" class="tab" name="filterTab" value="Equipment" id="equipmentTab"
                 v-model="filter.itemCategory" />
             <label for="equipmentTab">Equipment</label>
@@ -182,6 +182,7 @@ div.buybox {
     flex-direction: column;
     max-height: 50%;
     overflow: auto;
+    min-width: 50vw;
 }
 
 div.buybox p{

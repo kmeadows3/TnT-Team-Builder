@@ -33,8 +33,8 @@ INSERT INTO unit_reference (faction_id, class, rank, species, base_cost, wounds,
 (2, 'Mutant', 'Rank and File', 'Mutant', 27, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 1, 'Starting skill must be a mutation. May start with one detriment'), -- ID 20
 (2, 'Feral Mutant', 'Rank and File', 'Mutant', 25, 1, 6, 5, 5, 3, 6, 5, '[1|3|6]', '[105]', 1, 'Starting skill must be a mutation. May start with one detriment'), -- ID 21
 (2, 'Feral Mutant (Upgraded)', 'Rank and File', 'Mutant', 28, 1, 6, 5, 5, 3, 6, 5, '[1|3|6]', '[105|109]', 1, 'Starting skill must be a mutation. May start with one Detriment'), -- ID 22
-(2, 'Mondo', 'Specialist', 'Mutant', 50, 2, 7, 5, 5, 3, 6, 6, '[1|3|6]', '[98|103|110]', 0, 'May start with one detriment.'), -- ID 23
-(2, 'Huge Mondo', 'Specialist', 'Mutant', 75, 2, 7, 5, 5, 3, 6, 6, '[1|3|6]', '[98|101|110]', 0, 'May start with one detriment.'), -- ID 24
+(2, 'Mondo', 'Specialist', 'Mutant', 50, 2, 7, 5, 5, 3, 6, 6, '[1|3|6]', '[62|98|103|110]', 0, 'May start with one detriment.'), -- ID 23
+(2, 'Huge Mondo', 'Specialist', 'Mutant', 75, 2, 7, 5, 5, 3, 6, 6, '[1|3|6]', '[62|98|101|110]', 0, 'May start with one detriment.'), -- ID 24
 (2, 'Psychic Mutant', 'Specialist', 'Mutant', 27, 1, 6, 5, 5, 4, 4, 5, '[2|5|7]', '[54]', 1, 'Starting skill must be a random psychic mutation.'), -- ID 25
 (2, 'Mutant Gunner', 'Specialist', 'Mutant', 35, 1, 6, 5, 5, 4, 4, 5, '[2|3|5]', '[106]', 1, 'Starting skill must be a mutation. May start with one detriment.'), -- ID 26
 (3, 'Warlord', 'Leader', 'Human', 80, 2, 6, 7, 6, 5, 7, 6, '[1|2|3|4|6|7|8]', '', 3, ''), -- ID 27

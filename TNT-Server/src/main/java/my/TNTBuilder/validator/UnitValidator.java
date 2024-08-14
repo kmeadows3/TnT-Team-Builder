@@ -85,7 +85,7 @@ public class UnitValidator {
         int unitCount = team.getUnitList().size();
         int specialistCount = countRankOccurrence("Specialist", team);
 
-        return !(((double) (specialistCount + 1) / unitCount) <= MAX_SPECIALIST_RATIO);
+        return !(((double) (specialistCount + 1) / (unitCount + 1) ) <= MAX_SPECIALIST_RATIO);
     }
 
     public boolean teamCanNotBuyFreelancer(Team team){

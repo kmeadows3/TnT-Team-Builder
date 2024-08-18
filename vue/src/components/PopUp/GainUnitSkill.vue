@@ -35,6 +35,10 @@
                     <strong>Note for New Units: </strong>{{ $store.state.currentUnit.specialRules }}
                 </div>
 
+                <div v-show="filter.skillsetCategory =='Mutation' ">
+                    <strong> BS Remaining:</strong> {{ $store.state.currentTeam.money }}
+                </div>
+
                 <form>
                     <div class="skill-selection">
                         <div class="finder-label">
@@ -59,7 +63,7 @@
                                     :value="potentialSkill">
                                     {{ potentialSkill.name }} </option>
                             </select>
-                            <p>{{ newSkill.description ? newSkill.description : "---" }}</p>
+                            <p>{{newSkill.cost ? '(' + newSkill.cost+ 'BS)':''}}{{ newSkill.description ? newSkill.description : "---" }}</p>
 
                         </div>
                     </div>
@@ -69,7 +73,7 @@
 
 
             <span class="button-container">
-                <button @click="addSkill()">Gain Skill</button>
+                <button @click="addSkill()">{{filter.skillsetCategory=='Mutation' ? 'Gain Mutation' : 'Gain Skill'}}</button>
                 <button @click="cancel()">Cancel</button>
             </span>
         </div>

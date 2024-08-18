@@ -242,7 +242,7 @@ export function createStore(currentToken, currentUser) {
           unitSkills.push(injury.grants);
         });
 
-        store.state.currentUnit.inventory.filter( item => item.equipped && !unitSkills.includes(item.grants)).filter( item => item.grants)
+        store.state.currentUnit.inventory.filter( item => item.equipped && !unitSkills.includes(item.grants)).filter( item => item.grants && item.equipped)
         .forEach( item => {
           item.grants.addedString = "(" + item.name + ")"
           unitSkills.push(item.grants);

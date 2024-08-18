@@ -20,7 +20,7 @@ public class JdbcItemDao implements ItemDao {
             "is_relic, item_category, hands_required, melee_defense_bonus, ranged_defense_bonus, is_shield, " +
             "cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability, " +
             "is_masterwork, is_large_caliber, has_prefall_ammo, " +
-            "sr.skill_id AS skill_id, sr.skillset_id, sr.name AS skill_name, sr.description AS skill_description, skillset_name " +
+            "sr.skill_id AS skill_id, sr.skillset_id, sr.name AS skill_name, sr.description AS skill_description, skillset_name, phase " +
             "FROM inventory i " +
             "JOIN item_reference ir ON ir.item_ref_id = i.item_ref_id " +
             "LEFT JOIN skill_reference sr ON grants = sr.skill_id " +
@@ -30,7 +30,7 @@ public class JdbcItemDao implements ItemDao {
     private final String SELECT_ALL_FROM_ITEM_REFERENCE = "SELECT item_ref_id, ir.name, cost, special_rules, rarity, " +
             "is_relic, item_category, hands_required, melee_defense_bonus, ranged_defense_bonus, is_shield, " +
             "cost_2_wounds, cost_3_wounds, melee_range, ranged_range, weapon_strength, reliability, " +
-            "sr.skill_id AS skill_id, sr.skillset_id, sr.name AS skill_name, sr.description AS skill_description, skillset_name " +
+            "sr.skill_id AS skill_id, sr.skillset_id, sr.name AS skill_name, sr.description AS skill_description, skillset_name, phase " +
             "FROM item_reference ir " +
             "LEFT JOIN skill_reference sr ON grants = sr.skill_id " +
             "LEFT JOIN skillset_reference ssr ON  ssr.skillset_id = sr.skillset_id ";
@@ -384,6 +384,7 @@ public class JdbcItemDao implements ItemDao {
             newSkill.setName(row.getString("skill_name"));
             newSkill.setSkillsetName(row.getString("skillset_name"));
             newSkill.setDescription(row.getString("skill_description"));
+            newSkill.setPhase(row.getString("phase"));
             return newSkill;
         }
         return null;

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ItemService {
@@ -147,6 +148,8 @@ public class ItemService {
             ifPreFallAmmoRemovedUnequipFromWeapons(userId, item, unit);
 
             item.setEquippedValidated(!item.isEquipped(), unit);
+            handleBayonetRules(item, unit);
+
             itemDao.updateEquipped(item);
         } catch (DaoException|ValidationException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -174,7 +177,6 @@ public class ItemService {
 
     }
 
-
     public void updateWeaponUpgrade(Item item, int userId) throws ServiceException {
 
         try {
@@ -188,10 +190,10 @@ public class ItemService {
     }
 
 
+
     /*
     PRIVATE METHODS
      */
-
     private void validateUnitToTeamTransfer(int itemId, Unit unit) throws ValidationException {
         if (unit.getRank().equals("Freelancer")){
             Item item = itemDao.getItemById(itemId);
@@ -200,6 +202,7 @@ public class ItemService {
             }
         }
     }
+
     private void validateUnitCanHaveItem(Item itemToAdd, Unit unit) throws ServiceException {
         if (itemToAdd.getCategory().equals("Support Weapon")
                 ^ (unit.getUnitClass().equals("Broiler") && itemToAdd.getName().equals("Flamethrower"))){
@@ -227,7 +230,6 @@ public class ItemService {
             }
         }
     }
-
     private void validateUnitCanEquipSupportWeapon(Unit unit) throws ValidationException {
 
         boolean hasUpArmed = false;
@@ -241,6 +243,7 @@ public class ItemService {
             throw new ValidationException("Unit must have Up-Armed to equip a support weapon");
         }
     }
+
     private void validateUnitCanHaveRelic(Unit unit, Item itemToAddToInventory) throws ServiceException {
 
         if (unit.getRank().equals("Rank and File")){
@@ -263,7 +266,6 @@ public class ItemService {
                     "the team inventory before this item can be added to this unit.");
         }
     }
-
     private void validateTeamCanHaveRelic(Item itemToAddToInventory, Team team) throws ValidationException {
         boolean isPreservers = team.getFaction().equals("Preservers");
         boolean isPowerArmor = itemToAddToInventory.getName().equals("Power Armor");
@@ -280,6 +282,7 @@ public class ItemService {
             }
         }
     }
+
     private void updateTeamMoneyFromSellingItem(int itemId, int userId, Team team)  throws ServiceException, DaoException{
         Item item = itemDao.getItemById(itemId);
         int sellPrice = item.getCost() / 2;
@@ -293,7 +296,6 @@ public class ItemService {
             teamService.updateTeam(team, userId);
         }
     }
-
     private void deleteItemFromDatabase(int itemId, int userId, Team team)  throws ServiceException, DaoException {
 
         if (team.getUserId() == userId) {
@@ -303,6 +305,7 @@ public class ItemService {
         }
 
     }
+
     private int purchaseItem(Item referenceItem, Unit unit)  throws ServiceException {
         int itemId = 0;
         try {
@@ -314,7 +317,6 @@ public class ItemService {
 
         return itemId;
     }
-
     private int purchaseItem(Item referenceItem, Team team)  throws ServiceException{
         int itemId = 0;
         try {
@@ -440,6 +442,48 @@ public class ItemService {
                 int teamId = itemDao.getTeamIdByItemId(item.getId());
                 teamService.spendMoney(item.getCost(), teamService.getTeamById(teamId, userId));
             }
+        }
+    }
+
+    private void handleBayonetRules(Item item, Unit unit) throws ValidationException {
+        confirmBayonetIsAttachedToLegalWeapon(item, unit);
+
+        if (item.getCategory().equals("Ranged Weapon") && !item.isEquipped()){
+            unequipAnyAttachedBayonet(unit);
+        }
+    }
+
+    private void confirmBayonetIsAttachedToLegalWeapon(Item item, Unit unit) throws ValidationException {
+        if(item.isEquipped() &&  item.getName().equals("Bayonet")){
+            boolean bayonetIsEquippable = false;
+            List<Item> equippedItems = unit.getInventory().stream()
+                    .filter( inventoryItem -> inventoryItem.isEquipped()).collect(Collectors.toList());
+
+            for (Item equippedItem : equippedItems) {
+                if (equippedItem.getName().equals("Rifle")
+                        || equippedItem.getName().equals("Musket")
+                        || equippedItem.getName().equals("Shotgun")
+                        || equippedItem.getName().equals("Assault Rifle")) {
+                    bayonetIsEquippable = true;
+                }
+            }
+
+            if (!bayonetIsEquippable){
+                throw new ValidationException("Bayonets can only be equipped with an Assault Rifle, Musket, Shotgun, or Assault Rifle.");
+            }
+        }
+    }
+
+    private void unequipAnyAttachedBayonet(Unit unit) {
+        boolean hasEquippedBayonet = unit.getInventory().stream()
+                .anyMatch(inventoryItem -> inventoryItem.isEquipped() && inventoryItem.getName().equals("Bayonet"));
+
+        if ( hasEquippedBayonet ){
+            Item bayonet = unit.getInventory().stream()
+                    .filter(inventoryItem -> inventoryItem.isEquipped() && inventoryItem.getName().equals("Bayonet"))
+                    .findFirst().get();
+            bayonet.setEquipped(false);
+            itemDao.updateEquipped(bayonet);
         }
     }
 

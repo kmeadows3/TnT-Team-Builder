@@ -13,14 +13,17 @@
         <div class="stat-box">
             <p class="stat-label">MOVE</p>
             <div>
-                <p class="stat-text">{{ calculatedMove }}{{ calculatedMove == $store.state.currentUnit.move ? "" : " (" +
+                <p class="stat-text">{{ calculatedMove }}{{ calculatedMove == $store.state.currentUnit.move ? "" : " ("
+                    +
                     $store.state.currentUnit.move + ")" }}</p>
             </div>
         </div>
         <div class="stat-box">
             <p class="stat-label">MELEE</p>
             <div v-show="!hasShield">
-                <p class="stat-text">{{ $store.state.currentUnit.melee }}</p>
+                <p class="stat-text">{{ calculatedMelee }}{{ calculatedMelee == $store.state.currentUnit.melee ? "" : " ("
+                    +
+                    $store.state.currentUnit.melee + ")" }}</p>
             </div>
             <div v-show="hasShield" class="display-split-stat">
                 <div>
@@ -29,8 +32,9 @@
                 </div>
                 <div>
                     <p class="stat-text stat-label two-rows">Defending</p>
-                    <p class="stat-text two-rows" two-rows>{{ ($store.state.currentUnit.melee + 1) + " (" + $store.state.currentUnit.melee
-                        + ")"}}</p>
+                    <p class="stat-text two-rows" two-rows>{{ ($store.state.currentUnit.melee + 1) + " (" +
+                        $store.state.currentUnit.melee
+                        + ")" }}</p>
                 </div>
             </div>
 
@@ -44,8 +48,9 @@
         <div class="stat-box">
             <p class="stat-label">STRENGTH</p>
             <div>
-                <p class="stat-text">{{ calculatedStrength }}{{ calculatedStrength == $store.state.currentUnit.strength ? ""
-                    : " (" + $store.state.currentUnit.strength + ")"}}</p>
+                <p class="stat-text">{{ calculatedStrength }}{{ calculatedStrength == $store.state.currentUnit.strength
+                    ? ""
+                    : " (" + $store.state.currentUnit.strength + ")" }}</p>
             </div>
         </div>
         <div class="stat-box">
@@ -58,11 +63,13 @@
             <div v-show="!showRegularDefense" class="display-split-stat">
                 <div>
                     <p class="stat-text stat-label two-rows">Melee</p>
-                    <p class="stat-text two-rows">{{ calculatedMeleeDefense + " (" + $store.state.currentUnit.defense + ")" }}</p>
+                    <p class="stat-text two-rows">{{ calculatedMeleeDefense + " (" + $store.state.currentUnit.defense +
+                        ")" }}</p>
                 </div>
                 <div>
                     <p class="stat-text stat-label two-rows">Ranged</p>
-                    <p class="stat-text two-rows">{{ calculatedRangedDefense + " (" + $store.state.currentUnit.defense + ")" }}</p>
+                    <p class="stat-text two-rows">{{ calculatedRangedDefense + " (" + $store.state.currentUnit.defense +
+                        ")" }}</p>
                 </div>
             </div>
         </div>
@@ -92,7 +99,16 @@ export default {
             let inventory = this.$store.state.currentUnit.inventory;
             inventory = inventory.filter((item) => item.equipped);
 
+            let hasBerserkerBrew = false;
+
+            inventory.forEach(item => {
+                if (item.name == "Berserker Brew") {
+                    hasBerserkerBrew = true;
+                }
+            });
+
             let reducesMovement = false
+
             inventory = inventory.filter((item) => {
                 reducesMovement = false;
                 item.itemTraits.forEach((trait) => {
@@ -103,7 +119,24 @@ export default {
                 return reducesMovement;
             });
 
-            return this.$store.state.currentUnit.move - inventory.length;
+            let calculatedMovement = this.$store.state.currentUnit.move - inventory.length;
+
+            return hasBerserkerBrew ? calculatedMovement + 1 : calculatedMovement;
+        },
+        calculatedMelee() {
+
+            let inventory = this.$store.state.currentUnit.inventory;
+            inventory = inventory.filter((item) => item.equipped);
+
+            let hasBerserkerBrew = false;
+
+            inventory.forEach(item => {
+                if (item.name == "Berserker Brew") {
+                    hasBerserkerBrew = true;
+                }
+            });
+
+            return hasBerserkerBrew ? this.$store.state.currentUnit.melee + 1 : this.$store.state.currentUnit.melee;
         },
         calculatedRangedDefense() {
             let inventory = this.$store.state.currentUnit.inventory;
@@ -176,7 +209,7 @@ div.stat-box {
     margin: 3px;
 }
 
-div.stat-box>div{
+div.stat-box>div {
     flex-grow: 1;
     display: flex;
     justify-content: center;
@@ -197,7 +230,7 @@ p.stat-text {
     margin: 12px 0px;
 }
 
-p.stat-text.two-rows{
+p.stat-text.two-rows {
     margin: 5px 0px;
 }
 

@@ -150,6 +150,19 @@ public class ItemService {
             item.setEquippedValidated(!item.isEquipped(), unit);
             handleBayonetRules(item, unit);
 
+            if (item.isEquipped() && ( item.getName().equals("Battle Force Field") || item.getName().equals("Power Armor") )){
+                boolean hasPowerArmor = unit.getInventory().stream()
+                        .filter( inventoryItem -> inventoryItem.isEquipped() && inventoryItem.getName().equals("Power Armor"))
+                        .count() > 0;
+                boolean hasBattleForceField = unit.getInventory().stream()
+                        .filter( inventoryItem -> inventoryItem.isEquipped() && inventoryItem.getName().equals("Battle Force Field"))
+                        .count() > 0;
+                if ( (item.getName().equals("Battle Force Field") && hasPowerArmor)
+                    || (item.getName().equals("Power Armor") && hasBattleForceField)){
+                    throw new ValidationException("Unit cannot equip both Power Armor and a Battle Force Field at the same time.");
+                }
+            }
+
             itemDao.updateEquipped(item);
         } catch (DaoException|ValidationException e) {
             throw new ServiceException(e.getMessage(), e);

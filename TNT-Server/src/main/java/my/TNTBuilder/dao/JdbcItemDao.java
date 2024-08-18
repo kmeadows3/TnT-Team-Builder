@@ -292,7 +292,10 @@ public class JdbcItemDao implements ItemDao {
         return unitId;
     }
 
-
+    public boolean isItemOwnedByUnit(int itemId){
+        int[] potentialOwners = getPotentialOwnersOfItem(itemId);
+        return potentialOwners[1] != 0;
+    }
 
     /*
     PRIVATE METHODS

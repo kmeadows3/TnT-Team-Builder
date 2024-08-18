@@ -231,6 +231,10 @@ public class ItemService {
             throw new ValidationException("Berserkers cannot wear armor");
         }
 
+        if (itemToAdd.getCategory().equals("Melee Weapon") && ((Weapon)itemToAdd).isMasterwork() ){
+            validateNoDoubleMasterwork((Weapon)itemToAdd, unit);
+        }
+
         for (Skill skill : unit.getSkills()){
             if (skill.getName().equals("RagTag")){
                 int totalEquipmentBS = itemToAdd.getCost();
@@ -373,8 +377,32 @@ public class ItemService {
 
         validateWeaponCanHaveUpgrade(weapon);
         validateItemNotBeingDowngraded(userId, weapon);
+        validateNoDoubleMasterwork(weapon, userId);
         confirmUnitHasPrefallAmmoEquipped(weapon, userId);
 
+    }
+
+    private void validateNoDoubleMasterwork(Weapon weapon, int userId) throws ValidationException {
+        if (weapon.isMasterwork()){
+            if (itemDao.isItemOwnedByUnit(weapon.getId())){
+                Unit unit = unitDao.getUnitById(itemDao.getUnitIdByItemId(weapon.getId()), userId);
+                boolean unitHasMasterworkAlready = unit.getInventory().stream()
+                        .anyMatch(inventoryItem -> inventoryItem.getCategory().equals("Melee Weapon") && ((Weapon) inventoryItem).isMasterwork());
+                if (unitHasMasterworkAlready){
+                    throw new ValidationException("Unit may only have one masterwork item.");
+                }
+            }
+        }
+    }
+
+    private void validateNoDoubleMasterwork(Weapon weapon, Unit unit) throws ValidationException {
+        if (weapon.isMasterwork()){
+            boolean unitHasMasterworkAlready = unit.getInventory().stream()
+                    .anyMatch(inventoryItem -> inventoryItem.getCategory().equals("Melee Weapon") && ((Weapon) inventoryItem).isMasterwork());
+            if (unitHasMasterworkAlready){
+                throw new ValidationException("Unit may only have one masterwork item.");
+            }
+        }
     }
 
     private void validateWeaponCanHaveUpgrade(Weapon weapon) throws ValidationException {

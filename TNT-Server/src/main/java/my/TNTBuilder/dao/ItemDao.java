@@ -41,4 +41,5 @@ public interface ItemDao {
     void updateWeaponBonuses(Weapon weapon) throws DaoException;
 
     int getUnitIdByItemId(int itemId);
+    boolean isItemOwnedByUnit(int itemId);
 }

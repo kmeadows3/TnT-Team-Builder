@@ -82,6 +82,10 @@ public class ItemService {
             validateTeamCanHaveRelic(referenceItem, team);
         }
 
+        if (referenceItem.getName().equals("War Banner")){
+            validateTeamDoesNotHaveWarBanner(team);
+        }
+
         int itemId = 0;
         if (isFree){
             itemId = gainItemForFree(referenceItem, team);
@@ -235,6 +239,11 @@ public class ItemService {
             validateNoDoubleMasterwork((Weapon)itemToAdd, unit);
         }
 
+        if (itemToAdd.getName().equals("War Banner")){
+            Team team = teamService.getTeamByUnitId(unit.getId());
+            validateTeamDoesNotHaveWarBanner(team);
+        }
+
         for (Skill skill : unit.getSkills()){
             if (skill.getName().equals("RagTag")){
                 int totalEquipmentBS = itemToAdd.getCost();
@@ -247,6 +256,22 @@ public class ItemService {
             }
         }
     }
+
+    private void validateTeamDoesNotHaveWarBanner(Team team) throws ValidationException {
+        for (Item inventoryItem : team.getInventory()){
+            if (inventoryItem.getName().equals("War Banner")){
+                throw new ValidationException("Team may not have more than one War Banner.");
+            }
+        }
+        for (Unit teamUnit : team.getUnitList()){
+            for (Item inventoryItem : teamUnit.getInventory()){
+                if (inventoryItem.getName().equals("War Banner")){
+                    throw new ValidationException("Team may not have more than one War Banner.");
+                }
+            }
+        }
+    }
+
     private void validateUnitCanEquipSupportWeapon(Unit unit) throws ValidationException {
 
         boolean hasUpArmed = false;

@@ -634,7 +634,7 @@ public class JdbcUnitDao implements UnitDao{
     private List<Injury> getAllInjuriesOnUnit(int unitId) throws DaoException {
         String sql = "SELECT ir.injury_id, ir.name, ir.description, is_stat_damage, stat_damaged, is_removeable, " +
                 "is_stackable, count, sr.skill_id AS skill_id, sr.skillset_id, sr.name AS skill_name, " +
-                "sr.description AS skill_description, skillset_name " +
+                "sr.description AS skill_description, skillset_name, phase, skill_cost " +
                 "FROM injury_reference ir "+
                 "JOIN unit_injury ui ON ui.injury_id = ir.injury_id "+
                 "LEFT JOIN skill_reference sr ON grants = sr.skill_id " +

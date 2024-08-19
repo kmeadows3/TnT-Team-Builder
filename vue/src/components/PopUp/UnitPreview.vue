@@ -29,8 +29,8 @@
                 <div class="bigger-box">
                     <div class="title">Skillsets</div>
                     <div class="content">
-                        <span v-for="(skillset, index) in previewUnit.availableSkillsets" :key="'skillset-id-'+skillset.id">
-                            {{skillset.name}}{{index == previewUnit.availableSkillsets.length - 1 ? '' : ',&nbsp;' }}
+                        <span v-for="(skillset, index) in onlySkillsets" :key="'skillset-id-'+skillset.id">
+                            {{skillset.name}}{{index == onlySkillsets.length - 1 ? '' : ',&nbsp;' }}
                         </span>
                     </div>
                 </div>
@@ -61,7 +61,12 @@
 <script>
 
 export default {
-    props: ['preview-unit']    
+    props: ['preview-unit'],
+    computed: {
+        onlySkillsets() {
+            return this.previewUnit.availableSkillsets.filter( skillset => skillset.category == "Skill");
+        }
+    }
 }
 
 </script>

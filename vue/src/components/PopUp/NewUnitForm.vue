@@ -15,7 +15,8 @@
                                 unit.baseCost }} BS</option>
 
                 </select>
-                <label for="filter">Filter Units:</label>
+                <span v-show="!buyLeaders">
+                    <label for="filter">Filter Units:</label>
                 <select id="filter" v-model="filter">
                         <option selected :value="''">None</option>
                         <option :value="'Leader'" v-show="buyLeaders">Leaders</option>
@@ -25,8 +26,10 @@
                         <option :value="'Freelancer'" v-show="buyFreelancers">Freelancers</option>
 
                 </select>
+                </span>
+                
             </div>
-            <UnitPreview :preview-unit="previewUnit" v-show="previewUnit.id" />
+            <UnitPreview :preview-unit="previewUnit" v-if="previewUnit.id" />
             <span>
                 <button @click.prevent="buyUnit()">Buy Unit</button>
                 <button @click.prevent="clearForm()">Cancel</button>

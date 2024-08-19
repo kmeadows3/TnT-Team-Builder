@@ -4,7 +4,7 @@
             <h1 class="section-title">Special Rules Reference</h1>
             <div v-for="skill in $store.state.unitSkillsSorted" :key="'skill-'+skill.id">
                 <h2 class="reference-label">
-                    {{ skill.name }}
+                    {{ skill.name }} <span v-show="skill.count > 1">(x {{ skill.count }})</span>
                     <span>{{ skill.addedString }}</span>
                 </h2>
                 <p class="reference-desc">{{ skill.description }}</p>

@@ -231,12 +231,35 @@ export function createStore(currentToken, currentUser) {
           })
         );
 
+        if (store.state.currentUnit.skills.filter(skill => skill.name == "No Legs").length > 0){
+          let trait = {
+            id: 4,
+            name : 'Move or Fire',
+            effect: 'Weapon may not be fired if the attacker moved or intends to move during the same activation.'
+          }
+
+          let hasMoveOrFireAlready = false;
+
+          unitTraits.forEach( trait => {
+            if (trait.name == 'Move or Fire'){
+                hasMoveOrFireAlready = true;
+            }
+          })
+
+          if (!hasMoveOrFireAlready){
+            unitTraits.push(trait);
+          }
+        }
+
         unitTraits = unitTraits.sort((a, b) => a.name.localeCompare(b.name));
 
         store.commit('SET_UNIT_INVENTORY_TRAITS', unitTraits);
       },
       sortUnitSkills(context) {
         let unitSkills = store.state.currentUnit.skills;
+        let hasHatred = false;
+        let hasFrenzied = false;
+                        
         store.state.currentUnit.injuries.filter( injury => injury.grants && !unitSkills.includes(injury.grants) ).forEach(injury => {
           injury.grants.addedString = "(" + injury.name + ")"
           unitSkills.push(injury.grants);
@@ -246,7 +269,25 @@ export function createStore(currentToken, currentUser) {
         .forEach( item => {
           item.grants.addedString = "(" + item.name + ")"
           unitSkills.push(item.grants);
+        });       
+
+        unitSkills.forEach( skill => {
+          if (skill.name =="Frenzied" || skill.name == "Frienzied *"){
+            hasFrenzied = true;
+          } else if (skill.name =="Hatred"){
+            hasHatred = true;
+          }
         });
+
+        if (hasHatred && !hasFrenzied){
+          let frenzied = {
+            id: 99,
+            name:  'Frenzied *',
+            description: 'Only applies when Hatred is active. At the beginning of each activation, model must make an Intelligence test (MET/TN 10). On pass, it acts as normal. On fail, it enters a Frenzy. While in a Frenzy, it may only move or charge towards the nearest enemy model, or make a melee attack if it is already in base contact. It also gets a +2 bonus against Will tests. On subsequent activations, model may test Intelligence (MET/TN 10) to try to return to normal. This test does not consume AP.',
+            addedString: '(Hatred)'
+          }
+          unitSkills.push(frenzied);
+        }
 
         unitSkills = unitSkills.sort((a, b) => a.name.localeCompare(b.name))
         store.commit('SET_UNIT_SKILLS_SORTED', unitSkills);

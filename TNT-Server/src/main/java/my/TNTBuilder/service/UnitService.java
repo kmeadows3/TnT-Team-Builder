@@ -24,7 +24,6 @@ public class UnitService {
     private final UnitValidator unitValidator;
     private final TeamService teamService;
     private final ItemDao itemDao;
-
     private final int FRENZIED_SKILL_ID = 99;
 
     public UnitService(UnitDao unitDao, ItemDao itemDao, UnitValidator unitValidator, TeamService teamService) {

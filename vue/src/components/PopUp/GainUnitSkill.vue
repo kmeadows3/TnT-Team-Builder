@@ -42,7 +42,7 @@
                 <form>
                     <div class="skill-selection">
                         <div class="finder-label">
-                            <h2 class="subsection-title">Lookup Ability: </h2>
+                            <h2 class="subsection-title">Lookup {{filter.skillsetCategory}}: </h2>
                             <span  @change="resetPotentialSkill()">
                                 <label>Filter: </label>
                                 <select v-model.number="filter.skillsetId">
@@ -61,9 +61,11 @@
                                 </option>
                                 <option v-for="potentialSkill in filteredSkills" :key="'potential-skill-'+ potentialSkill.id"
                                     :value="potentialSkill">
-                                    {{ potentialSkill.name }} </option>
+                                    {{ potentialSkill.name }} {{ potentialSkill.cost ? '(' + potentialSkill.cost +' BS)' : '' }}</option>
                             </select>
-                            <p>{{newSkill.cost ? '(' + newSkill.cost+ 'BS)':''}}{{ newSkill.description ? newSkill.description : "---" }}</p>
+                            <p>
+                                {{newSkill.cost ? '(Costs ' + newSkill.cost + ' BS) ':''}}{{ newSkill.description ? newSkill.description : "---" }}
+                            </p>
 
                         </div>
                     </div>
@@ -73,7 +75,7 @@
 
 
             <span class="button-container">
-                <button @click="addSkill()">{{filter.skillsetCategory=='Mutation' ? 'Gain Mutation' : 'Gain Skill'}}</button>
+                <button @click="addSkill()" :disabled="newSkill.cost > $store.state.currentTeam.money">Gain {{filter.skillsetCategory}}</button>
                 <button @click="cancel()">Cancel</button>
             </span>
         </div>
@@ -233,6 +235,10 @@ div.finder-label {
     margin: auto;
     padding-left: 5px;
 
+}
+
+.too-expensive {
+    background-color: rgb(236, 173, 173);
 }
 
 input.tab {

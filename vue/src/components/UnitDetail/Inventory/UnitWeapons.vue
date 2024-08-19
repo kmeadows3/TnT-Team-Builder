@@ -19,15 +19,15 @@
                 <div class="weapon-cost">{{ weapon.masterwork || weapon.largeCaliber ? weapon.cost * 2 : weapon.cost }}</div>
                 <div class="weapon-range">{{ weapon.rangedString }}</div>
                 <div class="weapon-strength">{{ weapon.strengthString }}</div>
-                <div class="weapon-reliablity">{{ weapon.reliability }}</div>
+                <div class="weapon-reliablity">{{ reliabilityCalculated(weapon) }}</div>
                 <div class="weapon-hands">{{ weapon.handsRequired }}</div>
                 <div class="item-special-rules weapon-rules">
                     <span v-show="weapon.itemTraits.length == 0 || weapon.specialRules != 'N/A'">
                         {{ weapon.specialRules }}
                         <span v-show="weapon.itemTraits.length > 0">, </span>
                     </span>
-                    <span v-show="weapon.itemTraits.length > 0">
-                        <span v-for="(trait, index) in weapon.itemTraits" :key="'trait' + weapon.id + trait.id">
+                    <span v-show="itemTraitsCalculated(weapon).length > 0">
+                        <span v-for="(trait, index) in itemTraitsCalculated(weapon)" :key="'trait' + weapon.id +'-'+ trait.id">
                             <span v-show="index != 0">,</span>
                             {{ trait.name }}</span>
                     </span>
@@ -71,8 +71,45 @@ export default {
 
             return weapons;
         },
+        hasMaintainer(){
+            return this.$store.state.currentUnit.skills.filter(skill => skill.name == "Maintainer").length > 0;
+        },
+        hasLongArms(){
+            return this.$store.state.currentUnit.skills.filter(skill => skill.name == "Long Arms").length > 0;
+        }
     },
     methods: {
+        itemTraitsCalculated(weapon) {
+            let itemTraits = weapon.itemTraits;
+            if (this.$store.state.currentUnit.skills.filter(skill => skill.name == "No Legs").length > 0){
+                let trait = {
+                    id: 4,
+                    name : 'Move or Fire',
+                    effect: 'Weapon may not be fired if the attacker moved or intends to move during the same activation.'
+                }
+
+                let hasMoveOrFireAlready = false;
+
+                itemTraits.forEach( trait => {
+                    if (trait.name == 'Move or Fire'){
+                        hasMoveOrFireAlready = true;
+                    }
+                })
+
+                if (!hasMoveOrFireAlready){
+                    itemTraits.push(trait);
+                }
+
+            }
+            return itemTraits;            
+        },
+        reliabilityCalculated(weapon){
+            if (!this.hasMaintainer || weapon.reliability == 1) {
+                return weapon.reliability;
+            } else {
+                return weapon.reliability - 1;
+            }
+        },
         rangedString(item){
             let range = '';
             if (item.meleeRange == 0) {
@@ -84,7 +121,9 @@ export default {
                     range = this.$store.state.currentUnit.strength + '"';
                 } else if (this.hasFlamer(item)) {
                     range = "Flamer"
-                } else {
+                } else if (this.hasLongArms){
+                    range = '1"'
+                }else {
                     range = 'Base';
                 }
             } else {

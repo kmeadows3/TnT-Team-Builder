@@ -80,6 +80,9 @@
 
 export default {
     computed: {
+        hasStrongPoint(){
+            return this.$store.state.currentUnit.skills.filter(skill => skill.name == "Strong Point").length > 0;
+        },
         showRegularDefense() {
             return this.$store.state.currentUnit.defense == this.calculatedRangedDefense
                 && this.$store.state.currentUnit.defense == this.calculatedMeleeDefense
@@ -119,7 +122,7 @@ export default {
                 return reducesMovement;
             });
 
-            let calculatedMovement = this.$store.state.currentUnit.move - inventory.length;
+            let calculatedMovement = this.hasStrongPoint ? this.$store.state.currentUnit.move : this.$store.state.currentUnit.move - inventory.length;
 
             return hasBerserkerBrew ? calculatedMovement + 1 : calculatedMovement;
         },

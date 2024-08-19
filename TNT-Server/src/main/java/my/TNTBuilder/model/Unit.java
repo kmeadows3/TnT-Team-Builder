@@ -38,6 +38,7 @@ public class Unit {
     private boolean cannotLowerStrength = false;
     private boolean cannotLowerDefense = false;
     private boolean cannotLowerRanged = false;
+    private boolean cannotLowerMove = false;
 
 
     //constructors
@@ -357,7 +358,16 @@ public class Unit {
     public void setCannotLowerRanged(boolean cannotLowerRanged) {
         this.cannotLowerRanged = cannotLowerRanged;
     }
-//Override Equals
+
+    public boolean isCannotLowerMove() {
+        return cannotLowerMove;
+    }
+
+    public void setCannotLowerMove(boolean cannotLowerMove) {
+        this.cannotLowerMove = cannotLowerMove;
+    }
+
+    //Override Equals
 
     @Override
     public boolean equals(Object o) {
@@ -369,8 +379,8 @@ public class Unit {
                 melee == unit.melee && strength == unit.strength && emptySkills == unit.emptySkills &&
                 spentExperience == unit.spentExperience && unspentExperience == unit.unspentExperience &&
                 totalAdvances == unit.totalAdvances && tenPointAdvances == unit.tenPointAdvances &&
-                cannotLowerDefense == unit.cannotLowerDefense && unit.cannotLowerRanged == cannotLowerRanged
-                && cannotLowerStrength == unit.cannotLowerStrength &&
+                cannotLowerDefense == unit.cannotLowerDefense && unit.cannotLowerRanged == cannotLowerRanged &&
+                cannotLowerStrength == unit.cannotLowerStrength && cannotLowerMove == unit.cannotLowerMove &&
                 Objects.equals(name, unit.name) && Objects.equals(unitClass, unit.unitClass) &&
                 Objects.equals(rank, unit.rank) && Objects.equals(species, unit.species) &&
                 Objects.equals(specialRules, unit.specialRules) &&
@@ -383,6 +393,7 @@ public class Unit {
     public int hashCode() {
         return Objects.hash(id, teamId, name, unitClass, rank, species, baseCost, wounds, defense, mettle, move, ranged,
                 melee, strength, emptySkills, specialRules, spentExperience, unspentExperience, totalAdvances,
-                tenPointAdvances, availableSkillsets, skills, injuries, inventory, cannotLowerDefense, cannotLowerStrength, cannotLowerRanged);
+                tenPointAdvances, availableSkillsets, skills, injuries, inventory, cannotLowerDefense, cannotLowerStrength,
+                cannotLowerRanged, cannotLowerMove);
     }
 }

@@ -34,7 +34,7 @@ public class JdbcUnitDao implements UnitDao{
     private final String SELECT_ALL_FROM_UNIT = "SELECT u.team_id, unit_id, name, class, rank, species, base_cost, wounds, " +
             "defense, mettle, move, ranged, melee, strength, empty_skills, special_rules, spent_exp, unspent_exp, " +
             "total_advances, ten_point_advances, u.team_id, new_purchase, cannot_lower_strength, cannot_lower_defense, " +
-            "cannot_lower_ranged FROM unit u " +
+            "cannot_lower_ranged, cannot_lower_move FROM unit u " +
             "JOIN team t on t.team_id = u.team_id ";
     private final String SELECT_ALL_FROM_SKILLSET_REFERENCE = "SELECT ssr.skillset_id, skillset_name, category " +
             "FROM skillset_reference ssr ";
@@ -199,7 +199,7 @@ public class JdbcUnitDao implements UnitDao{
         String sql = "UPDATE unit SET name = ?, rank = ?, wounds = ?, defense = ?, mettle = ?, move = ?, " +
                 "ranged = ?, melee = ?, strength = ?, empty_skills = ?, spent_exp = ?, unspent_exp = ?, " +
                 "total_advances = ?, ten_point_advances = ?, new_purchase = ?, cannot_lower_strength = ?, " +
-                "cannot_lower_defense = ?, cannot_lower_ranged = ? " +
+                "cannot_lower_defense = ?, cannot_lower_ranged = ?, cannot_lower_move = ? " +
                 "WHERE unit_id = ?";
         try{
             int rowsAffected = jdbcTemplate.update(sql, updatedUnit.getName(), updatedUnit.getRank(), updatedUnit.getWounds(),
@@ -207,7 +207,8 @@ public class JdbcUnitDao implements UnitDao{
                     updatedUnit.getMelee(), updatedUnit.getStrength(), updatedUnit.getEmptySkills(),
                     updatedUnit.getSpentExperience(), updatedUnit.getUnspentExperience(), updatedUnit.getTotalAdvances(),
                     updatedUnit.getTenPointAdvances(), updatedUnit.isNewPurchase(), updatedUnit.isCannotLowerStrength(),
-                    updatedUnit.isCannotLowerDefense(), updatedUnit.isCannotLowerRanged(), updatedUnit.getId());
+                    updatedUnit.isCannotLowerDefense(), updatedUnit.isCannotLowerRanged(), updatedUnit.isCannotLowerMove(),
+                    updatedUnit.getId());
             if (rowsAffected != 1){
                 throw new DaoException("Incorrect number of rows affected");
             }
@@ -619,6 +620,7 @@ public class JdbcUnitDao implements UnitDao{
         newUnit.setCannotLowerDefense(row.getBoolean("cannot_lower_defense"));
         newUnit.setCannotLowerRanged(row.getBoolean("cannot_lower_ranged"));
         newUnit.setCannotLowerStrength(row.getBoolean("cannot_lower_strength"));
+        newUnit.setCannotLowerMove(row.getBoolean("cannot_lower_move"));
         newUnit.setSkills(getUnitSkills(newUnit.getId()));
         newUnit.setAvailableSkillsets(getAvailableSkillsets(newUnit.getId()));
         newUnit.setInjuries(getAllInjuriesOnUnit(newUnit.getId()));

@@ -128,6 +128,7 @@ CREATE TABLE unit(
 	cannot_lower_strength boolean DEFAULT false,
 	cannot_lower_defense boolean DEFAULT false,
 	cannot_lower_ranged boolean DEFAULT false,
+	cannot_lower_move boolean DEFAULT false,
 	CONSTRAINT FK_unit_team FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
 

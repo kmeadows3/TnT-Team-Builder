@@ -71,26 +71,31 @@ public class Item {
     //Validation Methods
 
     private boolean validateEquipItem(Unit unit) throws ValidationException{
-        int handsUsed = unit.getInventory().stream().filter( (item) ->  item.isEquipped ).mapToInt(Item::getHandsRequired).sum();
-        handsUsed += this.handsRequired;
+        int handsCurrentlyUsed = unit.getInventory().stream().filter( (item) ->  item.isEquipped ).mapToInt(Item::getHandsRequired).sum();
+        int handsUsed = handsCurrentlyUsed + this.handsRequired;
 
         validateUnitNotWearing2SetsOfArmor(unit);
 
         boolean unitCannotHoldItems = false;
         boolean unitCanOnlyHoldOneItem = false;
+        boolean unitCanHoldThreeItems = false;
 
-        if (unit.getSpecies().equals("Mutant")){
+        if (unit.getSpecies().equals("Mutant") || unit.getSpecies().equals("Robot")){
             unitCannotHoldItems = unit.getSkills().stream()
                     .anyMatch(skill -> skill.getName().equals("Crushing Claws") || skill.getName().equals("Weapon Growths (x2)"));
+
             unitCanOnlyHoldOneItem = unit.getSkills().stream()
                     .anyMatch(skill -> skill.getName().equals("No Arms") || skill.getName().equals("Weapon Growths"));
+            unitCanHoldThreeItems = unit.getSkills().stream()
+                    .anyMatch(skill -> skill.getName().equals("Integral") || skill.getName().equals("Potential Integrated Weapon"))
+                    && ( this.handsRequired == 2 || handsCurrentlyUsed == 2);
         }
 
         if (unitCannotHoldItems){
             throw new ValidationException("Unit is incapable of holding items.");
         } else if (handsUsed >= 2 && unitCanOnlyHoldOneItem) {
             throw new ValidationException("Unit can only equip a single 1-handed item.");
-        } else if (handsUsed > 2){
+        } else if (handsUsed > 3 || (handsUsed == 3 && !unitCanHoldThreeItems)){
             throw new ValidationException("Unit does not have enough hands to hold this item.");
         }
 

@@ -241,7 +241,7 @@ INSERT INTO skill_reference (skillset_id, name, description, phase, skill_cost) 
 	(16, 'Deadman', 'Gain a +1 bonus to all rolls on the Survival table, but may not wear armor of any type.', 'End of Game', 0), --ID 122
 	(16, 'Improved Haggler', 'Once after each game, when buying items, model may roll a 2d10 and pick the higher result. This reduces the cost of a single piece of equipment by the die result (min: 1). The item affected must be declared before the roll is made, but the player is not required to buy the reduced-price item. ', 'End of Game', 0), --ID 123
 	(16, 'Wasteland Hunter', 'Once per campaign, player may choose not to roll on Wasteland Encounter table and instead have the Creatures of the Wastes result be automatically applied.', 'Deployment', 0), --ID 124
-	(11, 'Weapon Growths (x2)', 'Model increases their bonus to Melee to +2, but cannot use any other weapons or equipment and must pass an Agility test (MET/TN 10) to open doors or do any other task that requires the use of hands.', 'Game', 0); --ID 125
+	(11, 'Weapon Growths (x2)', 'Model gains an additional +1 to Melee (total of +2, already added to stat), but cannot use any other weapons or equipment and must pass an Agility test (MET/TN 10) to open doors or do any other task that requires the use of hands.', 'Game', 0); --ID 125
 
 INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, is_removeable, is_stackable, grants) VALUES
 	('Banged Head', 'Model receives a -1 penalty to its Mettle Stat', TRUE, 'Mettle', FALSE, TRUE, null), --ID 1

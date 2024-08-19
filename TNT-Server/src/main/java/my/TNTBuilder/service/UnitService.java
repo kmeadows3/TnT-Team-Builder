@@ -114,84 +114,113 @@ public class UnitService {
         }
     }
 
-    private void addSideEffectsToAddingSkill(Skill skill, Unit unit) throws ValidationException{
+    private void addSideEffectsToAddingSkill(Skill skill, Unit unit) throws ValidationException {
         if (skill.getName().equals("Psychic")) {
             unitDao.addPsychicToSkillsets(unit.getId());
-        } else if (skill.getName().equals("Weapon Growths (x2)")){
+        } else if (skill.getName().equals("Weapon Growths (x2)")) {
+            unit.setMelee(unit.getMelee() + 1);
+            unitDao.updateUnit(unit);
             unitDao.deleteWeaponsGrowthsFromUnit(unit.getId());
         } else if (skill.getName().equals("Frother") && unit.getSkills().stream().noneMatch(unitSkill -> unitSkill.getId() == FRENZIED_SKILL_ID)) {
             unitDao.addSkillToUnit(FRENZIED_SKILL_ID, unit.getId());
         } else if (skill.getName().equals("Big")) {
-            unit.setStrength(unit.getStrength()+1);
+            unit.setWounds(unit.getWounds() + 1);
+            unit.setStrength(unit.getStrength() + 1);
             unitDao.addSkillToUnit(LARGE_SKILL_ID, unit.getId());
             unitDao.updateUnit(unit);
         } else if (skill.getName().equals("Long Arms")) {
-            unit.setMelee(unit.getMelee()+1);
+            unit.setMelee(unit.getMelee() + 1);
             unitDao.updateUnit(unit);
         } else if (skill.getName().equals("Long Legs")) {
-            unit.setMove(unit.getMove()+1);
+            unit.setMove(unit.getMove() + 1);
             unitDao.updateUnit(unit);
         } else if (skill.getName().equals("Multi-Limbed / Prehensile Tail")) {
-            unit.setEmptySkills(unit.getEmptySkills()+1);
+            unit.setEmptySkills(unit.getEmptySkills() + 1);
             unitDao.updateUnit(unit);
-        } else if (skill.isDetriment()) {
+        } else if (skill.getName().equals("No Arms")) {
+            unit.setMove(unit.getMove() + 1);
+            unitDao.updateUnit(unit);
+        } else if (skill.getName().equals("Weapon Growths")){
+            unit.setMelee(unit.getMelee() + 1);
+            unitDao.updateUnit(unit);
+        }else if (skill.isDetriment()) {
             handleDetrimentStatLoss(skill, unit);
         }
     }
 
     private void handleDetrimentStatLoss(Skill skill, Unit unit) throws ValidationException{
         int statValue = 0;
-        String statToAlter = null;
 
         switch (skill.getName()) {
             case "Atrophied Muscles":
                 statValue = unit.getStrength() - 1;
-                statToAlter = "Strength";
+                lowerStrengthFromDetriment(skill, unit, statValue);
                 break;
             case "Frailty":
                 statValue = unit.getStrength() - 1;
-                statToAlter = "Defense";
+                lowerDefenseFromDetriment(skill, unit, statValue);
                 break;
             case "Weakening Sight":
                 statValue = unit.getStrength() - 1;
-                statToAlter = "Ranged";
+                lowerRangedFromDetriment(skill, unit, statValue);
+                break;
+            case "Inert Twin":
+            case "Obese":
+            case "No Legs":
+                statValue = unit.getMove() -1;
+                lowerMoveFromDetriment(skill, unit, statValue);
+                break;
+            case "Stumpy Leg":
+                statValue = unit.getMove() - 2;
+                lowerMoveFromDetriment(skill, unit, statValue);
                 break;
             default:
                 return;
         }
 
-        switch (statToAlter) {
-            case "Strength":
-                if (statValue > 0) {
-                    unit.setStrength(statValue);
-                } else if (unit.isCannotLowerStrength()) {
-                    throw new ValidationException(skill.getName() + " has made this unit too weak to fight.");
-                } else {
-                    unit.setCannotLowerStrength(true);
-                }
-                break;
-            case "Defense":
-                if (statValue > 0) {
-                    unit.setDefense(statValue);
-                } else if (unit.isCannotLowerDefense()) {
-                    throw new ValidationException(skill.getName() + " has made this unit too weak to fight.");
-                } else {
-                    unit.setCannotLowerDefense(true);
-                }
-                break;
-            case "Ranged":
-                if (statValue > 0) {
-                    unit.setRanged(statValue);
-                } else if (unit.isCannotLowerRanged()) {
-                    throw new ValidationException(skill.getName() + " has made this unit too weak to fight.");
-                } else {
-                    unit.setCannotLowerRanged(true);
-                }
-                break;
-        }
-
         unitDao.updateUnit(unit);
 
+    }
+
+    private void lowerMoveFromDetriment(Skill skill, Unit unit, int statValue) throws ValidationException {
+        if (statValue > 0) {
+            unit.setMove(statValue);
+        } else if (unit.isCannotLowerMove()) {
+            throw new ValidationException(skill.getName() + " has made this unit too weak to fight.");
+        } else {
+            unit.setMove(1);
+            unit.setCannotLowerMove(true);
+        }
+    }
+
+    private void lowerRangedFromDetriment(Skill skill, Unit unit, int statValue) throws ValidationException {
+        if (statValue > 0) {
+            unit.setRanged(statValue);
+        } else if (unit.isCannotLowerRanged()) {
+            throw new ValidationException(skill.getName() + " has made this unit too weak to fight.");
+        } else {
+            unit.setCannotLowerRanged(true);
+        }
+    }
+
+    private void lowerDefenseFromDetriment(Skill skill, Unit unit, int statValue) throws ValidationException {
+        if (statValue > 0) {
+            unit.setDefense(statValue);
+        } else if (unit.isCannotLowerDefense()) {
+            throw new ValidationException(skill.getName() + " has made this unit too weak to fight.");
+        } else {
+            unit.setCannotLowerDefense(true);
+        }
+    }
+
+    private void lowerStrengthFromDetriment(Skill skill, Unit unit, int statValue) throws ValidationException {
+        if (statValue > 0) {
+            unit.setStrength(statValue);
+        } else if (unit.isCannotLowerStrength()) {
+            throw new ValidationException(skill.getName() + " has made this unit too weak to fight.");
+        } else {
+            unit.setCannotLowerStrength(true);
+        }
     }
 
     private int getExistingDetrimentCount(Skill skill, Unit unit) {

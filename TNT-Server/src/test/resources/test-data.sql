@@ -127,6 +127,9 @@ CREATE TABLE unit(
 	total_advances int DEFAULT 0,
 	ten_point_advances int DEFAULT 0,
 	new_purchase boolean DEFAULT true,
+    cannot_lower_strength boolean DEFAULT false,
+    cannot_lower_defense boolean DEFAULT false,
+    cannot_lower_ranged boolean DEFAULT false,
 	CONSTRAINT FK_unit_team FOREIGN KEY(team_id) REFERENCES team(team_id)
 );
 
@@ -157,6 +160,7 @@ CREATE TABLE unit_skillset(
 CREATE TABLE unit_skill(
 	unit_id int NOT NULL,
 	skill_id int NOT NULL,
+	count int DEFAULT 1,
 	PRIMARY KEY (unit_id, skill_id),
 	CONSTRAINT FK_unit_skill_join_skill_id FOREIGN KEY(skill_id) REFERENCES skill_reference(skill_id),
 	CONSTRAINT FK_unit_skill_join_unit_id FOREIGN KEY(unit_id) REFERENCES unit(unit_id)

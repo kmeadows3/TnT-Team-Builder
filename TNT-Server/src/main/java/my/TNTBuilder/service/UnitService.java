@@ -19,10 +19,13 @@ import java.util.stream.Collectors;
 @Component
 public class UnitService {
 
+    public static final int LARGE_SKILL_ID = 103;
     private final UnitDao unitDao;
     private final UnitValidator unitValidator;
     private final TeamService teamService;
     private final ItemDao itemDao;
+
+    private final int FRENZIED_SKILL_ID = 99;
 
     public UnitService(UnitDao unitDao, ItemDao itemDao, UnitValidator unitValidator, TeamService teamService) {
         this.unitDao = unitDao;
@@ -86,19 +89,22 @@ public class UnitService {
 
     public void addSkillToUnit(Skill skill, int unitId, int userId) throws ServiceException{
         try {
-            if (unitCanAddSkill(unitId, skill, userId)){
+            Unit unit = unitDao.getUnitById(unitId, userId);
+
+            if (unitCanAddSkill(unit, skill)){
 
                 if (skill.isMutation() && skill.getCost() != 0){
                     teamService.spendMoney(skill.getCost(), teamService.getTeamByUnitId(unitId));
                 }
 
-                if (skill.getName().equals("Psychic")) {
-                    unitDao.addPsychicToSkillsets(unitId);
-                } else if (skill.getName().equals("Weapon Growths (x2)")){
-                    unitDao.deleteWeaponsGrowthsFromUnit(unitId);
-                }
+                addSideEffectsToAddingSkill(skill, unit);
 
-                unitDao.addSkillToUnit(skill.getId(), unitId);
+                if (skill.isDetriment() && getExistingDetrimentCount(skill, unit) > 0){
+                    skill.setCount(getExistingDetrimentCount(skill, unit) + 1);
+                    unitDao.updateSkillCount(skill, unitId);
+                } else {
+                    unitDao.addSkillToUnit(skill.getId(), unitId);
+                }
 
                 updateUnitAfterSkillPurchase(skill, unitId, userId);
 
@@ -106,6 +112,125 @@ public class UnitService {
         } catch (DaoException e){
             throw new ServiceException(e.getMessage(), e);
         }
+    }
+
+    private void addSideEffectsToAddingSkill(Skill skill, Unit unit) throws ValidationException{
+        if (skill.getName().equals("Psychic")) {
+            unitDao.addPsychicToSkillsets(unit.getId());
+        } else if (skill.getName().equals("Weapon Growths (x2)")){
+            unitDao.deleteWeaponsGrowthsFromUnit(unit.getId());
+        } else if (skill.getName().equals("Frother") && unit.getSkills().stream().noneMatch(unitSkill -> unitSkill.getId() == FRENZIED_SKILL_ID)) {
+            unitDao.addSkillToUnit(FRENZIED_SKILL_ID, unit.getId());
+        } else if (skill.getName().equals("Big")) {
+            unit.setStrength(unit.getStrength()+1);
+            unitDao.addSkillToUnit(LARGE_SKILL_ID, unit.getId());
+            unitDao.updateUnit(unit);
+        } else if (skill.getName().equals("Long Arms")) {
+            unit.setMelee(unit.getMelee()+1);
+            unitDao.updateUnit(unit);
+        } else if (skill.getName().equals("Long Legs")) {
+            unit.setMove(unit.getMove()+1);
+            unitDao.updateUnit(unit);
+        } else if (skill.getName().equals("Multi-Limbed / Prehensile Tail")) {
+            unit.setEmptySkills(unit.getEmptySkills()+1);
+            unitDao.updateUnit(unit);
+        } else if (skill.isDetriment()) {
+            handleDetrimentStatLoss(skill, unit);
+        }
+    }
+
+    private void handleDetrimentStatLoss(Skill skill, Unit unit) throws ValidationException{
+        int statValue = 0;
+        String statToAlter = null;
+
+        switch (skill.getName()) {
+            case "Atrophied Muscles":
+                statValue = unit.getStrength() - 1;
+                statToAlter = "Strength";
+                break;
+            case "Frailty":
+                statValue = unit.getStrength() - 1;
+                statToAlter = "Defense";
+                break;
+            case "Weakening Sight":
+                statValue = unit.getStrength() - 1;
+                statToAlter = "Ranged";
+                break;
+            default:
+                return;
+        }
+
+        switch (statToAlter) {
+            case "Strength":
+                if (statValue > 0) {
+                    unit.setStrength(statValue);
+                } else if (unit.isCannotLowerStrength()) {
+                    throw new ValidationException(skill.getName() + " has made this unit too weak to fight.");
+                } else {
+                    unit.setCannotLowerStrength(true);
+                }
+                break;
+            case "Defense":
+                if (statValue > 0) {
+                    unit.setDefense(statValue);
+                } else if (unit.isCannotLowerDefense()) {
+                    throw new ValidationException(skill.getName() + " has made this unit too weak to fight.");
+                } else {
+                    unit.setCannotLowerDefense(true);
+                }
+                break;
+            case "Ranged":
+                if (statValue > 0) {
+                    unit.setRanged(statValue);
+                } else if (unit.isCannotLowerRanged()) {
+                    throw new ValidationException(skill.getName() + " has made this unit too weak to fight.");
+                } else {
+                    unit.setCannotLowerRanged(true);
+                }
+                break;
+        }
+
+        unitDao.updateUnit(unit);
+
+    }
+
+    private int getExistingDetrimentCount(Skill skill, Unit unit) {
+
+        List<Skill> existingSkills = unit.getSkills().stream()
+                .filter(unitSkill -> unitSkill.equals(skill))
+                .collect(Collectors.toList());
+
+        if (!existingSkills.isEmpty()){
+            Skill existingSkill = existingSkills.get(0);
+            return existingSkill.getCount();
+        }
+
+        return 0;
+    }
+
+    public void addInjury(int injuryId, int unitId, int userId) throws ServiceException {
+        Unit unit = getUnitById(unitId, userId);
+
+        Injury injury = selectInjuryFromInjuryList(injuryId, unit);
+
+        try {
+            if (injury == null){
+                injury = unitDao.selectInjuryById(injuryId);
+                applyInjuryEffects(injury, unit);
+                unitDao.addInjuryToUnit(injuryId, unitId);
+            } else if (injury.isStackable()){
+                applyInjuryEffects(injury, unit);
+                unitDao.updateInjuryCount(injuryId, unitId, injury.getCount() + 1);
+            } else {
+                throw new ServiceException("Unit already has this injury and cannot add another instance.");
+            }
+
+            unitDao.updateUnit(unit);
+
+        } catch (DaoException | ValidationException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+
     }
 
     public void deleteUnit(int unitId, int userId, boolean deleteItems) throws ServiceException{
@@ -132,10 +257,6 @@ public class UnitService {
 
     }
 
-    /*
-    Methods that go to DAO with no changes
-     */
-
     public List<Skill> getPotentialSkills(int unitId, int userId) throws ServiceException{
         List<Skill> skillList = null;
         try {
@@ -149,6 +270,10 @@ public class UnitService {
 
         return skillList;
     }
+
+    /*
+    Methods that go to DAO with no changes
+     */
 
     public Unit getUnitById(int unitId, int userId) throws ServiceException{
         Unit unit = null;
@@ -209,35 +334,24 @@ public class UnitService {
 
     }
 
-    public void addInjury(int injuryId, int unitId, int userId) throws ServiceException {
-        Unit unit = getUnitById(unitId, userId);
-
-        Injury injury = selectInjuryFromInjuryList(injuryId, unit);
-
-        try {
-            if (injury == null){
-                injury = unitDao.selectInjuryById(injuryId);
-                applyInjuryEffects(injury, unit);
-                unitDao.addInjuryToUnit(injuryId, unitId);
-            } else if (injury.isStackable()){
-                applyInjuryEffects(injury, unit);
-                unitDao.updateInjuryCount(injuryId, unitId, injury.getCount() + 1);
-            } else {
-                throw new ServiceException("Unit already has this injury and cannot add another instance.");
-            }
-
-            unitDao.updateUnit(unit);
-
-        } catch (DaoException | ValidationException e) {
-            throw new ServiceException(e.getMessage(), e);
-        }
-
-    }
-
     /*
         PRIVATE METHODS
      */
-    private void removeUnpurchasableSkills(List<Skill> skillList, int unitId, int userId) {
+
+    private boolean doesUnitHaveSkill (String skillName, Unit unit){
+        return unit.getSkills().stream().anyMatch( skill -> skill.getName().equals(skillName));
+    }
+
+    private int countInstancesOfSkillOnTeam (String skillName, Unit unit) throws ServiceException{
+        Team team = teamService.getTeamByUnitId(unit.getId());
+
+        return (int) team.getUnitList().stream()
+                .filter(teamUnit -> teamUnit.getSkills().stream()
+                        .filter( skill -> skill.getName().equals(skillName)).count() > 0)
+                .count();
+    }
+
+    private void removeUnpurchasableSkills(List<Skill> skillList, int unitId, int userId) throws ServiceException{
         Unit unit = unitDao.getUnitById(unitId, userId);
         boolean hasFearfulRep = false;
         boolean hasMedic = false;
@@ -264,12 +378,26 @@ public class UnitService {
         }
     }
 
-    private boolean skillIsIllegal(Skill skill, Unit unit) {
+    private boolean skillIsIllegal(Skill skill, Unit unit) throws ServiceException{
 
         if (unit.getUnitClass().contains("Mondo") && skill.getName().equals("Psychic")){
             return true;
         } else if (skill.getName().equals("Weapon Growths (x2)")) {
             return unit.getSkills().stream().noneMatch(unitSkill -> unitSkill.getName().equals("Weapon Growths"));
+        } else if (skill.getName().equals("Ranger")) {
+            return countInstancesOfSkillOnTeam("Ranger", unit) >=3;
+        } else if (skill.getName().equals("Reactive")) {
+            return !doesUnitHaveSkill("Nimble", unit);
+        } else if (skill.getName().equals("Nimble")) {
+            return !doesUnitHaveSkill("Reactive", unit);
+        } else if (skill.getName().equals("Flighty")){
+            return !doesUnitHaveSkill("Push Off", unit);
+        } else if (skill.getName().equals("Push Off")){
+            return !doesUnitHaveSkill("Flighty", unit);
+        } else if (skill.getName().equals("Resourceful")) {
+            return countInstancesOfSkillOnTeam("Resourceful", unit) >=2;
+        } else if (skill.getName().equals("Scavenger")) {
+            return unit.getRank().equals("Freelancer");
         }
 
         return false;
@@ -363,22 +491,21 @@ public class UnitService {
         updatedUnit.setTotalAdvances(updatedUnit.getTotalAdvances() + 1);
     }
 
-    private boolean unitCanAddSkill(int unitId, Skill skill, int userId) throws ServiceException, DaoException {
+    private boolean unitCanAddSkill(Unit unit, Skill skill) throws ServiceException, DaoException {
 
-        Unit unit = unitDao.getUnitById(unitId, userId);
         int skillId = skill.getId();
 
-        if (unit == null) {
-            throw new ServiceException("Error, invalid unit.");
-        } else if (unit.getEmptySkills() < 1 && !skill.isDetriment()){
+        if (unit.getEmptySkills() < 1 && !skill.isDetriment()){
             throw new ServiceException("Error, unit does not have any unpurchased skills.");
         } else if (skillIsIllegal(skill, unit)){
-            throw new ServiceException("This unit type is unable to purchase " + skill.getName());
+            throw new ServiceException("This unit is unable to purchase " + skill.getName());
         }else {
 
-            for (Skill ownedSkills : unit.getSkills()) {
-                if (ownedSkills.getId() == skillId) {
-                    throw new ServiceException("Error, unit already cannot have two copies of a ability.");
+            if (!skill.isDetriment()){
+                for (Skill ownedSkills : unit.getSkills()) {
+                    if (ownedSkills.getId() == skillId) {
+                        throw new ServiceException("Error, unit cannot have two copies of an ability.");
+                    }
                 }
             }
 

@@ -25,7 +25,7 @@ public class JdbcUnitDao implements UnitDao{
                     "1d6 Strength hit. If the power used is an attack, it automatically hits after the Will test, but " +
                     "any ranged modifiers counta s a penalty to the test. Psychics do not need line of sight if the " +
                     "target is 16” or closer. When first gaining Psychic, user also gains a free Psychic Mutation.",
-            9, "Hidden Defensive Mutation", "Game", 0);
+            9, "Hidden Defensive Mutation", "Game", 0, 1);
 
     private final JdbcTemplate jdbcTemplate;
     private final String SELECT_ALL_FROM_UNIT_REFERENCE = "SELECT unit_ref_id, faction_id, class, rank, species, base_cost, " +
@@ -33,7 +33,8 @@ public class JdbcUnitDao implements UnitDao{
             "special_rules FROM unit_reference ";
     private final String SELECT_ALL_FROM_UNIT = "SELECT u.team_id, unit_id, name, class, rank, species, base_cost, wounds, " +
             "defense, mettle, move, ranged, melee, strength, empty_skills, special_rules, spent_exp, unspent_exp, " +
-            "total_advances, ten_point_advances, u.team_id, new_purchase FROM unit u " +
+            "total_advances, ten_point_advances, u.team_id, new_purchase, cannot_lower_strength, cannot_lower_defense, " +
+            "cannot_lower_ranged FROM unit u " +
             "JOIN team t on t.team_id = u.team_id ";
     private final String SELECT_ALL_FROM_SKILLSET_REFERENCE = "SELECT ssr.skillset_id, skillset_name, category " +
             "FROM skillset_reference ssr ";
@@ -41,6 +42,13 @@ public class JdbcUnitDao implements UnitDao{
             "name AS skill_name, description AS skill_description, skillset_name, skill_cost, phase " +
             "FROM skill_reference sr " +
             "JOIN skillset_reference ssr ON ssr.skillset_id = sr.skillset_id ";
+
+    private final String SELECT_ALL_FROM_UNIT_SKILL_TABLE = "SELECT sr.skill_id AS skill_id, sr.skillset_id, " +
+            "name AS skill_name, description AS skill_description, skillset_name, skill_cost, phase, count " +
+            "FROM skill_reference sr " +
+            "JOIN skillset_reference ssr ON ssr.skillset_id = sr.skillset_id " +
+            "JOIN unit_skill us ON us.skill_id = sr.skill_id ";
+
     private final String SELECT_ALL_FROM_INJURY_REFERENCE = "SELECT injury_id, ir.name, ir.description, is_stat_damage, " +
             "stat_damaged, is_removeable, is_stackable, sr.skill_id AS skill_id, sr.skillset_id, sr.name AS skill_name, " +
             "sr.description AS skill_description, skillset_name, phase, skill_cost FROM injury_reference ir "+
@@ -190,14 +198,16 @@ public class JdbcUnitDao implements UnitDao{
     public void updateUnit(Unit updatedUnit) throws DaoException{
         String sql = "UPDATE unit SET name = ?, rank = ?, wounds = ?, defense = ?, mettle = ?, move = ?, " +
                 "ranged = ?, melee = ?, strength = ?, empty_skills = ?, spent_exp = ?, unspent_exp = ?, " +
-                "total_advances = ?, ten_point_advances = ?, new_purchase = ? " +
+                "total_advances = ?, ten_point_advances = ?, new_purchase = ?, cannot_lower_strength = ?, " +
+                "cannot_lower_defense = ?, cannot_lower_ranged = ? " +
                 "WHERE unit_id = ?";
         try{
             int rowsAffected = jdbcTemplate.update(sql, updatedUnit.getName(), updatedUnit.getRank(), updatedUnit.getWounds(),
                     updatedUnit.getDefense(), updatedUnit.getMettle(), updatedUnit.getMove(), updatedUnit.getRanged(),
                     updatedUnit.getMelee(), updatedUnit.getStrength(), updatedUnit.getEmptySkills(),
                     updatedUnit.getSpentExperience(), updatedUnit.getUnspentExperience(), updatedUnit.getTotalAdvances(),
-                    updatedUnit.getTenPointAdvances(), updatedUnit.isNewPurchase(), updatedUnit.getId());
+                    updatedUnit.getTenPointAdvances(), updatedUnit.isNewPurchase(), updatedUnit.isCannotLowerStrength(),
+                    updatedUnit.isCannotLowerDefense(), updatedUnit.isCannotLowerRanged(), updatedUnit.getId());
             if (rowsAffected != 1){
                 throw new DaoException("Incorrect number of rows affected");
             }
@@ -280,7 +290,9 @@ public class JdbcUnitDao implements UnitDao{
 
             List<Skill> currentSkills = getUnitSkills(unitId);
             for (Skill skill : currentSkills){
-                potentialSkills.remove(skill);
+                if (! skill.isDetriment()) {
+                    potentialSkills.remove(skill);
+                }
             }
 
         } catch (CannotGetJdbcConnectionException e) {
@@ -406,6 +418,23 @@ public class JdbcUnitDao implements UnitDao{
         }
     }
 
+    @Override
+    public void updateSkillCount(Skill skill, int unitId){
+        String sql = "UPDATE unit_skill SET count = ? WHERE unit_id = ? AND skill_id = ?";
+
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, skill.getCount(), unitId, skill.getId());
+            if (rowsAffected != 1){
+                throw new DaoException("Error, " + rowsAffected + " rows affected.");
+            }
+
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Invalid data provided, cannot delete injury", e);
+        }
+    }
+
     /*
     PRIVATE METHODS
      */
@@ -413,12 +442,13 @@ public class JdbcUnitDao implements UnitDao{
 
     private List<Skill> getUnitSkills(int unitId){
         List<Skill> skills = new ArrayList<>();
-        String sql = SELECT_ALL_FROM_SKILL_REFERENCE + "JOIN unit_skill us ON us.skill_id = sr.skill_id " +
-                "WHERE unit_id = ? " +
+        String sql = SELECT_ALL_FROM_UNIT_SKILL_TABLE + "WHERE unit_id = ? " +
                 "ORDER BY sr.skill_id";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, unitId);
         while (results.next()){
-            skills.add(mapRowToSkill(results));
+            Skill skill = mapRowToSkill(results);
+            skill.setCount(results.getInt("count"));
+            skills.add(skill);
         }
         return skills;
     }
@@ -555,6 +585,7 @@ public class JdbcUnitDao implements UnitDao{
             SqlRowSet results = jdbcTemplate.queryForRowSet(SELECT_ALL_FROM_SKILL_REFERENCE);
             while (results.next()) {
                 Skill skill = mapRowToSkill(results);
+                skill.setCount(1);
                 skillMap.put(skill.getId(), skill);
             }
         } catch (CannotGetJdbcConnectionException e) {
@@ -585,6 +616,9 @@ public class JdbcUnitDao implements UnitDao{
         newUnit.setTotalAdvances(row.getInt("total_advances"));
         newUnit.setTenPointAdvances(row.getInt("ten_point_advances"));
         newUnit.setNewPurchase(row.getBoolean("new_purchase"));
+        newUnit.setCannotLowerDefense(row.getBoolean("cannot_lower_defense"));
+        newUnit.setCannotLowerRanged(row.getBoolean("cannot_lower_ranged"));
+        newUnit.setCannotLowerStrength(row.getBoolean("cannot_lower_strength"));
         newUnit.setSkills(getUnitSkills(newUnit.getId()));
         newUnit.setAvailableSkillsets(getAvailableSkillsets(newUnit.getId()));
         newUnit.setInjuries(getAllInjuriesOnUnit(newUnit.getId()));

@@ -129,7 +129,7 @@ public class UnitTests {
 
     @Test
     public void getUnitUpkeep_calculates_correctly_scavenger_skill(){
-        unit.getSkills().add(new Skill(1, "Scavenger", "", 1, "","Game",0));
+        unit.getSkills().add(new Skill(1, "Scavenger", "", 1, "","Game",0,1));
         Assert.assertEquals(0, unit.getUnitUpkeep());
     }
 

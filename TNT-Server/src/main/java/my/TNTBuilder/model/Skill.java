@@ -9,11 +9,11 @@ public class Skill {
     private int id;
     private int skillsetId;
     private String skillsetName;
-
     private String phase;
     private int cost;
+    private int count;
 
-    public Skill(int id, String name, String description, int skillsetId, String skillsetName, String phase, int cost){
+    public Skill(int id, String name, String description, int skillsetId, String skillsetName, String phase, int cost, int count){
         this.id = id;
         this.name = name;
         this.description = description;
@@ -21,6 +21,7 @@ public class Skill {
         this.skillsetName = skillsetName;
         this.phase = phase;
         this.cost = cost;
+        this.count = count;
     }
 
     public Skill() {
@@ -85,6 +86,14 @@ public class Skill {
 
     public void setCost(int cost) {
         this.cost = cost;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public boolean equals(Object o) {

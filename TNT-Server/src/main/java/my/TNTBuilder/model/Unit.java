@@ -35,6 +35,10 @@ public class Unit {
     private List<Injury> injuries = new ArrayList<>();
     private List<Item> inventory = new ArrayList<>();
     private boolean isNewPurchase = true;
+    private boolean cannotLowerStrength = false;
+    private boolean cannotLowerDefense = false;
+    private boolean cannotLowerRanged = false;
+
 
     //constructors
 
@@ -330,8 +334,30 @@ public class Unit {
         isNewPurchase = newPurchase;
     }
 
+    public boolean isCannotLowerStrength() {
+        return cannotLowerStrength;
+    }
 
-    //Override Equals
+    public void setCannotLowerStrength(boolean cannotLowerStrength) {
+        this.cannotLowerStrength = cannotLowerStrength;
+    }
+
+    public boolean isCannotLowerDefense() {
+        return cannotLowerDefense;
+    }
+
+    public void setCannotLowerDefense(boolean cannotLowerDefense) {
+        this.cannotLowerDefense = cannotLowerDefense;
+    }
+
+    public boolean isCannotLowerRanged() {
+        return cannotLowerRanged;
+    }
+
+    public void setCannotLowerRanged(boolean cannotLowerRanged) {
+        this.cannotLowerRanged = cannotLowerRanged;
+    }
+//Override Equals
 
     @Override
     public boolean equals(Object o) {
@@ -343,6 +369,8 @@ public class Unit {
                 melee == unit.melee && strength == unit.strength && emptySkills == unit.emptySkills &&
                 spentExperience == unit.spentExperience && unspentExperience == unit.unspentExperience &&
                 totalAdvances == unit.totalAdvances && tenPointAdvances == unit.tenPointAdvances &&
+                cannotLowerDefense == unit.cannotLowerDefense && unit.cannotLowerRanged == cannotLowerRanged
+                && cannotLowerStrength == unit.cannotLowerStrength &&
                 Objects.equals(name, unit.name) && Objects.equals(unitClass, unit.unitClass) &&
                 Objects.equals(rank, unit.rank) && Objects.equals(species, unit.species) &&
                 Objects.equals(specialRules, unit.specialRules) &&
@@ -355,6 +383,6 @@ public class Unit {
     public int hashCode() {
         return Objects.hash(id, teamId, name, unitClass, rank, species, baseCost, wounds, defense, mettle, move, ranged,
                 melee, strength, emptySkills, specialRules, spentExperience, unspentExperience, totalAdvances,
-                tenPointAdvances, availableSkillsets, skills, injuries, inventory);
+                tenPointAdvances, availableSkillsets, skills, injuries, inventory, cannotLowerDefense, cannotLowerStrength, cannotLowerRanged);
     }
 }

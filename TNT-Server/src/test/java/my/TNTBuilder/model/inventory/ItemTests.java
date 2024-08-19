@@ -31,9 +31,9 @@ public class ItemTests {
             new ArrayList<>(),  new ArrayList<>(), new ArrayList<>(Arrays.asList(ARMOR, WEAPON, ITEM)), true);
 
     private static final Skill CRUSHING_CLAWS = new Skill(1, "Crushing Claws", "Desc", 1,
-            "Name", "Phase",0);
+            "Name", "Phase",0,1);
     private static final Skill WEAPON_GROWTHS = new Skill(1, "Weapon Growths", "Desc", 1,
-            "Name", "Phase",0);
+            "Name", "Phase",0,1);
 
 
     private Item sut;

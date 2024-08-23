@@ -1,9 +1,13 @@
 <template>
     <div class="team card" @click="toTeamDetail()">
-        <h1 class="card-title">{{ team.name }}</h1>
-        <h2 class="card-subtitle">{{ team.faction }}</h2>
+        <div class="card-title">
+            <h1 class="card-title" :class="{nameless: !team.name}">{{ team.name ? team.name : 'Nameless '+ team.faction }}</h1>
+            <h2 class="card-subtitle">Faction: {{ team.faction }}</h2>     
+        </div>
+        
         <h3 class="card-small">Barter Scrip: {{ team.money }}</h3>
         <h3 class="card-small">Units: {{ team.unitList.length }}</h3>
+        <div class="card-footer"></div>
     </div>
     
 </template>

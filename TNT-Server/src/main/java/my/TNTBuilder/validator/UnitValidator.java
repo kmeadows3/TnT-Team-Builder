@@ -177,17 +177,14 @@ public class UnitValidator {
                     && unit.getUnspentExperience() == updatedUnit.getUnspentExperience()
                     && unit.getTotalAdvances() == updatedUnit.getTotalAdvances()
                     && unit.getTenPointAdvances() == updatedUnit.getTenPointAdvances()
+                    && unit.isCannotLowerDefense() == updatedUnit.isCannotLowerDefense()
+                    && unit.isCannotLowerRanged() == updatedUnit.isCannotLowerRanged()
+                    && unit.isCannotLowerStrength() == updatedUnit.isCannotLowerStrength()
+                    && unit.isCannotLowerMove() == updatedUnit.isCannotLowerMove()
                     && Objects.equals(unit.getUnitClass(), updatedUnit.getUnitClass())
                     && Objects.equals(unit.getRank(), updatedUnit.getRank())
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
-                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
-                    && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
-                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
-                    && new HashSet<>(unit.getInjuries()).containsAll(updatedUnit.getInjuries())
-                    && new HashSet<>(updatedUnit.getInjuries()).containsAll(unit.getInjuries())
-                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
-                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
+                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules());
 
         }
         return false;
@@ -204,18 +201,15 @@ public class UnitValidator {
                     && unit.getSpentExperience() == updatedUnit.getSpentExperience()
                     && unit.getTotalAdvances() == updatedUnit.getTotalAdvances()
                     && unit.getTenPointAdvances() == updatedUnit.getTenPointAdvances()
+                    && unit.isCannotLowerDefense() == updatedUnit.isCannotLowerDefense()
+                    && unit.isCannotLowerRanged() == updatedUnit.isCannotLowerRanged()
+                    && unit.isCannotLowerStrength() == updatedUnit.isCannotLowerStrength()
+                    && unit.isCannotLowerMove() == updatedUnit.isCannotLowerMove()
                     && Objects.equals(unit.getName(), updatedUnit.getName())
                     && Objects.equals(unit.getUnitClass(), updatedUnit.getUnitClass())
                     && Objects.equals(unit.getRank(), updatedUnit.getRank())
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
-                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
-                    && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
-                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
-                    && new HashSet<>(unit.getInjuries()).containsAll(updatedUnit.getInjuries())
-                    && new HashSet<>(updatedUnit.getInjuries()).containsAll(unit.getInjuries())
-                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
-                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
+                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules());
 
         }
         return false;
@@ -233,18 +227,15 @@ public class UnitValidator {
                     && unit.getUnspentExperience() == updatedUnit.getUnspentExperience()
                     && unit.getTotalAdvances() == updatedUnit.getTotalAdvances()
                     && unit.getTenPointAdvances() == updatedUnit.getTenPointAdvances()
+                    && unit.isCannotLowerDefense() == updatedUnit.isCannotLowerDefense()
+                    && unit.isCannotLowerRanged() == updatedUnit.isCannotLowerRanged()
+                    && unit.isCannotLowerStrength() == updatedUnit.isCannotLowerStrength()
+                    && unit.isCannotLowerMove() == updatedUnit.isCannotLowerMove()
                     && Objects.equals(unit.getName(), updatedUnit.getName())
                     && Objects.equals(unit.getUnitClass(), updatedUnit.getUnitClass())
                     && Objects.equals(unit.getRank(), updatedUnit.getRank())
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
-                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
-                    && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
-                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
-                    && new HashSet<>(unit.getInjuries()).containsAll(updatedUnit.getInjuries())
-                    && new HashSet<>(updatedUnit.getInjuries()).containsAll(unit.getInjuries())
-                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
-                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
+                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules());
         }
         return false;
     }
@@ -260,17 +251,14 @@ public class UnitValidator {
                     && unit.getUnspentExperience() == updatedUnit.getUnspentExperience()
                     && unit.getTotalAdvances() == updatedUnit.getTotalAdvances()
                     && unit.getTenPointAdvances() == updatedUnit.getTenPointAdvances()
+                    && unit.isCannotLowerDefense() == updatedUnit.isCannotLowerDefense()
+                    && unit.isCannotLowerRanged() == updatedUnit.isCannotLowerRanged()
+                    && unit.isCannotLowerStrength() == updatedUnit.isCannotLowerStrength()
+                    && unit.isCannotLowerMove() == updatedUnit.isCannotLowerMove()
                     && Objects.equals(unit.getName(), updatedUnit.getName())
                     && Objects.equals(unit.getUnitClass(), updatedUnit.getUnitClass())
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
-                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
-                    && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
-                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
-                    && new HashSet<>(unit.getInjuries()).containsAll(updatedUnit.getInjuries())
-                    && new HashSet<>(updatedUnit.getInjuries()).containsAll(unit.getInjuries())
-                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
-                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
+                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules());
         }
         return false;
     }
@@ -287,18 +275,15 @@ public class UnitValidator {
                     && unit.getUnspentExperience() == updatedUnit.getUnspentExperience()
                     && unit.getTotalAdvances() == updatedUnit.getTotalAdvances()
                     && unit.getTenPointAdvances() == updatedUnit.getTenPointAdvances()
+                    && unit.isCannotLowerDefense() == updatedUnit.isCannotLowerDefense()
+                    && unit.isCannotLowerRanged() == updatedUnit.isCannotLowerRanged()
+                    && unit.isCannotLowerStrength() == updatedUnit.isCannotLowerStrength()
+                    && unit.isCannotLowerMove() == updatedUnit.isCannotLowerMove()
                     && Objects.equals(unit.getName(), updatedUnit.getName())
                     && Objects.equals(unit.getUnitClass(), updatedUnit.getUnitClass())
                     && Objects.equals(unit.getRank(), updatedUnit.getRank())
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
-                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
-                    && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
-                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
-                    && new HashSet<>(unit.getInjuries()).containsAll(updatedUnit.getInjuries())
-                    && new HashSet<>(updatedUnit.getInjuries()).containsAll(unit.getInjuries())
-                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
-                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
+                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules());
         }
         return false;
     }
@@ -315,18 +300,15 @@ public class UnitValidator {
                     && unit.getUnspentExperience() == updatedUnit.getUnspentExperience()
                     && unit.getTotalAdvances() == updatedUnit.getTotalAdvances()
                     && unit.getTenPointAdvances() == updatedUnit.getTenPointAdvances()
+                    && unit.isCannotLowerDefense() == updatedUnit.isCannotLowerDefense()
+                    && unit.isCannotLowerRanged() == updatedUnit.isCannotLowerRanged()
+                    && unit.isCannotLowerStrength() == updatedUnit.isCannotLowerStrength()
+                    && unit.isCannotLowerMove() == updatedUnit.isCannotLowerMove()
                     && Objects.equals(unit.getName(), updatedUnit.getName())
                     && Objects.equals(unit.getUnitClass(), updatedUnit.getUnitClass())
                     && Objects.equals(unit.getRank(), updatedUnit.getRank())
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
-                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
-                    && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
-                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
-                    && new HashSet<>(unit.getInjuries()).containsAll(updatedUnit.getInjuries())
-                    && new HashSet<>(updatedUnit.getInjuries()).containsAll(unit.getInjuries())
-                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
-                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
+                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules());
         }
         return false;
     }
@@ -343,18 +325,15 @@ public class UnitValidator {
                     && unit.getUnspentExperience() == updatedUnit.getUnspentExperience()
                     && unit.getTotalAdvances() == updatedUnit.getTotalAdvances()
                     && unit.getTenPointAdvances() == updatedUnit.getTenPointAdvances()
+                    && unit.isCannotLowerDefense() == updatedUnit.isCannotLowerDefense()
+                    && unit.isCannotLowerRanged() == updatedUnit.isCannotLowerRanged()
+                    && unit.isCannotLowerStrength() == updatedUnit.isCannotLowerStrength()
+                    && unit.isCannotLowerMove() == updatedUnit.isCannotLowerMove()
                     && Objects.equals(unit.getName(), updatedUnit.getName())
                     && Objects.equals(unit.getUnitClass(), updatedUnit.getUnitClass())
                     && Objects.equals(unit.getRank(), updatedUnit.getRank())
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
-                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
-                    && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
-                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
-                    && new HashSet<>(unit.getInjuries()).containsAll(updatedUnit.getInjuries())
-                    && new HashSet<>(updatedUnit.getInjuries()).containsAll(unit.getInjuries())
-                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
-                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
+                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules());
         }
         return false;
     }
@@ -371,18 +350,15 @@ public class UnitValidator {
                     && unit.getUnspentExperience() == updatedUnit.getUnspentExperience()
                     && unit.getTotalAdvances() == updatedUnit.getTotalAdvances()
                     && unit.getTenPointAdvances() == updatedUnit.getTenPointAdvances()
+                    && unit.isCannotLowerDefense() == updatedUnit.isCannotLowerDefense()
+                    && unit.isCannotLowerRanged() == updatedUnit.isCannotLowerRanged()
+                    && unit.isCannotLowerStrength() == updatedUnit.isCannotLowerStrength()
+                    && unit.isCannotLowerMove() == updatedUnit.isCannotLowerMove()
                     && Objects.equals(unit.getName(), updatedUnit.getName())
                     && Objects.equals(unit.getUnitClass(), updatedUnit.getUnitClass())
                     && Objects.equals(unit.getRank(), updatedUnit.getRank())
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
-                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
-                    && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
-                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
-                    && new HashSet<>(unit.getInjuries()).containsAll(updatedUnit.getInjuries())
-                    && new HashSet<>(updatedUnit.getInjuries()).containsAll(unit.getInjuries())
-                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
-                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
+                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules());
         }
         return false;
     }
@@ -399,18 +375,15 @@ public class UnitValidator {
                     && unit.getUnspentExperience() == updatedUnit.getUnspentExperience()
                     && unit.getTotalAdvances() == updatedUnit.getTotalAdvances()
                     && unit.getTenPointAdvances() == updatedUnit.getTenPointAdvances()
+                    && unit.isCannotLowerDefense() == updatedUnit.isCannotLowerDefense()
+                    && unit.isCannotLowerRanged() == updatedUnit.isCannotLowerRanged()
+                    && unit.isCannotLowerStrength() == updatedUnit.isCannotLowerStrength()
+                    && unit.isCannotLowerMove() == updatedUnit.isCannotLowerMove()
                     && Objects.equals(unit.getName(), updatedUnit.getName())
                     && Objects.equals(unit.getUnitClass(), updatedUnit.getUnitClass())
                     && Objects.equals(unit.getRank(), updatedUnit.getRank())
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
-                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
-                    && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
-                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
-                    && new HashSet<>(unit.getInjuries()).containsAll(updatedUnit.getInjuries())
-                    && new HashSet<>(updatedUnit.getInjuries()).containsAll(unit.getInjuries())
-                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
-                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
+                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules());
         }
         return false;
     }
@@ -427,18 +400,15 @@ public class UnitValidator {
                     && unit.getUnspentExperience() == updatedUnit.getUnspentExperience()
                     && unit.getTotalAdvances() == updatedUnit.getTotalAdvances()
                     && unit.getTenPointAdvances() == updatedUnit.getTenPointAdvances()
+                    && unit.isCannotLowerDefense() == updatedUnit.isCannotLowerDefense()
+                    && unit.isCannotLowerRanged() == updatedUnit.isCannotLowerRanged()
+                    && unit.isCannotLowerStrength() == updatedUnit.isCannotLowerStrength()
+                    && unit.isCannotLowerMove() == updatedUnit.isCannotLowerMove()
                     && Objects.equals(unit.getName(), updatedUnit.getName())
                     && Objects.equals(unit.getUnitClass(), updatedUnit.getUnitClass())
                     && Objects.equals(unit.getRank(), updatedUnit.getRank())
                     && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
-                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
-                    && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-                    && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
-                    && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
-                    && new HashSet<>(unit.getInjuries()).containsAll(updatedUnit.getInjuries())
-                    && new HashSet<>(updatedUnit.getInjuries()).containsAll(unit.getInjuries())
-                    && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
-                    && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
+                    && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules());
         }
         return false;
     }
@@ -459,18 +429,15 @@ public class UnitValidator {
         && unit.getUnspentExperience() == updatedUnit.getUnspentExperience()
         && unit.getTotalAdvances() == updatedUnit.getTotalAdvances()
         && unit.getTenPointAdvances() == updatedUnit.getTenPointAdvances()
+        && unit.isCannotLowerDefense() == updatedUnit.isCannotLowerDefense()
+        && unit.isCannotLowerRanged() == updatedUnit.isCannotLowerRanged()
+        && unit.isCannotLowerStrength() == updatedUnit.isCannotLowerStrength()
+        && unit.isCannotLowerMove() == updatedUnit.isCannotLowerMove()
         && Objects.equals(unit.getName(), updatedUnit.getName())
         && Objects.equals(unit.getUnitClass(), updatedUnit.getUnitClass())
         && Objects.equals(unit.getRank(), updatedUnit.getRank())
         && Objects.equals(unit.getSpecies(), updatedUnit.getSpecies())
-        && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules())
-        && Objects.equals(unit.getAvailableSkillsets(), updatedUnit.getAvailableSkillsets())
-        && new HashSet<>(unit.getSkills()).containsAll(updatedUnit.getSkills())
-        && new HashSet<>(updatedUnit.getSkills()).containsAll(unit.getSkills())
-        && new HashSet<>(unit.getInjuries()).containsAll(updatedUnit.getInjuries())
-        && new HashSet<>(updatedUnit.getInjuries()).containsAll(unit.getInjuries())
-        && new HashSet<>(unit.getInventory()).containsAll(updatedUnit.getInventory())
-        && new HashSet<>(updatedUnit.getInventory()).containsAll(unit.getInventory());
+        && Objects.equals(unit.getSpecialRules(), updatedUnit.getSpecialRules());
      */
 
 

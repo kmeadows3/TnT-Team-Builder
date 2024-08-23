@@ -1,8 +1,24 @@
 <template>
-    <h1 class="section-title">Unit List</h1>
-    <div class="card-container">  
-        <UnitCard v-for="unit in sortedUnits" v-bind:key="unit.id" v-bind:unit="unit"/>
-    </div>
+    <section class="unit-list">
+        <h1 class="section-title">Unit List</h1>
+
+        <div class="button-container">
+                <button @click="openNewUnitForm()">Add Unit</button>
+        </div>
+
+
+        <div>
+            <div v-show="$store.state.currentTeam.unitList.length == 0" class="card-container no-values">
+                This team has no units.
+            </div>
+
+        <div class="card-container" v-show="$store.state.currentTeam.unitList.length != 0">  
+            <UnitCard v-for="unit in sortedUnits" v-bind:key="unit.id" v-bind:unit="unit"/>
+        </div>  
+        </div>
+      
+    </section>
+
 </template>
 
 <script>
@@ -20,14 +36,18 @@ export default {
                 return ranks[a.rank] - ranks[b.rank] ||a.name.localeCompare(b.name);  
             });
         }
+    },
+    methods: {
+        openNewUnitForm() {
+            this.$store.commit('TOGGLE_NEW_UNIT_FORM');
+            this.$store.commit('TOGGLE_SHOW_POPUP');
+        }
     }
 }
 </script>
 
 <style>
-div#unit-list{
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+section.unit-list{
+    margin: 0px;
 }
 </style>

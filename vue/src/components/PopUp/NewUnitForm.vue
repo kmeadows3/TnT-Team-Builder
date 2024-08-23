@@ -7,7 +7,8 @@
                 <input id="name" type="text" v-model="newUnit.name" />
             </span>
             <div class="dropdowns">
-                <label for="unitSelect">Unit Type: </label>
+                <span>
+                    <label for="unitSelect" class="bigger">Unit Type: </label>
                 <select id="unitSelect" v-model="previewUnit">
                         <option></option>
                         <option v-for="unit in filteredUnits" :key="'new-unit-select-' + unit.id" :value="unit">{{
@@ -15,6 +16,8 @@
                                 unit.baseCost }} BS</option>
 
                 </select>
+                </span>
+                
                 <span v-show="!buyLeaders">
                     <label for="filter">Filter Units:</label>
                 <select id="filter" v-model="filter">
@@ -117,12 +120,23 @@ export default {
 
 <style scoped>
 div.dropdowns {
+    width: 100%;
     display: flex;
+    justify-content: space-between;
+    align-items: first baseline;
     font-size: .8em;
+}
+
+div.dropdowns>span>label.bigger {
+    font-size: 1.1rem;
 }
 
 div.dropdowns>label {
     font-size: 1rem;
+}
+
+div.dropdowns>select {
+    flex-grow: 0;
 }
 
 </style>

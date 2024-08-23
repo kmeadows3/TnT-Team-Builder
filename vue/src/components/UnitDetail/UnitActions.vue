@@ -1,5 +1,5 @@
 <template>
-        <div class="button-container">
+        <div class="button-container top-row">
             <button @click="toggleShowExp()">Gain Experience</button>
             <button @click="toggleShowAdvance()" v-show="$store.state.currentUnit.unspentExperience >= $store.state.currentUnit.costToAdvance">
                 Gain Advance

@@ -2,7 +2,7 @@
     <div v-if="$store.state.manageInventory">
         <i class="bi inventory-icon bi-explicit-fill button" v-show="$store.state.showUnitDetail" 
             title="Equip" @click="equipItem()"></i>
-        <i class="bi inventory-icon bi-capslock-fill" @click="upgrade()"
+        <i class="bi inventory-icon bi-capslock-fill button" @click="upgrade()"
         v-show="$store.state.showUnitDetail && canUpgrade"></i>
 
         <i class="bi inventory-icon bi-currency-dollar button" title="Sell" @click="sellItem()"></i>

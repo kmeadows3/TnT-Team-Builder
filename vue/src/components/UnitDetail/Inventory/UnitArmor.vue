@@ -1,8 +1,8 @@
 <template>
     <div class="item-container" v-show="armors.length > 0">
-        <h2 class="subsection-title">Armor</h2>
         <div class="item-table">
-            <div class="table-label item-list armor-grid">
+            <div class="title">Armor</div>
+            <div class="table-label item-list armor-grid" :class="$store.state.manageInventory ? 'action-mode' : ''">
                 <div class="item-name">Type</div>
                 <div class="armor-cost">Cost</div>
                 <div class="armor-mDef">Melee Defense</div>
@@ -11,11 +11,10 @@
                 <div class="item-action armor-action" v-if="$store.state.manageInventory">
                     Actions</div>
             </div>
-            <div class="item-list armor-grid" v-for="armor in armors" :key="'armor' + armor.id">
+            <div class="item-list armor-grid" v-for="armor in armors" :key="'armor' + armor.id"  :class="$store.state.manageInventory ? 'action-mode' : ''">
                 <div class="item-name">{{ armor.name }}</div>
                 <div class="armor-cost">{{ $store.state.currentUnit.wounds == 1 ? armor.cost :
                     ($store.state.currentUnit.wounds == 2 ? armor.cost2Wounds : armor.cost3Wounds) }}</div>
-                <!--TODO: Logic around armor bonuses once items can be equipped-->
                 <div class="armor-mDef"> {{ armor.meleeDefenseBonus > 0 ? "+"+armor.meleeDefenseBonus : "No Bonus" }}</div>
                 <div class="armor-rDef">{{ armor.rangedDefenseBonus > 0 ? "+"+armor.rangedDefenseBonus : "0" }} </div>
                 <div class="armor-rules item-special-rules">
@@ -39,7 +38,7 @@
 </template>
 
 <script>
-import ItemActions from '../../InventoryShared/ItemActions.vue';
+import ItemActions from '../../Shared/ItemActions.vue';
 
 export default {
     components: {

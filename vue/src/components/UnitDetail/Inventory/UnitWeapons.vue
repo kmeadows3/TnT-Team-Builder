@@ -1,7 +1,7 @@
 <template>
     <div class="item-container" v-show="weapons.length > 0">
-        <h2 class="subsection-title">Weapons</h2>
         <div class="item-table">
+            <div class="title">Weapons</div>
             <div class="item-list table-label weapon-grid" :class="$store.state.manageInventory ? 'action-mode' : ''">
                 <div class="item-name">Type</div>
                 <div class="weapon-cost">Cost</div>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import ItemActions from '../../InventoryShared/ItemActions.vue';
+import ItemActions from '../../Shared/ItemActions.vue';
 
 export default {
     components: {
@@ -188,7 +188,7 @@ div.item-list.weapon-grid.action-mode{
     }
 
     div.item-list>div.weapon-action{
-        border-top: dotted 1px black;
+        border-top: dotted var(--thin-border) var(--border-color);;
     }
 
     div.item-list.action-mode>div.weapon-equip{
@@ -196,20 +196,11 @@ div.item-list.weapon-grid.action-mode{
     }
 
     div.item-list.action-mode>div.weapon-rules{
-        border-right: dotted 1px black;
+        border-right: dotted var(--thin-border) var(--border-color);;
     }
 
 }
 
-
-@media only screen and (max-width: 762px) {
-    div.item-list.weapon-grid.action-mode.table-label{
-        font-size: .6em;
-    }
-
-
-
-}
 
 @media only screen and (max-width: 600px) {
     div.item-list.weapon-grid.action-mode.not-label{
@@ -229,8 +220,7 @@ div.item-list.weapon-grid.action-mode{
     }
 
     div.item-list>div.weapon-action{
-        border-top: dotted 1px black;
-        border-right: solid 1px black;
+        border-top: dotted var(--thin-border) var(--border-color);
     }
 
     div.item-list.action-mode>div.weapon-equip{

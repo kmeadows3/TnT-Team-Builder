@@ -3,18 +3,12 @@
         <div class="inventory">
             <h1 class="section-title">Inventory</h1>
             <InventoryActions />
+            <div v-show="$store.state.currentUnit.inventory.length == 0" class="no-values">
+                This unit has no items.
+            </div>
             <UnitWeapons />
             <UnitArmor />
             <UnitEquipment />
-
-        </div>
-
-        <div class="reference">
-            <h1 class="section-title">Item Rules Reference</h1>
-            <div v-for="trait in $store.state.unitInventoryTraits" :key="'itemTrait' + trait.id">
-                <h2 class="reference-label"> {{ trait.name }}</h2>
-                <p class="reference-desc">{{ trait.effect }}</p>
-            </div>
         </div>
     </section>
 
@@ -24,7 +18,7 @@
 import UnitWeapons from './UnitWeapons.vue';
 import UnitArmor from './UnitArmor.vue';
 import UnitEquipment from './UnitEquipment.vue';
-import InventoryActions from '../../InventoryShared/InventoryActions.vue';
+import InventoryActions from '../../Shared/InventoryActions.vue';
 
 export default {
     data() {

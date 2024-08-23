@@ -1,10 +1,8 @@
 <template>
-    <div class='unit-inventory-actions button-container' v-show="!$store.state.manageInventory">
+    <div class='inventory-actions button-container'>
         <button @click="toggleBuyItems()">Add Item</button>
-        <button @click="toggleManageInventory()">Manage Inventory</button>
-    </div>
-    <div class='unit-inventory-actions button-container' v-show="$store.state.manageInventory">
-        <button @click="resetActions()">Cancel</button>
+        <button @click="toggleManageInventory()" v-show=" !$store.state.manageInventory && $store.state.currentTeam.inventory.length > 0">Manage Inventory</button>
+        <button @click="resetActions()" v-show="$store.state.manageInventory">Close Inventory Actions</button>        
     </div>
 
 

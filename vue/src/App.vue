@@ -2,13 +2,14 @@
   <div id="capstone-app">
     <ErrorBanner />
     <PopUp />
-    <div id="absolute-button">
-       <button id="view-nav" @click="toggleNav()">{{this.$store.state.viewNavigation ? 'Close Nav' : 'Open Nav' }}</button>
-    </div>
     <h1 class="main-title">
       <span><em>"This is Not a Test"</em></span>
       <span>&nbsp;Team Builder</span>
     </h1>
+    <div id="absolute-button">
+       <button id="view-nav" @click="toggleNav()">
+        <i class="bi bi-list"></i></button>
+    </div>
     <section class="entire-page">
       <MainNavigation />
       <router-view />
@@ -38,10 +39,16 @@ export default {
 
 <style>
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css");
+@import './assets/base.css';
 
 
 * {
     box-sizing: border-box;
+}
+
+body {
+  background-color: var(--page-background);
+  height: 100vh -20px;
 }
 
 div#absolute-button{
@@ -52,19 +59,33 @@ div#absolute-button{
   div#absolute-button{
     display: block;
     position: sticky;
-    top: 20px;
+    top: 90px;
   }
 
   button#view-nav{
     position: absolute;
     left: 10px;
-    
+    padding: 10px;
+
+    border: solid var(--thick-border) var(--border-color);
+    border-radius: 20px;
+    background-color: var(--standard-light);
   }
 }
 
+div#app{
+  min-height: calc(100vh - 20px);
+}
+
+div#capstone-app{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
 section.entire-page {
   display: flex;
+  flex-grow: 1;
 }
 
 h1.main-title {
@@ -76,8 +97,17 @@ h1.main-title {
   font-size: 4em;
   margin: 0px;
   margin-top: 10px;
-  border: solid 3px black;
-  border-radius: 7px;
+
+  border: solid var(--thick-border) var(--border-color);
+  border-radius: var(--border-radius) var(--border-radius) 0px 0px;
+  border-bottom: none;
+  background-color: var(--standard-dark);
+
+  color: var(--border-color);
+  text-shadow: 1px 1px 3px var(--standard-medium),
+  1px -1px 3px var(--standard-medium),
+  -1px -1px 3px var(--standard-medium),
+  -1px 1px 3px var(--standard-medium);
 }
 
 h1.main-title>span{

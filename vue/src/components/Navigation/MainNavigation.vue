@@ -1,6 +1,7 @@
 <template>
   <nav :class="$store.state.viewNavigation?'view-nav':''">
     <section class="flex-nav">
+      <div class="spacer" :class="{'visible':$store.state.viewNavigation}"></div>
       <h1 class="section-title">Navigation</h1>
       <div class="flex-nav-option team-list" :class="{ selected: $store.state.currentPage == 'home' }" @click="toHome()">
         Home
@@ -72,16 +73,24 @@ export default {
 </script>
 
 <style>
+
 nav {
   min-width: 150px;
   max-width: 200px;
   width: 20%;
-  border: solid 3px black;
-  border-radius: 7px;
+  border: solid var(--thick-border) var(--border-color);
+  border-radius: none;
+  border-right: none;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding-bottom: 15px;
+
+  background-color: var(--standard-dark);
+}
+
+nav h1.section-title{
+  border: none;
 }
 
 nav section.flex-nav {
@@ -93,6 +102,7 @@ nav section.flex-nav {
 
 nav section.flex-nav>h1.section-title {
   font-size: 1.6rem;
+  background-color: var(--standard-dark);
 }
 
 nav section.flex-nav>h2.subsection-title {
@@ -103,19 +113,23 @@ nav div.flex-nav-option {
   min-width: 80%;
   max-width: 80%;
   padding: 5px;
-  border: solid 3px black;
-  border-radius: 7px;
+  
+  border: solid var(--thick-border) var(--border-color);
+  border-radius: var(--border-radius-button);
   cursor: pointer;
   text-align: center;
   word-wrap: break-word;
+
   box-shadow: 2px 2px 6px rgba(0, 0, 0, .2),
     2px 2px 10px rgba(0, 0, 0, .2);
+
+  background-color: var(--standard-medium);
 
 }
 
 nav div.flex-nav-option.selected {
-  border: solid 3px #666;
-  background-color: lightyellow;
+  border: solid var(--thick-border) var(--selected-dark);
+  background-color: var(--alternative-light);
   margin-bottom: 10px;
 }
 
@@ -130,11 +144,15 @@ nav div.flex-nav-option.team-list.selected {
 
 nav div.flex-nav-option:hover {
   transform: translateY(-1px);
-  background-color: #eee;
+  background-color: var(--alternative-light);
 }
 
 nav h2 {
   text-align: center;
+}
+
+div.spacer {
+  display: none;
 }
 
 
@@ -147,6 +165,11 @@ nav h2 {
     display:flex;
     max-width: 100%;
     flex-grow: 1;
+  }
+
+  div.spacer {
+    display: block;
+    height: 30px;
   }
 }
 </style>

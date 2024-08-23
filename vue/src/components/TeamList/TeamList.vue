@@ -1,14 +1,16 @@
 <template>
-    <div>
+    <section class="subsection">
         <h1 class ="page-title">Choose Your Team</h1>
-        <div class="button-container">
-            <button @click="openForm()">Create New Team</button>
-        </div>
-        
+
         <div class="card-container">
             <TeamCard v-for ='team in $store.state.teamList' v-bind:key="team.id" v-bind:team='team'/>
         </div>
-    </div>
+        
+        <div class="solo-button">
+            <button @click="openForm()">Create New Team</button>
+        </div>
+        
+    </section>
 </template>
 
 <script>

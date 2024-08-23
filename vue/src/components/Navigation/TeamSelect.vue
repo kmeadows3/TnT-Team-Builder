@@ -1,10 +1,10 @@
 <template>
         <h2 class="subsection-title">Team Selection</h2>
-        <div class="flex-nav-option selected" @click="changeTeam($store.state.currentTeam)">
-            {{ $store.state.currentTeam.name }}
+        <div class="flex-nav-option selected" @click="changeTeam($store.state.currentTeam)" :class="{nameless:!$store.state.currentTeam.name}">
+            {{ $store.state.currentTeam.name ? $store.state.currentTeam.name : 'Nameless ' + $store.state.currentTeam.faction}}
         </div>
         <div class="flex-nav-option" v-for="team in filteredTeams" :key="'team-select-' + team.id"
-            @click="changeTeam(team)">{{ team.name }}
+            @click="changeTeam(team)" :class="{nameless: !team.name}">{{ team.name ? team.name : 'Nameless ' + team.faction }}
         </div>
 
 </template>

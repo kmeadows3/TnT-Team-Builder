@@ -1,7 +1,8 @@
 <template>
-    <div>
+    <section class="subsection">
         <h1 class="page-title name-display" v-show="!showChangeNameForm">
-            <span>{{ this.$store.state.currentTeam.name }}</span>
+            <span :class="{ nameless: !$store.state.currentTeam.name }">{{ $store.state.currentTeam.name ?
+                $store.state.currentTeam.name : 'Nameless Team' }}</span>
             <i class="bi bi-pencil-square button" @click="toggleEditName()" title="Edit Name"></i>
         </h1>
         <h1 class="page-title name-entry" v-show="showChangeNameForm">
@@ -13,20 +14,22 @@
                 <i class="bi bi-x-square button" @click="resetName()" title="Cancel"></i>
             </span>
         </h1>
-        <div class="button-container">
-            <button @click="openNewUnitForm()">Add Unit</button>
+        <div class="button-container top-row">
             <button @click="toggleShowGainForm()">Gain Money</button>
             <button @click="toggleShowLossForm()">Lose Money</button>
             <button @click="payUpkeep()">Pay Upkeep</button>
-            <button @click="deleteTeam()">Delete Team</button>
         </div>
+
         <div class="team-box">
             <TeamSummary />
-            <UnitList />
-                </div>
 
-            <TeamInventory />
-            </div>
+            <UnitList />
+        </div>
+        <TeamInventory />
+        <div class="button-container delete">
+            <button @click="deleteTeam()">Delete Team</button>
+        </div>
+    </section>
 </template>
 
 <script>
@@ -49,6 +52,7 @@ export default {
     },
     methods: {
         toggleEditName() {
+            this.teamName = this.$store.state.currentTeam.name;
             this.showChangeNameForm = !this.showChangeNameForm;
         },
         resetName() {
@@ -85,15 +89,10 @@ export default {
             this.$store.commit('SET_SHOW_LOSE_MONEY_FORM', true);
             this.$store.commit('TOGGLE_SHOW_POPUP');
         },
-        openNewUnitForm() {
-            this.$store.commit('TOGGLE_NEW_UNIT_FORM');
-            this.$store.commit('TOGGLE_SHOW_POPUP');
-        },
-        deleteTeam(){
+        deleteTeam() {
             this.$store.commit('SET_POPUP_SUBFORM', 'DeleteTeam');
             this.$store.commit('TOGGLE_SHOW_POPUP');
         }
-
     },
     beforeMount() {
         this.teamName = this.$store.state.currentTeam.name;
@@ -102,31 +101,6 @@ export default {
 </script>
 
 <style scoped>
-div.team-box {
-    border: solid 3px black;
-    border-radius: 7px;
-    margin: 3px
-}
-
-div.controls {
-    border: solid 1px black;
-    text-align: center;
-}
-
-div.controls>button {
-    margin: 10px;
-}
-
-h1.page-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-h1.page-title span {
-    padding-right: 20px;
-}
-
 .main-display form {
     display: flex;
     justify-content: center;

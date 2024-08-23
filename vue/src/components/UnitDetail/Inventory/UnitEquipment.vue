@@ -1,7 +1,7 @@
 <template>
     <div class="item-container" v-show="equipments.length > 0">
-        <h2 class="subsection-title">Equipment</h2>
         <div class="item-table">
+            <div class="title">Equipment</div>
             <div class="table-label item-list equipment-grid"
                 :class="$store.state.manageInventory ? 'action-mode' : ''">
                 <div class="equipment-name">Type</div>
@@ -13,7 +13,7 @@
             </div>
             <div class="item-list equipment-grid" v-for="equipment in equipments" :key="'equipment' + equipment.id"
                 :class="$store.state.manageInventory ? 'action-mode' : ''">
-                <div class="equipment-name">{{ equipment.name }}</div>
+                <div class="item-name">{{ equipment.name }}</div>
                 <div class="equipment-cost">{{ equipment.cost }}</div>
                 <div class="equipment-rules item-special-rules">
                     <span v-show="equipment.itemTraits.length == 0 || equipment.specialRules != 'N/A'">
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import ItemActions from '../../InventoryShared/ItemActions.vue';
+import ItemActions from '../../Shared/ItemActions.vue';
 
 export default {
     components: {
@@ -69,7 +69,7 @@ div.item-list.equipment-grid.action-mode {
     grid-template-columns: 2fr 1fr 8fr 2fr 3fr;
 }
 
-div.item-list>.equipment-name {
+div.item-list>.item-name {
     grid-area: name;
     font-weight: bold;
 }
@@ -82,7 +82,7 @@ div.item-list>.equipment-cost {
 div.item-list>.equipment-rules {
     grid-area: rules;
     border-top: none;
-    border-right: dotted 1px black;
+    border-right: dotted var(--thin-border) var(--border-color);
     padding-right: 3px;
 
 }
@@ -108,6 +108,11 @@ div.item-list>.item-action {
         grid-template-areas: "name  cost equipped action" 
                                 "name rules rules rules";
         grid-template-columns: 1fr 1fr 1fr 1fr;
+
+        >div.equipment-rules {
+            border-right: none;
+            border-top: dotted var(--thin-border) var(--border-color);
+        }
     }
 
     div.table-label>div.equipment-rules{

@@ -1,0 +1,40 @@
+:root {
+    --page-background: #FFF2E6;
+    --standard-very-light: #FFF2E6;
+    --standard-light: #FFE2C8;
+    --standard-medium: #C7A07D;
+    --standard-mid-dark: #946E4D;
+    --standard-dark: #624124;
+    --section-background: white;
+
+
+    --alternative-very-light: #FFF7E6;
+    --alternative-light: #FFEDC8;
+    --alternative-medium: #C7AF7D;
+    --alternative-mid-dark: #947D4D;
+    --alternative-dark: #624E24;
+
+    --highlight-light: #FFE7E6;
+    --highlight-medium: #FFCBC8;
+    --highlight-mid-dark: #C7817D;
+    --highlight-dark: #94514D;
+    --highlight-darkest: #622724;
+
+    --alert-background-pale: lightpink;
+
+    --selected-light: #FFEEDF;
+    --selected-dark: #292c2e;
+
+    --border-color: black;
+    --border-radius: 3px;
+    --border-radius-button: 7px;
+    --border-radius-card: 10px;
+    --border-radius-card-title: 7px;
+    --thick-border: 2px;
+    --thin-border: 1px;
+
+    --standard-padding: 3px;
+    --wide-padding: 6px;
+    --card-padding: 10px;
+    --card-padding-double: 20px;
+  }

@@ -261,13 +261,13 @@ export function createStore(currentToken, currentUser) {
         let hasFrenzied = false;
                         
         store.state.currentUnit.injuries.filter( injury => injury.grants && !unitSkills.includes(injury.grants) ).forEach(injury => {
-          injury.grants.addedString = "(" + injury.name + ")"
+          injury.grants.addedString = injury.name;
           unitSkills.push(injury.grants);
         });
 
         store.state.currentUnit.inventory.filter( item => item.equipped && !unitSkills.includes(item.grants)).filter( item => item.grants && item.equipped)
         .forEach( item => {
-          item.grants.addedString = "(" + item.name + ")"
+          item.grants.addedString = item.name;
           unitSkills.push(item.grants);
         });       
 
@@ -294,7 +294,15 @@ export function createStore(currentToken, currentUser) {
       },
       sortInjuries(context){
         let unitInjuries = store.state.currentUnit.injuries;
-        unitInjuries = unitInjuries.sort((a, b) => a.name.localeCompare(b.name))
+        unitInjuries = unitInjuries.sort((a, b) => a.name.localeCompare(b.name));
+        unitInjuries.sort((a,b) => {
+          if (a.removable == b.removable){
+            return 0;
+          } else if ( a.removable){
+            return 1;
+          }
+          return -1;
+        });
         store.commit('SET_UNIT_INJURIES_SORTED', unitInjuries);
       }
     }

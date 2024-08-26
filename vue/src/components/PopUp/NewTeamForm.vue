@@ -1,6 +1,6 @@
 <template>
     <div class="popup-form">
-        <h1 class="section-title">New Team Details</h1>
+        <h1 class="section-title popup">New Team Details</h1>
         <form>
             <span> <label for="name">Team Name: </label>
                 <input id="name" type="text" v-model="newTeam.name" />
@@ -18,7 +18,7 @@
                 <label for="startingMoney">Starting Money:</label>
                 <input id="startingMoney" type="number" v-model.number="newTeam.money" placeholder="0"/>
             </span>
-            <span>
+            <span class="popup-buttons">
                 <button @click.prevent="createTeam()">Create Team</button>
                 <button @click.prevent="clearForm()">Cancel</button>
             </span>

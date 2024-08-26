@@ -1,7 +1,7 @@
 <template>
     <div v-if="$store.state.showPopup" class="popup-background">
         <div class="popup">
-            <i class="bi bi-x-square" @click ="closePopUp()"></i>
+            <i class="bi bi-x-lg button danger" @click ="closePopUp()"></i>
             <NewTeamForm v-if="$store.state.showNewTeamForm"/>
             <NewUnitForm v-if="$store.state.showNewUnitForm"/>
             <BuyItems v-if="$store.state.showBuyItems"/>
@@ -82,15 +82,13 @@ div.popup {
     max-width: 80%;
     max-height: 80vh;
     box-shadow: 2px 2px 6px rgba(0, 0, 0, .2);
-    padding: 5px 0px;
     overflow-y: auto;
 }
 
-i.bi-x-square {
+i.bi-x-lg {
     position: absolute;
     top: 10px;
     right: 10px;
-    border: none;
 }
 
 

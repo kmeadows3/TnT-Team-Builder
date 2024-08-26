@@ -217,6 +217,8 @@ export function createStore(currentToken, currentUser) {
         store.dispatch('loadTeams');
         if (context.state.currentUnit.id) {
           store.dispatch('reloadCurrentUnit');
+        } else if(context.state.currentTeam.id){
+          store.dispatch('reloadCurrentTeam');
         }
       },
       updateUnitInventoryTraits(context) {

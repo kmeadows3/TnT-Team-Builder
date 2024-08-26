@@ -89,7 +89,9 @@ public class Unit {
             return subtotal + item.getCost();
         }, Integer::sum);
 
-        return bsCost;
+        int detrimentCost = skills.stream().filter(Skill::isDetriment).reduce(0, (subtotal, skill)-> subtotal + skill.getCost(), Integer::sum);
+
+        return bsCost + detrimentCost;
     }
 
     public int getUnitUpkeep() {

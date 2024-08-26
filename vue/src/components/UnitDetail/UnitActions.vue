@@ -8,7 +8,7 @@
                 {{$store.state.currentUnit.emptySkills > 0 ? ($store.state.currentUnit.species === 'Mutant' ? 'Pick Skill or Mutation' : 'Pick Skill') : 'Pick Detriment'}}
             </button>
             <button @click="addInjury()">Add Injury</button>
-            <button @click="removeUnit()">Remove Unit</button>
+            <button @click="removeUnit()" class="danger">Remove Unit</button>
 
         </div>
 
@@ -58,6 +58,7 @@ export default {
 
 .button-container {
     margin-top: 0px;
+    border-bottom: solid var(--thick-border) var(--border-color);
 }
 
 </style>

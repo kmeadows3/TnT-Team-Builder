@@ -43,12 +43,9 @@ section.main-display {
     min-width: 200px;
     width: 80%;
     flex-grow: 1;
-    background-color: var(--standard-mid-dark);
-    border: solid var(--thick-border) var(--border-color);
-}
-
-section.subsection {
     background-color: var(--section-background);
+    border: solid var(--thick-border) var(--border-color);
+    border-radius: 0 0 var(--border-radius) 0;
 }
 
 input#changeName {
@@ -109,6 +106,12 @@ h1.section-title {
     width: 100%;
     background-color: var(--standard-mid-dark);
     border-top: solid var(--thick-border) var(--border-color);
+
+    &.popup{
+        padding: var(--wide-padding);
+        border-top: none;
+        border-bottom: solid var(--thick-border) var(--border-color);
+    }
 }
 
 h2.subsection-title {
@@ -159,22 +162,22 @@ div.card-container {
     border-top: solid var(--thick-border) var(--border-color);
 }
 
-div.card {
-    flex-basis: 21%;
-    flex-grow: 1;
+div.card {   
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 
+    flex-basis: 300px;
+    flex-grow: 2;
+    flex-shrink:1;
 
+    max-width: 400px;
     min-width: 200px;
-    max-width: 33%;
-    width: 30%;
 
     border: solid var(--thick-border) var(--border-color);
     border-radius: var(--border-radius-card);
     margin: var(--wide-padding);
-    background-color: var(--standard-light);
+    background-color: var(--standard-very-light);
 
     text-align: center;
     cursor: pointer;
@@ -277,6 +280,14 @@ div.solo-button {
     }
 }
 
+button.danger{
+    background-color: var(--highlight-mid-dark);
+
+        &:hover{
+            background-color: var(--highlight-medium);
+        }
+}
+
 .button-container {
     width: 100%;
     display: flex;
@@ -285,21 +296,6 @@ div.solo-button {
     padding: var(--standard-padding);
     border-top: solid var(--thick-border) var(--border-color);
     background-color: var(--standard-medium);
-
-    &.delete {
-        bottom:0px;
-        width: 100%;
-        background-color: var(--standard-mid-dark);
-        justify-content: flex-end;
-
-        button{
-            background-color: var(--highlight-mid-dark);
-
-            &:hover{
-                background-color: var(--highlight-medium);
-            }
-        }
-    }
 }
 
 
@@ -339,6 +335,15 @@ i.button {
         }
     }
 
+    &.danger {
+        padding: 2px 1px 0px 2px;
+        border-radius: var(--border-radius);
+        background-color: var(--highlight-mid-dark);
+
+        &:hover {
+            background-color: var(--highlight-medium);
+        }
+    }
     
 }
 
@@ -460,6 +465,7 @@ div.item-list >div {
     align-items: center;
     overflow-wrap: anywhere;
     border-right: dotted var(--thin-border) var(--border-color);
+    padding: var(--standard-padding);
 
     &.item-name {
         font-weight: bold;
@@ -504,11 +510,6 @@ div.item-list >div {
 
 
 @media only screen and (max-width: 768px) {
-    div.item-container {
-        width: 100%;
-        padding: 0px 10px;
-    }
-
     div.item-container div.item-table {
         font-size: 1em;
 
@@ -519,7 +520,7 @@ div.item-list >div {
 }
 
 @media only screen and (max-width: 475px) {
-    div.item-container div.item-table >div.table-label {
+    div.item-container div.item-table >div.table-label.action-mode {
             font-size: .7em;
         }
 }
@@ -541,16 +542,25 @@ div.popup-form {
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 25px;
 }
 
 div.popup-form form {
+    padding: var(--wide-padding);
     flex-direction: column;
     width: 100%;
     flex-grow: 5;
-    padding: 10px;
-    gap: 20px;
+
+    span {
+        padding: var(--wide-padding);
+    }
 }
+
+span.popup-buttons {
+        display: flex;
+        gap: var(--wide-padding);
+        align-items: center;
+        justify-content: center;
+    }
 
 div.popup-form>span {
     display: flex;
@@ -558,6 +568,7 @@ div.popup-form>span {
     gap: 10px;
     justify-content: center;
     align-items: center;
+    padding: var(--wide-padding);
 }
 
 div.popup-form label {

@@ -287,7 +287,6 @@ div.stat-text p {
 
 p.stat-text.stat-label {
     font-weight: normal;
-    border-bottom: solid 1px black;
 }
 
 @media only screen and (max-width: 375px) {

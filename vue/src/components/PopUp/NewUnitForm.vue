@@ -1,6 +1,6 @@
 <template>
     <div class="popup-form">
-        <h1 class="section-title">New Unit Details</h1>
+        <h1 class="section-title popup">New Unit Details</h1>
         <form>
             <span>
                 <label for="name">Unit Name: </label>
@@ -33,7 +33,7 @@
                 
             </div>
             <UnitPreview :preview-unit="previewUnit" v-if="previewUnit.id" />
-            <span>
+            <span class="popup-buttons">
                 <button @click.prevent="buyUnit()">Buy Unit</button>
                 <button @click.prevent="clearForm()">Cancel</button>
             </span>
@@ -122,9 +122,10 @@ export default {
 div.dropdowns {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: first baseline;
     font-size: .8em;
+    gap: var(--wide-padding);
 }
 
 div.dropdowns>span>label.bigger {

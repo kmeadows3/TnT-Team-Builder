@@ -27,10 +27,7 @@ public class TeamValidator {
                     && updatedTeam.getFactionId() == team.getFactionId()
                     && updatedTeam.isBoughtFirstLeader() == team.isBoughtFirstLeader()
                     && Objects.equals(updatedTeam.getFaction(), team.getFaction())
-                    && Objects.equals(updatedTeam.getName(), team.getName())
-                    && Objects.equals(updatedTeam.getUnitList(), team.getUnitList())
-                    && new HashSet<>(updatedTeam.getInventory()).containsAll(team.getInventory())
-                    && new HashSet<>(team.getInventory()).containsAll(updatedTeam.getInventory());
+                    && Objects.equals(updatedTeam.getName(), team.getName());
         }
         return false;
     }

@@ -38,7 +38,8 @@
             <div class="title">Special Ablities</div>
             <div class="content">
                 <template v-for="(skill, index) in previewUnit.skills" :key="'skill-id-'+skill.id">
-                    {{ skill.skillsetId != 16 ? skill.name : skill.description }}{{ index == previewUnit.skills.length - 1
+                    {{ skill.skillsetId != 16 ? skill.name : skill.description }}{{ index == previewUnit.skills.length -
+                        1
                         ? '' : ',&nbsp;' }}
                 </template>
             </div>
@@ -74,25 +75,35 @@ export default {
 
 
 <style scoped>
-
 div.unit-preview-box {
     max-width: 50vw;
     min-width: 50vw;
-    border: 1px solid black;
+    border: solid var(--thick-border) var(--border-color);
+    border-radius: var(--border-radius-card);
+
+    >div:first-child{
+        border-radius: var(--border-radius-card-title) var(--border-radius-card-title) 0 0;
+    }
+
+    >div:last-child{
+        >div:first-child {
+            border-radius: 0 0 0 var(--border-radius-card-title);
+        }
+    }
+    
 }
 
 div.basic-box {
     width: 100%;
     display: flex;
 
-    border-top: dotted 1px black;
-
-    &.title{
-    border-top: 1px solid black;
+    &.title {
+        border-top: solid var(--thin-border) var(--border-color);
+        background-color: var(--standard-medium);
     }
 
-    &.title:first-child{
-    border-top: none;
+    &.title:first-child {
+        border-top: none;
     }
 }
 
@@ -103,12 +114,12 @@ div.basic-box>div {
     align-items: center;
     justify-content: center;
 
-    border-left: solid 1px black;
+    border-left: solid var(--thin-border) var(--border-color);
 
-    &:first-child{
+    &:first-child {
         border-left: none;
     }
- 
+
 
 }
 
@@ -118,9 +129,10 @@ div.basic-box>div.class {
 
 div.bigger-box {
     display: flex;
-    border-top: 1px solid black;
-    &:last-child{
-        border-bottom: 1px solid black;
+    border-top: solid var(--thin-border) var(--border-color);
+
+    &:last-child {
+        border-bottom: none;
     }
 }
 
@@ -128,21 +140,24 @@ div.title {
     font-weight: bold;
 }
 
-div.bigger-box>div.title {
-    padding-left: 3px;
-    padding-right: 3px;
-    flex-basis: 25%;
-    border-right: solid 1px black;
-}
-
-div.bigger-box>div.content {
-    padding-left: 3px;
-    padding-right: 3px;
-    flex-basis: 75%;
-    max-width: 75%;
-    text-wrap: wrap;
+div.bigger-box>div {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    padding: 0px var(--standard-padding);
+
+    &.title {
+        flex-basis: 25%;
+        background-color: var(--standard-medium);
+    }
+
+    &.content {
+        flex-basis: 75%;
+        max-width: 75%;
+        text-wrap: wrap;
+        &>span {
+            padding: 0px;
+        }
+    }
 }
 </style>

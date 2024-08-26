@@ -1,9 +1,9 @@
 <template>
     <div>
-        <h1 class="section-title">Upgrade {{upgradedWeapon.name}}</h1>
+        <h1 class="section-title popup">Upgrade {{upgradedWeapon.name}}</h1>
         <div class="upgrade-container">
-            <p>Available BS: {{ $store.state.currentTeam.money }}</p>
-            <p>Select available upgrade from below:</p>
+            <p class="center">Select upgrade from below:</p>
+            <p class="center"><strong>Available BS: </strong>{{ $store.state.currentTeam.money }}</p>
             <div class="option-list">
                 <p v-show="upgradedWeapon.category == 'Melee Weapon' && !upgradedWeapon.masterwork">
                     <span class="button" @click="setMasterwork()"><button>Masterwork</button></span>
@@ -22,9 +22,9 @@
                 </p>
             </div>
             
-            <p class="button-container">
-                <button @click="cancel()">Cancel</button>
-            </p>
+            <span class="popup-buttons">
+                <button @click="cancel()" class="danger">Cancel</button>
+            </span>
         </div>
 
 
@@ -100,14 +100,21 @@ export default {
 
 <style scoped>
 div.upgrade-container{
-    padding: 3px;
+    padding: var(--standard-padding);
+}
+
+p {
+    margin: 0px;
+    padding: var(--standard-padding) 0px;
+    &.center{
+        text-align: center;
+    }
 }
 
 div.option-list>p{
-    margin: 5px;
     display: flex;
     align-items:center;
-    gap: 5px;
+    gap: var(--wide-padding);
 }
 
 div.option-list>p>span.cost {

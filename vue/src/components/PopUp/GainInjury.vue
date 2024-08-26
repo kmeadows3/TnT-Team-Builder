@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="section-title">Select Injury</h1>
+        <h1 class="section-title popup">Select Injury</h1>
         <div class="gain-injury-container">
             <p>Injury should be rolled on the injury table then selected here.</p>
             <form>
@@ -16,7 +16,7 @@
                 </div>
             </form>
 
-            <span class="button-container">
+            <span class="popup-buttons">
                 <button @click="addInjury()">Gain Injury</button>
                 <button @click="cancel()">Cancel</button>
             </span>
@@ -72,25 +72,32 @@ div.gain-injury-container {
     width: 60vw;
     align-items: center;
     justify-content: center;
+    padding: var(--wide-padding);
 }
 
 div.gain-injury-container>form {
     width: 100%;
-    padding: 3px;
 }
 
-div.gain-injury-container p {
-    padding-left: 6px;
+div.gain-injury-container>p {
+    padding-left: var(--wide-padding);
     text-wrap: wrap;
     flex-grow: 1;
     margin: 0px;
+    font-style: italic;
 }
 
 div.injury-picker {
     display: flex;
     justify-content: start;
     align-items: center;
-    padding-top: 6px;
+    padding: var(--wide-padding) 0px;
+    gap: var(--wide-padding);
+    min-height: 50px;
+
+    p {
+        margin: 0px;
+    }
 }
 
 .injury-name {
@@ -98,7 +105,7 @@ div.injury-picker {
 }
 
 select.injury-name {
-    font-size: 1em;
+    font-size: .9em;
     text-align: center;
 }
 </style>

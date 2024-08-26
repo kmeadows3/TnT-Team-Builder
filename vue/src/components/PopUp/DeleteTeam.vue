@@ -1,6 +1,6 @@
 <template>
     <div class="popup-form">
-        <h1 class="section-title">Delete Team</h1>
+        <h1 class="section-title popup">Delete Team</h1>
 
         <div>
             <p>Type 'Delete' below to confirm you want to delete your team.</p>
@@ -54,19 +54,21 @@ export default {
 div.popup-form {
     justify-content: center;
     align-items: center;
-    padding: 3px;
 }
 
 input.delete-input {
+    margin: var(--standard-padding);
     width: 300px;
 }
 
 input.delete-input::placeholder{
     font-size: .8em;
+    font-style: italic;
 }
 
 p {
     margin: 0px;
+    padding: var(--standard-padding);
     width: 50vw;
     text-align: center;
 }
@@ -74,6 +76,5 @@ p {
 p.rules-text {
     font-style: italic;
     font-size: .9em;
-    margin-top: 7px;
 }
 </style>

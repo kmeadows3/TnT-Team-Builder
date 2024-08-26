@@ -1,6 +1,6 @@
 <template>
     <div class="popup-form">
-        <h1 class="section-title">Delete Unit</h1>
+        <h1 class="section-title popup">Delete Unit</h1>
 
         <div>
             <p>Type 'Dead' below if the unit is dead, type 'Dismissed' if they are dismissed.</p>
@@ -65,26 +65,31 @@ export default {
 div.popup-form {
     justify-content: center;
     align-items: center;
-    padding: 3px;
 }
 
 input.delete-input {
+    margin: var(--standard-padding);
     width: 300px;
 }
 
 input.delete-input::placeholder{
     font-size: .8em;
+    font-style: italic;
 }
 
 p {
     margin: 0px;
+    padding: var(--standard-padding);
     width: 50vw;
     text-align: center;
+    
+    &.rules-text{
+        margin: auto;
+        font-style: italic;
+        width: 40vw;
+        font-size: .9em;
+        padding-top: 0px;
+    }
 }
 
-p.rules-text {
-    font-style: italic;
-    font-size: .9em;
-    margin-top: 7px;
-}
 </style>

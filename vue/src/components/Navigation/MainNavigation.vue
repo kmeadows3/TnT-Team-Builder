@@ -76,10 +76,10 @@ export default {
 
 nav {
   min-width: 150px;
-  max-width: 200px;
+  max-width: 300px;
   width: 20%;
   border: solid var(--thick-border) var(--border-color);
-  border-radius: none;
+  border-radius: 0 0 0 var(--border-radius);
   border-right: none;
   display: flex;
   flex-direction: column;
@@ -97,22 +97,25 @@ nav section.flex-nav {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: var(--standard-padding);
 }
 
 nav section.flex-nav>h1.section-title {
   font-size: 1.6rem;
   background-color: var(--standard-dark);
+  color: var(--title-text)
 }
 
 nav section.flex-nav>h2.subsection-title {
+  color: var(--title-text);
   font-size: 1.3rem;
 }
 
 nav div.flex-nav-option {
   min-width: 80%;
   max-width: 80%;
-  padding: 5px;
+  padding: var(--wide-padding);
+  margin: 0px;
   
   border: solid var(--thick-border) var(--border-color);
   border-radius: var(--border-radius-button);
@@ -124,18 +127,24 @@ nav div.flex-nav-option {
     2px 2px 10px rgba(0, 0, 0, .2);
 
   background-color: var(--standard-medium);
-
 }
 
 nav div.flex-nav-option.selected {
   border: solid var(--thick-border) var(--selected-dark);
   background-color: var(--alternative-light);
-  margin-bottom: 10px;
+  margin-bottom: var(--wide-padding);
 }
 
 
 nav div.flex-nav-option.logout-button {
-  margin-top: 3px;
+
+  background-color: var(--highlight-mid-dark);
+
+        &:hover{
+            background-color: var(--highlight-medium);
+        }
+
+  margin-top: var(--double-wide-padding);
 }
 
 nav div.flex-nav-option.team-list.selected {
@@ -169,7 +178,7 @@ div.spacer {
 
   div.spacer {
     display: block;
-    height: 30px;
+    height: 43px;
   }
 }
 </style>

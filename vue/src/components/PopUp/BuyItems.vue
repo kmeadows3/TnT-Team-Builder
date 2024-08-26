@@ -1,6 +1,6 @@
 <template>
     <div class="buybox">
-        <h1 class="section-title">Purchase Items</h1>
+        <h1 class="section-title popup">Purchase Items</h1>
         <div class="radio-tab-wrapper">
             <input type="radio" class="tab" name="filterTab" value="Armor" id="armorTab" checked
                 v-model="filter.itemCategory" />
@@ -20,10 +20,10 @@
             <input type="radio" class="tab" name="filterTab" value="Grenade" id="grenadeTab"
                 v-model="filter.itemCategory" />
             <label for="grenadeTab">Grenades</label>
-            <input type="radio" class="tab" name="filterTab" value="Other" id="otherTab"
-                v-model="filter.itemCategory" v-if="$store.state.currentUnit.species == 'Mutant'"/>
+            <input type="radio" class="tab" name="filterTab" value="Other" id="otherTab" v-model="filter.itemCategory"
+                v-if="$store.state.currentUnit.species == 'Mutant'" />
             <label for="otherTab" v-if="$store.state.currentUnit.species == 'Mutant'">Mutation Attacks</label>
-            <div v-if="$store.state.currentUnit.rank != 'Rank and File'">
+            <div v-if="$store.state.currentUnit.rank != 'Rank and File'" class="relic-filter">
                 <label for="filterRarity">Max Relic Rarity: </label>
                 <select id="filterRarity" v-model.number="filter.maxRarity">
                     <option :value="0">No Relics</option>
@@ -36,40 +36,43 @@
         </div>
         <div class='item-purchase-list'>
             <p v-show="filter.itemCategory == 'Other'">Must have appropriate mutation to use.</p>
-            <p>Current Barter Scrip: {{ $store.state.currentTeam.money }}</p>
-            <div class="grid-row table-label">
-                <div class="grid-name">Name</div>
-                <div class="grid-rarity">Rarity</div>
+            <p><strong>Current Barter Scrip: </strong>{{ $store.state.currentTeam.money }}</p>
+            <div class="option-list">
+                <div class="grid-row table-label">
+                    <div class="grid-name">Name</div>
+                    <div class="grid-rarity">Rarity</div>
 
-                <div class="grid-cost">Cost</div>
-                <div class="grid-buttons">Actions</div>
+                    <div class="grid-cost">Cost</div>
+                    <div class="grid-buttons">Actions</div>
+                </div>
+                <div class="grid-row" v-for="item in filteredItems" :key="'refItem' + item.referenceId"
+                    :class="{ 'too-expensive': trueItemCost(item) > $store.state.currentTeam.money }">
+                    <div class="grid-name">{{ item.name }}</div>
+                    <div class="grid-rarity">
+                        {{ item.rarity }}
+                    </div>
+                    <div class="grid-cost">
+                        {{ item.category != 'Armor' || !$store.state.showUnitDetail ||
+                            this.$store.state.currentUnit.wounds
+                            == 1 ? item.cost :
+                            this.$store.state.currentUnit.wounds == 2 ? item.cost2Wounds : item.cost3Wounds }} BS
+                    </div>
+
+                    <div class="grid-buttons">
+                        <button @click="purchaseItem(item.referenceId)"
+                            :disabled="trueItemCost(item) > $store.state.currentTeam.money">
+                            Buy
+                        </button>
+                        <button @click="gainItem(item.referenceId)">Gain for Free</button>
+                    </div>
+                </div>
             </div>
 
-            <div class="grid-row" v-for="item in filteredItems" :key="'refItem' + item.referenceId"
-                :class="{ 'too-expensive': trueItemCost(item) > $store.state.currentTeam.money }">
-                <div class="grid-name">{{ item.name }}</div>
-                <div class="grid-rarity">
-                    {{ item.rarity }}
-                </div>
-                <div class="grid-cost">
-                    {{ item.category != 'Armor' || !$store.state.showUnitDetail || this.$store.state.currentUnit.wounds
-                        == 1 ? item.cost :
-                        this.$store.state.currentUnit.wounds == 2 ? item.cost2Wounds : item.cost3Wounds }} BS
-                </div>
-
-                <div class="grid-buttons">
-                    <button @click="purchaseItem(item.referenceId)"
-                        :disabled="trueItemCost(item) > $store.state.currentTeam.money">
-                        Buy
-                    </button>
-                    <button @click="gainItem(item.referenceId)">Gain for Free</button>
-                </div>
-            </div>
         </div>
-        <span class="button-container">
-            <button @click="cancel()">Cancel</button>
+        <span class="popup-buttons">
+            <button @click="cancel()" class="danger">Cancel</button>
         </span>
-        
+
     </div>
 </template>
 
@@ -106,6 +109,9 @@ export default {
                 }
                 return false;
             })
+
+            filteredList = filteredList.sort((a, b) => a.name.localeCompare(b.name));
+
 
 
             return filteredList;
@@ -163,7 +169,7 @@ export default {
             }
             return item.cost3Wounds;
         },
-        cancel(){
+        cancel() {
             this.$store.commit('REMOVE_SHOW_POPUP');
         }
     },
@@ -176,7 +182,6 @@ export default {
 
 
 <style scoped>
-
 div.buybox {
     display: flex;
     flex-direction: column;
@@ -185,45 +190,79 @@ div.buybox {
     min-width: 50vw;
 }
 
-div.buybox p{
+div.buybox p {
     margin: 0px;
-    margin-bottom: 3px;
+    padding: var(--standard-padding);
+    text-align: center;
+}
+
+span.popup-buttons {
+    padding-bottom: var(--wide-padding);
 }
 
 .item-purchase-list {
-    padding: 10px 10px 0px 10px;
+    padding: var(--wide-padding) 0px;
+    align-content: center;
+}
+
+div.option-list {
+    margin: auto;
+    width: 90%;
+    border: solid var(--thick-border) var(--border-color);
+    border-radius: var(--border-radius-card);
+
+    &>div:nth-child(odd) {
+        background-color: var(--standard-very-light);
+    }
+
+    &>div.grid-row.table-label {
+        border-bottom: solid var(--thick-border) var(--border-color);
+        background-color: var(--standard-medium);
+        border-radius: var(--border-radius-card-title) var(--border-radius-card-title) 0px 0px;
+    }
 }
 
 .grid-row {
     display: grid;
-    margin: auto;
-    margin-top: 5px;
-    width: 80%;
     grid-template-columns: 3fr 2fr 1fr 3fr;
     grid-template-areas: "Name Rarity Cost Buttons";
     text-align: center;
-}
+    padding: 1px 0px;
+    border-radius: 0px 0px var(--border-radius-card-title) var(--border-radius-card-title);
 
-.grid-name {
-    grid-area: "Name";
-    text-align: end;
-    padding-right: 5px;
-}
+    >div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-.grid-cost {
-    grid-area: "Cost";
-}
+    .grid-name {
+        grid-area: "Name";
+        justify-content: end;
+    }
 
-.grid-rarity {
-    grid-area: "Rarity";
-}
+    .grid-cost {
+        grid-area: "Cost";
+    }
 
-.grid-buttons {
-    grid-area: "Buttons";
-}
+    .grid-rarity {
+        grid-area: "Rarity";
+    }
 
-.grid-buttons>button {
-    margin: 0px 3px;
+    .grid-buttons {
+        grid-area: "Buttons";
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--standard-padding);
+
+        & >button {
+            background-color: var(--highlight-medium);
+            &:hover {
+                background-color: var(--highlight-light);
+            }
+        }
+    }
 }
 
 .too-expensive {
@@ -231,17 +270,17 @@ div.buybox p{
 }
 
 .radio-tab-wrapper {
-    margin-top: 5px;
+    margin-top: var(--wide-padding);
     display: flex;
-    border-bottom: 1px solid #428bca;
-    padding: 0 5px;
+    border-bottom: var(--thin-border) solid var(--standard-medium);
+    padding: 0 var(--wide-padding);
     position: relative;
 }
 
 .radio-tab-wrapper>div {
     display: inline-block;
     margin: auto;
-    padding-left: 5px;
+    padding-left: var(--wide-padding);
 }
 
 input.tab {
@@ -253,28 +292,34 @@ input.tab {
         text-align: center;
         cursor: pointer;
         float: left;
-        border: 1px solid #aaa;
+        border: 1px solid var(--standard-mid-dark);
         border-bottom: 0;
-        background-color: #fff;
+        background-color: var(--standard-light);
         margin-right: -1px;
-        padding: 6px 3px 3px 3px;
+        padding: var(--wide-padding) var(--standard-padding) var(--standard-padding) var(--standard-padding);
         position: relative;
         vertical-align: middle;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-
+        border-top-left-radius: var(--border-radius);
+        border-top-right-radius: var(--border-radius);
 
         &:hover {
-            background-color: #eee;
+            background-color: var(--standard-very-light);
         }
     }
 
     &:checked+label {
-        box-shadow: 0 3px 0 -1px #fff,
-            inset 0 5px 0 -1px #13CD4A;
-        background-color: #fff;
-        border-color: #428bca;
+        box-shadow: 0 3px 0 -1px var(--section-background),
+            inset 0 5px 0 -1px var(--highlight-light);
+        background-color: var(--section-background);
+        border-color: var(--standard-medium);
         z-index: 1;
     }
+}
+
+div.relic-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 </style>

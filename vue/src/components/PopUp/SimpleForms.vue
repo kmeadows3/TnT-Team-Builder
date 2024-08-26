@@ -1,12 +1,11 @@
 <template>
     <div>
         <div v-show="$store.state.showGainMoneyForm" class="popup-form">
-            <h1 class="section-title">Gain Money</h1>
+            <h1 class="section-title popup">Gain Money</h1>
             <form>
                 <span><label for="bsGained">BS Gained: </label>
                     <input id="bsGained" type="number" v-model.number="bsGained" /></span>
-
-                <span>
+                <span class="popup-buttons">
                     <button @click.prevent="gainMoney(bsGained)">Gain Barter Scrip</button>
                     <button @click.prevent="clearForm()">Cancel</button>
                 </span>
@@ -14,14 +13,14 @@
             </form>
         </div>
         <div v-show="$store.state.showLoseMoneyForm" class="popup-form">
-            <h1 class="section-title">Lose Money</h1>
+            <h1 class="section-title popup">Lose Money</h1>
             <form>
                 <span>
                     <label for="bsGained">BS Lost: </label>
                     <input id="bsGained" type="number" v-model.number="bsLost" />
 
                 </span>
-                <span>
+                <span class="popup-buttons">
                     <button @click.prevent="loseMoney(bsLost)">Lose Barter Scrip</button>
                     <button @click.prevent="clearForm()">Cancel</button>
                 </span>
@@ -29,13 +28,13 @@
             </form>
         </div>
         <div v-show="$store.state.showGainExpForm" class="popup-form">
-            <h1 class="section-title">Gain Experience</h1>
+            <h1 class="section-title popup">Gain Experience</h1>
             <form>
                 <span>
-                    <label for="expToGain">Experience Gained </label>
+                    <label for="expToGain">Experience Gained: </label>
                     <input type="number" id="expToGain" v-model.number="expGained" />
                 </span>
-                <span>
+                <span class="popup-buttons">
                     <button @click.prevent="gainExp(expGained)">Gain</button>
                     <button @click.prevent="clearForm()">Cancel</button>
                 </span>

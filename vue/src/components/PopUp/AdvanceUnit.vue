@@ -1,14 +1,13 @@
 <template>
     <div>
-        <h1 class="section-title">Gain Advance</h1>
+        <h1 class="section-title popup">Gain Advance</h1>
 
         <div v-show="!showRandom && !showOptions" class="advance-unit">
             <button @click="rollRandom()">Roll For Random Advance</button>
             <button @click="pickStat()">Pick Advance (After Rolling Physical Die)</button>
-            <span>
-                <button @click="cancel()">Cancel</button>
+            <span class="popup-buttons">
+                <button @click="cancel()" class="danger">Cancel</button>
             </span>
-
         </div>
 
         <div v-show="showOptions" class="advance-unit">
@@ -49,7 +48,7 @@
                 </span>
                 <button class="advance-btn" @click="buyAdvance('promotion')" v-show="isPromotionLegal && canPromote">
                     Gain Promotion</button>
-                <button class="advance-btn cancel" @click="clearForm()">
+                <button class="advance-btn cancel danger" @click="clearForm()">
                     Go Back</button>
             </div>
         </div>
@@ -349,13 +348,11 @@ div.advance-options {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 4px;
-    margin-bottom: 4px;
+    gap: var(--standard-padding);
 }
 
 div.advance-options.button-list{
     width: 50%;
-
 }
 
 div.advance-options>p {
@@ -393,11 +390,12 @@ p.roll-result {
 .advance-options>span{
     display: flex;
     justify-content: center;
-    gap: 6px;
+    gap: var(--standard-padding);
 }
 
 span>button.advance-btn{
     width: 100%;
+    text-wrap: nowrap;
 }
 
 button.cancel {
@@ -412,11 +410,17 @@ div.advance-unit {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 6px;
+    gap: var(--standard-padding);
+    padding: var(--wide-padding);
+
+    span.popup-buttons {
+        padding-top: var(--wide-padding);
+    }
 }
 
 div.advance-unit>button {
     min-width: 300px;
     max-width: 300px;
 }
+
 </style>

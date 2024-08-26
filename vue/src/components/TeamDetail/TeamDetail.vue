@@ -18,17 +18,14 @@
             <button @click="toggleShowGainForm()">Gain Money</button>
             <button @click="toggleShowLossForm()">Lose Money</button>
             <button @click="payUpkeep()">Pay Upkeep</button>
+            <button @click="deleteTeam()" class="danger">Delete Team</button>
         </div>
 
         <div class="team-box">
             <TeamSummary />
-
             <UnitList />
         </div>
         <TeamInventory />
-        <div class="button-container delete">
-            <button @click="deleteTeam()">Delete Team</button>
-        </div>
     </section>
 </template>
 

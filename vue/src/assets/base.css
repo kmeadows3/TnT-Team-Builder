@@ -1,11 +1,15 @@
 :root {
     --page-background: #FFF2E6;
+    --section-background: white;
+
+    --title-text: #E0B997;
+
+
     --standard-very-light: #FFF2E6;
     --standard-light: #FFE2C8;
     --standard-medium: #C7A07D;
     --standard-mid-dark: #946E4D;
     --standard-dark: #624124;
-    --section-background: white;
 
 
     --alternative-very-light: #FFF7E6;
@@ -24,9 +28,10 @@
 
     --selected-light: #FFEEDF;
     --selected-dark: #292c2e;
+    --unselected: #aaaaaa;
 
     --border-color: black;
-    --border-radius: 3px;
+    --border-radius: 5px;
     --border-radius-button: 7px;
     --border-radius-card: 10px;
     --border-radius-card-title: 7px;
@@ -35,6 +40,7 @@
 
     --standard-padding: 3px;
     --wide-padding: 6px;
+    --double-wide-padding: 12px;
     --card-padding: 10px;
     --card-padding-double: 20px;
   }

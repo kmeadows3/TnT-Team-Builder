@@ -79,6 +79,10 @@ div.item-list>.equipment-cost {
     grid-area: cost;
 }
 
+div.item-list>.equipment-equipped {
+    grid-area: equipped;
+}
+
 div.item-list>.equipment-rules {
     grid-area: rules;
     border-top: none;
@@ -94,7 +98,7 @@ div.item-list>.item-action {
 
 @media only screen and (max-width: 992px) {
     div.item-list.equipment-grid {
-        grid-template-columns: 3fr 1fr 6fr 2fr;
+        grid-template-columns: 2fr 1fr 5fr 2fr;
     }
 
     div.item-list.equipment-grid.action-mode {
@@ -115,7 +119,7 @@ div.item-list>.item-action {
         }
     }
 
-    div.table-label>div.equipment-rules{
+    div.table-label.action-mode>div.equipment-rules{
         display: none;
     }
 

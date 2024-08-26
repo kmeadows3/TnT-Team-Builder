@@ -1,6 +1,6 @@
 <template>
-    <div class="keyword-row">
-        <div class="label" v-show="$store.state.unitSkillsSorted.length >0">
+    <div class="keyword-row" v-show="$store.state.unitSkillsSorted.length > 0" :class="{'bottom': !$store.state.unitInjuriesSorted.length}">
+        <div class="label" >
             ABILITIES
         </div>
         <div class="text">
@@ -10,7 +10,7 @@
             </span>
         </div>
     </div>
-    <div class="keyword-row" v-show="$store.state.unitInjuriesSorted.length > 0">
+    <div class="keyword-row bottom" v-show="$store.state.unitInjuriesSorted.length > 0">
         <div class="label">
             INJURIES
         </div>
@@ -70,7 +70,7 @@ div.keyword-row{
         }
     }
 
-    &:last-child{
+    &.bottom{
         div.label{
             border-radius: 0 0 0 var(--border-radius-card-title);
         }
@@ -81,14 +81,17 @@ div.keyword-row{
     div.keyword-row {
         display: block;
 
+        border-top: solid var(--thick-border) var(--border-color);
+
         > div{
             &.label{
                 border-right: none;
                 border-radius: none;
             }
   
-        }   
-        &:last-child{
+        } 
+
+        &.bottom{
             div.label{
                 border-right: none;
                 border-radius: 0px;
@@ -98,7 +101,8 @@ div.keyword-row{
 }
 
 i.bi-x-lg {
-    padding: 0px 1px;
+    margin-left:var(--standard-padding);
+    padding: 1px 1px 0px 0px;
     border-radius: 3px;
 }
 

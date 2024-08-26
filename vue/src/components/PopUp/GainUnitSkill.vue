@@ -94,7 +94,8 @@ export default {
             potentialSkills: [],
             newSkill: {},
             filter: {
-                skillsetCategory: ''
+                skillsetCategory: '',
+                skillsetId: 0
             },
         }
     },
@@ -153,6 +154,7 @@ export default {
 </script>
 
 
+
 <style scoped>
 div.gain-skill-container {
     display: flex;
@@ -191,7 +193,7 @@ div.skill-selection {
 div.skill-finder {
     display: flex;
     justify-content: start;
-    align-items: stretch;
+    align-items: center;
     padding-top: 6px;
 }
 
@@ -223,22 +225,17 @@ div.finder-label {
 }
 
 .radio-tab-wrapper {
-    margin-top: 5px;
+    margin-top: var(--wide-padding);
     display: flex;
-    border-bottom: 1px solid #428bca;
-    padding: 0 10px;
+    border-bottom: var(--thin-border) solid var(--standard-medium);
+    padding: 0 var(--wide-padding);
     position: relative;
 }
 
 .radio-tab-wrapper>div {
     display: inline-block;
     margin: auto;
-    padding-left: 5px;
-
-}
-
-.too-expensive {
-    background-color: rgb(236, 173, 173);
+    padding-left: var(--wide-padding);
 }
 
 input.tab {
@@ -247,31 +244,30 @@ input.tab {
     &+label {
         display: flex;
         align-items: center;
+        text-align: center;
         cursor: pointer;
         float: left;
-        border: 1px solid #aaa;
+        border: 1px solid var(--standard-mid-dark);
         border-bottom: 0;
-        background-color: #fff;
+        background-color: var(--standard-light);
         margin-right: -1px;
-        padding: .5em 1em;
+        padding: var(--wide-padding);
         position: relative;
         vertical-align: middle;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-
+        border-top-left-radius: var(--border-radius);
+        border-top-right-radius: var(--border-radius);
 
         &:hover {
-            background-color: #eee;
+            background-color: var(--standard-very-light);
         }
     }
 
     &:checked+label {
-        box-shadow: 0 3px 0 -1px #fff,
-            inset 0 5px 0 -1px #13CD4A;
-        background-color: #fff;
-        border-color: #428bca;
+        box-shadow: 0 3px 0 -1px var(--section-background),
+            inset 0 5px 0 -1px var(--highlight-light);
+        background-color: var(--section-background);
+        border-color: var(--standard-medium);
         z-index: 1;
     }
 }
-
 </style>

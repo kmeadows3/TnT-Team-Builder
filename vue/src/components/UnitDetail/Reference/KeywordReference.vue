@@ -21,3 +21,11 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+
+h1.section-title {
+    border-bottom: solid var(--thick-border) var(--border-color);
+}
+
+</style>

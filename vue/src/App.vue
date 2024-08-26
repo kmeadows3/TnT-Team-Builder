@@ -53,23 +53,26 @@ body {
 
 div#absolute-button{
   display: none;
+  z-index: 99;
 }
 
 @media only screen and (max-width: 992px) {
   div#absolute-button{
     display: block;
     position: sticky;
-    top: 90px;
+    top: 10px;
+    left: 0px;
   }
 
   button#view-nav{
     position: absolute;
+    top: 8px;
     left: 10px;
     padding: 10px;
 
     border: solid var(--thick-border) var(--border-color);
     border-radius: 20px;
-    background-color: var(--standard-light);
+    background-color: var(--highlight-mid-dark);
   }
 }
 
@@ -81,6 +84,8 @@ div#capstone-app{
   display: flex;
   flex-direction: column;
   height: 100%;
+  border-radius: var(--border-radius);
+
 }
 
 section.entire-page {
@@ -90,6 +95,7 @@ section.entire-page {
 
 h1.main-title {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
@@ -102,15 +108,10 @@ h1.main-title {
   border-radius: var(--border-radius) var(--border-radius) 0px 0px;
   border-bottom: none;
   background-color: var(--standard-dark);
-
-  color: var(--border-color);
-  text-shadow: 1px 1px 3px var(--standard-medium),
-  1px -1px 3px var(--standard-medium),
-  -1px -1px 3px var(--standard-medium),
-  -1px 1px 3px var(--standard-medium);
 }
 
 h1.main-title>span{
+  color: var(--standard-medium);
   word-wrap: unset;
   text-align: center;
 }

@@ -56,6 +56,10 @@ public class ItemService {
         }
 
         validateUnitCanHaveItem(referenceItem, unit);
+        if (referenceItem.getName().equals("War Banner")){
+            Team team = teamService.getTeamByUnitId(unit.getId());
+            validateTeamDoesNotHaveWarBanner(team);
+        }
 
         int itemId = 0;
         if (isFree){
@@ -237,11 +241,6 @@ public class ItemService {
 
         if (itemToAdd.getCategory().equals("Melee Weapon") && ((Weapon)itemToAdd).isMasterwork() ){
             validateNoDoubleMasterwork((Weapon)itemToAdd, unit);
-        }
-
-        if (itemToAdd.getName().equals("War Banner")){
-            Team team = teamService.getTeamByUnitId(unit.getId());
-            validateTeamDoesNotHaveWarBanner(team);
         }
 
         for (Skill skill : unit.getSkills()){

@@ -75,9 +75,9 @@ div.popup-background{
 
 div.popup {
     position: absolute;
-    background-color: white;
-    border: solid 3px black;
-    border-radius: 10px;
+    background-color: var(--section-background);
+    border: solid var(--thick-border) var(--border-color);
+    border-radius: var(--border-radius-card);
     min-width: 33%;
     max-width: 80%;
     max-height: 80vh;

@@ -1,34 +1,36 @@
 <template>
-  <nav :class="$store.state.viewNavigation?'view-nav':''">
+  <nav :class="$store.state.viewNavigation ? 'view-nav' : ''">
     <section class="flex-nav">
-      <div class="spacer" :class="{'visible':$store.state.viewNavigation}"></div>
+      <div class="spacer" :class="{ 'visible': $store.state.viewNavigation }"></div>
       <h1 class="section-title">Navigation</h1>
-      <div class="flex-nav-option team-list" :class="{ selected: $store.state.currentPage == 'home' }" @click="toHome()">
+      <div class="flex-nav-option team-list" :class="{ selected: $store.state.currentPage == 'home' }"
+        @click="toHome()">
         Home
       </div>
-      <div class="flex-nav-option team-list" :class="{ selected: $store.state.showTeamList && $store.state.currentPage == 'dashboard' }"
+      <div class="flex-nav-option team-list"
+        :class="{ selected: $store.state.showTeamList && $store.state.currentPage == 'dashboard' }"
         @click="showTeamListOn()" v-show="$store.state.token">
         Team List
       </div>
-      <div class="flex-nav-option team-list" :class="{ selected: $store.state.currentPage == 'login' }" @click="toLogin()"
-        v-show="!$store.state.token">
+      <div class="flex-nav-option team-list" :class="{ selected: $store.state.currentPage == 'login' }"
+        @click="toLogin()" v-show="!$store.state.token">
         Sign In
       </div>
 
 
 
-      <TeamSelect v-if="($store.state.showTeamDetail || $store.state.showUnitDetail) && $store.state.currentPage != 'login' && $store.state.currentPage !='home'" />
-      <UnitSelect v-if="$store.state.showUnitDetail && $store.state.currentPage != 'login' && $store.state.currentPage !='home'" />
+      <TeamSelect
+        v-if="($store.state.showTeamDetail || $store.state.showUnitDetail) && $store.state.currentPage != 'login' && $store.state.currentPage != 'home'" />
+      <UnitSelect
+        v-if="$store.state.showUnitDetail && $store.state.currentPage != 'login' && $store.state.currentPage != 'home'" />
     </section>
     <section class="flex-nav">
-
       <div class="flex-nav-option logout-button" @click="logout()" v-show="$store.state.token">Logout</div>
 
     </section>
-
   </nav>
-
 </template>
+
 
 <script>
 import TeamSelect from './TeamSelect.vue';
@@ -73,7 +75,6 @@ export default {
 </script>
 
 <style>
-
 nav {
   min-width: 150px;
   max-width: 300px;
@@ -89,7 +90,7 @@ nav {
   background-color: var(--standard-dark);
 }
 
-nav h1.section-title{
+nav h1.section-title {
   border: none;
 }
 
@@ -116,7 +117,7 @@ nav div.flex-nav-option {
   max-width: 80%;
   padding: var(--wide-padding);
   margin: 0px;
-  
+
   border: solid var(--thick-border) var(--border-color);
   border-radius: var(--border-radius-button);
   cursor: pointer;
@@ -130,7 +131,6 @@ nav div.flex-nav-option {
 }
 
 nav div.flex-nav-option.selected {
-  border: solid var(--thick-border) var(--selected-dark);
   background-color: var(--alternative-light);
   margin-bottom: var(--wide-padding);
 }
@@ -140,9 +140,9 @@ nav div.flex-nav-option.logout-button {
 
   background-color: var(--highlight-mid-dark);
 
-        &:hover{
-            background-color: var(--highlight-medium);
-        }
+  &:hover {
+    background-color: var(--highlight-medium);
+  }
 
   margin-top: var(--double-wide-padding);
 }
@@ -171,7 +171,7 @@ div.spacer {
   }
 
   nav.view-nav {
-    display:flex;
+    display: flex;
     max-width: 100%;
     flex-grow: 1;
   }

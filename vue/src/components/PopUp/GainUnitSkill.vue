@@ -265,7 +265,7 @@ input.tab {
     &:checked+label {
         box-shadow: 0 3px 0 -1px var(--section-background),
             inset 0 5px 0 -1px var(--highlight-light);
-        background-color: var(--section-background);
+        background-color: var(--standard-very-light);
         border-color: var(--standard-medium);
         z-index: 1;
     }

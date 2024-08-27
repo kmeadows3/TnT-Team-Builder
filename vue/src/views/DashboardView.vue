@@ -63,6 +63,19 @@ div.no-values{
     text-align: center;
 }
 
+select{
+    background-color: var(--list-background);
+    color: var(--default-font);
+    &>option:disabled{
+        color: var(--unselected);
+    }
+}
+
+input {
+    background-color: var(--list-background);
+    color: var(--default-font);
+}
+
 @media only screen and (max-width: 992px) {
     body {
         font-size: .9em;
@@ -262,6 +275,7 @@ button {
     padding: var(--standard-padding) var(--wide-padding);
     cursor: pointer;
     justify-self: center;
+    color: var(--default-font);
     
     background-color: var(--standard-light);
         &:hover {
@@ -367,11 +381,11 @@ i.inventory-icon {
 }
 
 div.item-table .bi-check-circle {
-    color: green;
+    color: var(--check-color);
 }
 
 div.item-table .bi-x-circle {
-    color: red;
+    color: var(--x-color);
 }
 
 span.name-change-buttons {
@@ -445,10 +459,10 @@ div.item-table {
 div.item-table >div.item-list {
     display: flex;
     min-width: 100%;
-    background-color: var(--section-background);
+    background-color: var(--list-background);
 
     &:nth-child(even) {
-        background-color: var(--standard-very-light);
+        background-color: var(--alternative-background);
     }
     &.table-label {
         background-color: var(--standard-medium);

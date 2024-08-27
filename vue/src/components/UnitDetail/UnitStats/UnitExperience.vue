@@ -34,6 +34,7 @@ div#exp-grid {
         >span {
             display: flex;
             align-items: center;
+            background-color: var(--list-background);
             padding: var(--standard-padding);
         }
     }

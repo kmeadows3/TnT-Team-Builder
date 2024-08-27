@@ -89,6 +89,7 @@ div.item-table.team-inventory > div.item-list{
 div.item-list > div {
     &.type{
         grid-area: type;
+        text-align: center;
     }
     &.cost{
         grid-area: cost;

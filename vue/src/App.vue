@@ -7,15 +7,34 @@
       <span>&nbsp;Team Builder</span>
     </h1>
     <div id="absolute-button">
-       <button id="view-nav" @click="toggleNav()">
+      <button id="view-nav" @click="toggleNav()">
         <i class="bi bi-list"></i></button>
     </div>
+    <div class="slider-container">
+      <div class="dark-mode-slider" :class="$store.state.viewNavigation ? 'view' : ''">
+        <label class="switch">
+          <input type="checkbox" @click="toggleDark()" :checked=isDark>
+          <span class="slider round"></span>
+        </label>
+        <span>
+          {{ isDark ? 'Light Mode' : 'Dark Mode' }}
+        </span>
+      </div>
+    </div>
+
     <section class="entire-page">
       <MainNavigation />
       <router-view />
     </section>
   </div>
 </template>
+
+<script setup>
+import { useDark, useToggle } from "@vueuse/core";
+
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
+</script>
 
 
 <script>
@@ -30,7 +49,7 @@ export default {
     PopUp
   },
   methods: {
-    toggleNav(){
+    toggleNav() {
       this.$store.commit('TOGGLE_VIEW_NAVIGATION');
     }
   }
@@ -43,7 +62,7 @@ export default {
 
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
@@ -51,20 +70,20 @@ body {
   height: 100vh -20px;
 }
 
-div#absolute-button{
+div#absolute-button {
   display: none;
   z-index: 99;
 }
 
 @media only screen and (max-width: 992px) {
-  div#absolute-button{
+  div#absolute-button {
     display: block;
     position: sticky;
     top: 10px;
     left: 0px;
   }
 
-  button#view-nav{
+  button#view-nav {
     position: absolute;
     top: 8px;
     left: 10px;
@@ -76,11 +95,11 @@ div#absolute-button{
   }
 }
 
-div#app{
+div#app {
   min-height: calc(100vh - 20px);
 }
 
-div#capstone-app{
+div#capstone-app {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -110,18 +129,109 @@ h1.main-title {
   background-color: var(--standard-dark);
 }
 
-h1.main-title>span{
-  color: var(--standard-medium);
+h1.main-title>span {
+  color: var(--title-text);
   word-wrap: unset;
   text-align: center;
 }
 
 @media only screen and (max-width: 768px) {
-
-h1.main-title {
+  h1.main-title {
     font-size: 3em;
-}
+  }
 }
 
+div.slider-container{
+  z-index: 50;
+  position: relative;
+}
 
+div.dark-mode-slider {
+  position: absolute;
+  top: 14px;
+  right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--wide-padding);
+
+  @media only screen and (max-width: 992px) {
+    top:12px;
+  }
+
+  @media only screen and (max-width: 768px) {
+    display: none;
+
+    &.view{
+      display: flex;
+    }
+  }
+
+  >span {
+    text-align: center;
+    width: 40px;
+    color: var(--font-color);
+    text-wrap: wrap;
+  }
+
+  
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--standard-light);
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: var(--standard-medium);
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked+.slider {
+    background-color: var(--highlight-light);
+
+    &:before {
+      background-color: var(--highlight-mid-dark);
+      -webkit-transform: translateX(20px);
+      -ms-transform: translateX(20px);
+      transform: translateX(20px);
+    }
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+}
 </style>

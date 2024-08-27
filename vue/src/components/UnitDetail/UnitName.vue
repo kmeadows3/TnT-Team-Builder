@@ -72,7 +72,7 @@ div#basic-information {
 
 div#new-purchase {
     border-top: solid var(--thick-border) var(--border-color);
-    background-color: var(--alert-background-pale);
+    background-color: var(--highlight-medium);
     text-align: center;
     padding: var(--wide-padding) var(--standard-padding);
     font-weight: bold;

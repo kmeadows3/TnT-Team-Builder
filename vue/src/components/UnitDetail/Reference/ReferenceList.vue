@@ -58,13 +58,19 @@ div.reference>div {
     text-align: left;
     padding: 0px;
     border-bottom: dotted 1px black;
+    background-color: var(--list-background);
 
     &:first-child {
         padding-top: var(--standard-padding);
     }
 
+    &:nth-child(odd){
+        background-color: var(--alternative-background);
+    }
+
     &:last-child {
         border-bottom: 0px;
+        border-radius: 0 0 var(--border-radius-card-title) var(--border-radius-card-title);
     }
 }
 

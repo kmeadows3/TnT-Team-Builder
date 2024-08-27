@@ -244,6 +244,7 @@ section#unit-stats {
 div.stat-container>div {
     display: flex;
     flex-direction: column;
+    background-color: var(--list-background);
 
     >div {
         flex-grow: 1;
@@ -306,7 +307,7 @@ div.display-split-stat {
     justify-content: center;
 
     div p {
-        background-color: var(--section-background);
+        background-color: var(--list-background);
         border: none;
         margin: 0px;
         padding: 0px var(--standard-padding);

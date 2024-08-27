@@ -210,9 +210,15 @@ div.option-list {
     width: 90%;
     border: solid var(--thick-border) var(--border-color);
     border-radius: var(--border-radius-card);
+    background-color: var(--list-background);
 
     &>div:nth-child(odd) {
-        background-color: var(--standard-very-light);
+        background-color: var(--alternative-background);
+    }
+
+    &>div.too-expensive {
+    font-style: italic;
+    color: var(--unselected);
     }
 
     &>div.grid-row.table-label {
@@ -228,7 +234,6 @@ div.option-list {
     grid-template-areas: "Name Rarity Cost Buttons";
     text-align: center;
     padding: 1px 0px;
-    border-radius: 0px 0px var(--border-radius-card-title) var(--border-radius-card-title);
 
     >div {
         display: flex;
@@ -258,16 +263,25 @@ div.option-list {
 
         & >button {
             background-color: var(--highlight-medium);
+            
             &:hover {
                 background-color: var(--highlight-light);
             }
+            &:disabled{
+                font-style: italic;
+            }
+            &:disabled:hover{
+                background-color: var(--highlight-medium);
+                transform: translateY(0px);
+            }
         }
+    }
+
+    &:last-child{
+        border-radius: 0px 0px var(--border-radius-card-title) var(--border-radius-card-title);
     }
 }
 
-.too-expensive {
-    background-color: rgb(236, 173, 173);
-}
 
 .radio-tab-wrapper {
     margin-top: var(--wide-padding);
@@ -310,7 +324,7 @@ input.tab {
     &:checked+label {
         box-shadow: 0 3px 0 -1px var(--section-background),
             inset 0 5px 0 -1px var(--highlight-light);
-        background-color: var(--section-background);
+        background-color: var(--standard-very-light);
         border-color: var(--standard-medium);
         z-index: 1;
     }

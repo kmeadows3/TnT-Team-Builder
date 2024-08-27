@@ -67,6 +67,7 @@ div.keyword-row{
 
         &.text{
             grid-area: text;
+            background-color: var(--list-background);
         }
     }
 

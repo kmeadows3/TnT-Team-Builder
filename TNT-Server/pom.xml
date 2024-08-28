@@ -84,7 +84,33 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-webapp-maven-plugin</artifactId>
+                <version>2.13.0</version>
+                <configuration>
+                    <resourceGroup>tnt-builder-group</resourceGroup>
+                    <appName>tnt-builder-api</appName>
+                    <appSettings>
+                        <!-- Tell Azure that our app uses Port 8080 -->
+                        <property>
+                            <name>PORT</name>
+                            <value>8080</value>
+                        </property>
+                    </appSettings>
+                    <deployment>
+                        <resources>
+                            <resource>
+                                <directory>${project.basedir}/target</directory>
+                                <includes>*.jar</includes>
+                            </resource>
+                        </resources>
+                    </deployment>
+                </configuration>
+            </plugin>
+
         </plugins>
+
     </build>
 
 </project>

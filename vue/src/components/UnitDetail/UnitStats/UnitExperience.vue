@@ -34,7 +34,6 @@ div#exp-grid {
         >span {
             display: flex;
             align-items: center;
-            background-color: var(--list-background);
             padding: var(--standard-padding);
         }
     }
@@ -70,7 +69,7 @@ div#exp-grid {
             >span {
                 flex-grow: 1;
                 justify-content: center;
-                background-color: var(--section-background);
+                background-color: var(--list-background);
                 border-left: solid var(--thin-border) var(--border-color);
                 border-right: solid var(--thin-border) var(--border-color);
 

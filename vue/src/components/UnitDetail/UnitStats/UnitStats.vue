@@ -239,12 +239,12 @@ section#unit-stats {
     border: solid var(--thick-border) var(--border-color);
     border-radius: var(--border-radius-card);
     margin: var(--wide-padding);
+    background-color: var(--list-background);
 }
 
 div.stat-container>div {
     display: flex;
     flex-direction: column;
-    background-color: var(--list-background);
 
     >div {
         flex-grow: 1;

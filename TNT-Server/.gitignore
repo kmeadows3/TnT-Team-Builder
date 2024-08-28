@@ -58,6 +58,8 @@ bin/
 .env.local
 .env.*.local
 
+.properties
+
 # Log files
 npm-debug.log*
 yarn-debug.log*

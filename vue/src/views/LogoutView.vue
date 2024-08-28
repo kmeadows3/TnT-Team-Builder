@@ -1,5 +1,5 @@
 <template>
-    <section class="logout main-display">
+    <section class="logout main-display" :class="$store.state.viewNavigation ? 'view-nav' : ''">
 
   <h1>Logout</h1>
     </section>

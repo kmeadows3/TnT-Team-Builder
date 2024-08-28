@@ -1,5 +1,5 @@
 <template>
-  <section class="login main-display">
+  <section class="login main-display" :class="$store.state.viewNavigation ? 'view-nav' : ''">
     <div id="login">
       <form v-on:submit.prevent="login">
         <h1>Please Sign In</h1>

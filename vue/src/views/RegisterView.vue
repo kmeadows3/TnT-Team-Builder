@@ -1,5 +1,5 @@
 <template>
-  <section id="register" class="main-display text-center">
+  <section id="register" class="main-display text-center" :class="$store.state.viewNavigation ? 'view-nav' : ''">
 
     <form v-on:submit.prevent="register">
       <h1>Create Account</h1>

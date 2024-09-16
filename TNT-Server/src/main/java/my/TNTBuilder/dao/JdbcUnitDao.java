@@ -172,6 +172,31 @@ public class JdbcUnitDao implements UnitDao{
     }
 
     @Override
+    public List<Unit> getExplorationUnits() throws DaoException{
+        List<Unit> unitList= new ArrayList<>();
+        String sql = "SELECT unit_ref_id FROM unit_reference WHERE faction_id = 8 OR class = 'Depend-o-Bot'";
+
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+            List<Integer> validUnitIds = new ArrayList<>();
+            while (results.next()){
+                validUnitIds.add(results.getInt("unit_ref_id"));
+            }
+            for (int unitRefId : validUnitIds){
+                Unit unit = convertReferenceUnitToUnit(unitRefId);
+                unit.setId(unitRefId);
+                unitList.add(unit);
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to database", e);
+        }
+
+
+        return unitList;
+    }
+
+
+    @Override
     public void  deleteUnit(Unit unit) throws DaoException{
         String deleteSkillSql = "DELETE FROM unit_skill WHERE unit_id = ?";
         String deleteSkillsetSql = "DELETE FROM unit_skillset WHERE unit_id = ?";
@@ -515,7 +540,7 @@ public class JdbcUnitDao implements UnitDao{
         return newUnit;
     }
     private int convertStartingExp(String rank){
-        if (rank.equalsIgnoreCase("Rank and File")){
+        if (rank.equalsIgnoreCase("Rank and File")||rank.equalsIgnoreCase("Nuisance")){
             return 0;
         } else if (rank.equalsIgnoreCase("Specialist")) {
             return 21;

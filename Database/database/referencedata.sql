@@ -7,7 +7,8 @@ INSERT INTO faction (faction_name) VALUES
 	('Preservers'), -- ID 4
 	('Tribals'), -- ID 5
 	('Peacekeepers'), -- ID 6
-	('Freelancers'); -- ID 7
+	('Freelancers'), --ID 7
+	('Nuisance Creatures'); --ID 8
 	
 INSERT INTO unit_reference (faction_id, class, rank, species, base_cost, wounds, defense, mettle, move, ranged, melee, 
 							strength, skillsets, starting_skills, starting_free_skills, special_rules) VALUES
@@ -93,7 +94,17 @@ INSERT INTO unit_reference (faction_id, class, rank, species, base_cost, wounds,
 (7, 'Sawbones', 'Freelancer', 'Human', 50, 1, 6, 6, 5, 4, 4, 5, '[3|4|5]', '[17|104]', 0, ''), -- ID 80
 (7, 'Veteran Scout', 'Freelancer', 'Human', 45, 1, 6, 6, 6, 5, 4, 5, '[2|3|4]', '[15|18|119]', 0, ''), -- ID 81
 (7, 'Wandering Mutant', 'Freelancer', 'Mutant', 45, 1, 6, 6, 5, 4, 5, 5, '[1|2|3]', '', 2, 'Starting skills must be random hidden mutations. may start with one detriment.'), -- ID 82
-(7, 'Wasteland Hunter', 'Freelancer', 'Human', 50, 1, 6, 6, 5, 5, 4, 5, '[2|3|4]', '[7|12|124]', 0, ''); -- ID 83
+(7, 'Wasteland Hunter', 'Freelancer', 'Human', 50, 1, 6, 6, 5, 5, 4, 5, '[2|3|4]', '[7|12|124]', 0, ''), -- ID 83
+(8, 'Chupacabra', 'Nuisance', 'Animal', 20, 1, 6, 5, 7, 0, 5, 5, '[]', '[51|109|126]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 84
+(8, 'Giant Rat', 'Nuisance', 'Animal', 20, 1, 6, 5, 7, 0, 4, 4, '[]', '[109|127]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 85
+(8, 'Wild Dog', 'Nuisance', 'Animal', 20, 1, 6, 5, 7, 0, 5, 5, '[]', '[109|130]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 86
+(8, 'Gnash Worm', 'Nuisance', 'Animal', 20, 1, 6, 5, 6, 0, 5, 5, '[]', '[64|109|128]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 87
+(8, 'Mud Crab', 'Nuisance', 'Animal', 20, 1, 6, 5, 5, 0, 4, 6, '[]', '[49|109|128]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 88
+(8, 'Walking Mudcat', 'Nuisance', 'Animal', 20, 1, 6, 5, 5, 0, 5, 5, '[]', '[130|109]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 89
+(8, 'Rad Roach', 'Nuisance', 'Animal', 20, 1, 6, 5, 7, 0, 4, 5, '[]', '[109|128]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 90
+(8, 'Trog', 'Nuisance', 'Mutant', 20, 1, 6, 5, 6, 3, 5, 6, '[]', '[85|129]', 0, 'Starts with Light Weapon or Heavy Weapon. Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 91
+(8, 'Hill Folk', 'Nuisance', 'Human', 20, 1, 6, 5, 5, 3, 5, 5, '[]', '[38]', 0, 'Starts with a Light Weapon, Black Powder Pistol, or Musket. Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 92
+(8, 'Wild Mutant', 'Nuisance', 'Mutant', 20, 1, 6, 5, 5, 4, 4, 5, '[]', '[109]', 1, 'Starting skill must be a randomly determined hidden mutation. Only obtainable if team drew Ace of Spades during Wasteland Exploration'); -- ID 93 
 
 
 
@@ -241,7 +252,12 @@ INSERT INTO skill_reference (skillset_id, name, description, phase, skill_cost) 
 	(16, 'Deadman', 'Gain a +1 bonus to all rolls on the Survival table, but may not wear armor of any type.', 'End of Game', 0), --ID 122
 	(16, 'Improved Haggler', 'Once after each game, when buying items, model may roll a 2d10 and pick the higher result. This reduces the cost of a single piece of equipment by the die result (min: 1). The item affected must be declared before the roll is made, but the player is not required to buy the reduced-price item. ', 'End of Game', 0), --ID 123
 	(16, 'Wasteland Hunter', 'Once per campaign, player may choose not to roll on Wasteland Encounter table and instead have the Creatures of the Wastes result be automatically applied.', 'Deployment', 0), --ID 124
-	(11, 'Weapon Growths (x2)', 'Model gains an additional +1 to Melee (total of +2, already added to stat), but cannot use any other weapons or equipment and must pass an Agility test (MET/TN 10) to open doors or do any other task that requires the use of hands.', 'Game', 0); --ID 125
+	(11, 'Weapon Growths (x2)', 'Model gains an additional +1 to Melee (total of +2, already added to stat), but cannot use any other weapons or equipment and must pass an Agility test (MET/TN 10) to open doors or do any other task that requires the use of hands.', 'Game', 0), --ID 125
+	(16, 'Harbinger of the Gods', 'All members of Tribal Warbands treat the Chupacabra as if it has the Fearful Reputation skill', 'Game', 0), --ID 126
+	(16, 'Poison Weapon', 'This model’s natural weapons count as being Poisoned. Any model hit but not wounded by a Poison weapon must pass a survival test (MET/TN 10) during the cleanup phase or suffer a D6 Strength hit.', 'Game', 0), --ID 127
+	(16, 'Oblivious', 'Automatically passes all Will tests', 'Game', 0), --ID 128
+	(16, 'Pack Mentality', 'This model gains +1 to all Morale tests when within 3" of a friendly model, but suffer -1 when not friendly model is within range.', 'Game', 0), --ID 129
+	(16, 'Amphibious', 'Treats water terrain features as open ground', 'Game', 0); --ID 130
 
 INSERT INTO injury_reference (name, description, is_stat_damage, stat_damaged, is_removeable, is_stackable, grants) VALUES
 	('Banged Head', 'Model receives a -1 penalty to its Mettle Stat', TRUE, 'Mettle', FALSE, TRUE, null), --ID 1

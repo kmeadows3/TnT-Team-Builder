@@ -141,6 +141,19 @@ public class TeamController {
         }
     }
 
+    /**
+     * returns a list of units that can be gained for free during exploration
+     * @return the list of units that can be found during exploration
+     */
+    @RequestMapping(path = "/explorationUnits", method = RequestMethod.GET)
+    public List<Unit> getExplorationUnits() {
+        try {
+            return unitService.getExplorationUnits();
+        }catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
     @RequestMapping(path="/teams/{id}", method = RequestMethod.DELETE)
     public void deleteUnit(@PathVariable int id, Principal principal){
         try {

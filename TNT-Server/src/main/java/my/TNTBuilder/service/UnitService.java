@@ -33,14 +33,19 @@ public class UnitService {
         this.teamService = teamService;
     }
 
-    public Unit createNewUnit(Unit clientUnit, int userId)  throws ServiceException{
+    public Unit createNewUnit(Unit clientUnit, int userId, boolean isExploreGain)  throws ServiceException{
         Unit newUnit = null;
 
 
         try {
-            unitValidator.validateNewUnit(clientUnit, teamService.getTeamById(clientUnit.getTeamId(), userId) );
-            newUnit = unitDao.createUnit(clientUnit);
-            teamService.updateTeamAfterNewUnitPurchase(userId, newUnit);
+            if (isExploreGain){
+                newUnit = unitDao.createUnit(clientUnit);
+            } else {
+                unitValidator.validateNewUnit(clientUnit, teamService.getTeamById(clientUnit.getTeamId(), userId) );
+                newUnit = unitDao.createUnit(clientUnit);
+                teamService.updateTeamAfterNewUnitPurchase(userId, newUnit);
+            }
+
 
         } catch (DaoException | ValidationException e){
             throw new ServiceException(e.getMessage());
@@ -58,6 +63,17 @@ public class UnitService {
         }
 
         units = adjustUnitListForTeamStatus(team, units);
+
+        return units;
+    }
+
+    public List<Unit> getExplorationUnits() throws ServiceException{
+        List<Unit> units = null;
+        try {
+            units = unitDao.getExplorationUnits();
+        } catch (DaoException e){
+            throw new ServiceException(e.getMessage());
+        }
 
         return units;
     }

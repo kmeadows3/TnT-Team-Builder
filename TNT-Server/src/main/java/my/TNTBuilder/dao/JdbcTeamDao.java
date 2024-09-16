@@ -108,7 +108,7 @@ public class JdbcTeamDao implements TeamDao{
     @Override
     public List<FactionDTO> getAllFactions() throws DaoException {
         List<FactionDTO> allFactions = new ArrayList<>();
-        String sql = "SELECT faction_id, faction_name FROM faction WHERE faction_name != 'Freelancers' ORDER BY faction_id";
+        String sql = "SELECT faction_id, faction_name FROM faction WHERE faction_name NOT IN ('Freelancers', 'Nuisance Creatures') ORDER BY faction_id";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
             while (results.next()) {

@@ -96,7 +96,7 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
 
         List<Unit> testList = sut.getListOfUnitsByFactionId(1);
         Assert.assertNotNull(testList);
-        Assert.assertEquals(6, testList.size());
+        Assert.assertEquals(7, testList.size());
         Assert.assertEquals(expectedUnit, testList.get(3));
         Assert.assertEquals(10, testList.get(4).getId());
     }
@@ -270,5 +270,19 @@ public class JdbcUnitDaoTests extends BaseDaoTests{
         Skill testSkill = testUnit.getSkills().stream().filter(unitSkill -> unitSkill.getId() == bully.getId()).findFirst().get();
 
         Assert.assertEquals(2, testSkill.getCount());
+    }
+
+    @Test
+    public void getExplorationUnits_gets_correct_units() throws DaoException {
+        Unit expectedUnit = new Unit(13, 0, "", "Nuisance Creature", "Nuisance",
+                "Animal", 23,1,6,5,5,4,4,5,0,
+                "N/A",0,0,0,0,
+                new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>(), true);
+
+        List<Unit> testList = sut.getExplorationUnits();
+        Assert.assertNotNull(testList);
+        Assert.assertEquals(2, testList.size());
+        Assert.assertEquals(expectedUnit, testList.get(1));
+        Assert.assertEquals(12, testList.get(0).getId());
     }
 }

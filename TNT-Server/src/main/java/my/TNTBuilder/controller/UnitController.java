@@ -36,10 +36,10 @@ public class UnitController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path="/units", method = RequestMethod.POST)
-    public Unit newUnit(@Valid @RequestBody Unit unit, Principal principal){
+    public Unit newUnit(@Valid @RequestBody Unit unit, @RequestParam(defaultValue = "false") boolean isExporeGain, Principal principal){
         Unit newUnit = null;
         try{
-            newUnit = unitService.createNewUnit(unit, userDao.getUserIdByUsername(principal.getName()));
+            newUnit = unitService.createNewUnit(unit, userDao.getUserIdByUsername(principal.getName()), isExporeGain);
         } catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (DaoException e){

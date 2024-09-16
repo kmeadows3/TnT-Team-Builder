@@ -45,7 +45,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit expectedUnit = generateExpectedRankAndFileCaravanner();
         expectedUnit.setTeamId(1);
 
-        Unit newUnit = sut.createNewUnit(expectedUnit, 1);
+        Unit newUnit = sut.createNewUnit(expectedUnit, 1, false);
         expectedUnit.setId(newUnit.getId());
 
         Unit testUnit = sut.getUnitById(expectedUnit.getId(), 1);
@@ -59,7 +59,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit invalidUnit = new Unit();
         invalidUnit.setId(9);
         invalidUnit.setTeamId(3);
-        sut.createNewUnit(invalidUnit, 1);
+        sut.createNewUnit(invalidUnit, 1, false);
         Assert.fail();
     }
 
@@ -69,7 +69,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit invalidUnit = new Unit();
         invalidUnit.setId(1);
         invalidUnit.setTeamId(5);
-        sut.createNewUnit(invalidUnit, 4);
+        sut.createNewUnit(invalidUnit, 4, false);
         Assert.fail();
     }
 
@@ -78,7 +78,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit invalidUnit = new Unit();
         invalidUnit.setId(1);
         invalidUnit.setTeamId(2);
-        sut.createNewUnit(invalidUnit, 1);
+        sut.createNewUnit(invalidUnit, 1, false);
         Assert.fail();
     }
 
@@ -89,7 +89,7 @@ public class UnitServiceTests extends BaseDaoTests {
         validUnit.setTeamId(4);
 
         try {
-            sut.createNewUnit(validUnit, 4);
+            sut.createNewUnit(validUnit, 4, false);
         } catch (ServiceException e){
             Assert.fail();
         }
@@ -100,7 +100,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit invalidUnit = new Unit();
         invalidUnit.setId(1);
         invalidUnit.setTeamId(1);
-        sut.createNewUnit(invalidUnit, 1);
+        sut.createNewUnit(invalidUnit, 1, false);
         Assert.fail();
     }
 
@@ -109,7 +109,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit invalidUnit = new Unit();
         invalidUnit.setId(4);
         invalidUnit.setTeamId(6);
-        sut.createNewUnit(invalidUnit, 1);
+        sut.createNewUnit(invalidUnit, 1, false);
         Assert.fail();
     }
 
@@ -118,7 +118,7 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit invalidUnit = new Unit();
         invalidUnit.setId(2);
         invalidUnit.setTeamId(7);
-        sut.createNewUnit(invalidUnit, 4);
+        sut.createNewUnit(invalidUnit, 4, false);
         Assert.fail();
     }
 
@@ -127,9 +127,43 @@ public class UnitServiceTests extends BaseDaoTests {
         Unit invalidUnit = new Unit();
         invalidUnit.setId(11);
         invalidUnit.setTeamId(1);
-        sut.createNewUnit(invalidUnit, 1);
+        sut.createNewUnit(invalidUnit, 1, false);
         Assert.fail();
     }
+
+    @Test
+    public void createNewUnit_is_free_if_isExploreGain_is_true() throws ServiceException{
+        Unit expectedUnit = generateExpectedRankAndFileCaravanner();
+        expectedUnit.setTeamId(1);
+
+        Unit newUnit = sut.createNewUnit(expectedUnit, 1, true);
+        expectedUnit.setId(newUnit.getId());
+
+        Unit testUnit = sut.getUnitById(expectedUnit.getId(), 1);
+        Team testTeam = teamDao.getTeamById(1, 1);
+
+        Assert.assertNotNull(testUnit);
+        Assert.assertEquals(expectedUnit, testUnit);
+        Assert.assertEquals(500, testTeam.getMoney());
+    }
+
+    @Test
+    public void createNewUnit_allows_invalid_units_if_isExploreGain_is_true() throws ServiceException{
+        Unit invalidUnit = new Unit();
+        invalidUnit.setId(13);
+        invalidUnit.setTeamId(1);
+
+        Unit newUnit = sut.createNewUnit(invalidUnit, 1, true);
+
+        Unit testUnit = sut.getUnitById(newUnit.getId(), 1);
+        Team testTeam = teamDao.getTeamById(1, 1);
+
+        Assert.assertNotNull(testUnit);
+        Assert.assertTrue(testUnit.getUnitClass().equalsIgnoreCase("Nuisance Creature"));
+        Assert.assertEquals(500, testTeam.getMoney());
+    }
+
+
 
     @Test
     public void getUnitsForFaction_returns_only_leader_if_team_has_no_leader() throws ServiceException{
@@ -156,7 +190,7 @@ public class UnitServiceTests extends BaseDaoTests {
         List<Unit> testList = sut.getUnitsForFaction(1, team);
 
         Assert.assertNotNull(testList);
-        Assert.assertEquals(5, testList.size()); //returns all valid units
+        Assert.assertEquals(6, testList.size()); //returns all valid units
         Assert.assertEquals(expectedUnit, testList.get(2)); //unit returned is expected one
         Assert.assertEquals(10, testList.get(3).getId()); //can return freelancers
         for (Unit unit : testList){
@@ -190,7 +224,7 @@ public class UnitServiceTests extends BaseDaoTests {
         List<Unit> testList = sut.getUnitsForFaction(1, team);
 
         Assert.assertNotNull(testList);
-        Assert.assertEquals(3, testList.size());
+        Assert.assertEquals(4, testList.size());
         for (Unit unit : testList){
             Assert.assertFalse("Elite".equalsIgnoreCase(unit.getRank()));
         }
@@ -206,7 +240,7 @@ public class UnitServiceTests extends BaseDaoTests {
         List<Unit> testList = sut.getUnitsForFaction(1, team);
 
         Assert.assertNotNull(testList);
-        Assert.assertEquals(4, testList.size());
+        Assert.assertEquals(5, testList.size());
         for (Unit unit : testList){
             Assert.assertFalse("Specialist".equalsIgnoreCase(unit.getRank()));
         }
@@ -609,5 +643,19 @@ public class UnitServiceTests extends BaseDaoTests {
 
         return new Team(1, 1, "", "Caravanners", 1, 500,
                 new ArrayList<>(List.of(UNIT1)), new ArrayList<>());
+    }
+
+    @Test
+    public void getExplorationUnits_gets_correct_units() throws ServiceException {
+        Unit expectedUnit = new Unit(13, 0, "", "Nuisance Creature", "Nuisance",
+                "Animal", 23,1,6,5,5,4,4,5,0,
+                "N/A",0,0,0,0,
+                new ArrayList<>(), new ArrayList<>(),  new ArrayList<>(), new ArrayList<>(), true);
+
+        List<Unit> testList = sut.getExplorationUnits();
+        Assert.assertNotNull(testList);
+        Assert.assertEquals(2, testList.size());
+        Assert.assertEquals(expectedUnit, testList.get(1));
+        Assert.assertEquals(12, testList.get(0).getId());
     }
 }

@@ -210,7 +210,8 @@ INSERT INTO faction (faction_name) VALUES
 	('Preservers'),
 	('Tribals'),
 	('Peacekeepers'),
-	('Freelancers');
+	('Freelancers'),
+	('Nuisance Creatures');
 
 INSERT INTO unit_reference (faction_id, class, rank, species, base_cost, wounds, defense, mettle, move, ranged, melee,
 							strength, skillsets, starting_skills, starting_free_skills, special_rules) VALUES
@@ -224,7 +225,9 @@ INSERT INTO unit_reference (faction_id, class, rank, species, base_cost, wounds,
 	(3, 'Raider', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, 'N/A'),
     (2, 'Raider2', 'Rank and File', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, 'N/A'),
     (7, 'Freelancer', 'Freelancer', 'Human', 20, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '', 0, 'N/A'), -- ID 10
-    (1, 'Specialist', 'Specialist', 'Human', 23, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '[5]', 0, 'N/A');
+    (1, 'Specialist', 'Specialist', 'Human', 23, 1, 6, 5, 5, 4, 4, 5, '[1|2|3]', '[5]', 0, 'N/A'),
+    (7, 'Depend-o-Bot', 'Freelancer', 'Robot', 23, 1, 6, 5, 5, 4, 4, 5, '[]', '[]', 0, 'N/A'),
+    (8, 'Nuisance Creature', 'Nuisance', 'Animal', 23, 1, 6, 5, 5, 4, 4, 5, '[]', '[]', 0, 'N/A');
 
 
 

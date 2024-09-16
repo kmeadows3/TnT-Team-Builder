@@ -41,6 +41,12 @@ public interface UnitDao {
     List<Unit> getListOfUnitsByFactionId(int factionId) throws DaoException;
 
     /**
+     * Get the list of all possible units that can be found during Wasteland Exploration
+     * @return the list of units that can be found during exploration
+     */
+    List<Unit> getExplorationUnits() throws DaoException;
+
+    /**
      * Retrieves a list of all units that belong to a team
      * @param teamId the id of the team
      * @return the list of units

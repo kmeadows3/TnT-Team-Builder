@@ -2,8 +2,8 @@ import axios from 'axios';
 
 export default {
 
-  buyUnit(newUnit){
-    return axios.post('/units', newUnit);
+  buyUnit(newUnit, isExploreUnit){
+    return axios.post(`/units?isExporeGain=${isExploreUnit}`, newUnit);
   },
   getPotentialSkills(id){
     return axios.get(`/units/${id}/skills`);
@@ -37,5 +37,8 @@ export default {
   },
   removeInjury(injuryId, unitId){
     return axios.delete(`/units/${unitId}/injuries/${injuryId}`);
+  },
+  getExplorationUnits(){
+    return axios.get(`/explorationUnits`);
   }
 }

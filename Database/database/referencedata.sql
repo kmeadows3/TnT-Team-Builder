@@ -97,7 +97,7 @@ INSERT INTO unit_reference (faction_id, class, rank, species, base_cost, wounds,
 (7, 'Wasteland Hunter', 'Freelancer', 'Human', 50, 1, 6, 6, 5, 5, 4, 5, '[2|3|4]', '[7|12|124]', 0, ''), -- ID 83
 (8, 'Chupacabra', 'Nuisance', 'Animal', 20, 1, 6, 5, 7, 0, 5, 5, '[]', '[51|109|126]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 84
 (8, 'Giant Rat', 'Nuisance', 'Animal', 20, 1, 6, 5, 7, 0, 4, 4, '[]', '[109|127]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 85
-(8, 'Wild Dog', 'Nuisance', 'Animal', 20, 1, 6, 5, 7, 0, 5, 5, '[]', '[109|130]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 86
+(8, 'Wild Dog', 'Nuisance', 'Animal', 20, 1, 6, 5, 7, 0, 5, 5, '[]', '[109|129]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 86
 (8, 'Gnash Worm', 'Nuisance', 'Animal', 20, 1, 6, 5, 6, 0, 5, 5, '[]', '[64|109|128]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 87
 (8, 'Mud Crab', 'Nuisance', 'Animal', 20, 1, 6, 5, 5, 0, 4, 6, '[]', '[49|109|128]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 88
 (8, 'Walking Mudcat', 'Nuisance', 'Animal', 20, 1, 6, 5, 5, 0, 5, 5, '[]', '[130|109]', 0, 'Only obtainable if team drew Ace of Spades during Wasteland Exploration'), -- ID 89

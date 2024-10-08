@@ -197,27 +197,36 @@ export default {
             let inventory = this.$store.state.currentUnit.inventory;
             inventory = inventory.filter((item) => item.equipped && item.category == "Armor");
 
-            let meleeBonus = 0;
+            let armorBonus = 0;
+            let shieldBonus = 0;
             let hasArmor = false
             let hasShield = false;
 
             inventory.forEach((item) => {
-                if (item.meleeDefenseBonus > meleeBonus) {
-                    meleeBonus = item.meleeDefenseBonus;
-                }
                 if (item.shield) {
                     hasShield = true;
-                }
-                if (!item.shield && !item.name == "Power Armor") {
-                    hasArmor = true;
+                    if (item.meleeDefenseBonus > shieldBonus){
+                        shieldBonus = item.meleeDefenseBonus
+                    }
+                } else {
+                    if (item.meleeDefenseBonus > armorBonus){
+                        armorBonus = item.meleeDefenseBonus
+                    }
+                    if (item.name != "Power Armor"){
+                        hasArmor = true;
+                    }
                 }
             });
 
             if (hasArmor && hasShield) {
-                meleeBonus++;
+                armorBonus++;
             }
 
-            return meleeBonus + this.$store.state.currentUnit.defense;
+            armorBonus += this.$store.state.currentUnit.defense;
+            shieldBonus += this.$store.state.currentUnit.defense;
+
+            return armorBonus >= shieldBonus ? armorBonus : shieldBonus;
+
         },
         calculatedStrength() {
             let inventory = this.$store.state.currentUnit.inventory;

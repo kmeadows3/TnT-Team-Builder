@@ -46,7 +46,7 @@
                         +
                         $store.state.currentUnit.melee + ")" }}</p>
                 </div>
-                <div v-show="hasShield" class="display-split-stat">
+                <div v-show="hasShield" class="display-split-stat melee">
                     <div>
                         <p class="stat-text stat-label two-rows">Attacking</p>
                         <p class="stat-text two-rows">{{ $store.state.currentUnit.melee }}</p>
@@ -315,12 +315,18 @@ div.display-split-stat {
     flex-wrap: wrap;
     justify-content: center;
 
+    &.melee {
+        border-right: dotted var(--thin-border) var(--border-color);
+    }
+    
+
     div p {
         background-color: var(--list-background);
         border: none;
         margin: 0px;
         padding: 0px var(--standard-padding);
     }
+
 }
 
 div#basics-grid {
